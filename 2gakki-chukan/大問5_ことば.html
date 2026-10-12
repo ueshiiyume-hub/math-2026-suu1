@@ -347,6 +347,55 @@ span.r{display:inline-block}
 @keyframes nudge{50%{transform:translate(var(--dx),var(--dy))}}
 @media (prefers-reduced-motion: reduce){ .gs.show .mmring,.gs.show .mmline,.gs.show .arrw{animation:none} .popb{transition-duration:.01s} }
 
+/* ===== スマホ（縦長の画面）：720×1280 の縦の台紙に組みかえ ===== */
+body{touch-action:manipulation}
+@media (hover:none){ .ui{display:none} }
+@media (max-height:500px){ #jump{flex-wrap:nowrap;overflow-x:auto;max-width:calc(100% - 24px)} }
+body.portrait #stage{width:720px;height:1280px;top:calc(50% - 23px)}
+body.portrait .ui{display:none}
+body.portrait #jump{left:0;right:0;bottom:6px;padding:6px 8px;flex-wrap:nowrap;overflow-x:auto;max-width:none;
+  background:color-mix(in srgb,var(--paper) 85%,transparent)}
+body.portrait .cbar{left:20px;top:1010px;width:680px;height:250px;padding:10px 26px 0}
+body.portrait .cm{font-size:26px;line-height:1.55}
+body.portrait .pno{left:4px;top:2px}
+/* グラフ・最大最小 */
+.portrait .t-g .eqcard{left:20px;top:30px;width:680px;height:640px}
+.portrait .t-g .divider{display:none}
+.portrait .t-g .graph{left:310px;top:222px;width:350px;height:393px}
+.portrait .t-g .memo{left:20px;top:700px}
+.portrait .t-g .legend{left:370px;top:700px}
+.portrait .t-g .done{left:560px!important;top:852px!important}
+/* 平方完成 */
+.portrait .t-h .eqcard{left:20px;top:30px;width:680px;height:520px}
+.portrait .t-h .hrows{left:14px;font-size:30px}
+.portrait .t-h .hrows .er{height:92px}
+.portrait .t-h .note{left:470px;width:180px;font-size:17px}
+.portrait .t-h .note svg{width:26px}
+.portrait .t-h .hmemo{left:20px;top:590px;height:260px}
+.portrait .t-h .hlegend{left:370px;top:590px;height:260px}
+.portrait .t-h .done{left:560px!important;top:862px!important}
+/* ことば */
+.portrait .t-w .wcard{left:20px;top:30px;width:680px;height:600px;padding:40px 28px 0}
+.portrait .t-w .zcard{left:20px;top:662px;height:300px;align-items:center}
+.portrait .t-w .gocard{left:370px;top:662px;height:300px}
+.portrait .t-w .done{left:574px!important;top:880px!important}
+/* 基本のスライド */
+.portrait .t-b .end-h{left:40px;top:40px}
+.portrait .t-b .end-h h2{font-size:34px}
+.portrait .t-b .fcard{left:20px;top:116px;width:680px;height:860px;padding:0 26px;gap:30px}
+.portrait .t-b .fr{white-space:normal;text-align:center;line-height:1.5}
+.portrait .t-b .fr.big{font-size:46px!important}
+.portrait .t-b .fr.mid{font-size:30px!important}
+.portrait .t-b .fr.chk{font-size:26px}
+/* 表紙・おわり */
+.portrait .t-c .cover{left:40px!important;top:110px!important;width:640px;height:560px!important;padding:44px 40px}
+.portrait .t-c .cover h1{font-size:60px}
+.portrait .t-c .cover .sub{font-size:28px}
+.portrait .t-c .polaroid{left:210px;top:740px}
+/* 目次 */
+.portrait .mtitle h2{font-size:31px!important}
+.portrait .toplink{left:60px!important;right:auto!important;top:150px!important}
+
 </style>
 </head>
 <body>
@@ -830,7 +879,9 @@ const DECK = {title:'大問５ 2次関数のことば', pages:[
 const stage = document.getElementById('stage');
 const pages = DECK.pages.map(x=>x.html), names = DECK.pages.map(x=>x.name);
 document.title = DECK.title;
-stage.innerHTML = pages.map(h=>`<section class="slide">${h}</section>`).join('');
+/* スライドの種類（スマホの縦レイアウトで使う） */
+const kind = h => /class="hrows/.test(h)?'h' : /class="graph"/.test(h)?'g' : /wcard/.test(h)?'w' : /fcard/.test(h)?'b' : 'c';
+stage.innerHTML = pages.map(h=>`<section class="slide t-${kind(h)}">${h}</section>`).join('');
 (function italicVars(){
   const w=document.createTreeWalker(stage,NodeFilter.SHOW_TEXT);
   const nodes=[]; while(w.nextNode()) nodes.push(w.currentNode);
@@ -947,8 +998,18 @@ document.addEventListener('keydown',e=>{
     d.dataset.theme = dark ? 'light' : 'dark';
   }
 });
-document.addEventListener('click',e=>{ if(e.target.closest('a')) return; stopAuto(); if(e.clientX < innerWidth/3) prev(); else next(); });
-function fit(){ stage.style.setProperty('--s', Math.min(innerWidth/1280, innerHeight/720)); }
+document.addEventListener('click',e=>{ if(e.target.closest('a')) return; stopAuto(); if(e.clientX < document.documentElement.clientWidth/3) prev(); else next(); });
+/* 画面に合わせる：縦長（スマホ）なら 720×1280、横長なら 1280×720 */
+function fit(){
+  const vw = document.documentElement.clientWidth, vh = document.documentElement.clientHeight;   // スマホでは innerWidth がずれることがある
+  const portrait = vh > vw;
+  document.body.classList.toggle('portrait', portrait);
+  const W = portrait?720:1280, H = portrait?1280:720, avail = vh - (portrait?52:0);
+  stage.style.setProperty('--s', Math.min(vw/W, avail/H));
+  jump.style.top = portrait ? (vh-46)+'px' : '';   // スマホでは画面の下にそろえる
+  jump.style.bottom = portrait ? 'auto' : '';
+  relayout(els[si]);
+}
 addEventListener('resize',fit); fit(); render();
 
 </script>
