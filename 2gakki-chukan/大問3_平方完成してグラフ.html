@@ -396,6 +396,10 @@ body.portrait .pno{left:4px;top:2px}
 .portrait .mtitle h2{font-size:31px!important}
 .portrait .toplink{left:60px!important;right:auto!important;top:150px!important}
 
+/* スマホで ページの幅が広がらないように、画面の外にはみ出した部分は 必ず切り取る */
+html{overflow:hidden;height:100%}
+body{position:fixed;inset:0;overflow:hidden;height:auto;width:auto}
+
 </style>
 </head>
 <body>
