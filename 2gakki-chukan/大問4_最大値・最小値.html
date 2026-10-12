@@ -329,6 +329,24 @@ span.r{display:inline-block}
 .mcard{height:178px}
 .mcard .tt{font-size:25px}
 
+/* もとの式（平方完成する前） */
+.er.orig{height:40px;font-size:26px}
+.otag{margin-left:12px;font-family:"Zen Maru Gothic",sans-serif;font-size:15px;font-weight:900;color:var(--muted);border:1.5px dashed var(--muted);border-radius:999px;padding:0 10px;line-height:1.5}
+/* 最大値・最小値の強調 */
+.mmring{fill:none;stroke:var(--accent);stroke-width:3;opacity:0;transform-box:fill-box;transform-origin:center}
+.gs.show .mmring{animation:ring 1.8s ease-out infinite}
+.gs.show .mmring.d2{animation-delay:.9s}
+@keyframes ring{0%{transform:scale(.5);opacity:.9}100%{transform:scale(3.2);opacity:0}}
+.popb{transform-box:fill-box;transform-origin:center;transform:scale(0);transition:transform .55s cubic-bezier(.3,1.7,.5,1) .35s}
+.gs.show .popb{transform:scale(1)}
+.mmbadge{fill:var(--accent)}
+.mmbt{fill:var(--paper);font-family:"Zen Maru Gothic",sans-serif;font-weight:900;font-size:19px}
+.gs.show .mmline{animation:march 1s linear infinite}
+@keyframes march{to{stroke-dashoffset:-20}}
+.gs.show .arrw{animation:nudge 1s ease-in-out infinite}
+@keyframes nudge{50%{transform:translate(var(--dx),var(--dy))}}
+@media (prefers-reduced-motion: reduce){ .gs.show .mmring,.gs.show .mmline,.gs.show .arrw{animation:none} .popb{transition-duration:.01s} }
+
 </style>
 </head>
 <body>
@@ -433,6 +451,16 @@ function readEq(P,st){
   const rowV = `<div class="arow math"><span class="al">頂点</span>(${slotC('o',fmt(p),st.vx,'p')},${slotC('g',fmt(q),st.vy,'q')})</div>`;
   return {aS,qT,eqTxt,up,dir,V,cm,r0,rowDir,rowV};
 }
+/* 平方完成する前の式（もとの式）。kst：数だけの項を青く光らせる番（なければ光らせない） */
+function origRow(o,kst){
+  const cpart = o.c ? tm('b',sgn(o.c),kst===undefined?99:kst) : (kst!==undefined ? S(kst,K('b','＋ 0')) : '');
+  return `<div class="er orig"><span class="lhs">y</span><span class="eqs">＝</span><span>${polyStr(o.a,o.b,0)} ${cpart}</span><span class="otag">もとの式</span></div>`;
+}
+function topRows(P,R){
+  if(!P.orig) return `<div class="rowsw math" style="font-size:32px">${R.r0}</div>`;
+  return `<div class="rowsw math" style="font-size:32px;top:22px">${origRow(P.orig,P.kst)}`
+    + R.r0.replace('margin-top:12px','margin-top:34px').replace('<span class="lhs">y</span>','<span class="lhs"></span>') + `</div>`;
+}
 const LEGEND = `<div class="card abs legend">${TP('lav','right:24px;top:-14px;transform:rotate(-5deg)')}
     <div class="lab">基本の形</div>
     <div class="l1 math">y ＝ ${K('r','a')}(x − ${K('o','p')})${P2} ＋ ${K('g','q')}</div>
@@ -492,6 +520,7 @@ function genGraph(P){
     ];
   }
   st.ptg = st.pt + L.length; st.dn = st.ptg + 1;
+  if(P.orig){ if(P.yint!==undefined) P.orig.c = P.yint; P.kst = st.pt; }
 
   const cm = [
     P.yint!==undefined
@@ -511,8 +540,8 @@ function genGraph(P){
   return `
   <div class="pno">${num}</div>
   <div class="card abs eqcard">${EQTAPE}
-    <div class="rowsw math" style="font-size:32px">${R.r0}</div>
-    <div class="rowsw" style="top:148px">${n2}</div>
+    ${topRows(P,R)}
+    <div class="rowsw" style="top:${P.orig?196:148}px">${n2}</div>
     <div class="divider"></div>
     ${graphSVG(P,st)}
   </div>
@@ -535,17 +564,20 @@ function mmSlide(P){
   const R = readEq(P,st), up=R.up;
   const big = up?'最小値':'最大値', non = up?'最大値':'最小値';
   P.extra = ({X,Y,d,u})=>{
-    let s=`<g class="gs" data-s="${st.ext}">${p?`<line class="gd" x1="${X(p)}" y1="${Y(q)}" x2="${X(0)}" y2="${Y(q)}"/>`:''}
+    const bw=136, bx = p>0 ? X(0)-10-bw : X(0)+(p?10:18), by=Y(q)-18;
+    let s=`<g class="gs" data-s="${st.ext}">${p?`<line class="gd mmline" x1="${X(p)}" y1="${Y(q)}" x2="${X(0)}" y2="${Y(q)}"/>`:''}
+      <circle class="mmring" cx="${X(p)}" cy="${Y(q)}" r="12"/><circle class="mmring d2" cx="${X(p)}" cy="${Y(q)}" r="12"/>
+      <g class="popb"><rect class="mmbadge" x="${bx}" y="${by}" width="${bw}" height="36" rx="18"/><text class="mmbt" x="${bx+bw/2}" y="${by+25}" text-anchor="middle">${big} ${fmt(q)}</text></g>
       <text class="gt k halo" x="${X(p)}" y="${up?Y(q)+56:Y(q)-42}" text-anchor="middle" style="font-family:'Zen Maru Gothic';font-weight:900">いちばん${up?'下':'上'}！</text></g>`;
     let arr='';
     [-1,1].forEach(sd=>{
       const xe=p+sd*d, ye=a*d*d+q, ang=Math.atan2(-2*a*d*u, sd*u);
       const hx=X(xe), hy=Y(ye);
       const tri=[[6,0],[-10,-7],[-10,7]].map(([dx,dy])=>`${(hx+dx*Math.cos(ang)-dy*Math.sin(ang)).toFixed(1)},${(hy+dx*Math.sin(ang)+dy*Math.cos(ang)).toFixed(1)}`).join(' ');
-      arr+=`<polygon points="${tri}" fill="var(--note)"/>`;
+      arr+=`<g class="arrw" style="--dx:${(7*Math.cos(ang)).toFixed(1)}px;--dy:${(7*Math.sin(ang)).toFixed(1)}px"><polygon points="${tri}" fill="var(--note)"/></g>`;
     });
     const xe=p-d, ye=a*d*d+q;
-    arr+=`<text class="gt halo" x="${X(xe)+10}" y="${Y(ye)+(up?34:-24)}" style="font-family:'Zen Maru Gothic';font-weight:900;fill:var(--note)">どこまでも</text>`;
+    arr+=`<text class="gt halo" x="${X(xe)+10}" y="${Y(ye)+(up?34:-24)}" style="font-family:'Zen Maru Gothic';font-weight:900;fill:var(--note)"><tspan>どこまでも</tspan><tspan x="${X(xe)+10}" dy="22">→ ${non} なし</tspan></text>`;
     s+=`<g class="gs" data-s="${st.none}">${arr}</g>`;
     return s;
   };
@@ -567,8 +599,8 @@ function mmSlide(P){
   return `
   <div class="pno">${num}</div>
   <div class="card abs eqcard">${EQTAPE}
-    <div class="rowsw math" style="font-size:32px">${R.r0}</div>
-    <div class="rowsw" style="top:160px">${notes}</div>
+    ${topRows(P,R)}
+    <div class="rowsw" style="top:${P.orig?200:160}px">${notes}</div>
     <div class="divider"></div>
     ${graphSVG(P,st)}
   </div>
@@ -795,9 +827,9 @@ const DECK = {title:'大問４ 最大値・最小値', pages:[
   {name:'⑴', html:mmSlide({num:'⑴', a:2, p:-1, q:-1})},
   {name:'⑵', html:mmSlide({num:'⑵', a:-3, p:2, q:4})},
   {name:'⑶式', html:heihoSlide({num:'⑶', a:1, b:-4, c:5, next:true})},
-  {name:'⑶図', html:mmSlide({num:'⑶', a:1, p:2, q:1, intro:`⑶ 平方完成した 式 ${M('y ＝ (x − 2)² ＋ 1')} を 使って、<b>最大値・最小値</b> を 求めよう！`})},
+  {name:'⑶図', html:mmSlide({num:'⑶', a:1, p:2, q:1, orig:{a:1,b:-4,c:5}, intro:`⑶ 平方完成した 式 ${M('y ＝ (x − 2)² ＋ 1')} を 使って、<b>最大値・最小値</b> を 求めよう！`})},
   {name:'⑷式', html:heihoSlide({num:'⑷', a:-2, b:4, c:1, next:true})},
-  {name:'⑷図', html:mmSlide({num:'⑷', a:-2, p:1, q:3, intro:`⑷ 平方完成した 式 ${M('y ＝ −2(x − 1)² ＋ 3')} を 使って、<b>最大値・最小値</b> を 求めよう！`})},
+  {name:'⑷図', html:mmSlide({num:'⑷', a:-2, p:1, q:3, orig:{a:-2,b:4,c:1}, intro:`⑷ 平方完成した 式 ${M('y ＝ −2(x − 1)² ＋ 3')} を 使って、<b>最大値・最小値</b> を 求めよう！`})},
   {name:'終', html:endHtml}
 ]};
 

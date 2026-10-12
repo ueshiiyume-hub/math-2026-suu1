@@ -329,6 +329,24 @@ span.r{display:inline-block}
 .mcard{height:178px}
 .mcard .tt{font-size:25px}
 
+/* もとの式（平方完成する前） */
+.er.orig{height:40px;font-size:26px}
+.otag{margin-left:12px;font-family:"Zen Maru Gothic",sans-serif;font-size:15px;font-weight:900;color:var(--muted);border:1.5px dashed var(--muted);border-radius:999px;padding:0 10px;line-height:1.5}
+/* 最大値・最小値の強調 */
+.mmring{fill:none;stroke:var(--accent);stroke-width:3;opacity:0;transform-box:fill-box;transform-origin:center}
+.gs.show .mmring{animation:ring 1.8s ease-out infinite}
+.gs.show .mmring.d2{animation-delay:.9s}
+@keyframes ring{0%{transform:scale(.5);opacity:.9}100%{transform:scale(3.2);opacity:0}}
+.popb{transform-box:fill-box;transform-origin:center;transform:scale(0);transition:transform .55s cubic-bezier(.3,1.7,.5,1) .35s}
+.gs.show .popb{transform:scale(1)}
+.mmbadge{fill:var(--accent)}
+.mmbt{fill:var(--paper);font-family:"Zen Maru Gothic",sans-serif;font-weight:900;font-size:19px}
+.gs.show .mmline{animation:march 1s linear infinite}
+@keyframes march{to{stroke-dashoffset:-20}}
+.gs.show .arrw{animation:nudge 1s ease-in-out infinite}
+@keyframes nudge{50%{transform:translate(var(--dx),var(--dy))}}
+@media (prefers-reduced-motion: reduce){ .gs.show .mmring,.gs.show .mmline,.gs.show .arrw{animation:none} .popb{transition-duration:.01s} }
+
 </style>
 </head>
 <body>
