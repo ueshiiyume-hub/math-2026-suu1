@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>①-2 2次方程式の解</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@400;500&family=Zen+Maru+Gothic:wght@500;700;900&family=STIX+Two+Text:ital,wght@0,500;0,700;1,500;1,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bgimg:linear-gradient(135deg,#fdeef2 0%,#f4effb 48%,#ebf6f1 100%);
+  --grid:rgba(140,155,200,.17); --grid2:rgba(140,155,200,.30);
+  --ink:#4f4760; --muted:#8c849c; --paper:#fffdf9; --note:#7286c2; --accent:#d4677f;
+  --curve:#e07f96; --gline:rgba(150,160,200,.20); --halo:#fffdf9;
+  --r-bg:#fbdde1; --r-ink:#c4536a; --r-bd:#f1b3bd;
+  --o-bg:#fde7d1; --o-ink:#c2702a; --o-bd:#f3c597;
+  --g-bg:#d8f0e1; --g-ink:#3a8f61; --g-bd:#a6d8b8;
+  --b-bg:#dde8f8; --b-ink:#4f7cc0; --b-bd:#b0c9ec;
+  --shadow:0 1px 0 rgba(120,100,140,.06),0 10px 26px rgba(120,100,140,.13);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bgimg:linear-gradient(135deg,#302c3e 0%,#2b2f40 50%,#2a3532 100%);
+    --grid:rgba(220,210,255,.07); --grid2:rgba(220,210,255,.12);
+    --ink:#f0ebf6; --muted:#b9b1c9; --paper:#3b384f; --note:#a9b8ec; --accent:#ff9fb3;
+    --curve:#ff9fb3; --gline:rgba(220,210,255,.10); --halo:#3b384f;
+    --r-bg:#5a3a48; --r-ink:#ffb6c3; --r-bd:#8a5567;
+    --o-bg:#5a4632; --o-ink:#ffcf9a; --o-bd:#8a6a45;
+    --g-bg:#2f5041; --g-ink:#a2e2bd; --g-bd:#4f7d63;
+    --b-bg:#33435e; --b-ink:#b3cdf5; --b-bd:#56709a;
+  }
+}
+:root[data-theme="dark"]{
+  --bgimg:linear-gradient(135deg,#302c3e 0%,#2b2f40 50%,#2a3532 100%);
+  --grid:rgba(220,210,255,.07); --grid2:rgba(220,210,255,.12);
+  --ink:#f0ebf6; --muted:#b9b1c9; --paper:#3b384f; --note:#a9b8ec; --accent:#ff9fb3;
+  --curve:#ff9fb3; --gline:rgba(220,210,255,.10); --halo:#3b384f;
+  --r-bg:#5a3a48; --r-ink:#ffb6c3; --r-bd:#8a5567;
+  --o-bg:#5a4632; --o-ink:#ffcf9a; --o-bd:#8a6a45;
+  --g-bg:#2f5041; --g-ink:#a2e2bd; --g-bd:#4f7d63;
+  --b-bg:#33435e; --b-ink:#b3cdf5; --b-bd:#56709a;
+}
+html{height:100%}
+body{margin:0;height:100%;overflow:hidden;background:var(--bgimg);color:var(--ink);
+  font-family:"Zen Maru Gothic","Hiragino Maru Gothic ProN","Yu Gothic",Meiryo,sans-serif;font-weight:700;
+  position:relative;user-select:none;-webkit-user-select:none}
+/* 方眼用紙 */
+#bg{position:fixed;inset:0;overflow:hidden;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(var(--grid2) 1px,transparent 1px),
+    linear-gradient(90deg,var(--grid2) 1px,transparent 1px),
+    linear-gradient(var(--grid) 1px,transparent 1px),
+    linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:140px 140px,140px 140px,28px 28px,28px 28px;
+  background-position:-1px -1px}
+.deco{position:absolute;opacity:.55;animation:float var(--t) ease-in-out infinite;animation-delay:var(--d)}
+.deco.dot{border-radius:50%;background:var(--c)}
+.deco.star{background:var(--c);clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+@keyframes float{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-1.6vmin) rotate(8deg)}}
+
+#stage{position:absolute;z-index:1;left:50%;top:50%;width:1280px;height:720px;
+  transform:translate(-50%,-50%) scale(var(--s,1));transform-origin:center center}
+.slide{position:absolute;inset:0;opacity:0;transform:translateY(24px);pointer-events:none;
+  transition:opacity .45s ease, transform .6s cubic-bezier(.3,1.25,.5,1)}
+.slide.active{opacity:1;transform:none}
+.slide.past{transform:translateY(-24px)}
+h1,h2,.pop{font-family:"Kiwi Maru","Zen Maru Gothic",serif;font-weight:500}
+h1,h2{margin:0;color:var(--ink);letter-spacing:.04em}
+.math{font-family:"STIX Two Text","Times New Roman","Zen Maru Gothic",serif;font-weight:500}
+.cm .math{white-space:nowrap}
+.cm b,.cm .cc{white-space:nowrap}
+.v+sup{margin-left:-.12em}
+.v{font-family:"STIX Two Text","Times New Roman",serif;font-style:italic;font-weight:500;font-size:1.08em;padding-right:.1em}
+sup{font-size:.62em;line-height:0;vertical-align:super;position:relative;top:-.05em;margin-left:1px}
+
+/* 出現 */
+.r{opacity:0;transform:translateY(14px)}
+span.r{display:inline-block}
+.r.show{opacity:1;transform:none;transition:opacity .4s ease,transform .55s cubic-bezier(.3,1.3,.5,1)}
+
+/* カード＋マスキングテープ */
+.card{background:var(--paper);border-radius:6px;box-shadow:var(--shadow);box-sizing:border-box}
+.abs{position:absolute}
+.tape{position:absolute;z-index:4;width:116px;height:30px;opacity:.88;pointer-events:none;
+  clip-path:polygon(2% 0,98% 0,100% 16%,97% 32%,100% 50%,97% 68%,100% 84%,98% 100%,2% 100%,0 84%,3% 68%,0 50%,3% 32%,0 16%)}
+.t-pink{background:repeating-linear-gradient(45deg,rgba(255,255,255,.38) 0 6px,rgba(255,255,255,0) 6px 12px),#f5c2cc}
+.t-mint{background:radial-gradient(circle,rgba(255,255,255,.7) 2px,transparent 2.6px) 0 0/12px 12px,#bfe5d0}
+.t-yellow{background:repeating-linear-gradient(90deg,rgba(255,255,255,.35) 0 4px,rgba(255,255,255,0) 4px 14px),#f8e2a2}
+.t-lav{background:linear-gradient(rgba(255,255,255,.35) 1px,transparent 1px) 0 0/8px 8px,linear-gradient(90deg,rgba(255,255,255,.35) 1px,transparent 1px) 0 0/8px 8px,#d8cdf1}
+.t-blue{background:repeating-linear-gradient(-45deg,rgba(255,255,255,.4) 0 5px,rgba(255,255,255,0) 5px 10px),#c4d8f2}
+
+/* 色の札 */
+.cc{display:inline-block;border-radius:10px;padding:0 9px;margin:0 3px;line-height:1.3;border:2px solid;font-weight:700}
+.cc-r{background:var(--r-bg);color:var(--r-ink);border-color:var(--r-bd)}
+.cc-o{background:var(--o-bg);color:var(--o-ink);border-color:var(--o-bd)}
+.cc-g{background:var(--g-bg);color:var(--g-ink);border-color:var(--g-bd)}
+.cc-b{background:var(--b-bg);color:var(--b-ink);border-color:var(--b-bd)}
+.cc.sm{padding:0 7px;border-radius:8px;margin:0 2px}
+
+/* 式：あとから色がつく */
+.tm{display:inline-block;border-radius:10px;padding:0 2px;margin:0 2px;border:2px solid transparent;line-height:1.3;
+  transition:background .45s,color .45s,padding .45s,border-color .45s}
+.tm.on{padding:0 7px}
+.tm-r.on{background:var(--r-bg);color:var(--r-ink);border-color:var(--r-bd)}
+.tm-o.on{background:var(--o-bg);color:var(--o-ink);border-color:var(--o-bd)}
+.tm-g.on{background:var(--g-bg);color:var(--g-ink);border-color:var(--g-bd)}
+.tm-b.on{background:var(--b-bg);color:var(--b-ink);border-color:var(--b-bd)}
+.tm.ghost{min-width:20px}
+.tm.ghost.on{border-style:dashed;background:transparent}
+.tm.cur{animation:throb .9s ease-in-out 2}
+@keyframes throb{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+
+/* 空らんと、飛んでくる数 */
+.slot{display:inline-block;border-radius:10px;border:2.5px dashed;margin:0 4px;min-width:62px;text-align:center;transition:border-color .3s,background .3s}
+.slot-o{border-color:var(--o-bd);background:color-mix(in srgb,var(--o-bg) 45%,transparent)}
+.slot-g{border-color:var(--g-bd);background:color-mix(in srgb,var(--g-bg) 45%,transparent)}
+.slot:has(.fly.go){border-color:transparent;background:transparent}
+.slot .tm{margin:0}
+.fly{position:relative;z-index:30;opacity:0;transform:translate(var(--fx,0px),var(--fy,0px)) scale(.8)}
+.fly.go{opacity:1;transform:none;transition:transform .95s cubic-bezier(.3,1.15,.45,1),opacity .2s ease}
+
+/* 左：式とグラフ */
+.eqcard{left:40px;top:30px;width:840px;height:490px}
+.rowsw{position:absolute;left:30px;top:30px;width:370px;font-size:28px}
+.er{display:flex;align-items:center;height:60px;white-space:nowrap}
+.lh{opacity:0;transform:translateY(10px);transition:opacity .4s ease,transform .5s cubic-bezier(.3,1.3,.5,1)}
+.lh.show{opacity:1;transform:none}
+.lhs{width:24px;text-align:right;flex:none}
+.eqs{width:40px;text-align:center;flex:none}
+.nt{margin-top:16px;font-size:21px;line-height:1.55;color:var(--ink);padding-left:30px;position:relative;white-space:nowrap}
+.nt::before{content:"";position:absolute;left:6px;top:.5em;width:12px;height:12px;border-radius:50%;background:var(--dotc,#f5c2cc)}
+.nt .math{font-size:24px}
+.nt b{color:var(--accent)}
+.pl{display:flex;gap:8px;align-items:baseline;font-size:20px;line-height:1.45;margin-top:5px;padding-left:4px;white-space:nowrap}
+.pl .no{flex:none;color:#c9a23a;font-weight:900}
+.pl .math{font-size:23px}
+.hasl{position:relative;display:inline-block}
+.lbl{position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:6px;white-space:nowrap;text-align:center;
+  font-family:"Zen Maru Gothic",sans-serif;font-size:17px;line-height:1.3;font-weight:900}
+.lbl .lh{display:inline-block}
+.lbl.lo{color:var(--o-ink)} .lbl.lg{color:var(--g-ink)} .lbl.lr{color:var(--r-ink)}
+.divider{position:absolute;left:404px;top:28px;bottom:28px;border-left:2px dashed var(--gline)}
+.graph{position:absolute;left:412px;top:16px;overflow:visible}
+.gg{stroke:var(--gline);stroke-width:1}
+.ax{stroke:var(--ink);stroke-width:2}
+.axh{fill:var(--ink)}
+.tk{stroke:var(--ink);stroke-width:1.5}
+.gt{font-family:"STIX Two Text","Times New Roman",serif;font-size:20px;fill:var(--ink);font-weight:500}
+.gt.it{font-style:italic}
+.gt.sm{font-size:17px;fill:var(--muted)}
+.halo{paint-order:stroke;stroke:var(--halo);stroke-width:6px;stroke-linejoin:round}
+.gd{stroke:var(--muted);stroke-width:1.6;stroke-dasharray:5 5}
+.axl{stroke:var(--o-ink);stroke-width:2.6;stroke-dasharray:9 7}
+.gt.o{fill:var(--o-ink);font-weight:700}
+.gt.k{fill:var(--accent);font-weight:700}
+.gs{opacity:0;transition:opacity .45s}
+.gs.show{opacity:1}
+.curve{fill:none;stroke:var(--curve);stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1}
+.curve.show{stroke-dashoffset:0;transition:stroke-dashoffset 1.8s ease-in-out}
+.pt circle{fill:var(--accent);stroke:var(--paper);stroke-width:2.5;transform-box:fill-box;transform-origin:center;transform:scale(0);transition:transform .45s cubic-bezier(.3,1.6,.5,1)}
+.pt.show circle{transform:scale(1)}
+.tmp{opacity:0;transition:opacity .35s}
+.tmp.wv-on{opacity:1}
+.tmp path{fill:none;stroke:var(--note);stroke-width:2.4;stroke-dasharray:6 5}
+.tmp polygon{fill:var(--note)}
+
+.pno{position:absolute;left:14px;top:8px;width:60px;height:60px;border-radius:50%;z-index:5;display:flex;align-items:center;justify-content:center;
+  background:var(--paper);border:3px solid var(--r-bd);color:var(--r-ink);font-family:"Kiwi Maru",serif;font-size:30px;
+  box-shadow:0 0 0 5px var(--r-bg),var(--shadow);transform:rotate(-8deg)}
+
+/* 右：答え・基本の形 */
+.lab{position:absolute;left:22px;top:-16px;z-index:5;background:var(--paper);color:var(--accent);border:2px dashed var(--r-bd);border-radius:999px;padding:0 16px;font-size:18px;font-weight:900}
+.memo{left:902px;top:30px;width:330px;height:300px;padding:26px 16px 0}
+.arow{display:flex;align-items:center;height:66px;gap:6px;font-size:30px}
+.arow.gray{color:var(--muted)}
+.al{width:86px;flex:none;font-size:21px;color:var(--ink);text-align:center;font-family:"Zen Maru Gothic",sans-serif;font-weight:700}
+.arow.gray .al{color:var(--muted);font-size:18px}
+.slot-r{border-color:var(--r-bd);background:color-mix(in srgb,var(--r-bg) 45%,transparent);min-width:110px}
+.slot-r .tm{font-family:"Zen Maru Gothic",sans-serif;font-size:24px;font-weight:900}
+.slot-k{border-color:var(--gline);background:color-mix(in srgb,var(--gline) 40%,transparent);min-width:150px}
+.tm-k.on{color:var(--ink)}
+.legend{left:902px;top:352px;width:330px;height:122px;padding:20px 12px 6px;display:flex;flex-direction:column;justify-content:center;gap:8px;align-items:center}
+.legend .l1{font-size:26px}
+.legend .l2{font-size:16px;white-space:nowrap}
+.legend .cc{padding:0 5px;margin:0 1px}
+.lbl.up{top:auto;bottom:100%;margin-top:0;margin-bottom:2px;font-size:16px}
+
+/* 完成シール */
+.done{z-index:6}
+.seal{display:flex;align-items:center;justify-content:center;width:120px;height:120px;border-radius:50%;
+  background:#fff1c2;border:3px dashed #eec36a;color:#c4536a;font-family:"Kiwi Maru",serif;font-size:30px;
+  box-shadow:0 0 0 6px #fff7dc,0 8px 18px rgba(120,100,140,.18);transform:rotate(-12deg)}
+
+/* 基本の形スライド */
+.end-h{position:absolute;left:72px;top:40px}
+.end-h h2{font-size:40px;display:inline-block;background:linear-gradient(transparent 60%,var(--r-bg) 60%);padding:0 8px}
+.fcard{left:48px;top:118px;width:1184px;height:396px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:22px}
+.fr{white-space:nowrap}
+.fr.big{font-size:58px}
+.fr.mid{font-size:44px}
+.fr.chk{font-size:32px;color:var(--muted)}
+.fr .tm{margin:0 4px}
+
+/* 下：コメント */
+.cbar{left:48px;top:542px;width:1184px;height:150px;padding:8px 34px 0 34px;display:grid;align-items:center;z-index:2}
+.cm{grid-area:1/1;word-break:auto-phrase;line-break:strict;text-wrap:pretty;font-size:27px;line-height:1.6;opacity:0;transform:translateY(10px);transition:opacity .35s ease,transform .5s cubic-bezier(.3,1.3,.5,1)}
+.cm.cur{opacity:1;transform:none}
+.cm b{color:var(--accent);font-weight:900}
+
+/* 表紙・おわり */
+.cover{left:96px;top:120px;width:760px;height:460px;padding:56px 60px;transform:rotate(-1.2deg);display:flex;flex-direction:column;justify-content:center}
+.kicker{display:inline-block;align-self:flex-start;background:var(--b-bg);color:var(--b-ink);border-radius:999px;padding:2px 22px;font-size:22px;font-weight:900;margin-bottom:22px}
+.cover h1{font-size:72px;line-height:1.3}
+.cover h1 .mk{background:linear-gradient(transparent 62%,var(--r-bg) 62%);padding:0 4px}
+.cover .sub{margin-top:30px;font-size:34px}
+.cover .sub2{margin-top:18px;font-size:22px;color:var(--muted)}
+.mini{transform:rotate(3deg)}
+.polaroid{left:880px;top:170px;width:300px;height:330px;padding:18px 18px 0;transform:rotate(4deg)}
+.polaroid svg{display:block;background:var(--paper)}
+.polaroid .cap{font-family:"Kiwi Maru",serif;text-align:center;font-size:22px;margin-top:10px;color:var(--muted)}
+
+/* UI */
+#bar{position:absolute;z-index:5;left:0;bottom:0;height:6px;width:0;transition:width .5s cubic-bezier(.3,1.2,.5,1);
+  background:linear-gradient(90deg,#f5b8c4,#f8dc9a,#b7e2c8,#bcd2f2,#d6c8f0)}
+.ui{position:absolute;z-index:5;right:24px;bottom:12px;font-size:14px;color:var(--muted);transition:opacity .3s}
+.ui.hide,#bar.hide{opacity:0}
+#jump{position:fixed;z-index:20;left:12px;bottom:6px;display:flex;gap:6px;align-items:center;transition:opacity .3s}
+#jump.hide{opacity:0;pointer-events:none}
+#jump span{font:700 12px "Zen Maru Gothic",sans-serif;color:var(--muted);margin-right:2px}
+#jump button{font:700 13px "Zen Maru Gothic",sans-serif;min-width:30px;height:26px;padding:0 8px;border-radius:13px;border:1.5px solid var(--r-bd);background:var(--paper);color:var(--ink);cursor:pointer}
+#jump button:hover{background:var(--r-bg)}
+#jump button.on{background:var(--r-bg);color:var(--r-ink)}
+@media (prefers-reduced-motion: reduce){
+  .slide,.r.show,#bar,.tm,.cm,.lh,.curve.show{transition-duration:.01s}
+  .deco,.tm.cur{animation:none}
+}
+
+/* ===== 共通の追加 ===== */
+#jump a.home{font:700 13px "Zen Maru Gothic",sans-serif;height:26px;line-height:22px;padding:0 10px;border-radius:13px;border:1.5px solid var(--b-bd);background:var(--b-bg);color:var(--b-ink);text-decoration:none;box-sizing:border-box;margin-right:6px}
+.cc-n{background:transparent;color:var(--muted);border-color:var(--muted)}
+.tm-n.on{color:var(--muted);border-color:transparent;background:transparent;padding:0 2px}
+.fr .lbl.up{font-size:22px;margin-bottom:6px}
+
+/* ===== 平方完成 ===== */
+.hrows{position:absolute;left:96px;right:8px;top:22px;font-size:34px}
+.hrows .er{height:88px;position:relative}
+.hrows .lhs{width:34px}
+.hrows .eqs{width:46px}
+.hrows .slot{min-width:0;margin:0 2px}
+.bd{flex:none}
+.note{position:absolute;left:520px;top:-30px;bottom:30px;width:196px;display:flex;align-items:center;gap:6px;color:var(--note);font-size:20px;line-height:1.3;white-space:nowrap;
+  font-family:"Zen Maru Gothic",sans-serif;font-weight:900}
+.note svg{flex:none}
+.wv{position:relative;display:inline-block}
+.wl{position:absolute;left:0;right:0;bottom:-12px;height:10px;pointer-events:none;opacity:0;background:var(--accent);
+  -webkit-mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='10' viewBox='0 0 16 10'><path d='M0 5 Q4 0 8 5 T16 5' fill='none' stroke='%23000' stroke-width='3' stroke-linecap='round'/></svg>") repeat-x left center/16px 10px;
+          mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='10' viewBox='0 0 16 10'><path d='M0 5 Q4 0 8 5 T16 5' fill='none' stroke='%23000' stroke-width='3' stroke-linecap='round'/></svg>") repeat-x left center/16px 10px;
+  transition:opacity .35s ease .9s}
+.wv.wv-on .wl{opacity:1;animation:wdraw .6s ease-out;transition:opacity 0s}
+@keyframes wdraw{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+.pg{display:inline-block}
+.dist{position:absolute;left:0;top:0;overflow:visible;pointer-events:none}
+.dg{opacity:0;transition:opacity .3s}
+.dg.wv-on{opacity:1}
+.dg path{fill:none;stroke:var(--note);stroke-width:3.5;stroke-linecap:round;stroke-dasharray:1}
+.dg polygon{fill:var(--note)}
+.dg.wv-on path{animation:ddraw .6s ease-out}
+.dg.wv-on polygon{animation:dpop .25s ease-out .5s backwards}
+@keyframes ddraw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+@keyframes dpop{from{opacity:0}to{opacity:1}}
+.dlbl{position:absolute;top:100%;left:2px;margin-top:-2px;white-space:nowrap;font-family:"Zen Maru Gothic",sans-serif;font-weight:900;font-size:17px;color:var(--note);opacity:0;transition:opacity .3s}
+.dlbl.wv-on{opacity:1}
+.ans{position:relative;display:inline-block;padding-bottom:12px}
+.ulh{position:absolute;left:0;right:0;bottom:0;height:4px;border-radius:3px;background:var(--accent);transform:scaleX(0);transform-origin:left center;transition:transform .5s ease-out}
+.sl{position:absolute;left:100%;bottom:-6px;margin-left:-2px;overflow:visible}
+.sl path{fill:none;stroke:var(--accent);stroke-width:4;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1}
+.ans.ul-on .ulh{transform:scaleX(1);transition-delay:.5s}
+.ans.ul-on .sl .s1{stroke-dashoffset:0;transition:stroke-dashoffset .18s ease-out 1.05s}
+.ans.ul-on .sl .s2{stroke-dashoffset:0;transition:stroke-dashoffset .18s ease-out 1.25s}
+.ct{display:inline-block;border-radius:12px;padding:0 6px;transition:all .4s}
+.ct.on{outline:3px dashed var(--r-bd);outline-offset:4px;animation:throb .9s ease-in-out 2}
+.hmemo{left:902px;top:30px;width:330px;height:250px;padding:26px 18px 0}
+.mrow{display:flex;align-items:center;height:104px;gap:12px}
+.ml{width:146px;flex:none;font-size:23px;line-height:1.25;text-align:center;color:var(--ink)}
+.mbox{flex:1;height:68px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:36px;font-family:"STIX Two Text",serif}
+.mbox.bo{background:color-mix(in srgb,var(--o-bg) 50%,transparent);border:2.5px dashed var(--o-bd)}
+.mbox.bg{background:color-mix(in srgb,var(--g-bg) 50%,transparent);border:2.5px dashed var(--g-bd)}
+.hlegend{left:902px;top:302px;width:330px;height:150px;padding:22px 14px 8px;display:grid;grid-template-columns:1fr 1fr;gap:6px 4px;align-content:center}
+.hlegend .cc{margin:0;padding:0 6px;display:block;text-align:center;white-space:nowrap;font-size:17px}
+
+/* ===== 最大・最小 ===== */
+.slot-w{border-color:var(--gline);background:color-mix(in srgb,var(--gline) 40%,transparent);min-width:190px}
+.slot-w .tm{font-family:"Zen Maru Gothic",sans-serif;font-size:21px;font-weight:900;color:var(--accent)}
+.mmrow{font-size:28px}
+
+/* ===== ことば ===== */
+.wcard{left:40px;top:30px;width:840px;height:490px;padding:44px 40px 0}
+.sent{font-size:25px;line-height:1.5;margin:0 0 26px;padding-left:22px;position:relative}
+.sent::before{content:"";position:absolute;left:0;top:.55em;width:10px;height:10px;border-radius:50%;background:var(--r-bd)}
+.wslot{position:relative;display:inline-block;min-width:118px;height:42px;vertical-align:middle;border:2.5px dashed var(--r-bd);border-radius:10px;text-align:center;margin:2px 6px;
+  background:color-mix(in srgb,var(--r-bg) 35%,transparent);transition:border-color .3s,background .3s;box-sizing:border-box}
+.wslot.sm{min-width:64px}
+.wslot .num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--r-ink);font-size:22px;transition:opacity .3s}
+.wslot:has(.fly.go){border-color:transparent;background:transparent}
+.wslot:has(.fly.go) .num{opacity:0}
+.wslot .tm{margin:0;font-size:24px;line-height:36px}
+.tm-w{border-color:var(--b-bd);background:var(--b-bg);color:var(--b-ink);padding:0 8px;margin:3px 3px;font-size:18px;transition:opacity .4s}
+.tm-w.on{opacity:.35;text-decoration:line-through;padding:0 8px}
+.zcard{left:902px;top:30px;width:330px;height:250px;padding:18px 10px 0;display:flex;justify-content:center}
+.gocard{left:902px;top:302px;width:330px;height:172px;padding:24px 10px 6px;display:flex;flex-wrap:wrap;align-content:center;justify-content:center}
+.hl line{transition:stroke .4s,stroke-width .4s}
+.hl.on line{stroke:var(--accent);stroke-width:4}
+.hl circle{transition:r .4s,fill .4s}
+.hl.on circle{fill:var(--accent)}
+.hl text{transition:fill .4s}
+.hl.on text{fill:var(--accent)}
+
+/* ===== 目次 ===== */
+.mcard{position:absolute;width:250px;height:160px;padding:26px 22px 0;text-decoration:none;color:var(--ink);transition:transform .25s}
+.mcard:hover{transform:translateY(-6px) rotate(0deg) !important}
+.mcard .no{font-family:"Kiwi Maru",serif;font-size:22px;color:var(--accent)}
+.mcard .tt{font-family:"Kiwi Maru",serif;font-size:27px;line-height:1.35;margin-top:6px}
+.mcard .ds{font-size:15px;color:var(--muted);margin-top:8px}
+#jump{flex-wrap:wrap;max-width:calc(100% - 24px)}
+#jump button,#jump a.home,#jump span{white-space:nowrap;flex:none}
+.slot-w{margin:0 2px}
+.slot-w .tm{white-space:nowrap;font-size:18px;padding:0 4px}
+.mcard{height:178px}
+.mcard .tt{font-size:25px}
+
+/* もとの式（平方完成する前） */
+.er.orig{height:40px;font-size:26px}
+.otag{margin-left:12px;font-family:"Zen Maru Gothic",sans-serif;font-size:15px;font-weight:900;color:var(--muted);border:1.5px dashed var(--muted);border-radius:999px;padding:0 10px;line-height:1.5}
+/* 最大値・最小値の強調 */
+.mmring{fill:none;stroke:var(--accent);stroke-width:3;opacity:0;transform-box:fill-box;transform-origin:center}
+.gs.show .mmring{animation:ring 1.8s ease-out infinite}
+.gs.show .mmring.d2{animation-delay:.9s}
+@keyframes ring{0%{transform:scale(.5);opacity:.9}100%{transform:scale(3.2);opacity:0}}
+.popb{transform-box:fill-box;transform-origin:center;transform:scale(0);transition:transform .55s cubic-bezier(.3,1.7,.5,1) .35s}
+.gs.show .popb{transform:scale(1)}
+.mmbadge{fill:var(--accent)}
+.mmbt{fill:var(--paper);font-family:"Zen Maru Gothic",sans-serif;font-weight:900;font-size:19px}
+.gs.show .mmline{animation:march 1s linear infinite}
+@keyframes march{to{stroke-dashoffset:-20}}
+.gs.show .arrw{animation:nudge 1s ease-in-out infinite}
+@keyframes nudge{50%{transform:translate(var(--dx),var(--dy))}}
+@media (prefers-reduced-motion: reduce){ .gs.show .mmring,.gs.show .mmline,.gs.show .arrw{animation:none} .popb{transition-duration:.01s} }
+
+/* ===== スマホ（縦長の画面）：720×1280 の縦の台紙に組みかえ ===== */
+body{touch-action:manipulation}
+@media (hover:none){ .ui{display:none} }
+@media (max-height:500px){ #jump{flex-wrap:nowrap;overflow-x:auto;max-width:calc(100% - 24px)} }
+body.portrait #stage{width:720px;height:1280px;top:calc(50% - 23px)}
+body.portrait .ui{display:none}
+body.portrait #jump{left:0;right:0;bottom:6px;padding:6px 8px;flex-wrap:nowrap;overflow-x:auto;max-width:none;
+  background:color-mix(in srgb,var(--paper) 85%,transparent)}
+body.portrait .cbar{left:20px;top:1010px;width:680px;height:250px;padding:10px 26px 0}
+body.portrait .cm{font-size:26px;line-height:1.55}
+body.portrait .pno{left:4px;top:2px}
+/* グラフ・最大最小 */
+.portrait .t-g .eqcard{left:20px;top:30px;width:680px;height:640px}
+.portrait .t-g .divider{display:none}
+.portrait .t-g .graph{left:310px;top:222px;width:350px;height:393px}
+.portrait .t-g .memo{left:20px;top:700px}
+.portrait .t-g .legend{left:370px;top:700px}
+.portrait .t-g .done{left:560px!important;top:852px!important}
+/* 平方完成 */
+.portrait .t-h .eqcard{left:20px;top:30px;width:680px;height:520px}
+.portrait .t-h .hrows{left:14px;font-size:30px}
+.portrait .t-h .hrows .er{height:92px}
+.portrait .t-h .note{left:470px;width:180px;font-size:17px}
+.portrait .t-h .note svg{width:26px}
+.portrait .t-h .hmemo{left:20px;top:590px;height:260px}
+.portrait .t-h .hlegend{left:370px;top:590px;height:260px}
+.portrait .t-h .done{left:560px!important;top:862px!important}
+/* ことば */
+.portrait .t-w .wcard{left:20px;top:30px;width:680px;height:600px;padding:40px 28px 0}
+.portrait .t-w .zcard{left:20px;top:662px;height:300px;align-items:center}
+.portrait .t-w .gocard{left:370px;top:662px;height:300px}
+.portrait .t-w .done{left:574px!important;top:880px!important}
+/* 基本のスライド */
+.portrait .t-b .end-h{left:40px;top:40px}
+.portrait .t-b .end-h h2{font-size:34px}
+.portrait .t-b .fcard{left:20px;top:116px;width:680px;height:860px;padding:0 26px;gap:30px}
+.portrait .t-b .fr{white-space:normal;text-align:center;line-height:1.5}
+.portrait .t-b .fr.big{font-size:46px!important}
+.portrait .t-b .fr.mid{font-size:30px!important}
+.portrait .t-b .fr.chk{font-size:26px}
+/* 表紙・おわり */
+.portrait .t-c .cover{left:40px!important;top:110px!important;width:640px;height:560px!important;padding:44px 40px}
+.portrait .t-c .cover h1{font-size:60px}
+.portrait .t-c .cover .sub{font-size:28px}
+.portrait .t-c .polaroid{left:210px;top:740px}
+/* 目次 */
+.portrait .mtitle h2{font-size:31px!important}
+.portrait .toplink{left:60px!important;right:auto!important;top:150px!important}
+
+/* スマホで ページの幅が広がらないように、画面の外にはみ出した部分は 必ず切り取る */
+html{overflow:hidden;height:100%}
+body{overflow:hidden;height:100%;width:100%}
+
+/* ===== ２学期期末考査まで ===== */
+/* 表紙の写真：式が かけ算の形に 変わる */
+.fpol{width:264px;height:250px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background-color:var(--paper);
+  background-image:linear-gradient(var(--gline) 1px,transparent 1px),linear-gradient(90deg,var(--gline) 1px,transparent 1px);background-size:24px 24px}
+.fpol .fa{font-size:28px}
+.fpol .fv{font-size:17px;color:var(--accent);font-weight:900}
+.fpol .fb{font-size:30px;background:linear-gradient(transparent 60%,var(--r-bg) 60%);padding:0 4px}
+
+/* 4つのパターン */
+.pcards{position:absolute;left:48px;top:112px;width:1184px;height:410px}
+.pcw{position:absolute;width:578px;height:196px}
+.pcw.p1{left:0;top:0}.pcw.p2{left:606px;top:0}.pcw.p3{left:0;top:216px}.pcw.p4{left:606px;top:216px}
+.pc{position:absolute;inset:0;padding:14px 30px 8px;display:flex;flex-direction:column;justify-content:center;gap:10px}
+.pc-f{font-size:36px;line-height:1.25;white-space:nowrap}
+.pc-k{font-size:19px;color:var(--muted);white-space:nowrap}
+.ct-b{color:var(--b-ink);font-weight:700}.ct-g{color:var(--g-ink);font-weight:700}.ct-r{color:var(--r-ink);font-weight:700}
+.p1 .pc{transform:rotate(-.7deg)}.p2 .pc{transform:rotate(.6deg)}.p3 .pc{transform:rotate(.5deg)}.p4 .pc{transform:rotate(-.6deg)}
+.pc-h{font-family:"Kiwi Maru",serif;font-size:25px;display:flex;align-items:center;gap:12px}
+.pc-no{width:40px;height:40px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex:none;
+  background:var(--r-bg);color:var(--r-ink);border:2px solid var(--r-bd);font-size:21px}
+.kw{color:var(--accent);font-weight:900;border-bottom:2.5px solid var(--r-bd);padding:0 2px;margin:0 2px}
+.xr{color:var(--r-ink)}
+
+/* 因数分解の 1問 */
+.fxcard{left:40px;top:30px;width:600px;height:490px}
+.fxpat{position:absolute;left:62px;top:20px;font-size:17px;font-weight:900;color:var(--accent);border:2px dashed var(--r-bd);border-radius:999px;padding:1px 14px}
+.fxrows{position:absolute;left:40px;right:16px;top:66px;font-size:44px}
+.fxr{display:flex;align-items:center;height:96px;white-space:nowrap;position:relative}
+.fxr .eqs{width:58px}
+.fxr .tm{margin:0 3px}
+/* 数の右上に そえる メモ（9 ＝ 3² など） */
+.upnote{position:absolute;left:78%;bottom:82%;white-space:nowrap;font-size:26px;color:var(--g-ink);background:var(--paper);
+  border:2px dashed var(--g-bd);border-radius:12px;padding:0 10px;line-height:1.4;transform:rotate(-4deg)}
+.upnote.show{transform:rotate(-4deg)}
+.upnote.un-r{color:var(--r-ink);border-color:var(--r-bd);background:var(--r-bg);font-size:28px;padding:0 9px;left:92%;bottom:84%}
+.fxrows .slot{min-width:46px;margin:0 2px}
+.fxrows .slot-r{min-width:40px}
+.fxrows .slot-r .tm{font-family:inherit;font-size:inherit;font-weight:inherit}
+.fxdone{left:506px;top:58px}
+/* 考え方（大きく） */
+.think{left:662px;top:30px;width:570px;height:490px;padding:30px 28px 10px;display:flex;flex-direction:column}
+.tg{font-size:22px;text-align:center;padding:2px 0 12px;margin-bottom:6px;border-bottom:2px dashed var(--gline);white-space:nowrap}
+.tg .cc{font-family:"STIX Two Text",serif;font-size:24px}
+.ts{display:flex;gap:16px;align-items:flex-start;padding:14px 0 10px}
+.ts-n{flex:none;width:40px;height:40px;margin-top:4px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:var(--o-bg);color:var(--o-ink);border:2px solid var(--o-bd);font-size:21px;font-weight:900}
+.ts-l{font-size:21px;color:var(--muted)}
+.ts-m{font-size:40px;line-height:1.3;white-space:nowrap}
+.ts-m .cc,.ts-m .tm{font-size:38px;padding:0 10px}
+.ts-s{font-size:19px;color:var(--note);white-space:nowrap}
+.ts-s .math{font-size:21px}
+.dim{color:var(--muted)}
+
+/* スマホ（縦長） */
+.portrait .t-p .end-h{left:40px;top:40px}
+.portrait .t-p .end-h h2{font-size:34px}
+.portrait .t-p .pcards{left:20px;top:116px;width:680px;height:870px}
+.portrait .t-p .pcw{left:0!important;width:680px;height:200px}
+.portrait .t-p .pcw.p2{top:220px}.portrait .t-p .pcw.p3{top:440px}.portrait .t-p .pcw.p4{top:660px}
+.portrait .t-x .fxcard{left:20px;top:30px;width:680px;height:500px}
+.portrait .t-x .fxrows{left:24px;font-size:34px}
+.portrait .t-x .think{left:20px;top:552px;width:680px;height:436px;padding-top:26px}
+.portrait .t-x .ts{padding:5px 0 3px}
+.portrait .t-x .fxdone{left:560px;top:330px}
+
+/* ===== 2次方程式（因数分解で解く） ===== */
+.qecard{left:48px;top:30px;width:1184px;height:490px}
+.q0{position:absolute;left:48px;top:30px;font-size:40px;white-space:nowrap}
+.q1{position:absolute;left:48px;top:108px;height:66px;display:flex;align-items:center;font-size:38px;white-space:nowrap}
+.qf{display:inline-flex;align-items:center;justify-content:center;height:66px}
+.qf-b{background:var(--b-bg)} .qf-o{background:var(--o-bg)}
+.qz{margin-left:14px}
+.qlab{position:absolute;top:40px;display:flex;align-items:center;gap:8px;color:var(--accent);font-size:28px;font-weight:900;white-space:nowrap}
+.qlab path{stroke-dasharray:1;stroke-dashoffset:1} .qlab polygon{opacity:0}
+.qlab .gs.show path{stroke-dashoffset:0;transition:stroke-dashoffset .5s ease-out}
+.qlab .gs.show polygon{opacity:1;transition:opacity .15s .45s}
+.qlab .gs{opacity:1}
+.lh.late.show{transition-delay:.7s}
+.qarr{position:absolute;left:0;top:174px;overflow:visible}
+.qarr line{stroke-width:3}
+.qb{position:absolute;top:232px;height:136px;display:flex;align-items:center;justify-content:center;font-size:32px}
+.qlines{display:grid;grid-template-columns:auto auto auto;column-gap:12px;row-gap:26px;align-items:center}
+.qc0{justify-self:end;white-space:nowrap} .qc2{justify-self:start;white-space:nowrap}
+.qlines .late.show{transition-delay:.7s}
+.qb .tm{margin:0 2px;line-height:1.15}
+.mva{position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+.mva path{fill:none;stroke:var(--accent);stroke-width:3;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1}
+.mva .gs.show path{stroke-dashoffset:0;transition:stroke-dashoffset .55s ease-out .1s}
+.mva polygon{opacity:0} .mva .gs.show polygon{opacity:1;transition:opacity .15s .6s}
+.mva polygon{fill:var(--accent)}
+.qb-b{background:color-mix(in srgb,var(--b-bg) 70%,transparent)} .qb-o{background:color-mix(in srgb,var(--o-bg) 70%,transparent)}
+.q3{position:absolute;left:120px;top:388px;height:72px;display:flex;align-items:center;font-size:38px;white-space:nowrap}
+.qx{margin-right:14px}
+.qa{display:inline-flex;align-items:center;min-width:240px;height:72px;padding:0 18px;background:color-mix(in srgb,var(--b-bg) 45%,transparent);border-radius:6px}
+.qa .slot{min-width:56px;margin:0 4px}
+.qcm{margin:0 4px}
+.qdup{display:inline-flex;align-items:center;max-width:240px;transition:max-width .6s ease .35s,opacity .4s ease}
+.qdup.on{max-width:0;opacity:0;overflow:hidden}
+.slot-b{border-color:var(--b-bd);background:color-mix(in srgb,var(--b-bg) 45%,transparent)}
+.qjyu{margin-left:36px;display:inline-flex;align-items:center;justify-content:center;width:170px;height:72px;background:var(--r-bg);color:var(--r-ink);
+  font-family:"Kiwi Maru",serif;font-size:32px;border-radius:6px}
+.qpt{position:absolute;left:780px;top:46px;width:360px;height:220px;border:2.5px dashed var(--r-bd);border-radius:14px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px}
+.qpt .lab{left:18px}
+.qpt-m{font-size:38px;display:flex;align-items:center;gap:10px}
+.qs{display:inline-block;width:54px;height:46px;border-radius:6px}
+.qs-b{background:var(--b-bg)} .qs-o{background:var(--o-bg)}
+.qpt-t{font-size:26px;color:var(--accent);font-weight:900}
+.qdone{left:1080px;top:380px}
+/* ※注意！ */
+.ncard{left:48px;top:30px;width:1184px;height:490px;padding:40px 60px;display:flex;flex-direction:column;align-items:center;gap:18px;
+  background:color-mix(in srgb,var(--g-bg) 45%,var(--paper))}
+.n-h{align-self:flex-start;font-size:30px;font-weight:900}
+.n-t{font-size:30px;color:var(--b-ink);font-weight:900}
+.n-eq{display:flex;align-items:flex-start;gap:4px;font-size:46px;margin-top:16px;white-space:nowrap}
+.n-c{display:flex;flex-direction:column;align-items:center}
+.n-u{display:flex;align-items:center;height:66px;line-height:1;border-bottom:4px dotted;padding:0 2px}
+.n-u.b{border-color:var(--b-ink)} .n-u.o{border-color:var(--o-ink)}
+.n-v{font-size:38px;line-height:1.2;text-align:center;margin-top:8px}
+.n-v.b{color:var(--b-ink)} .n-v.o{color:var(--o-ink)}
+.n-z{margin-left:10px;height:66px;display:flex;align-items:center;line-height:1}
+.n-tri{align-self:flex-end;margin:0 0 6px 50px;font-family:"Zen Maru Gothic",sans-serif;font-size:30px;color:#d9443a;font-weight:900}
+.n-tri b{font-size:56px;vertical-align:-8px;margin-left:6px}
+.n-last{font-size:28px;color:var(--b-ink);font-weight:900}
+/* スマホ（縦長） */
+.portrait .t-q .qecard{left:20px;top:30px;width:680px;height:960px}
+.portrait .t-q .qpt{left:40px;top:610px;width:600px;height:190px}
+.portrait .t-q .qjyu{position:absolute;left:0;top:96px;margin:0}
+.portrait .t-q .q3{left:48px}
+.portrait .t-q .qdone{left:540px;top:840px}
+.portrait .t-n .ncard{left:20px;top:30px;width:680px;height:960px;padding:40px 30px;justify-content:center}
+.portrait .t-n .n-t{font-size:24px;text-align:center}
+.portrait .t-n .n-eq{flex-wrap:wrap;justify-content:center}
+.portrait .t-n .n-tri{margin:20px 0 0;width:100%;text-align:center}
+
+</style>
+</head>
+<body>
+<div id="bg"></div>
+<div id="stage"></div>
+<div id="bar"></div>
+<div class="ui" id="ui"></div>
+<div id="jump"></div>
+<script>
+/* ====== 小道具 ====== */
+const K  = (k,t) => `<span class="cc cc-${k} sm">${t}</span>`;
+const M  = t => `<span class="math">${t}</span>`;
+const S  = (n,html,cls='') => `<span class="r ${cls}" data-s="${n}">${html}</span>`;
+const tm = (k,t,o,x='') => `<span class="tm tm-${k}" data-o="${o}"${x}>${t}</span>`;
+const TP = (c,css) => `<span class="tape t-${c}" style="${css}"></span>`;
+const ab = Math.abs;
+const fmt = n => n<0 ? '−'+ab(n) : String(n);
+const sgn = n => (n<0 ? '− ' : '＋ ') + ab(n);
+const sf  = n => (n<0 ? '−' : '＋') + ab(n);
+const P2='<sup>2</sup>', X2='x<sup>2</sup>';
+const slotC = (k,txt,f,src) => `<span class="slot slot-${k}"><span class="tm tm-${k} on fly" data-f="${f}" data-src="${src}">${txt}</span></span>`;
+const cbar = list => `<div class="card abs cbar">${TP('mint','left:-30px;top:2px;transform:rotate(-38deg)')}${TP('mint','right:-30px;top:2px;transform:rotate(38deg)')}<div class="lab">いま やっていること</div>${list.map((c,i)=>`<div class="cm" data-m="${i}">${c}</div>`).join('')}</div>`;
+const SEAL = s => `<div class="abs r done" data-s="${s}" style="left:1146px;top:456px"><div class="seal">完成！</div></div>`;
+/* ax²＋bx＋c を 文字列に */
+function polyStr(a,b,c){
+  let s = `${a===1?'':a===-1?'−':fmt(a)}x${P2}`;
+  if(b) s += ` ${b<0?'−':'＋'} ${ab(b)===1?'':ab(b)}x`;
+  if(c) s += ` ${c<0?'−':'＋'} ${ab(c)}`;
+  return s;
+}
+
+/* ====== グラフ（SVG） ====== */
+const GW=410, GH=460;
+function graphSVG(P,st){
+  const {a,p,q,x1,y1}=P;
+  const xs=[p-2,p+2,0,x1], ys=[q,y1,0,q+Math.sign(a)*Math.min(ab(a)*4,6)];
+  const xmin=Math.min(...xs)-.9, xmax=Math.max(...xs)+.9, ymin=Math.min(...ys)-.9, ymax=Math.max(...ys)+.9;
+  const u=Math.min(GW/(xmax-xmin), GH/(ymax-ymin), 48);
+  const ox=GW/2-u*(xmin+xmax)/2, oy=GH/2+u*(ymin+ymax)/2;
+  const X=x=>+(ox+u*x).toFixed(1), Y=y=>+(oy-u*y).toFixed(1);
+  const vx0=-ox/u, vx1=(GW-ox)/u, vy0=(oy-GH)/u, vy1=oy/u;
+  let s='';
+  for(let i=Math.ceil(vx0);i<=Math.floor(vx1);i++) s+=`<line class="gg" x1="${X(i)}" y1="0" x2="${X(i)}" y2="${GH}"/>`;
+  for(let j=Math.ceil(vy0);j<=Math.floor(vy1);j++) s+=`<line class="gg" x1="0" y1="${Y(j)}" x2="${GW}" y2="${Y(j)}"/>`;
+  /* 座標軸 */
+  s+=`<line class="ax" x1="2" y1="${Y(0)}" x2="${GW-4}" y2="${Y(0)}"/><polygon class="axh" points="${GW+2},${Y(0)} ${GW-11},${Y(0)-6} ${GW-11},${Y(0)+6}"/>`;
+  s+=`<line class="ax" x1="${X(0)}" y1="${GH-2}" x2="${X(0)}" y2="6"/><polygon class="axh" points="${X(0)},0 ${X(0)-6},13 ${X(0)+6},13"/>`;
+  s+=`<text class="gt it" x="${GW-6}" y="${Y(0)+24}">x</text><text class="gt it" x="${X(0)+10}" y="16">y</text><text class="gt it" x="${X(0)-18}" y="${Y(0)+20}">O</text>`;
+  for(let i=Math.ceil(vx0);i<=Math.floor(vx1);i++) if(i) s+=`<line class="tk" x1="${X(i)}" y1="${Y(0)-4}" x2="${X(i)}" y2="${Y(0)+4}"/>`;
+  for(let j=Math.ceil(vy0);j<=Math.floor(vy1);j++) if(j) s+=`<line class="tk" x1="${X(0)-4}" y1="${Y(j)}" x2="${X(0)+4}" y2="${Y(j)}"/>`;
+  /* 放物線 */
+  const yedge = a>0 ? vy1-.15 : vy0+.15;
+  const d = Math.min(Math.sqrt((yedge-q)/a), p-vx0-.1, vx1-p-.1);
+  let path=''; for(let i=0;i<=80;i++){ const x=p-d+2*d*i/80; path+=(i?'L':'M')+X(x)+' '+Y(a*(x-p)**2+q)+' '; }
+  s+=`<path class="curve" data-s="${st.cu}" pathLength="1" d="${path}"/>`;
+  /* 頂点（原点のときはラベルなし） */
+  const vlab = a>0 ? Y(q)+30 : Y(q)-16;
+  if(p||q) s+=`<g class="gs" data-s="${st.pv}"><text class="gt k halo" x="${X(p)+(p<=0?-6:6)}" y="${vlab}" text-anchor="${p<=0?'end':'start'}">(${fmt(p)}, ${fmt(q)})</text></g>`;
+  s+=`<g class="pt" data-s="${st.pv}"><circle cx="${X(p)}" cy="${Y(q)}" r="7"/></g>`;
+  /* もう1点 */
+  if(!P.noPt){
+    const [an,dx] = x1>=p ? ['start',11] : ['end',-11];
+    s+=`<g class="gs" data-s="${st.ptg}"><text class="gt k halo" x="${X(x1)+dx}" y="${y1===0?Y(y1)-12:Y(y1)+7}" text-anchor="${an}">(${fmt(x1)}, ${fmt(y1)})</text></g>`;
+    s+=`<g class="pt" data-s="${st.ptg}"><circle cx="${X(x1)}" cy="${Y(y1)}" r="6"/></g>`;
+  }
+  if(P.extra) s+=P.extra({X,Y,d,u});
+  return `<svg class="graph" width="${GW}" height="${GH}" viewBox="0 0 ${GW} ${GH}">${s}</svg>`;
+}
+
+/* ====== 式の読みとり（形・横・縦） ====== */
+function readEq(P,st){
+  const {a,p,q}=P;
+  const aS = a===1 ? '' : a===-1 ? '−' : fmt(a);
+  const qT = q===0 ? '' : ` ${q<0?'−':'＋'} ${ab(q)}`;
+  const body = p===0 ? `x${P2}` : `(x ${p<0?'＋':'−'} ${ab(p)})${P2}`;
+  const eqTxt = `y ＝ ${aS}${body}${qT}`;
+  const up = a>0, dir = up ? '下に凸' : '上に凸';
+  const aC = a===1 ? 'なし' : a===-1 ? '−' : fmt(a);
+  const pC = p===0 ? 'なし' : p<0 ? `＋${-p}` : `−${p}`;
+  const qC = q===0 ? 'なし' : `${q<0?'−':'＋'}${ab(q)}`;
+  const V = `(${fmt(p)}, ${fmt(q)})`;
+  const cm = [
+    `基本の形 ${M('y ＝ a(x − p)² ＋ q')} と 見くらべよう。　${K('r',aC)} が <b>形</b>、${K('o',pC)} が <b>横</b>、${K('g',qC)} が <b>縦</b> だよ。`,
+    a===1  ? `<b>形</b> は x² の前に 何も 書いていない ので <b>1</b>、つまり <b>＋</b>。　だから グラフの 向きは <b>${dir}</b>。`
+    : a===-1 ? `<b>形</b> は ${K('r','−')}（−1 の 1 が 省略されている）。　だから グラフの 向きは <b>${dir}</b>。`
+    : `<b>形</b> の ${K('r',aC)} は ${up?'＋':'−'}。　だから グラフの 向きは <b>${dir}</b>。`,
+    p===0 ? `<b>横</b> の かっこ が ない ので、頂点の <b>x座標</b> は <b>0</b>。`
+          : `<b>横</b> の ${K('o',pC)} は 頂点の <b>x座標</b>。　<b>プラスマイナスが逆転</b> して → <b>${fmt(p)}</b>`,
+    q===0 ? `<b>縦</b> の 数 が ない ので、頂点の <b>y座標</b> は <b>0</b>。　　頂点は ${M(V)}。`
+          : `<b>縦</b> の ${K('g',qC)} は 頂点の <b>y座標</b>。　<b>そのまま</b> → <b>${fmt(q)}</b>　　頂点は ${M(V)}。`
+  ];
+  const lb = (s,cls,t) => `<span class="lbl ${cls}"><span class="lh" data-s="${s}">${t}</span></span>`;
+  const top = (cls,t) => lb(st.col,`up ${cls}`,t);
+  const gtm = (k,o,x='') => `<span class="tm tm-${k} ghost" data-o="${o}"${x}>&nbsp;</span>`;
+  const aPart = `<span class="hasl"${p===0?' style="margin-right:20px"':''}>${aS?tm('r',aS,st.col,' data-k="a"'):gtm('r',st.col,' data-k="a"')}${top('lr','形')}${lb(st.dir,'lr',(up?(a===1?'1 →':'＋ →'):'− →')+'<br>'+dir)}</span>`;
+  const pPart = p===0
+    ? `<span class="hasl">${tm('o',`x${P2}`,st.col,' data-k="p"')}${top('lo','横')}${lb(st.vx,'lo','なし<br>→ 0')}</span>`
+    : `( x <span class="hasl">${tm('o',sgn(-p),st.col,' data-k="p"')}${top('lo','横')}${lb(st.vx,'lo','±逆転<br>→ '+fmt(p))}</span> )${P2}`;
+  const qPart = `<span class="hasl" style="margin-left:${p===0?20:6}px">${q===0?gtm('g',st.col,' data-k="q"'):tm('g',sgn(q),st.col,' data-k="q"')}${top('lg','縦')}${lb(st.vy,'lg',q===0?'なし<br>→ 0':'そのまま<br>→ '+fmt(q))}</span>`;
+  const r0 = `<div class="er" style="margin-top:12px"><span class="lhs">y</span><span class="eqs">＝</span><span>${aPart}${pPart}${qPart}</span></div>`;
+  const rowDir = `<div class="arow"><span class="al">向き</span>${slotC('r',dir,st.dir,'a')}</div>`;
+  const rowV = `<div class="arow math"><span class="al">頂点</span>(${slotC('o',fmt(p),st.vx,'p')},${slotC('g',fmt(q),st.vy,'q')})</div>`;
+  return {aS,qT,eqTxt,up,dir,V,cm,r0,rowDir,rowV};
+}
+/* 平方完成する前の式（もとの式）。kst：数だけの項を青く光らせる番（なければ光らせない） */
+function origRow(o,kst){
+  const cpart = o.c ? tm('b',sgn(o.c),kst===undefined?99:kst) : (kst!==undefined ? S(kst,K('b','＋ 0')) : '');
+  return `<div class="er orig"><span class="lhs">y</span><span class="eqs">＝</span><span>${polyStr(o.a,o.b,0)} ${cpart}</span><span class="otag">もとの式</span></div>`;
+}
+function topRows(P,R){
+  if(!P.orig) return `<div class="rowsw math" style="font-size:32px">${R.r0}</div>`;
+  return `<div class="rowsw math" style="font-size:32px;top:22px">${origRow(P.orig,P.kst)}`
+    + R.r0.replace('margin-top:12px','margin-top:34px').replace('<span class="lhs">y</span>','<span class="lhs"></span>') + `</div>`;
+}
+const LEGEND = `<div class="card abs legend">${TP('lav','right:24px;top:-14px;transform:rotate(-5deg)')}
+    <div class="lab">基本の形</div>
+    <div class="l1 math">y ＝ ${K('r','a')}(x − ${K('o','p')})${P2} ＋ ${K('g','q')}</div>
+    <div class="l2">${K('r','形')}向き　${K('o','横')}x座標　${K('g','縦')}y座標</div>
+  </div>`;
+const EQTAPE = `${TP('pink','left:-34px;top:4px;transform:rotate(-40deg)')}${TP('pink','right:-34px;top:4px;transform:rotate(40deg)')}`;
+
+/* ====== グラフ・頂点・軸 の 1問 ======
+   P = {num, a, p, q}　　y軸との交点を もとの式から読むとき：yint:c, orig:{a,b} */
+function genGraph(P){
+  const {num,a,p,q}=P;
+  const x1 = p!==0 ? 0 : 1;                      // 頂点がy軸上なら x=1 の点
+  const y1 = a*(x1-p)**2+q;
+  Object.assign(P,{x1,y1});
+  const aOne = ab(a)===1;
+  const Q1 = `(${fmt(x1)}, ${fmt(y1)})`;
+  const eqv = (m) => m===fmt(y1) ? m : `${m} ＝ ${fmt(y1)}`;
+  const st={col:1,dir:2,vx:3,vy:4,ax:5,pv:6,cu:7,pt:8};
+  const R = readEq(P,st), aS=R.aS, qT=R.qT;
+
+  /* もう1点：1行ずつ［番号, 左に書く式, コメント］ */
+  let L, head='もう1点';
+  if(P.yint!==undefined){
+    const c=P.yint, o=P.orig;
+    head='y軸との交点';
+    L = [
+      ['①', `<span class="math">y ＝ ${polyStr(o.a,o.b,0)} <span class="cc cc-b sm">${sgn(c)}</span></span> なので`,
+            `<b>もう1点</b> は <b>y軸との交点</b>。　平方完成する <b>前</b> の もとの式を 見よう。　${c===0?`数だけの項が ないので ${K('b','＋ 0')} と 考えるよ。`:`数だけの項は ${K('b',sgn(c))}。`}`],
+      ['②', `y軸との交点は <span class="math" data-k="pt1">(0, <span class="cc cc-b sm">${fmt(c)}</span>)</span>`,
+            `y軸上 では ${M('x ＝ 0')}。　x に 0 を 入れると x の項は 全部 0 に なるから、残るのは 数だけの項。　だから y軸との交点は <b>${M(Q1)}</b>。`],
+      ['※', `計算不要`, `もとの式の <b>数だけの項</b> が そのまま y座標！　<b>計算しなくても</b> 読みとれるよ。`]
+    ];
+  } else if(p!==0){
+    const subst = `${aS}(0 ${p<0?'＋':'−'} ${ab(p)})${P2}${qT}`;
+    const kakko = `${aS}(${fmt(-p)})${P2}${qT}`;
+    const sq = p*p;
+    const mul = aOne ? `${a<0?'−':''}${sq}${qT}` : `${fmt(a)} × ${sq}${qT}`;
+    L = [
+      ['①', `y軸上なので <span class="math">x ＝ 0</span><br><span class="math">x ＝ 0</span> を代入`,
+            `<b>もう1点</b> 求めよう。　① <b>y軸上</b> の点なので ${M('x ＝ 0')}。　だから ${M('x ＝ 0')} を <b>代入</b> するよ。`],
+      ['②', `<span class="math">y ＝ ${subst}</span>`, `② 式の x に 0 を 代入した式。　${M(`y ＝ ${subst}`)}`],
+      ['③', `<span class="math">　＝ ${kakko}</span>`, `③ まず <b>括弧の中</b> を 計算。　${M(`0 ${p<0?'＋':'−'} ${ab(p)} ＝ ${fmt(-p)}`)} だから ${M(`y ＝ ${kakko}`)}`],
+      ['④', `<span class="math">　＝ ${eqv(mul)}</span>`, `④ <b>全部</b> 計算する。　${M(`y ＝ ${eqv(mul)}`)}`],
+      ['⑤', `<span class="math">x ＝ 0, y ＝ ${fmt(y1)}</span> なので<br><span class="math" data-k="pt1">${Q1}</span>`,
+            `⑤ だから ${M('x ＝ 0')}、${M(`y ＝ ${fmt(y1)}`)} なので、もう1点は <b>${M(Q1)}</b>。`]
+    ];
+  } else {
+    const subst = aOne ? `${a<0?'−':''}1${P2}${qT}` : `${fmt(a)} × 1${P2}${qT}`;
+    const mul = aOne ? `${a<0?'−':''}1${qT}` : `${fmt(a)} × 1${qT}`;
+    L = [
+      ['①', `頂点が y軸上なので<br><span class="math">x ＝ 1</span> のときを求める`,
+            `<b>もう1点</b> 求めよう。　① 頂点が <b>y軸上</b> にあるので、${M('x ＝ 0')} だと 頂点と 同じ点に なってしまう。　だから <b>${M('x ＝ 1')}</b> のときを 求めるよ。`],
+      ['②', `<span class="math">y ＝ ${subst}</span>`, `② 式の x に 1 を 代入した式。　${M(`y ＝ ${subst}`)}`],
+      ['③', `<span class="math">　＝ ${eqv(mul)}</span>`, `③ <b>全部</b> 計算する。　${M(`y ＝ ${eqv(mul)}`)}`],
+      ['④', `<span class="math">x ＝ 1, y ＝ ${fmt(y1)}</span> なので<br><span class="math" data-k="pt1">${Q1}</span>`,
+            `④ だから ${M('x ＝ 1')}、${M(`y ＝ ${fmt(y1)}`)} なので、もう1点は <b>${M(Q1)}</b>。`]
+    ];
+  }
+  st.ptg = st.pt + L.length; st.dn = st.ptg + 1;
+  if(P.orig){ if(P.yint!==undefined) P.orig.c = P.yint; P.kst = st.pt; }
+
+  const cm = [
+    P.yint!==undefined
+      ? `${num} 前のスライドで 平方完成 した 式 ${M(R.eqTxt)} を 使って、<b>グラフ</b> と <b>向き・頂点・軸</b> を 答えよう！`
+      : (P.intro || `${num} ${M(R.eqTxt)} の <b>グラフ</b> をかいて、<b>向き・頂点・軸</b> を 答えよう！`),
+    ...R.cm,
+    `軸は 頂点の x座標 を 使って <b>${M(`x ＝ ${fmt(p)}`)}</b>。${p===0?'　（y軸 そのもの だね）':''}`,
+    `グラフを かこう。　まず <b>頂点</b> ${M(R.V)} を とる。`,
+    `頂点から ${R.dir} の <b>放物線</b> を かこう。`,
+    ...L.map(l=>l[2]),
+    `点 ${M(Q1)} を グラフに かきこもう。`,
+    `<b>完成！</b>　${R.dir}、頂点 ${M(R.V)}、軸 ${M(`x ＝ ${fmt(p)}`)} です。`
+  ];
+  const n2 = `<div class="nt lh" data-s="${st.pt}" style="--dotc:#f3d58a"><b>【${head}】</b></div>`
+    + L.map((l,i)=>`<div class="pl lh" data-s="${st.pt+i}"><span class="no">${l[0]}</span><span>${l[1]}</span></div>`).join('');
+
+  return `
+  <div class="pno">${num}</div>
+  <div class="card abs eqcard">${EQTAPE}
+    ${topRows(P,R)}
+    <div class="rowsw" style="top:${P.orig?196:148}px">${n2}</div>
+    <div class="divider"></div>
+    ${graphSVG(P,st)}
+  </div>
+  <div class="card abs memo">${TP('yellow','right:22px;top:-14px;transform:rotate(4deg)')}
+    <div class="lab">答え</div>
+    ${R.rowDir}${R.rowV}
+    <div class="arow math"><span class="al">軸</span>x ＝${slotC('o',fmt(p),st.ax,'p')}</div>
+    <div class="arow math gray"><span class="al">もう一点</span>${slotC('k',Q1,st.ptg,'pt1')}</div>
+  </div>
+  ${LEGEND}
+  ${SEAL(st.dn)}
+  ${cbar(cm)}`;
+}
+
+/* ====== 最大値・最小値 の 1問 ====== */
+function mmSlide(P){
+  const {num,a,p,q}=P;
+  Object.assign(P,{x1:p,y1:q,noPt:true});
+  const st={col:1,dir:2,vx:3,vy:4,pv:5,cu:6,ext:7,none:8,dn:9};
+  const R = readEq(P,st), up=R.up;
+  const big = up?'最小値':'最大値', non = up?'最大値':'最小値';
+  P.extra = ({X,Y,d,u})=>{
+    const bw=136, bx = p>0 ? X(0)-10-bw : X(0)+(p?10:18), by=Y(q)-18;
+    let s=`<g class="gs" data-s="${st.ext}">${p?`<line class="gd mmline" x1="${X(p)}" y1="${Y(q)}" x2="${X(0)}" y2="${Y(q)}"/>`:''}
+      <circle class="mmring" cx="${X(p)}" cy="${Y(q)}" r="12"/><circle class="mmring d2" cx="${X(p)}" cy="${Y(q)}" r="12"/>
+      <g class="popb"><rect class="mmbadge" x="${bx}" y="${by}" width="${bw}" height="36" rx="18"/><text class="mmbt" x="${bx+bw/2}" y="${by+25}" text-anchor="middle">${big} ${fmt(q)}</text></g>
+      <text class="gt k halo" x="${X(p)}" y="${up?Y(q)+56:Y(q)-42}" text-anchor="middle" style="font-family:'Zen Maru Gothic';font-weight:900">いちばん${up?'下':'上'}！</text></g>`;
+    let arr='';
+    [-1,1].forEach(sd=>{
+      const xe=p+sd*d, ye=a*d*d+q, ang=Math.atan2(-2*a*d*u, sd*u);
+      const hx=X(xe), hy=Y(ye);
+      const tri=[[6,0],[-10,-7],[-10,7]].map(([dx,dy])=>`${(hx+dx*Math.cos(ang)-dy*Math.sin(ang)).toFixed(1)},${(hy+dx*Math.sin(ang)+dy*Math.cos(ang)).toFixed(1)}`).join(' ');
+      arr+=`<g class="arrw" style="--dx:${(7*Math.cos(ang)).toFixed(1)}px;--dy:${(7*Math.sin(ang)).toFixed(1)}px"><polygon points="${tri}" fill="var(--note)"/></g>`;
+    });
+    const xe=p-d, ye=a*d*d+q;
+    arr+=`<text class="gt halo" x="${X(xe)+10}" y="${Y(ye)+(up?34:-24)}" style="font-family:'Zen Maru Gothic';font-weight:900;fill:var(--note)"><tspan>どこまでも</tspan><tspan x="${X(xe)+10}" dy="22">→ ${non} なし</tspan></text>`;
+    s+=`<g class="gs" data-s="${st.none}">${arr}</g>`;
+    return s;
+  };
+  const extT = `x ＝ ${fmt(p)} で、${big} ${fmt(q)}`;
+  const cm = [
+    P.intro || `${num} ${M(R.eqTxt)} の <b>最大値・最小値</b> を 求めよう！　まず グラフを かいて 考えるよ。`,
+    ...R.cm,
+    `グラフに <b>頂点</b> ${M(R.V)} を とる。`,
+    `頂点から ${R.dir} の <b>放物線</b> を かこう。`,
+    `${R.dir} の グラフは 頂点が <b>いちばん${up?'下':'上'}</b>。　だから ${M(`x ＝ ${fmt(p)}`)} の とき <b>${big} ${fmt(q)}</b>。`,
+    up ? `グラフの 上の方は <b>どこまでも</b> 大きくなる。　いちばん大きい 値は 決まらないので <b>最大値 なし</b>。`
+       : `グラフの 下の方は <b>どこまでも</b> 小さくなる。　いちばん小さい 値は 決まらないので <b>最小値 なし</b>。`,
+    `<b>完成！</b>　${up?`最大値 なし、${M(extT)}`:`${M(extT)}、最小値 なし`}。`
+  ];
+  const notes = `<div class="nt lh" data-s="${st.ext}" style="--dotc:var(--r-bd)">${R.dir} → 頂点が いちばん${up?'下':'上'}<br><span class="math">→ ${extT}</span></div>
+    <div class="nt lh" data-s="${st.none}" style="--dotc:var(--b-bd)">${up?'上':'下'}は どこまでも のびる<br>→ ${non} なし</div>`;
+  const vs = `<span class="slot slot-w"><span class="tm tm-w2 on fly" data-f="${st.ext}" data-src="q">${extT}</span></span>`;
+  const ns = `<span class="slot slot-w"><span class="tm tm-w2 on fly" data-f="${st.none}" data-src="none">なし</span></span>`;
+  return `
+  <div class="pno">${num}</div>
+  <div class="card abs eqcard">${EQTAPE}
+    ${topRows(P,R)}
+    <div class="rowsw" style="top:${P.orig?200:160}px">${notes}</div>
+    <div class="divider"></div>
+    ${graphSVG(P,st)}
+  </div>
+  <div class="card abs memo">${TP('yellow','right:22px;top:-14px;transform:rotate(4deg)')}
+    <div class="lab">答え</div>
+    ${R.rowDir}${R.rowV}
+    <div class="arow"><span class="al">最大値</span>${up?ns:vs}</div>
+    <div class="arow"><span class="al">最小値</span>${up?vs:ns}</div>
+  </div>
+  ${LEGEND}
+  ${SEAL(st.dn)}
+  ${cbar(cm)}`;
+}
+
+/* ====== 平方完成 の 1問 ======
+   P = {num, a, b, c}　（y ＝ ax² ＋ bx ＋ c）　next:true なら 最後に「次はグラフ」と添える */
+const ARW = `<svg width="34" height="46" viewBox="0 0 44 60"><path d="M10 4 C34 10,36 36,17 46" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/><polygon points="3,52 20,56 12,38" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>`;
+const WV = (a,b,html) => `<span class="wv" data-wa="${a}" data-wb="${b}">${html}<span class="wl"></span></span>`;
+const ANS = (s,html) => `<span class="ans" data-a="${s}">${html}<span class="ulh"></span><svg class="sl" width="34" height="30" viewBox="0 0 34 30"><path class="s1" d="M8 27 L15 4" pathLength="1"/><path class="s2" d="M21 27 L28 4" pathLength="1"/></svg></span>`;
+const hslot = (k,txt,f,x='') => `<span class="slot slot-${k}"${x}><span class="tm tm-${k} on fly" data-f="${f}" data-src="memo-${k}">${txt}</span></span>`;
+const hrow = (s,lhs,body,note) =>
+  `<div class="er${s===null?'':' lh'}"${s===null?'':` data-s="${s}"`}><span class="lhs">${lhs}</span><span class="eqs">＝</span><span class="bd">${body}</span>${note?`<span class="note">${ARW}<span>${note}</span></span>`:''}</div>`;
+
+function heihoSlide(P){
+  const {num,a,b,c}=P, one=(a===1);
+  const bb=b/a, h=bb/2, h2=h*h;          // bb：かっこの中の x の係数 / h：その半分
+  const g1=-h2, g2=-a*h2, fin=c+g2;      // g1：{ }の中の数 / g2：分配後の数 / fin：最後の定数
+  const aS = a===1 ? '' : a===-1 ? '−' : fmt(a);
+  const aP = a<0 ? `(${fmt(a)})` : fmt(a);
+  const hx = `x ${h<0?'−':'＋'} ${ab(h)}`;
+  const ans = `${aS}(${hx})² ${fin<0?'−':'＋'} ${ab(fin)}`;
+  const xt = n => `${ab(n)===1?'':ab(n)}x`;   // 1x → x
+  const c0 = `${num} ${M('y ＝ '+polyStr(a,b,c))} を <b>平方完成</b> しよう！　平方完成は ${M('a(x − p)² ＋ q')} の形に 書きかえることだよ。`;
+  const cm=[c0]; let n=0; const nx=t=>{n++;cm.push(t);return n;};
+  const st={};
+  const bTxt = one ? `${b<0?'−':'＋'}${xt(b)}` : `x² ${b<0?'−':'＋'} ${xt(b)}`;
+
+  if(one) st.pre = nx(`まず 式の中の <b>x の項</b> に 注目！　<b>波線</b> の部分だよ。`);
+  st.col = one
+    ? nx(`まず 色分け！　${K('b',bTxt)}（青）が <b>x の項</b>。${c!==0?`　${K('n',sf(c))}（灰）は 数だけの項で、あとで使うよ。`:''}　公式に使うのは 青の <b>${fmt(b)}</b> です。`)
+    : nx(`${K('r',aS)} 赤の <b>${fmt(a)}</b> に注目！　点線で囲んだ <b>x² の項と x の項（2項）</b> を ${fmt(a)} で くくりだして、公式を使う準備をするよ。${c!==0?`　${K('n',sf(c))} 灰は 数だけの項なので 外のまま。`:''}`);
+  if(!one) st.f1 = nx(`<b>公式を使う準備</b>！　${fmt(a)} で くくりだして、かっこの中を <b>x² ＋ ○x</b> の形にする。　${M(`${fmt(b)}x ÷ ${aP} ＝ ${fmt(bb)}x`)} なので かっこの中は ${M(`x² ${bb<0?'−':'＋'} ${xt(bb)}`)}。　この かっこの中に 公式が 使えるよ。`);
+  st.o = nx(`${one?'青の':'かっこの中の'} <b>${fmt(bb)}</b> の <b>半分</b>：${M(`${fmt(bb)} ÷ 2 ＝ ${fmt(h)}`)}。　公式メモの <b>「半分」</b>の欄に 入れよう。`);
+  st.g = nx(`つぎは <b>マイナス 半分の2乗</b>。　半分 ${fmt(h)} を 2乗して マイナスを つけて ${M(`−(${fmt(h)})² ＝ −${h2}`)}。　緑の欄に 入れよう。`);
+  if(one){
+    st.f2 = nx(`公式を使う！　${M('(x ＋ □)² − △')} の形の <b>空らん</b> に、右の 公式メモの 数を 入れていくよ。${c!==0?`　${K('n',sf(c))} 灰は そのまま 後ろに つけるよ。`:''}`);
+    st.fo = nx(`まず <b>半分</b>（橙）の <b>${fmt(h)}</b> を メモから □ へ！　${M(`(${hx})²`)}`);
+    st.fg = nx(`つぎに <b>マイナス半分の2乗</b>（緑）の <b>${fmt(g1)}</b> を メモから △ へ！　${M(`(${hx})² − ${h2}`)}${c===0?'　これで 平方完成！':''}`);
+    if(c!==0){
+      st.cw = nx(`つぎに 計算するのは、<b>波線</b> の部分！　${K('g',sf(g1))} と ${K('n',sf(c))} を あわせるよ。`);
+      st.f4 = nx(`計算する！　${M(`${fmt(g1)} ${c<0?'−':'＋'} ${ab(c)} ＝ ${fmt(fin)}`)}。　答えは <b>${M('y ＝ '+ans)}</b>。`);
+    }
+  } else {
+    st.f2 = nx(`公式を使う！　かっこの中を ${M('(x ＋ □)² − △')} の形にする。　空らんに 右の 公式メモの 数を 入れていくよ。　まわりの { } は あとで 外すよ。`);
+    st.fo = nx(`まず <b>半分</b>（橙）の <b>${fmt(h)}</b> を メモから □ へ！　${M(`(${hx})²`)}`);
+    st.fg = nx(`つぎに <b>マイナス半分の2乗</b>（緑）の <b>${fmt(g1)}</b> を メモから △ へ！　${M(`(${hx})² − ${h2}`)}`);
+    st.d1 = nx(`<b>分配</b> して { } を 外す！　まず ${fmt(a)} と ${M('( )²')} の分配。　${fmt(a)} が ${M('( )²')} に <b>くっついて</b> ${M(`${aS}(${hx})²`)} になるよ。`);
+    st.d2 = nx(`つぎに ${fmt(a)} と ${fmt(g1)} の分配。　<b>かけ算</b> して ${M(`${aP} × (${fmt(g1)}) ＝ ${sf(g2)}`)}。${c===0?`　これで 平方完成！　答えは <b>${M('y ＝ '+ans)}</b>。`:''}`);
+    if(c!==0){
+      st.d3 = nx(`最後に、{ } の外に あった 灰色の ${K('n',sf(c))} を そのまま 後ろに つけるよ。`);
+      st.cw = nx(`つぎに 計算するのは、<b>波線</b> の部分！　${K('g',sf(g2))} と ${K('n',sf(c))} を あわせるよ。`);
+      st.f4 = nx(`計算する！　${M(`${fmt(g2)} ${c<0?'−':'＋'} ${ab(c)} ＝ ${fmt(fin)}`)}。　答えは <b>${M('y ＝ '+ans)}</b>。`);
+    }
+  }
+  st.dn = nx(`これで <b>完成</b>！　ここから 頂点は ${M(`(${fmt(-h)}, ${fmt(fin)})`)} と 読みとれるよ。${P.next?'　つぎの スライドで グラフを かこう！':''}`);
+
+  /* 式の行 */
+  const L0 = one
+    ? `${WV(st.f2,st.fg,`${X2} ${WV(st.pre,st.col,tm('b',`${b<0?'− ':'＋ '}${xt(b)}`,st.col))}`)}${c!==0?tm('n',sgn(c),st.col):''}`
+    : `<span class="ct" data-o="${st.col}">${tm('r',aS,st.col)}${X2} ${b<0?'−':'＋'} ${xt(b)}</span> ${c!==0?tm('n',sgn(c),st.col):''}`;
+  let rows = hrow(null,'y',L0), dist = '';
+  if(one){
+    let L1 = `( x ${hslot('o',sgn(h),st.fo)} )${P2} ${c!==0?WV(st.cw,st.f4,`${hslot('g',sgn(g1),st.fg)}${tm('n',sgn(c),st.f2)}`):hslot('g',sgn(g1),st.fg)}`;
+    if(c===0) L1 = ANS(st.dn, L1);
+    rows += hrow(st.f2,'',L1,'公式を使う');
+    if(c!==0) rows += hrow(st.f4,'',ANS(st.f4,`( x ${sgn(h)} )${P2} ${sgn(fin)}`),'計算する');
+  } else {
+    const lblEnd = c!==0 ? st.cw : st.dn;
+    rows += hrow(st.f1,'',`${tm('r',aS,st.f1)}( ${WV(st.f2,st.fg,`${X2} ${tm('b',`${bb<0?'− ':'＋ '}${xt(bb)}`,st.f1)}`)} )${c!==0?tm('n',sgn(c),st.f1):''}`,`公式の準備<br>${fmt(a)} で くくりだす`);
+    rows += hrow(st.f2,'',`${tm('r',aS,st.f2,' data-k="r3"')}{ <span class="pg" data-k="par">( x ${hslot('o',sgn(h),st.fo)} )${P2}</span> ${hslot('g',sgn(g1),st.fg,' data-k="grn"')} }${c!==0?tm('n',sgn(c),st.f2):''}`,'公式を使う');
+    const lbl = (a0,t) => `<span class="dlbl" data-wa="${a0}" data-wb="${lblEnd}">${t}</span>`;
+    const orgC = `<span class="hasl">${tm('o',`${aS}( x ${sgn(h)} )${P2}`,st.d1)}${lbl(st.d1,`${fmt(a)} と ( )² が くっつく`)}</span>`;
+    const grnC = `<span class="hasl">${tm('g',sgn(g2),st.d2)}${lbl(st.d2,`${aP} × (${fmt(g1)}) ＝ ${sf(g2)}`)}</span>`;
+    const tail = c!==0 ? WV(st.cw,st.f4,`${S(st.d2,grnC)}${S(st.d3,tm('n',sgn(c),st.d3))}`) : S(st.d2,grnC);
+    rows += hrow(st.d1,'', c!==0 ? `${orgC}${tail}` : ANS(st.dn,`${orgC}${tail}`), '分配して<br>{ } を外す');
+    const dg = (a0,to,hh,dx) => `<g class="dg" data-wa="${a0}" data-wb="${lblEnd}" data-fr="r3" data-to="${to}" data-h="${hh}" data-dx="${dx}"><path pathLength="1" d=""/><polygon points=""/></g>`;
+    dist = `<svg class="dist" width="724" height="460">${dg(st.d1,'par',18,0)}${dg(st.d2,'grn',34,12)}</svg>`;
+    if(c!==0) rows += hrow(st.f4,'',ANS(st.f4,`${aS}( x ${sgn(h)} )${P2} ${sgn(fin)}`),'計算する');
+  }
+
+  return `
+  <div class="pno">${num}</div>
+  <div class="card abs eqcard">${EQTAPE}<div class="hrows math">${rows}${dist}</div></div>
+  <div class="card abs hmemo">${TP('yellow','right:22px;top:-14px;transform:rotate(4deg)')}<div class="lab">公式メモ</div>
+    <div class="mrow"><div class="ml">半分</div><div class="mbox bo" data-k="memo-o">${S(st.o,`<span class="cc cc-o">${fmt(h)}</span>`)}</div></div>
+    <div class="mrow"><div class="ml">マイナス<br>半分の2乗</div><div class="mbox bg" data-k="memo-g">${S(st.g,`<span class="cc cc-g">${fmt(g1)}</span>`)}</div></div>
+  </div>
+  <div class="card abs hlegend">${TP('lav','right:24px;top:-14px;transform:rotate(-5deg)')}<div class="lab">色の ルール</div>
+    <span class="cc cc-r">x² の前の数</span><span class="cc cc-b">x の項</span>
+    <span class="cc cc-n">数だけの項</span><span class="cc cc-o">半分</span>
+    <span class="cc cc-g">−半分の2乗</span>
+  </div>
+  ${SEAL(st.dn)}
+  ${cbar(cm)}`;
+}
+
+/* ====== 表紙・基本・おわり ====== */
+const miniGraph = `<svg width="264" height="250" viewBox="0 0 264 250">
+  ${[...Array(12)].map((_,i)=>`<line class="gg" x1="${i*24}" y1="0" x2="${i*24}" y2="250"/>`).join('')}
+  ${[...Array(11)].map((_,i)=>`<line class="gg" x1="0" y1="${i*24+10}" x2="264" y2="${i*24+10}"/>`).join('')}
+  <line class="ax" x1="0" y1="178" x2="264" y2="178"/><line class="ax" x1="144" y1="250" x2="144" y2="0"/>
+  <path d="M 52 20 Q 120 330 188 20" fill="none" stroke="var(--curve)" stroke-width="4" stroke-linecap="round"/>
+  <line class="axl" x1="120" y1="0" x2="120" y2="250"/>
+  <circle cx="120" cy="175" r="7" fill="var(--accent)" stroke="var(--paper)" stroke-width="2.5"/>
+</svg>`;
+const cover = (kicker,title,sub,sub2,cap) => `
+<div class="card abs cover">${TP('pink','left:-26px;top:-4px;transform:rotate(-38deg)')}${TP('mint','right:-26px;bottom:-4px;transform:rotate(-38deg)')}
+  <div class="kicker">${kicker}</div>
+  <h1>${title}</h1>
+  <div class="r" data-s="1"><div class="sub math">${sub}</div></div>
+  <div class="r" data-s="2"><div class="sub2">${sub2}</div></div>
+</div>
+<div class="card abs polaroid">${TP('yellow','left:92px;top:-14px;transform:rotate(-3deg)')}${miniGraph}<div class="cap">${cap}</div></div>`;
+const FORM_SUB = `y ＝ ${K('r','a')}(x − ${K('o','p')})${P2} ＋ ${K('g','q')}`;
+const basicWrap = (title,body,cms,tape='blue') => `
+<div class="end-h"><h2>${title}</h2></div>
+<div class="card abs fcard">${TP(tape,'left:-30px;top:2px;transform:rotate(-40deg)')}${TP(tape,'right:-30px;top:2px;transform:rotate(40deg)')}${body}</div>
+${cbar(cms)}`;
+const upL = (k,t,s) => `<span class="lbl up l${k}"><span class="lh" data-s="${s}">${t}</span></span>`;
+const graphBasic = basicWrap('グラフの 読み方（形・横・縦）', `
+  <div class="fr math big" style="margin-top:20px">y ＝ <span class="hasl">${tm('r','a',1)}${upL('r','形',1)}</span>( x − <span class="hasl">${tm('o','p',1)}${upL('o','横',1)}</span> )${P2} ＋ <span class="hasl">${tm('g','q',1)}${upL('g','縦',1)}</span></div>
+  <div class="fr mid lh" data-s="2" style="font-size:34px">${K('r','形')} → グラフの <b>向き</b>　＋ なら 下に凸 ∪ 、− なら 上に凸 ∩</div>
+  <div class="fr mid lh" data-s="3" style="font-size:34px">${K('o','横')} → 頂点の <b>x座標</b>　<span style="color:var(--accent)">プラスマイナスが逆転！</span></div>
+  <div class="fr mid lh" data-s="4" style="font-size:34px">${K('g','縦')} → 頂点の <b>y座標</b>　そのまま</div>
+  <div class="fr chk lh" data-s="5">軸は 頂点の x座標 を 使って <span class="math">x ＝ p</span></div>`,
+  [
+  `2次関数 ${M('y ＝ a(x − p)² ＋ q')} の グラフ。　この形なら 式から そのまま <b>向き・頂点・軸</b> が 読みとれるよ。`,
+  `赤の ${K('r','a')} が <b>形</b>、橙の ${K('o','p')} が <b>横</b>、緑の ${K('g','q')} が <b>縦</b>。`,
+  `<b>形</b> は グラフの 向き。　プラスなら <b>下に凸</b>、マイナスなら <b>上に凸</b>。`,
+  `<b>横</b> は 頂点の x座標。　かっこの中の 数の <b>プラスマイナスが逆転</b> するので 注意！　${M('(x ＋ 1)²')} なら −1。`,
+  `<b>縦</b> は 頂点の y座標。　こちらは <b>そのまま</b>。`,
+  `軸は 頂点を 通る たての直線 <b>${M('x ＝ p')}</b>。`
+]);
+const heihoBasic = basicWrap('平方完成の 公式', `
+  <div class="fr math big">${X2} ${tm('b','＋ ○x',1)}</div>
+  <div class="fr math big lh" data-s="2">＝ ( x ${tm('o','＋ ○の半分',2)} )${P2} ${tm('g','− (○の半分)'+P2,3)}</div>
+  <div class="fr math mid lh" data-s="4">例　${X2} ${tm('b','＋ 6x',4)} ＝ ( x ${tm('o','＋ 3',5)} )${P2} ${tm('g','− 9',6)}</div>
+  <div class="fr math chk lh" data-s="7">たしかめ：(x ＋ 3)<sup>2</sup> − 9 ＝ x<sup>2</sup> ＋ 6x ＋ 9 − 9 ＝ x<sup>2</sup> ＋ 6x</div>`,
+  [
+  `平方完成 とは、式を <b>a(x − p)² ＋ q</b> の形に 書きかえること。　まず 公式を 確認しよう！`,
+  `${M('x² ＋ ○x')} の <b>○</b>（x の係数）に 注目！　この数を 使って 書きかえるよ。`,
+  `かっこの中には ○ の <b>半分</b> を 入れる！　${M('(x ＋ ○の半分)²')}`,
+  `展開すると よぶんな ${M('(○の半分)²')} が 出てくる。　それを <b>引いて</b> つじつまを合わせる → <b>マイナス 半分の2乗</b>。`,
+  `例で やってみよう。　${M('x² ＋ 6x')} では ○ ＝ 6 です。`,
+  `6 の <b>半分</b> は 3。　${M('(x ＋ 3)²')}`,
+  `3 の2乗は 9。　引くので <b>− 9</b>。　${M('x² ＋ 6x ＝ (x ＋ 3)² − 9')}`,
+  `たしかめ：展開して 9 を 引くと、もとの ${M('x² ＋ 6x')} に もどる！　これが <b>平方完成</b> です。`
+], 'lav');
+const mmBasic = basicWrap('最大値・最小値の 考え方', `
+  <div class="fr mid lh" data-s="1" style="font-size:38px">${K('r','＋')} 下に凸 ∪ → 頂点が いちばん下</div>
+  <div class="fr mid lh" data-s="2" style="font-size:36px">→ 頂点で <b style="color:var(--accent)">最小値</b>　／　最大値は <b style="color:var(--accent)">なし</b></div>
+  <div class="fr mid lh" data-s="3" style="font-size:38px;margin-top:18px">${K('r','−')} 上に凸 ∩ → 頂点が いちばん上</div>
+  <div class="fr mid lh" data-s="4" style="font-size:36px">→ 頂点で <b style="color:var(--accent)">最大値</b>　／　最小値は <b style="color:var(--accent)">なし</b></div>`,
+  [
+  `2次関数の <b>最大値・最小値</b> は、グラフを かいて 考えるよ。　大事なのは <b>向き</b> と <b>頂点</b>。`,
+  `${K('r','＋')} なら 下に凸。　グラフは 頂点が <b>いちばん下</b>。`,
+  `だから 頂点の y座標が <b>最小値</b>。　上の方は どこまでも 大きくなるので <b>最大値は なし</b>。`,
+  `${K('r','−')} なら 上に凸。　グラフは 頂点が <b>いちばん上</b>。`,
+  `だから 頂点の y座標が <b>最大値</b>。　下の方は どこまでも 小さくなるので <b>最小値は なし</b>。`
+], 'yellow');
+const endHtml = `
+<div class="card abs cover" style="height:380px;top:150px">${TP('lav','left:-26px;top:-4px;transform:rotate(-38deg)')}${TP('yellow','right:-26px;top:-4px;transform:rotate(38deg)')}
+  <div class="kicker">数学Ⅰ　２学期中間考査対策</div>
+  <h1>おつかれさま<br><span class="mk">でした！</span></h1>
+</div>
+<div class="card abs polaroid">${TP('pink','left:92px;top:-14px;transform:rotate(3deg)')}${miniGraph}<div class="cap">よくできました</div></div>`;
+
+/* ====== ２学期期末考査まで：共通の小道具 ====== */
+const KIMATSU = '数学Ⅰ　２学期期末考査まで';
+/* 表紙・おわりの 写真の中身：式が 変わる様子 */
+const fpol = (a,b,msg) => `<div class="fpol"><div class="fa math">${a}</div><div class="fv">↓ ${msg}</div><div class="fb math">${b}</div></div>`;
+const coverF = (kicker,title,sub,sub2,pol,cap) => `
+<div class="card abs cover">${TP('pink','left:-26px;top:-4px;transform:rotate(-38deg)')}${TP('mint','right:-26px;bottom:-4px;transform:rotate(-38deg)')}
+  <div class="kicker">${kicker}</div>
+  <h1>${title}</h1>
+  <div class="r" data-s="1"><div class="sub">${sub}</div></div>
+  <div class="r" data-s="2"><div class="sub2">${sub2}</div></div>
+</div>
+<div class="card abs polaroid">${TP('yellow','left:92px;top:-14px;transform:rotate(-3deg)')}${pol}<div class="cap">${cap}</div></div>`;
+const endF = (kicker,pol,cap='よくできました') => `
+<div class="card abs cover" style="height:380px;top:150px">${TP('lav','left:-26px;top:-4px;transform:rotate(-38deg)')}${TP('yellow','right:-26px;top:-4px;transform:rotate(38deg)')}
+  <div class="kicker">${kicker}</div>
+  <h1>おつかれさま<br><span class="mk">でした！</span></h1>
+</div>
+<div class="card abs polaroid">${TP('pink','left:92px;top:-14px;transform:rotate(3deg)')}${pol}<div class="cap">${cap}</div></div>`;
+
+/* ====== 因数分解：4つのパターン ====== */
+/* 文字の公式は 使わず、実際の式＋色の数＋キーワード で 見せる */
+const KW = t => `<span class="kw">${t}</span>`;
+/* 色だけ つける（枠なし）：b 青、g 緑、r 赤 */
+const CT = (k,t) => `<span class="ct-${k}">${t}</span>`;
+const PAT = [
+  {no:'⑴', name:'たして・かけて',
+   expr:`x${P2} ${CT('b','＋ 2')}x ${CT('g','− 15')}`, res:`(x ＋ 5)(x − 3)`,
+   kw:`${CT('b','たして ＋2')}　${CT('g','かけて −15')}`},
+  {no:'⑵', name:'2乗 − 2乗',
+   expr:`x${P2} ${CT('g','− 9')}`, res:`(x ＋ 3)(x − 3)`,
+   kw:`x の項が ない　${CT('g','9 ＝ 3²')}`},
+  {no:'⑶', name:'同じ (　) が 2つ',
+   expr:`x${P2} ${CT('b','＋ 6')}x ${CT('g','＋ 9')}`, res:`(x ＋ 3)${P2}`,
+   kw:`${CT('b','たして ＋6')}　${CT('g','かけて ＋9')}　→ 2乗で まとめる`},
+  {no:'⑷', name:'共通因数で くくる',
+   expr:`${CT('r','x')}${P2} ＋ 6${CT('r','x')}`, res:`${CT('r','x')}(x ＋ 6)`,
+   kw:`数だけの項が ない　${CT('r','x')} で くくる`}
+];
+/* 4つのパターンを 一覧で 見せる（アニメーションなし） */
+function patOverview(title, cms){
+  const tp = ['pink','mint','yellow','lav'];
+  const card = (p,i) => `<div class="pcw p${i+1}"><div class="card pc">${TP(tp[i],'left:50%;margin-left:-58px;top:-14px;transform:rotate(-2deg)')}
+      <div class="pc-h"><span class="pc-no">${p.no}</span>${p.name}</div>
+      <div class="pc-f math">${p.expr} ＝ ${p.res}</div>
+      <div class="pc-k">${p.kw}</div></div></div>`;
+  return `<div class="end-h"><h2>${title}</h2></div>
+  <div class="pcards">${PAT.map(card).join('')}</div>
+  ${cbar(cms)}`;
+}
+
+/* ====== 因数分解の 1問 ======
+   左：式の変形（もとの式 → 答え）、右：考え方（大きく見せる）、下：ことばの説明 */
+const frow = (s,eq,body) =>
+  `<div class="fxr${s===null?'':' lh'}"${s===null?'':` data-s="${s}"`}><span class="eqs">${eq}</span><span class="bd">${body}</span></div>`;
+const tgoal = (s,html) => `<div class="tg lh" data-s="${s}">${html}</div>`;
+/* 考え方の 1段。n：番号、label：何をするか、big：大きく見せる式、sub：補足
+   s を [問いの番, 答えの番] にすると、問いを先に出し、次のクリックで答えを出す */
+const tstep = (s,n,label,big,sub='') => {
+  const [sl,sb] = Array.isArray(s) ? s : [s,s];
+  return `<div class="ts lh" data-s="${sl}"><div class="ts-n">${n}</div><div><div class="ts-l">${label}</div><div class="ts-m math lh" data-s="${sb}">${big}</div>${sub?`<div class="ts-s">${sub}</div>`:''}</div></div>`;
+};
+function fxSlide({num,pat,rows,thinkLab,think,cm,done}){
+  const p = PAT[pat];
+  return `
+  <div class="pno">${num}</div>
+  <div class="card abs fxcard">${EQTAPE}<div class="fxpat">${p.no} ${p.name}</div><div class="fxrows math">${rows}</div></div>
+  <div class="card abs think">${TP('yellow','right:30px;top:-14px;transform:rotate(4deg)')}<div class="lab">${thinkLab}</div>${think}</div>
+  <div class="abs r done fxdone" data-s="${done}"><div class="seal">完成！</div></div>
+  ${cbar(cm)}`;
+}
+
+/* ====== 2次方程式（因数分解で解く）の 1問 ======
+   プリントと同じ形：もとの式 → 青と橙の ( ) ＝ 0 → それぞれ ＝ 0 → x ＝
+   P = {num, eq, fb, fo, wb, wo, bl, ol, ab, ao, jyu, merge, point, ofirst, cm}
+   bl/ol = {a:'x', t:'＋ 5', v:'−5'}：「x ＋ 5 ＝ 0」→ クリックで 移項の矢印と「x ＝ −5」。t が なければ「x ＝ v」の 1行
+   答えの数は 答えの枠へ 飛んでいく */
+/* 矢印（線＋先の三角） */
+function qArrow(x1,y1,x2,y2,c){
+  const a=Math.atan2(y2-y1,x2-x1), L=14, W=7, bx=x2-L*Math.cos(a), by=y2-L*Math.sin(a);
+  const p=[[x2,y2],[bx-W*Math.sin(a),by+W*Math.cos(a)],[bx+W*Math.sin(a),by-W*Math.cos(a)]].map(q=>q.map(v=>v.toFixed(1)).join(',')).join(' ');
+  return `<line x1="${x1}" y1="${y1}" x2="${bx.toFixed(1)}" y2="${by.toFixed(1)}" stroke="${c}"/><polygon points="${p}" fill="${c}"/>`;
+}
+function eqSlide(P){
+  let n = 0; const st = {lab: ++n, fac: ++n};   // 矢印「因数分解」→ もう一回 クリックで 式
+  if(P.point) st.pt = ++n;
+  const ns = B => B.t ? [++n, ++n] : [++n];
+  if(P.ofirst){ st.o = ns(P.ol); st.b = ns(P.bl); }   // ⑷：( ) の方から 先に
+  else        { st.b = ns(P.bl); st.o = ns(P.ol); }
+  st.ans = ++n;
+  if(P.merge) st.mg = ++n;          // ⑶：同じ答えを 1つに まとめる
+  if(P.jyu) st.jyu = ++n;
+  const done = P.jyu ? st.jyu : st.ans;
+  const L = 48, BX = 48, OX = 352, BW = 280;
+  const bx = L + P.wb/2, ox = L + P.wb + P.wo/2;
+  /* 箱の中：「x ＋ 5 ＝ 0」→ 移項の矢印が のびてから「x ＝ −5」（＝ の位置を そろえた 2行） */
+  const box = (B,ss,k) => {
+    const ln = (s,l,r,cls='') => [l,'＝',r].map((h,i)=>`<span class="qc${i} lh${cls}" data-s="${s}">${h}</span>`).join('');
+    const val = `<span${k?` data-k="${k}"`:''}>${B.v}</span>`;
+    if(!B.t) return `<div class="qlines">${ln(ss[0],B.a,val)}</div>`;
+    return `<div class="qlines">${ln(ss[0],`${B.a} ${tm('r',`<span class="mvt">${B.t}</span>`,ss[1])}`,'0')}${ln(ss[1],B.a,tm('r',`<span class="mvv">${val}</span>`,ss[1]),' late')}</div>`
+         + `<svg class="mva"><g class="gs" data-s="${ss[1]}"><path pathLength="1" d=""/><polygon points=""/></g></svg>`;
+  };
+  const ans = P.merge
+    ? `${slotC('b',P.ab,st.ans,'ab')}<span class="qdup" data-o="${st.mg}"><span class="qcm">,</span>${slotC('o',P.ao,st.ans,'ao')}</span>`
+    : P.ao
+    ? `${slotC('b',P.ab,st.ans,'ab')}<span class="qcm">,</span>${slotC('o',P.ao,st.ans,'ao')}`
+    : slotC('b',P.ab,st.ans,'ab');
+  return `
+  <div class="pno">${P.num}</div>
+  <div class="card abs qecard">${EQTAPE}
+    <div class="q0 math">${P.eq}</div>
+    <div class="qlab" style="left:${L+P.wb+P.wo+100}px"><svg class="gs" data-s="${st.lab}" width="46" height="76" viewBox="0 0 46 76"><path pathLength="1" d="M10 6 C44 14,44 52,18 64" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/><polygon points="6,68 26,72 17,52" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span class="lh" data-s="${st.lab}">因数分解</span></div>
+    <div class="q1 math lh" data-s="${st.fac}"><span class="qf qf-b" style="width:${P.wb}px"><span>${P.fb}</span></span><span class="qf qf-o" style="width:${P.wo}px"><span>${P.fo}</span></span><span class="qz">＝ 0</span></div>
+    <svg class="qarr" width="700" height="60" viewBox="0 0 700 60">
+      <g class="gs" data-s="${st.b[0]}">${qArrow(bx,4,bx,56,'var(--b-ink)')}</g>
+      <g class="gs" data-s="${st.o[0]}">${qArrow(ox,4,OX+BW/2,56,'var(--o-ink)')}</g>
+    </svg>
+    <div class="qb qb-b math lh" data-s="${st.b[0]}" style="left:${BX}px;width:${BW}px">${box(P.bl,st.b,'ab')}</div>
+    <div class="qb qb-o math lh" data-s="${st.o[0]}" style="left:${OX}px;width:${BW}px">${box(P.ol,st.o,'ao')}</div>
+    <div class="q3 math"><span class="qx">x ＝</span><span class="qa">${ans}</span>${P.jyu?`<span class="qjyu lh" data-s="${st.jyu}">重解</span>`:''}</div>
+    <div class="qpt${P.point?' lh':''}"${P.point?` data-s="${st.pt}"`:''}>${TP('yellow','right:20px;top:-14px;transform:rotate(4deg)')}<div class="lab">ポイント</div>
+      <div class="qpt-m math"><span class="qs qs-b"></span> × <span class="qs qs-o"></span> ＝ 0</div>
+      <div class="qpt-t">→ どちらかが 0</div>
+    </div>
+  </div>
+  <div class="abs r done qdone" data-s="${done}"><div class="seal">完成！</div></div>
+  ${cbar(P.cm)}`;
+}
+
+/* 移項の矢印を、＋5 の下から −5 の上へ かく（engine.js の relayout から 呼ばれる） */
+function layoutExtra(root){
+  root.querySelectorAll('.qb').forEach(b=>{
+    const t=b.querySelector('.mvt'), v=b.querySelector('.mvv'), g=b.querySelector('.mva g');
+    if(!t||!v||!g) return;
+    const [bx,by]=pos(b), r=e=>{ const [x,y]=pos(e); return [x-bx,y-by,e.offsetWidth,e.offsetHeight]; };
+    const [tx,ty,tw,th]=r(t.closest('.tm')), [vx,vy,vw]=r(v.closest('.tm'));
+    const x1=tx+tw/2, y1=ty+th+2, x2=vx+vw/2, y2=vy-2, d=(y2-y1)*.9;
+    g.querySelector('path').setAttribute('d',`M${x1} ${y1} C${x1} ${y1+d} ${x2} ${y2-d} ${x2} ${y2-10}`);
+    g.querySelector('polygon').setAttribute('points',`${x2-7},${y2-12} ${x2+7},${y2-12} ${x2},${y2}`);
+  });
+}
+
+/* ====== このプリントのスライド ====== */
+
+const KK = KIMATSU + '　①-2';
+const POL = fpol(`(x ＋ 5)(x − 3) ＝ 0`, `x ＝ −5, 3`, 'どちらかが 0');
+
+const q1 = eqSlide({num:'⑴', point:true, eq:`x${P2} ＋ 2x − 15 ＝ 0`, fb:'(x ＋ 5)', fo:'(x − 3)', wb:170, wo:170,
+  bl:{a:'x', t:'＋ 5', v:'−5'}, ol:{a:'x', t:'− 3', v:'3'}, ab:'−5', ao:'3',
+  cm:[
+    `⑴ ${M('x² ＋ 2x − 15 ＝ 0')} を 解こう！　まず 左の式を <b>因数分解</b> するよ。`,
+    `<b>因数分解</b> すると…？`,
+    `①-1 で やった 因数分解。　${M('(x ＋ 5)(x − 3) ＝ 0')}`,
+    `<b>かけて 0</b> なら、<b>どちらかが 0</b>。　だから 2つに 分けて 考えるよ。`,
+    `青の ( ) が 0 の とき。　${M('x ＋ 5 ＝ 0')}`,
+    `＋5 を 移項すると −5。　<b>${M('x ＝ −5')}</b>`,
+    `橙の ( ) が 0 の とき。　${M('x − 3 ＝ 0')}`,
+    `−3 を 移項すると ＋3。　<b>${M('x ＝ 3')}</b>`,
+    `答えは <b>${M('x ＝ −5, 3')}</b>。　<b>完成！</b>`
+  ]});
+
+const q2 = eqSlide({num:'⑵', eq:`x${P2} − 9 ＝ 0`, fb:'(x ＋ 3)', fo:'(x − 3)', wb:170, wo:170,
+  bl:{a:'x', t:'＋ 3', v:'−3'}, ol:{a:'x', t:'− 3', v:'3'}, ab:'−3', ao:'3',
+  cm:[
+    `⑵ ${M('x² − 9 ＝ 0')} を 解こう！　まず 因数分解。`,
+    `<b>因数分解</b> すると…？`,
+    `<b>2乗 − 2乗</b> だね。　${M('(x ＋ 3)(x − 3) ＝ 0')}`,
+    `青の ( ) が 0 の とき。　${M('x ＋ 3 ＝ 0')}`,
+    `＋3 を 移項すると −3。　<b>${M('x ＝ −3')}</b>`,
+    `橙の ( ) が 0 の とき。　${M('x − 3 ＝ 0')}`,
+    `−3 を 移項すると ＋3。　<b>${M('x ＝ 3')}</b>`,
+    `答えは <b>${M('x ＝ −3, 3')}</b>。　${M('x ＝ ±3')} と 書いても よいよ。　<b>完成！</b>`
+  ]});
+
+const q3 = eqSlide({num:'⑶', jyu:true, merge:true, eq:`x${P2} ＋ 6x ＋ 9 ＝ 0`, fb:'(x ＋ 3)', fo:'(x ＋ 3)', wb:170, wo:170,
+  bl:{a:'x', t:'＋ 3', v:'−3'}, ol:{a:'x', t:'＋ 3', v:'−3'}, ab:'−3', ao:'−3',
+  cm:[
+    `⑶ ${M('x² ＋ 6x ＋ 9 ＝ 0')} を 解こう！　まず 因数分解。`,
+    `<b>因数分解</b> すると…？`,
+    `①-1 の「<b>同じ ( ) が 2つ</b>」。　${M('(x ＋ 3)(x ＋ 3) ＝ 0')} と 書くよ。`,
+    `青の ( ) が 0 の とき。　${M('x ＋ 3 ＝ 0')}`,
+    `＋3 を 移項すると −3。　<b>${M('x ＝ −3')}</b>`,
+    `橙の ( ) が 0 の とき。　${M('x ＋ 3 ＝ 0')}`,
+    `こちらも <b>${M('x ＝ −3')}</b>。　同じ 答えが 出たね。`,
+    `2つの 答えを 書くと ${M('x ＝ −3, −3')}。`,
+    `同じ だから <b>1つに まとめて</b>、答えは <b>${M('x ＝ −3')}</b>。`,
+    `2つの 解が 重なったものを <b>重解</b> という。　<b>完成！</b>`
+  ]});
+
+const q4 = eqSlide({num:'⑷', ofirst:true, eq:`x${P2} ＋ 6x ＝ 0`, fb:'x', fo:'(x ＋ 6)', wb:70, wo:170,
+  bl:{a:'x', v:'0'}, ol:{a:'x', t:'＋ 6', v:'−6'}, ab:'0', ao:'−6',
+  cm:[
+    `⑷ ${M('x² ＋ 6x ＝ 0')} を 解こう！　まず 因数分解。`,
+    `<b>因数分解</b> すると…？`,
+    `共通因数 x で くくって ${M('x(x ＋ 6) ＝ 0')}。　x と (x ＋ 6) の かけ算 だね。`,
+    `まず 橙の ( ) が 0 の とき。　${M('x ＋ 6 ＝ 0')}`,
+    `＋6 を 移項すると −6。　<b>${M('x ＝ −6')}</b>`,
+    `つぎに 青の x。　( ) は ついていないけど、x も 0 に なれる！　<b>${M('x ＝ 0')}</b>。`,
+    `答えは <b>${M('x ＝ 0, −6')}</b>。　${M('x ＝ 0')} を 忘れないように！　<b>完成！</b>`
+  ]});
+
+/* ※注意！ */
+const note = `
+  <div class="card abs ncard">${EQTAPE}
+    <div class="n-h">※注意！</div>
+    <div class="n-t">「2次方程式の解は 符号を変えたものである」という理解は、正しくない。</div>
+    <div class="n-eq math"><span class="n-c"><span class="n-u b"><span>(x ＋ 5)</span></span><span class="n-v b lh" data-s="1">↓<br>−5</span></span><span class="n-c"><span class="n-u o"><span>(x − 3)</span></span><span class="n-v o lh" data-s="1">↓<br>3</span></span><span class="n-z">＝ 0</span><span class="n-tri lh" data-s="2">この解き方は<b>△</b></span></div>
+    <div class="n-last lh" data-s="3">＜＜ この解き方だと 解けない問題が ある。＞＞</div>
+  </div>
+  ${cbar([
+    `<b>※注意！</b>　「2次方程式の 解は、( ) の中の 数の 符号を 変えたもの」と 覚えるのは <b>正しくない</b>。`,
+    `${M('(x ＋ 5)(x − 3) ＝ 0')} を 見て、符号を 変えて −5 と 3。　答えは 合っているけど…`,
+    `この 解き方は <b>△</b>。`,
+    `この 解き方 だと <b>解けない 問題</b> が ある。　かならず「<b>( ) ＝ 0</b> に して 解く」を 使おう！`
+  ])}`;
+
+const DECK = {title:'①-2 2次方程式の解', pages:[
+  {name:'表紙', html:coverF(KK, '<span class="mk">2次方程式</span>を<br>解こう', '因数分解して 解く', 'かけて 0 なら、どちらかが 0！', POL, 'どちらかが 0')},
+  {name:'⑴', html:q1}, {name:'⑵', html:q2}, {name:'⑶', html:q3}, {name:'⑷', html:q4},
+  {name:'注意', html:note},
+  {name:'終', html:endF(KK + '　2次方程式の解', POL)}
+]};
+
+/* ====== 組み立て・操作 ====== */
+const stage = document.getElementById('stage');
+const pages = DECK.pages.map(x=>x.html), names = DECK.pages.map(x=>x.name);
+document.title = DECK.title;
+/* スライドの種類（スマホの縦レイアウトで使う） */
+const kind = h => /qecard/.test(h)?'q' : /ncard/.test(h)?'n' : /class="pcards/.test(h)?'p' : /fxcard/.test(h)?'x' : /class="hrows/.test(h)?'h' : /class="graph"/.test(h)?'g' : /wcard/.test(h)?'w' : /fcard/.test(h)?'b' : 'c';
+stage.innerHTML = pages.map(h=>`<section class="slide t-${kind(h)}">${h}</section>`).join('');
+(function italicVars(){
+  const w=document.createTreeWalker(stage,NodeFilter.SHOW_TEXT);
+  const nodes=[]; while(w.nextNode()) nodes.push(w.currentNode);
+  nodes.forEach(n=>{
+    if(!/[A-Za-z]/.test(n.nodeValue)) return;
+    if(n.parentNode.closest && (n.parentNode.closest('svg')||n.parentNode.closest('i'))) return;
+    const f=document.createDocumentFragment();
+    n.nodeValue.split(/([A-Za-z])/).forEach(t=>{
+      if(/^[A-Za-z]$/.test(t)){const i=document.createElement('i');i.className='v';i.textContent=t;f.appendChild(i);}
+      else if(t) f.appendChild(document.createTextNode(t));
+    });
+    n.parentNode.replaceChild(f,n);
+  });
+})();
+(function backdrop(){
+  const bg=document.getElementById('bg');
+  const items=[['dot',3,12,1.6,'#f5c2cc'],['star',6,80,2.6,'#f8e2a2'],['dot',95,8,1.2,'#bfe5d0'],['star',92,60,2.2,'#d8cdf1'],
+               ['dot',50,4,1,'#c4d8f2'],['star',30,94,1.8,'#f5c2cc'],['dot',70,95,1.4,'#f8e2a2'],['dot',97,90,2,'#f5c2cc'],['star',2,45,1.6,'#c4d8f2']];
+  items.forEach(([k,l,t,z,c],i)=>{
+    const d=document.createElement('div'); d.className='deco '+k;
+    d.style.cssText=`left:${l}%;top:${t}%;width:${z}vmin;height:${z}vmin;--c:${c};--t:${5+(i%3)}s;--d:${-i*.9}s`;
+    bg.appendChild(d);
+  });
+})();
+
+const els = [...stage.querySelectorAll('.slide')];
+const stepAttr = e => [e.dataset.s,e.dataset.o,e.dataset.m,e.dataset.f,e.dataset.a,e.dataset.wa].filter(v=>v!==undefined).map(Number).filter(v=>v<90);
+const maxStep = els.map(el => Math.max(0,...[...el.querySelectorAll('[data-s],[data-o],[data-m],[data-f],[data-a],[data-wa]')].flatMap(stepAttr)));
+
+/* 飛んでくる数：出発点までの距離を測る */
+function pos(el){
+  let x=0,y=0;
+  while(el && !el.classList.contains('slide')){
+    x+=el.offsetLeft; y+=el.offsetTop;
+    const p=el.offsetParent;
+    if(p && !p.classList.contains('slide')){ x+=p.clientLeft; y+=p.clientTop; }
+    el=p;
+  }
+  return [x,y];
+}
+function layoutFly(root){
+  root.querySelectorAll('.fly').forEach(e=>{
+    const src=e.closest('.slide').querySelector(`[data-k="${e.dataset.src}"]`);
+    if(!src) return;
+    const [sx,sy]=pos(src), [tx,ty]=pos(e);
+    e.style.setProperty('--fx',((sx+src.offsetWidth/2)-(tx+e.offsetWidth/2))+'px');
+    e.style.setProperty('--fy',((sy+src.offsetHeight/2)-(ty+e.offsetHeight/2))+'px');
+  });
+}
+/* 分配線：かっこの外の数の上から、かっこの中の2つの上へ アーチを描く */
+function layoutDist(root){
+  root.querySelectorAll('.dist').forEach(svg=>{
+    const sl=svg.closest('.slide'), base=pos(svg.parentElement);
+    const rel=el=>{ const [x,y]=pos(el); return [x-base[0], y-base[1], el.offsetWidth, el.offsetHeight]; };
+    svg.querySelectorAll('.dg').forEach(g=>{
+      const fr=sl.querySelector(`[data-k="${g.dataset.fr}"]`), to=sl.querySelector(`[data-k="${g.dataset.to}"]`);
+      if(!fr||!to) return;
+      const [fx,fy,fw]=rel(fr), [tx,ty,tw]=rel(to), H=+g.dataset.h, dx=+g.dataset.dx;
+      const x1=fx+fw/2+dx, y1=fy-2, x2=tx+tw/2, y2=ty-4;
+      g.querySelector('path').setAttribute('d',`M${x1} ${y1} C${x1} ${y1-H} ${x2} ${y2-H-10} ${x2} ${y2-14}`);
+      g.querySelector('polygon').setAttribute('points',`${x2-8},${y2-15} ${x2+8},${y2-15} ${x2},${y2}`);
+    });
+  });
+}
+const relayout = r => { layoutFly(r); layoutDist(r); if(typeof layoutExtra==='function') layoutExtra(r); };
+if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>relayout(stage));
+const bar = document.getElementById('bar'), ui = document.getElementById('ui');
+const jump = document.getElementById('jump');
+jump.innerHTML='<a class="home" href="目次.html">目次</a><span>ジャンプ</span>'+names.map((n,i)=>`<button data-i="${i}">${n}</button>`).join('');
+jump.addEventListener('click',e=>{
+  e.stopPropagation();
+  const b=e.target.closest('button'); if(!b) return;
+  stopAuto(); si=+b.dataset.i; st=0; render(); b.blur();
+});
+let si = 0, st = 0, timer = null, layoutTimer = null;
+
+function render(){
+  relayout(els[si]);
+  clearTimeout(layoutTimer); layoutTimer=setTimeout(()=>relayout(els[si]),700);
+  els.forEach((el,i)=>{
+    const past=i<si, now=i===si;
+    el.querySelectorAll('[data-f]').forEach(e=>e.classList.toggle('go', past || (now && +e.dataset.f<=st)));
+    el.querySelectorAll('[data-a]').forEach(e=>e.classList.toggle('ul-on', past || (now && +e.dataset.a<=st)));
+    el.querySelectorAll('[data-wa]').forEach(e=>e.classList.toggle('wv-on', now && +e.dataset.wa<=st && st<+e.dataset.wb));
+    el.classList.toggle('active', now);
+    el.classList.toggle('past', past);
+    el.querySelectorAll('[data-s]').forEach(e=>e.classList.toggle('show', past || (now && +e.dataset.s<=st)));
+    el.querySelectorAll('[data-o]').forEach(e=>{ e.classList.toggle('on', past || (now && +e.dataset.o<=st)); e.classList.toggle('cur', now && +e.dataset.o===st); });
+    el.querySelectorAll('[data-m]').forEach(e=>e.classList.toggle('cur', now && +e.dataset.m===st));
+  });
+  const total = maxStep.reduce((a,m)=>a+m+1,0);
+  const done = maxStep.slice(0,si).reduce((a,m)=>a+m+1,0)+st+1;
+  bar.style.width = (done/total*100)+'%';
+  [...jump.querySelectorAll('button')].forEach(b=>b.classList.toggle('on',+b.dataset.i===si));
+  ui.textContent = `${si+1} / ${els.length}　←→ 進む・戻る　P 自動再生　Home 最初から　F 全画面　H 表示を隠す　T 明暗`;
+}
+function next(){ if(st<maxStep[si]) st++; else if(si<els.length-1){si++;st=0;} else stopAuto(); render(); }
+function prev(){ if(st>0) st--; else if(si>0){si--;st=maxStep[si];} render(); }
+function stopAuto(){ if(timer){ clearInterval(timer); timer=null; } }
+function toggleAuto(){ if(timer) stopAuto(); else timer=setInterval(next,4000); }
+
+document.addEventListener('keydown',e=>{
+  const k=e.key;
+  if(['ArrowRight','ArrowDown',' ','Enter','PageDown'].includes(k)){e.preventDefault();stopAuto();next();}
+  else if(['ArrowLeft','ArrowUp','Backspace','PageUp'].includes(k)){e.preventDefault();stopAuto();prev();}
+  else if(k==='Home'){stopAuto();si=0;st=0;render();}
+  else if(k==='End'){stopAuto();si=els.length-1;st=maxStep[si];render();}
+  else if(k==='p'||k==='P'){toggleAuto();}
+  else if(k==='f'||k==='F'){ try{ if(document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen(); }catch(_){} }
+  else if(k==='h'||k==='H'){ ui.classList.toggle('hide'); bar.classList.toggle('hide'); jump.classList.toggle('hide'); }
+  else if(k==='t'||k==='T'){
+    const d=document.documentElement;
+    const dark = d.dataset.theme ? d.dataset.theme==='dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+    d.dataset.theme = dark ? 'light' : 'dark';
+  }
+});
+document.addEventListener('click',e=>{ if(e.target.closest('a')) return; stopAuto(); if(e.clientX < document.documentElement.clientWidth/3) prev(); else next(); });
+/* 画面に合わせる：縦長（スマホ）なら 720×1280、横長なら 1280×720 */
+function fit(){
+  const vw = document.documentElement.clientWidth, vh = document.documentElement.clientHeight;   // スマホでは innerWidth がずれることがある
+  const portrait = vh > vw;
+  document.body.classList.toggle('portrait', portrait);
+  const W = portrait?720:1280, H = portrait?1280:720, avail = vh - (portrait?52:0);
+  stage.style.setProperty('--s', Math.min(vw/W, avail/H));
+  jump.style.top = portrait ? (vh-46)+'px' : '';   // スマホでは画面の下にそろえる
+  jump.style.bottom = portrait ? 'auto' : '';
+  relayout(els[si]);
+}
+addEventListener('resize',fit); fit(); render();
+
+</script>
+</body>
+</html>

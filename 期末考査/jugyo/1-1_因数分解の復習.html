@@ -465,6 +465,76 @@ body{overflow:hidden;height:100%;width:100%}
 .portrait .t-x .ts{padding:5px 0 3px}
 .portrait .t-x .fxdone{left:560px;top:330px}
 
+/* ===== 2次方程式（因数分解で解く） ===== */
+.qecard{left:48px;top:30px;width:1184px;height:490px}
+.q0{position:absolute;left:48px;top:30px;font-size:40px;white-space:nowrap}
+.q1{position:absolute;left:48px;top:108px;height:66px;display:flex;align-items:center;font-size:38px;white-space:nowrap}
+.qf{display:inline-flex;align-items:center;justify-content:center;height:66px}
+.qf-b{background:var(--b-bg)} .qf-o{background:var(--o-bg)}
+.qz{margin-left:14px}
+.qlab{position:absolute;top:40px;display:flex;align-items:center;gap:8px;color:var(--accent);font-size:28px;font-weight:900;white-space:nowrap}
+.qlab path{stroke-dasharray:1;stroke-dashoffset:1} .qlab polygon{opacity:0}
+.qlab .gs.show path{stroke-dashoffset:0;transition:stroke-dashoffset .5s ease-out}
+.qlab .gs.show polygon{opacity:1;transition:opacity .15s .45s}
+.qlab .gs{opacity:1}
+.lh.late.show{transition-delay:.7s}
+.qarr{position:absolute;left:0;top:174px;overflow:visible}
+.qarr line{stroke-width:3}
+.qb{position:absolute;top:232px;height:136px;display:flex;align-items:center;justify-content:center;font-size:32px}
+.qlines{display:grid;grid-template-columns:auto auto auto;column-gap:12px;row-gap:26px;align-items:center}
+.qc0{justify-self:end;white-space:nowrap} .qc2{justify-self:start;white-space:nowrap}
+.qlines .late.show{transition-delay:.7s}
+.qb .tm{margin:0 2px;line-height:1.15}
+.mva{position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+.mva path{fill:none;stroke:var(--accent);stroke-width:3;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1}
+.mva .gs.show path{stroke-dashoffset:0;transition:stroke-dashoffset .55s ease-out .1s}
+.mva polygon{opacity:0} .mva .gs.show polygon{opacity:1;transition:opacity .15s .6s}
+.mva polygon{fill:var(--accent)}
+.qb-b{background:color-mix(in srgb,var(--b-bg) 70%,transparent)} .qb-o{background:color-mix(in srgb,var(--o-bg) 70%,transparent)}
+.q3{position:absolute;left:120px;top:388px;height:72px;display:flex;align-items:center;font-size:38px;white-space:nowrap}
+.qx{margin-right:14px}
+.qa{display:inline-flex;align-items:center;min-width:240px;height:72px;padding:0 18px;background:color-mix(in srgb,var(--b-bg) 45%,transparent);border-radius:6px}
+.qa .slot{min-width:56px;margin:0 4px}
+.qcm{margin:0 4px}
+.qdup{display:inline-flex;align-items:center;max-width:240px;transition:max-width .6s ease .35s,opacity .4s ease}
+.qdup.on{max-width:0;opacity:0;overflow:hidden}
+.slot-b{border-color:var(--b-bd);background:color-mix(in srgb,var(--b-bg) 45%,transparent)}
+.qjyu{margin-left:36px;display:inline-flex;align-items:center;justify-content:center;width:170px;height:72px;background:var(--r-bg);color:var(--r-ink);
+  font-family:"Kiwi Maru",serif;font-size:32px;border-radius:6px}
+.qpt{position:absolute;left:780px;top:46px;width:360px;height:220px;border:2.5px dashed var(--r-bd);border-radius:14px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px}
+.qpt .lab{left:18px}
+.qpt-m{font-size:38px;display:flex;align-items:center;gap:10px}
+.qs{display:inline-block;width:54px;height:46px;border-radius:6px}
+.qs-b{background:var(--b-bg)} .qs-o{background:var(--o-bg)}
+.qpt-t{font-size:26px;color:var(--accent);font-weight:900}
+.qdone{left:1080px;top:380px}
+/* ※注意！ */
+.ncard{left:48px;top:30px;width:1184px;height:490px;padding:40px 60px;display:flex;flex-direction:column;align-items:center;gap:18px;
+  background:color-mix(in srgb,var(--g-bg) 45%,var(--paper))}
+.n-h{align-self:flex-start;font-size:30px;font-weight:900}
+.n-t{font-size:30px;color:var(--b-ink);font-weight:900}
+.n-eq{display:flex;align-items:flex-start;gap:4px;font-size:46px;margin-top:16px;white-space:nowrap}
+.n-c{display:flex;flex-direction:column;align-items:center}
+.n-u{display:flex;align-items:center;height:66px;line-height:1;border-bottom:4px dotted;padding:0 2px}
+.n-u.b{border-color:var(--b-ink)} .n-u.o{border-color:var(--o-ink)}
+.n-v{font-size:38px;line-height:1.2;text-align:center;margin-top:8px}
+.n-v.b{color:var(--b-ink)} .n-v.o{color:var(--o-ink)}
+.n-z{margin-left:10px;height:66px;display:flex;align-items:center;line-height:1}
+.n-tri{align-self:flex-end;margin:0 0 6px 50px;font-family:"Zen Maru Gothic",sans-serif;font-size:30px;color:#d9443a;font-weight:900}
+.n-tri b{font-size:56px;vertical-align:-8px;margin-left:6px}
+.n-last{font-size:28px;color:var(--b-ink);font-weight:900}
+/* スマホ（縦長） */
+.portrait .t-q .qecard{left:20px;top:30px;width:680px;height:960px}
+.portrait .t-q .qpt{left:40px;top:610px;width:600px;height:190px}
+.portrait .t-q .qjyu{position:absolute;left:0;top:96px;margin:0}
+.portrait .t-q .q3{left:48px}
+.portrait .t-q .qdone{left:540px;top:840px}
+.portrait .t-n .ncard{left:20px;top:30px;width:680px;height:960px;padding:40px 30px;justify-content:center}
+.portrait .t-n .n-t{font-size:24px;text-align:center}
+.portrait .t-n .n-eq{flex-wrap:wrap;justify-content:center}
+.portrait .t-n .n-tri{margin:20px 0 0;width:100%;text-align:center}
+
 </style>
 </head>
 <body>
@@ -967,6 +1037,77 @@ function fxSlide({num,pat,rows,thinkLab,think,cm,done}){
   ${cbar(cm)}`;
 }
 
+/* ====== 2次方程式（因数分解で解く）の 1問 ======
+   プリントと同じ形：もとの式 → 青と橙の ( ) ＝ 0 → それぞれ ＝ 0 → x ＝
+   P = {num, eq, fb, fo, wb, wo, bl, ol, ab, ao, jyu, merge, point, ofirst, cm}
+   bl/ol = {a:'x', t:'＋ 5', v:'−5'}：「x ＋ 5 ＝ 0」→ クリックで 移項の矢印と「x ＝ −5」。t が なければ「x ＝ v」の 1行
+   答えの数は 答えの枠へ 飛んでいく */
+/* 矢印（線＋先の三角） */
+function qArrow(x1,y1,x2,y2,c){
+  const a=Math.atan2(y2-y1,x2-x1), L=14, W=7, bx=x2-L*Math.cos(a), by=y2-L*Math.sin(a);
+  const p=[[x2,y2],[bx-W*Math.sin(a),by+W*Math.cos(a)],[bx+W*Math.sin(a),by-W*Math.cos(a)]].map(q=>q.map(v=>v.toFixed(1)).join(',')).join(' ');
+  return `<line x1="${x1}" y1="${y1}" x2="${bx.toFixed(1)}" y2="${by.toFixed(1)}" stroke="${c}"/><polygon points="${p}" fill="${c}"/>`;
+}
+function eqSlide(P){
+  let n = 0; const st = {lab: ++n, fac: ++n};   // 矢印「因数分解」→ もう一回 クリックで 式
+  if(P.point) st.pt = ++n;
+  const ns = B => B.t ? [++n, ++n] : [++n];
+  if(P.ofirst){ st.o = ns(P.ol); st.b = ns(P.bl); }   // ⑷：( ) の方から 先に
+  else        { st.b = ns(P.bl); st.o = ns(P.ol); }
+  st.ans = ++n;
+  if(P.merge) st.mg = ++n;          // ⑶：同じ答えを 1つに まとめる
+  if(P.jyu) st.jyu = ++n;
+  const done = P.jyu ? st.jyu : st.ans;
+  const L = 48, BX = 48, OX = 352, BW = 280;
+  const bx = L + P.wb/2, ox = L + P.wb + P.wo/2;
+  /* 箱の中：「x ＋ 5 ＝ 0」→ 移項の矢印が のびてから「x ＝ −5」（＝ の位置を そろえた 2行） */
+  const box = (B,ss,k) => {
+    const ln = (s,l,r,cls='') => [l,'＝',r].map((h,i)=>`<span class="qc${i} lh${cls}" data-s="${s}">${h}</span>`).join('');
+    const val = `<span${k?` data-k="${k}"`:''}>${B.v}</span>`;
+    if(!B.t) return `<div class="qlines">${ln(ss[0],B.a,val)}</div>`;
+    return `<div class="qlines">${ln(ss[0],`${B.a} ${tm('r',`<span class="mvt">${B.t}</span>`,ss[1])}`,'0')}${ln(ss[1],B.a,tm('r',`<span class="mvv">${val}</span>`,ss[1]),' late')}</div>`
+         + `<svg class="mva"><g class="gs" data-s="${ss[1]}"><path pathLength="1" d=""/><polygon points=""/></g></svg>`;
+  };
+  const ans = P.merge
+    ? `${slotC('b',P.ab,st.ans,'ab')}<span class="qdup" data-o="${st.mg}"><span class="qcm">,</span>${slotC('o',P.ao,st.ans,'ao')}</span>`
+    : P.ao
+    ? `${slotC('b',P.ab,st.ans,'ab')}<span class="qcm">,</span>${slotC('o',P.ao,st.ans,'ao')}`
+    : slotC('b',P.ab,st.ans,'ab');
+  return `
+  <div class="pno">${P.num}</div>
+  <div class="card abs qecard">${EQTAPE}
+    <div class="q0 math">${P.eq}</div>
+    <div class="qlab" style="left:${L+P.wb+P.wo+100}px"><svg class="gs" data-s="${st.lab}" width="46" height="76" viewBox="0 0 46 76"><path pathLength="1" d="M10 6 C44 14,44 52,18 64" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/><polygon points="6,68 26,72 17,52" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span class="lh" data-s="${st.lab}">因数分解</span></div>
+    <div class="q1 math lh" data-s="${st.fac}"><span class="qf qf-b" style="width:${P.wb}px"><span>${P.fb}</span></span><span class="qf qf-o" style="width:${P.wo}px"><span>${P.fo}</span></span><span class="qz">＝ 0</span></div>
+    <svg class="qarr" width="700" height="60" viewBox="0 0 700 60">
+      <g class="gs" data-s="${st.b[0]}">${qArrow(bx,4,bx,56,'var(--b-ink)')}</g>
+      <g class="gs" data-s="${st.o[0]}">${qArrow(ox,4,OX+BW/2,56,'var(--o-ink)')}</g>
+    </svg>
+    <div class="qb qb-b math lh" data-s="${st.b[0]}" style="left:${BX}px;width:${BW}px">${box(P.bl,st.b,'ab')}</div>
+    <div class="qb qb-o math lh" data-s="${st.o[0]}" style="left:${OX}px;width:${BW}px">${box(P.ol,st.o,'ao')}</div>
+    <div class="q3 math"><span class="qx">x ＝</span><span class="qa">${ans}</span>${P.jyu?`<span class="qjyu lh" data-s="${st.jyu}">重解</span>`:''}</div>
+    <div class="qpt${P.point?' lh':''}"${P.point?` data-s="${st.pt}"`:''}>${TP('yellow','right:20px;top:-14px;transform:rotate(4deg)')}<div class="lab">ポイント</div>
+      <div class="qpt-m math"><span class="qs qs-b"></span> × <span class="qs qs-o"></span> ＝ 0</div>
+      <div class="qpt-t">→ どちらかが 0</div>
+    </div>
+  </div>
+  <div class="abs r done qdone" data-s="${done}"><div class="seal">完成！</div></div>
+  ${cbar(P.cm)}`;
+}
+
+/* 移項の矢印を、＋5 の下から −5 の上へ かく（engine.js の relayout から 呼ばれる） */
+function layoutExtra(root){
+  root.querySelectorAll('.qb').forEach(b=>{
+    const t=b.querySelector('.mvt'), v=b.querySelector('.mvv'), g=b.querySelector('.mva g');
+    if(!t||!v||!g) return;
+    const [bx,by]=pos(b), r=e=>{ const [x,y]=pos(e); return [x-bx,y-by,e.offsetWidth,e.offsetHeight]; };
+    const [tx,ty,tw,th]=r(t.closest('.tm')), [vx,vy,vw]=r(v.closest('.tm'));
+    const x1=tx+tw/2, y1=ty+th+2, x2=vx+vw/2, y2=vy-2, d=(y2-y1)*.9;
+    g.querySelector('path').setAttribute('d',`M${x1} ${y1} C${x1} ${y1+d} ${x2} ${y2-d} ${x2} ${y2-10}`);
+    g.querySelector('polygon').setAttribute('points',`${x2-7},${y2-12} ${x2+7},${y2-12} ${x2},${y2}`);
+  });
+}
+
 /* ====== このプリントのスライド ====== */
 
 const KK = KIMATSU + '　①-1';
@@ -1063,7 +1204,7 @@ const stage = document.getElementById('stage');
 const pages = DECK.pages.map(x=>x.html), names = DECK.pages.map(x=>x.name);
 document.title = DECK.title;
 /* スライドの種類（スマホの縦レイアウトで使う） */
-const kind = h => /class="pcards/.test(h)?'p' : /fxcard/.test(h)?'x' : /class="hrows/.test(h)?'h' : /class="graph"/.test(h)?'g' : /wcard/.test(h)?'w' : /fcard/.test(h)?'b' : 'c';
+const kind = h => /qecard/.test(h)?'q' : /ncard/.test(h)?'n' : /class="pcards/.test(h)?'p' : /fxcard/.test(h)?'x' : /class="hrows/.test(h)?'h' : /class="graph"/.test(h)?'g' : /wcard/.test(h)?'w' : /fcard/.test(h)?'b' : 'c';
 stage.innerHTML = pages.map(h=>`<section class="slide t-${kind(h)}">${h}</section>`).join('');
 (function italicVars(){
   const w=document.createTreeWalker(stage,NodeFilter.SHOW_TEXT);
@@ -1129,7 +1270,7 @@ function layoutDist(root){
     });
   });
 }
-const relayout = r => { layoutFly(r); layoutDist(r); };
+const relayout = r => { layoutFly(r); layoutDist(r); if(typeof layoutExtra==='function') layoutExtra(r); };
 if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>relayout(stage));
 const bar = document.getElementById('bar'), ui = document.getElementById('ui');
 const jump = document.getElementById('jump');
