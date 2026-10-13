@@ -546,6 +546,79 @@ body{overflow:hidden;height:100%;width:100%}
 .portrait .t-n .n-eq{flex-wrap:wrap;justify-content:center}
 .portrait .t-n .n-tri{margin:20px 0 0;width:100%;text-align:center}
 
+/* ===== 解の公式（①-4）：プリントの 色の 枠 ===== */
+:root{--pb:#dbe6f2;--pr:#f2dbdb;--pl:#dbedf5}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){--pb:#34425a;--pr:#5a3a44;--pl:#2f4a55} }
+:root[data-theme="dark"]{--pb:#34425a;--pr:#5a3a44;--pl:#2f4a55}
+.kcard{left:48px;top:30px;width:1184px;height:490px}
+.ksv{position:absolute;left:0;top:0;overflow:visible;pointer-events:none}
+.ksv line,.ksv polyline{stroke-linecap:round}
+.kb0{position:absolute;display:flex;align-items:center;justify-content:center}
+.kpb{background:var(--pb)} .kpr{background:var(--pr)} .kpl{background:var(--pl)} .kpn{background:transparent}
+.kin{font-family:"STIX Two Text","Times New Roman",serif;font-size:30px;white-space:nowrap;display:flex;align-items:center;justify-content:center;width:100%;height:100%}
+.ktx{position:absolute;display:flex;align-items:center;white-space:nowrap}
+.ktitle{font-size:27px}
+.kxe{font-size:38px;justify-content:center}
+.kpm{font-size:36px;justify-content:center;font-family:"STIX Two Text",serif}
+.klab{font-size:19px;color:#c4536a;font-weight:900}
+.kabc{position:absolute;display:flex;align-items:center;gap:22px;font-family:"STIX Two Text",serif;font-size:26px;white-space:nowrap}
+.ka{color:#c4536a} .kb{color:#5e9a3a} .kc{color:var(--b-ink)}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .ka{color:#ffb6c3} :root:not([data-theme="light"]) .kb{color:#a8dc8a} }
+:root[data-theme="dark"] .ka{color:#ffb6c3} :root[data-theme="dark"] .kb{color:#a8dc8a}
+.ov{border-top:2px solid currentColor;padding:0 2px;margin-left:1px}
+.kfr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.15}
+.kfr>span:first-child{border-bottom:2px solid currentColor;padding:0 4px 2px}
+.kfr>span:last-child{padding-top:2px}
+.kin .kfr{font-size:28px}
+.kref{position:absolute;left:944px;top:26px;width:222px;height:150px;border:2.5px dashed var(--b-bd);border-radius:12px;display:flex;align-items:center;justify-content:center}
+.kref .lab{left:14px;color:var(--b-ink);border-color:var(--b-bd)}
+.kfx{font-size:22px;white-space:nowrap;display:inline-flex;align-items:center;gap:4px}
+.kfx .kfr>span:first-child{border-bottom-width:1.5px}
+.kfx.big{font-size:54px;gap:12px}
+.kfx.big .kfr>span:first-child{border-bottom-width:3px;padding:0 10px 4px}
+.kfx.big .ov{border-top-width:3px}
+.kdone{left:1100px;top:390px}
+.kcalc .kin{font-size:23px}
+.ktitle .v+sup{margin-right:4px}
+/* 公式の スライド（プリントの 上の 青い枠） */
+.kfcard{left:48px;top:40px;width:1184px;height:470px;border:4px solid var(--b-ink)}
+.kf-h{position:absolute;left:60px;top:44px;font-size:34px;font-weight:900}
+.kf-c{position:absolute;left:330px;top:50px;font-family:"STIX Two Text",serif;font-size:30px}
+.kf-m{position:absolute;left:0;right:340px;top:150px;display:flex;justify-content:center}
+.kf-k{position:absolute;right:70px;top:230px;font-family:"Kiwi Maru",serif;font-size:56px;color:var(--b-ink)}
+/* スマホ（縦長）：プリントと 同じ 並びを 保つため、カードごと 縮める */
+.portrait .t-k .kcard{left:20px;top:150px;transform-origin:top left;transform:scale(.574)}
+.portrait .t-k .kdone{left:560px;top:450px}
+.portrait .t-f .kfcard{left:20px;top:300px;transform-origin:top left;transform:scale(.574)}
+.kwr{display:inline-block;white-space:nowrap;line-height:1.2}
+.knote{position:absolute;display:flex;align-items:center;justify-content:center;font-family:"STIX Two Text",serif;font-size:21px;color:var(--note)}
+.khf{display:grid;grid-template-rows:1fr 1fr;width:100%;height:100%}
+.khf>span{display:flex;align-items:center;justify-content:center}
+.kin .fr{font-size:.85em}
+
+/* ===== 手書き ===== */
+#ink{position:fixed;left:0;top:0;z-index:15;pointer-events:none;touch-action:none}
+body.inking #ink{pointer-events:auto;cursor:crosshair}
+/* ペンを 使う 端末では、さわった瞬間に スクロール判定で 線が 切れないように する */
+body.pen-dev, body.pen-dev *{touch-action:none}
+#inkbar{position:fixed;z-index:25;right:12px;top:10px;display:flex;align-items:center;gap:6px;padding:5px;border-radius:999px;
+  background:color-mix(in srgb,var(--paper) 88%,transparent);box-shadow:var(--shadow);transition:opacity .3s}
+#inkbar.hide{opacity:0;pointer-events:none}
+#inkbar button{font:900 15px "Zen Maru Gothic",sans-serif;height:36px;min-width:36px;padding:0 10px;border-radius:18px;border:2px solid var(--r-bd);background:var(--paper);color:var(--ink);cursor:pointer}
+#inkbar .ink-tg{font-size:18px}
+body.inking #inkbar .ink-tg{background:var(--accent);border-color:var(--accent);color:var(--paper)}
+#inkbar .ink-tools{display:none;gap:6px;align-items:center}
+body.inking #inkbar .ink-tools{display:flex}
+#inkbar .ink-c{width:36px;padding:0;background:var(--c);border-color:transparent}
+#inkbar .ink-c.sel{box-shadow:0 0 0 3px var(--paper),0 0 0 6px var(--c)}
+#inkbar .ink-er.sel{background:var(--r-bg)}
+#inkbar .ink-w{width:36px;padding:0;display:flex;align-items:center;justify-content:center;border-color:var(--gline)}
+#inkbar .ink-w i{display:block;border-radius:50%;background:var(--ink)}
+#inkbar .ink-w.sel{border-color:var(--accent);background:var(--r-bg)}
+#inkbar .ink-sep{width:1px;height:24px;background:var(--gline);margin:0 2px}
+body.portrait #inkbar .ink-tools{flex-wrap:wrap;max-width:calc(100vw - 70px)}
+body.portrait #inkbar{top:6px;right:6px}
+
 </style>
 </head>
 <body>
@@ -1125,6 +1198,58 @@ function layoutExtra(root){
   });
 }
 
+/* ====== 解の公式（①-4）：プリントの 枠の 位置を そのまま 拡大して 再現する ======
+   座標は プリント（PDF）の pt。 KS 倍して、問題番号の 行を 原点に する。
+   生徒は プリントに 書きこむので、枠の 位置・形は 変えない。 */
+const KS = 2.05, KX0 = 62, KL = 24, KT = 18;
+const kpos = (y0) => (x1,y1,x2,y2) => `left:${(KL+(x1-KX0)*KS).toFixed(1)}px;top:${(KT+(y1-y0)*KS).toFixed(1)}px;width:${((x2-x1)*KS).toFixed(1)}px;height:${((y2-y1)*KS).toFixed(1)}px`;
+const SQ = t => `√<span class="ov">${t}</span>`;
+/* 解の公式（色つき）：a 赤、b 緑、c 青 */
+const KA = t => `<span class="ka">${t}</span>`, KB = t => `<span class="kb">${t}</span>`, KC = t => `<span class="kc">${t}</span>`;
+const FORMULA = (big) => `<span class="kfx math${big?' big':''}">x ＝ <span class="kfr"><span>−${KB('b')} ± ${SQ(`${KB('b')}${P2} − 4${KA('a')}${KC('c')}`)}</span><span>2${KA('a')}</span></span></span>`;
+
+/* 1問。P = {num, eq, abc, y0, b1:[-b], b2:[b²], b3:[-4ac], calc, b4:[2a], row2:[…], cm}
+   各 枠は [出る番, 中身]。row2 は 下の段（プリントの 問題ごとに 形が ちがう）
+   notes：[[番, ⑴ の座標 [x1,y1,x2,y2], 中身]]（枠の 近くの 小さな 計算メモ） */
+function kfSlide(P){
+  const at = kpos(P.y0);
+  const wrap = h => /^<div class="khf"/.test(h) ? h : `<span class="kwr">${h}</span>`;
+  const bx = (cls,r,[s,h],x='') => `<div class="kb0 ${cls}" style="${at(...r)}"${x}>${h!==undefined?`<div class="kin lh" data-s="${s}">${wrap(h)}</div>`:''}</div>`;
+  const tx = (r,h,cls='') => `<div class="ktx ${cls}" style="${at(...r)}"><span class="kwr">${h}</span></div>`;
+  const Y = P.y0, d = y => y - 210.2 + Y;          // ⑴ の 位置を 基準に、問題ごとの ずれ
+  // ルート記号と 分数の線（SVG、pt → px）
+  const X = x => (KL+(x-KX0)*KS).toFixed(1), YY = y => (KT+(y-Y)*KS).toFixed(1);
+  const svg = `<svg class="ksv" width="1184" height="490">
+    <polyline points="${X(176)},${YY(d(252))} ${X(180)},${YY(d(249.5))} ${X(184.5)},${YY(d(262))} ${X(189)},${YY(d(238.2))} ${X(290.3)},${YY(d(238.2))}" fill="none" stroke="var(--ink)" stroke-width="2.4" stroke-linejoin="round"/>
+    <line x1="${X(112.5)}" y1="${YY(d(271.1))}" x2="${X(300.4)}" y2="${YY(d(271.1))}" stroke="var(--ink)" stroke-width="2.4"/>
+    ${(P.lines||[]).map(([x1,y,x2])=>`<line x1="${X(x1)}" y1="${YY(y)}" x2="${X(x2)}" y2="${YY(y)}" stroke="var(--ink)" stroke-width="2"/>`).join('')}
+    ${(P.arrows||[]).map(([x1,y1,x2,y2])=>`<g class="gs" data-s="${P.arrowS}">${qArrow(+X(x1),+YY(y1),+X(x2),+YY(y2),'var(--note)')}</g>`).join('')}
+  </svg>`;
+  return `
+  <div class="card abs kcard">
+    ${tx([KX0,Y,340,Y+14.4],`${P.num}　${P.eq}`,'ktitle math')}
+    <div class="kabc lh" data-s="${P.abc[0]}" style="${at(230,Y-2,520,Y+16)}">${P.abc[1]}</div>
+    ${tx([76,d(261.1),112,d(281.1)],'x ＝','kxe math')}
+    ${tx([157.2,d(241.7),176,d(268.7)],'±','kpm math')}
+    ${bx('kpb',[113.7,d(241.7),157.2,d(268.7)],P.b1)}
+    ${bx('kpb',[186.5,d(241.7),229.9,d(268.7)],P.b2)}
+    ${bx('kpr',[229.2,d(241.7),285.4,d(268.7)],P.b3)}
+    ${bx('kpb',[179.9,d(273.7),239.2,d(300.6)],P.b4)}
+    ${tx([350.4,d(225.7),460,d(235.7)],'−4ac の計算','klab')}
+    ${(P.notes||[]).map(([s,r,h])=>`<div class="knote lh" data-s="${s}" style="${at(r[0],d(r[1]),r[2],d(r[3]))}"><span class="kwr">${h}</span></div>`).join('')}
+    ${bx('kpr kcalc',[350.5,d(240.6),465.2,d(267.5)],P.calc)}
+    ${P.row2.map(r=>r.t ? tx(r.r,r.t,'kxe math') : bx(r.c,r.r,r.v)).join('')}
+    ${svg}
+    <div class="kref">${TP('lav','right:20px;top:-14px;transform:rotate(-4deg)')}<div class="lab">解の公式</div>${FORMULA()}</div>
+  </div>
+  <div class="abs r done kdone" data-s="${P.done}"><div class="seal">完成！</div></div>
+  ${cbar(P.cm)}`;
+}
+/* 分数（枠の中：上と下に 分けて 書く） */
+const KF = (n,dn) => `<span class="kfr"><span>${n}</span><span>${dn}</span></span>`;
+/* 枠の中を 上下に 分けて 書く（プリントに 分数の線が 印刷されている 枠） */
+const KH = (n,dn) => `<div class="khf"><span>${n}</span><span>${dn}</span></div>`;
+
 /* ====== このプリントのスライド ====== */
 
 const KK = KIMATSU + '　①-2';
@@ -1211,7 +1336,7 @@ const stage = document.getElementById('stage');
 const pages = DECK.pages.map(x=>x.html), names = DECK.pages.map(x=>x.name);
 document.title = DECK.title;
 /* スライドの種類（スマホの縦レイアウトで使う） */
-const kind = h => /qecard/.test(h)?'q' : /ncard/.test(h)?'n' : /class="pcards/.test(h)?'p' : /fxcard/.test(h)?'x' : /class="hrows/.test(h)?'h' : /class="graph"/.test(h)?'g' : /wcard/.test(h)?'w' : /fcard/.test(h)?'b' : 'c';
+const kind = h => /kcard/.test(h)?'k' : /kfcard/.test(h)?'f' : /qecard/.test(h)?'q' : /ncard/.test(h)?'n' : /class="pcards/.test(h)?'p' : /fxcard/.test(h)?'x' : /class="hrows/.test(h)?'h' : /class="graph"/.test(h)?'g' : /wcard/.test(h)?'w' : /fcard/.test(h)?'b' : 'c';
 stage.innerHTML = pages.map(h=>`<section class="slide t-${kind(h)}">${h}</section>`).join('');
 (function italicVars(){
   const w=document.createTreeWalker(stage,NodeFilter.SHOW_TEXT);
@@ -1307,7 +1432,7 @@ function render(){
   const done = maxStep.slice(0,si).reduce((a,m)=>a+m+1,0)+st+1;
   bar.style.width = (done/total*100)+'%';
   [...jump.querySelectorAll('button')].forEach(b=>b.classList.toggle('on',+b.dataset.i===si));
-  ui.textContent = `${si+1} / ${els.length}　←→ 進む・戻る　P 自動再生　Home 最初から　F 全画面　H 表示を隠す　T 明暗`;
+  ui.textContent = `${si+1} / ${els.length}　←→ 進む・戻る　P 自動再生　Home 最初から　F 全画面　H 表示を隠す　T 明暗${typeof INK!=='undefined'?'　W 書きこむ':''}`;
 }
 function next(){ if(st<maxStep[si]) st++; else if(si<els.length-1){si++;st=0;} else stopAuto(); render(); }
 function prev(){ if(st>0) st--; else if(si>0){si--;st=maxStep[si];} render(); }
@@ -1342,6 +1467,120 @@ function fit(){
   relayout(els[si]);
 }
 addEventListener('resize',fit); fit(); render();
+
+/* ====== 手書き（授業中に スライドの上から 書きこむ） ======
+   右上の ✏ ボタン か W キーで 書く／やめる。ペンの 後ろ（消しゴム側）で なぞると 消える。
+   ペン（Surface ペンなど）で 画面に さわると、自動で 書くモードに なる。
+   書いた線は スライドごとに 残る（ページを 開き直すと 消える）。
+   線は 台紙（1280×720 / 720×1280）の 座標で 覚えるので、画面の 大きさが 変わっても ずれない。 */
+var INK = {on:false, color:'#e0465e', tool:'pen', w:3.5, strokes:{}, cur:null};
+(function(){
+  const cv = document.createElement('canvas'); cv.id = 'ink'; document.body.appendChild(cv);
+  const ctx = cv.getContext('2d');
+  const bar = document.createElement('div'); bar.id = 'inkbar';
+  const COLORS = [['#e0465e','赤'],['#1f3f9e','青'],['#f07a12','オレンジ'],['#1f9a4a','緑'],['#33303d','黒']];
+  const SIZES = [[3.5,'細'],[5,'太']];   // 細 が 最初
+  bar.innerHTML = `<button class="ink-tg" title="書きこむ（W）">✏</button>
+    <span class="ink-tools">${COLORS.map(([c,n])=>`<button class="ink-c" data-c="${c}" title="${n}" style="--c:${c}"></button>`).join('')}
+    <span class="ink-sep"></span>${SIZES.map(([w,n])=>`<button class="ink-w" data-w="${w}" title="${n}"><i style="width:${w*2}px;height:${w*2}px"></i></button>`).join('')}<span class="ink-sep"></span>
+    <button class="ink-er" title="消しゴム（E）">消</button><button class="ink-un" title="1つ戻す（Ctrl+Z）">↶</button>
+    <button class="ink-cl" title="このページを 全部 消す">全消</button></span>`;
+  document.body.appendChild(bar);
+  const key = () => si + (document.body.classList.contains('portrait') ? 'p' : 'l');
+  const list = () => (INK.strokes[key()] ||= []);
+  /* 画面の点 ⇔ 台紙の点 */
+  const box = () => stage.getBoundingClientRect();
+  const sz  = () => document.body.classList.contains('portrait') ? [720,1280] : [1280,720];
+  const toStage = (x,y) => { const b=box(), [W,H]=sz(); return [(x-b.left)/b.width*W, (y-b.top)/b.height*H]; };
+  function size(){
+    const r = devicePixelRatio || 1;
+    cv.width = innerWidth * r; cv.height = innerHeight * r;
+    cv.style.width = innerWidth + 'px'; cv.style.height = innerHeight + 'px';
+    draw();
+  }
+  function draw(){
+    const r = devicePixelRatio || 1, b = box(), [W] = sz(), k = b.width / W;
+    ctx.setTransform(r,0,0,r,0,0); ctx.clearRect(0,0,innerWidth,innerHeight);
+    ctx.setTransform(r*k,0,0,r*k,r*b.left,r*b.top);
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    for(const s of list()){
+      ctx.strokeStyle = s.c; ctx.lineWidth = s.w; ctx.beginPath();
+      s.p.forEach(([x,y],i)=> i ? ctx.lineTo(x,y) : ctx.moveTo(x,y));
+      if(s.p.length===1) ctx.lineTo(s.p[0][0]+.1, s.p[0][1]);
+      ctx.stroke();
+    }
+  }
+  function erase(x,y){
+    const L = list(), n = L.length;
+    for(let i=L.length-1;i>=0;i--) if(L[i].p.some(([a,b])=>Math.hypot(a-x,b-y)<16)) L.splice(i,1);
+    if(L.length!==n) draw();
+  }
+  function setOn(v){
+    INK.on = v; document.body.classList.toggle('inking', v);
+    if(!v) INK.cur = null;
+  }
+  function setTool(t,c){
+    INK.tool = t; if(c) INK.color = c;
+    bar.querySelectorAll('.ink-c').forEach(b=>b.classList.toggle('sel', t==='pen' && b.dataset.c===INK.color));
+    bar.querySelector('.ink-er').classList.toggle('sel', t==='er');
+    bar.querySelectorAll('.ink-w').forEach(b=>b.classList.toggle('sel', +b.dataset.w===INK.w));
+  }
+  function start(e){
+    e.preventDefault(); try{ cv.setPointerCapture(e.pointerId); }catch(_){}
+    const p = toStage(e.clientX,e.clientY);
+    /* ペンの 後ろ（消しゴム側）で さわったら 消しゴム。Surface ペンなどは buttons に 32 が 入る */
+    const back = e.pointerType==='pen' && (e.button===5 || (e.buttons & 32));
+    if(INK.tool==='er' || back){ INK.cur = {er:true}; erase(...p); return; }
+    INK.cur = {c:INK.color, w:INK.w, p:[p]}; list().push(INK.cur); draw();
+  }
+  cv.addEventListener('pointerdown', e=>{ if(INK.on) start(e); });
+  /* ペンを 近づけた（さわる前の ホバー）時点で、ブラウザの スクロール・拡大の 判定を 止める。
+     止めないと、ペンで さわって すぐ 書き始めた線が 0.3秒ほどで 打ち切られる（pointercancel） */
+  const penSeen = e => { if(e.pointerType==='pen') document.body.classList.add('pen-dev'); };
+  ['pointerover','pointermove','pointerdown'].forEach(t=>document.addEventListener(t, penSeen, {capture:true, passive:true}));
+  /* ペンで 画面に さわったら、自動で 書くモードに する（ボタンや リンクは ふつうに 押せる） */
+  let skipClick = false;
+  document.addEventListener('pointerdown', e=>{
+    if(INK.on || e.pointerType!=='pen' || e.target.closest('#inkbar,#jump,a,button')) return;
+    setOn(true); if(INK.tool!=='er') setTool('pen'); skipClick = true; start(e);
+  }, true);
+  document.addEventListener('click', e=>{ if(skipClick){ skipClick = false; e.stopPropagation(); e.preventDefault(); } }, true);
+  cv.addEventListener('pointermove', e=>{
+    if(!INK.cur) return;
+    const evs = e.getCoalescedEvents ? e.getCoalescedEvents() : [e];
+    for(const ev of evs){
+      const p = toStage(ev.clientX,ev.clientY);
+      if(INK.cur.er) erase(...p); else INK.cur.p.push(p);
+    }
+    if(!INK.cur.er) draw();
+  });
+  const end = () => { INK.cur = null; };
+  cv.addEventListener('pointerup', end); cv.addEventListener('pointercancel', end);
+  cv.addEventListener('click', e=>e.stopPropagation());
+  bar.addEventListener('click', e=>{
+    e.stopPropagation();
+    const b = e.target.closest('button'); if(!b) return;
+    if(b.classList.contains('ink-tg')){ setOn(!INK.on); if(INK.on) setTool('pen'); }
+    else if(b.classList.contains('ink-c')) setTool('pen', b.dataset.c);
+    else if(b.classList.contains('ink-w')){ INK.w = +b.dataset.w; setTool('pen'); }
+    else if(b.classList.contains('ink-er')) setTool('er');
+    else if(b.classList.contains('ink-un')){ list().pop(); draw(); }
+    else if(b.classList.contains('ink-cl')){ INK.strokes[key()] = []; draw(); }
+    b.blur();
+  });
+  document.addEventListener('keydown', e=>{
+    const k = e.key;
+    if(k==='w'||k==='W'){ setOn(!INK.on); if(INK.on) setTool('pen'); }
+    else if(INK.on && (k==='e'||k==='E')) setTool(INK.tool==='er' ? 'pen' : 'er');
+    else if(INK.on && k==='Escape') setOn(false);
+    else if(k==='h'||k==='H') bar.classList.toggle('hide');
+    else if((e.ctrlKey||e.metaKey) && (k==='z'||k==='Z')){ e.preventDefault(); list().pop(); draw(); }
+  });
+  /* ページを めくったら、そのページの 線を かく */
+  const r0 = render; render = function(){ r0(); draw(); };
+  addEventListener('resize', size);
+  setTool('pen'); size();
+})();
 
 </script>
 </body>
