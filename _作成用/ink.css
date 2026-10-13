@@ -1,0 +1,22 @@
+/* ===== 手書き ===== */
+#ink{position:fixed;left:0;top:0;z-index:15;pointer-events:none;touch-action:none}
+body.inking #ink{pointer-events:auto;cursor:crosshair}
+/* ペンを 使う 端末では、さわった瞬間に スクロール判定で 線が 切れないように する */
+body.pen-dev, body.pen-dev *{touch-action:none}
+#inkbar{position:fixed;z-index:25;right:12px;top:10px;display:flex;align-items:center;gap:6px;padding:5px;border-radius:999px;
+  background:color-mix(in srgb,var(--paper) 88%,transparent);box-shadow:var(--shadow);transition:opacity .3s}
+#inkbar.hide{opacity:0;pointer-events:none}
+#inkbar button{font:900 15px "Zen Maru Gothic",sans-serif;height:36px;min-width:36px;padding:0 10px;border-radius:18px;border:2px solid var(--r-bd);background:var(--paper);color:var(--ink);cursor:pointer}
+#inkbar .ink-tg{font-size:18px}
+body.inking #inkbar .ink-tg{background:var(--accent);border-color:var(--accent);color:var(--paper)}
+#inkbar .ink-tools{display:none;gap:6px;align-items:center}
+body.inking #inkbar .ink-tools{display:flex}
+#inkbar .ink-c{width:36px;padding:0;background:var(--c);border-color:transparent}
+#inkbar .ink-c.sel{box-shadow:0 0 0 3px var(--paper),0 0 0 6px var(--c)}
+#inkbar .ink-er.sel{background:var(--r-bg)}
+#inkbar .ink-w{width:36px;padding:0;display:flex;align-items:center;justify-content:center;border-color:var(--gline)}
+#inkbar .ink-w i{display:block;border-radius:50%;background:var(--ink)}
+#inkbar .ink-w.sel{border-color:var(--accent);background:var(--r-bg)}
+#inkbar .ink-sep{width:1px;height:24px;background:var(--gline);margin:0 2px}
+body.portrait #inkbar .ink-tools{flex-wrap:wrap;max-width:calc(100vw - 70px)}
+body.portrait #inkbar{top:6px;right:6px}

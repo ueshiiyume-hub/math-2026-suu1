@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>2次関数のグラフ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@400;500&family=Zen+Maru+Gothic:wght@500;700;900&family=STIX+Two+Text:ital,wght@0,500;0,700;1,500;1,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bgimg:linear-gradient(135deg,#fdeef2 0%,#f4effb 48%,#ebf6f1 100%);
+  --grid:rgba(140,155,200,.17); --grid2:rgba(140,155,200,.30);
+  --ink:#4f4760; --muted:#8c849c; --paper:#fffdf9; --note:#7286c2; --accent:#d4677f;
+  --curve:#e07f96; --gline:rgba(150,160,200,.20); --halo:#fffdf9;
+  --r-bg:#fbdde1; --r-ink:#c4536a; --r-bd:#f1b3bd;
+  --o-bg:#fde7d1; --o-ink:#c2702a; --o-bd:#f3c597;
+  --g-bg:#d8f0e1; --g-ink:#3a8f61; --g-bd:#a6d8b8;
+  --b-bg:#dde8f8; --b-ink:#4f7cc0; --b-bd:#b0c9ec;
+  --shadow:0 1px 0 rgba(120,100,140,.06),0 10px 26px rgba(120,100,140,.13);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bgimg:linear-gradient(135deg,#302c3e 0%,#2b2f40 50%,#2a3532 100%);
+    --grid:rgba(220,210,255,.07); --grid2:rgba(220,210,255,.12);
+    --ink:#f0ebf6; --muted:#b9b1c9; --paper:#3b384f; --note:#a9b8ec; --accent:#ff9fb3;
+    --curve:#ff9fb3; --gline:rgba(220,210,255,.10); --halo:#3b384f;
+    --r-bg:#5a3a48; --r-ink:#ffb6c3; --r-bd:#8a5567;
+    --o-bg:#5a4632; --o-ink:#ffcf9a; --o-bd:#8a6a45;
+    --g-bg:#2f5041; --g-ink:#a2e2bd; --g-bd:#4f7d63;
+    --b-bg:#33435e; --b-ink:#b3cdf5; --b-bd:#56709a;
+  }
+}
+:root[data-theme="dark"]{
+  --bgimg:linear-gradient(135deg,#302c3e 0%,#2b2f40 50%,#2a3532 100%);
+  --grid:rgba(220,210,255,.07); --grid2:rgba(220,210,255,.12);
+  --ink:#f0ebf6; --muted:#b9b1c9; --paper:#3b384f; --note:#a9b8ec; --accent:#ff9fb3;
+  --curve:#ff9fb3; --gline:rgba(220,210,255,.10); --halo:#3b384f;
+  --r-bg:#5a3a48; --r-ink:#ffb6c3; --r-bd:#8a5567;
+  --o-bg:#5a4632; --o-ink:#ffcf9a; --o-bd:#8a6a45;
+  --g-bg:#2f5041; --g-ink:#a2e2bd; --g-bd:#4f7d63;
+  --b-bg:#33435e; --b-ink:#b3cdf5; --b-bd:#56709a;
+}
+html{height:100%}
+body{margin:0;height:100%;overflow:hidden;background:var(--bgimg);color:var(--ink);
+  font-family:"Zen Maru Gothic","Hiragino Maru Gothic ProN","Yu Gothic",Meiryo,sans-serif;font-weight:700;
+  position:relative;user-select:none;-webkit-user-select:none}
+/* 方眼用紙 */
+#bg{position:fixed;inset:0;overflow:hidden;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(var(--grid2) 1px,transparent 1px),
+    linear-gradient(90deg,var(--grid2) 1px,transparent 1px),
+    linear-gradient(var(--grid) 1px,transparent 1px),
+    linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:140px 140px,140px 140px,28px 28px,28px 28px;
+  background-position:-1px -1px}
+.deco{position:absolute;opacity:.55;animation:float var(--t) ease-in-out infinite;animation-delay:var(--d)}
+.deco.dot{border-radius:50%;background:var(--c)}
+.deco.star{background:var(--c);clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+@keyframes float{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-1.6vmin) rotate(8deg)}}
+
+#stage{position:absolute;z-index:1;left:50%;top:50%;width:1280px;height:720px;
+  transform:translate(-50%,-50%) scale(var(--s,1));transform-origin:center center}
+.slide{position:absolute;inset:0;opacity:0;transform:translateY(24px);pointer-events:none;
+  transition:opacity .45s ease, transform .6s cubic-bezier(.3,1.25,.5,1)}
+.slide.active{opacity:1;transform:none}
+.slide.past{transform:translateY(-24px)}
+h1,h2,.pop{font-family:"Kiwi Maru","Zen Maru Gothic",serif;font-weight:500}
+h1,h2{margin:0;color:var(--ink);letter-spacing:.04em}
+.math{font-family:"STIX Two Text","Times New Roman","Zen Maru Gothic",serif;font-weight:500}
+.cm .math{white-space:nowrap}
+.cm b,.cm .cc{white-space:nowrap}
+.v+sup{margin-left:-.12em}
+.v{font-family:"STIX Two Text","Times New Roman",serif;font-style:italic;font-weight:500;font-size:1.08em;padding-right:.1em}
+sup{font-size:.62em;line-height:0;vertical-align:super;position:relative;top:-.05em;margin-left:1px}
+
+/* 出現 */
+.r{opacity:0;transform:translateY(14px)}
+span.r{display:inline-block}
+.r.show{opacity:1;transform:none;transition:opacity .4s ease,transform .55s cubic-bezier(.3,1.3,.5,1)}
+
+/* カード＋マスキングテープ */
+.card{background:var(--paper);border-radius:6px;box-shadow:var(--shadow);box-sizing:border-box}
+.abs{position:absolute}
+.tape{position:absolute;z-index:4;width:116px;height:30px;opacity:.88;pointer-events:none;
+  clip-path:polygon(2% 0,98% 0,100% 16%,97% 32%,100% 50%,97% 68%,100% 84%,98% 100%,2% 100%,0 84%,3% 68%,0 50%,3% 32%,0 16%)}
+.t-pink{background:repeating-linear-gradient(45deg,rgba(255,255,255,.38) 0 6px,rgba(255,255,255,0) 6px 12px),#f5c2cc}
+.t-mint{background:radial-gradient(circle,rgba(255,255,255,.7) 2px,transparent 2.6px) 0 0/12px 12px,#bfe5d0}
+.t-yellow{background:repeating-linear-gradient(90deg,rgba(255,255,255,.35) 0 4px,rgba(255,255,255,0) 4px 14px),#f8e2a2}
+.t-lav{background:linear-gradient(rgba(255,255,255,.35) 1px,transparent 1px) 0 0/8px 8px,linear-gradient(90deg,rgba(255,255,255,.35) 1px,transparent 1px) 0 0/8px 8px,#d8cdf1}
+.t-blue{background:repeating-linear-gradient(-45deg,rgba(255,255,255,.4) 0 5px,rgba(255,255,255,0) 5px 10px),#c4d8f2}
+
+/* 色の札 */
+.cc{display:inline-block;border-radius:10px;padding:0 9px;margin:0 3px;line-height:1.3;border:2px solid;font-weight:700}
+.cc-r{background:var(--r-bg);color:var(--r-ink);border-color:var(--r-bd)}
+.cc-o{background:var(--o-bg);color:var(--o-ink);border-color:var(--o-bd)}
+.cc-g{background:var(--g-bg);color:var(--g-ink);border-color:var(--g-bd)}
+.cc-b{background:var(--b-bg);color:var(--b-ink);border-color:var(--b-bd)}
+.cc.sm{padding:0 7px;border-radius:8px;margin:0 2px}
+
+/* 式：あとから色がつく */
+.tm{display:inline-block;border-radius:10px;padding:0 2px;margin:0 2px;border:2px solid transparent;line-height:1.3;
+  transition:background .45s,color .45s,padding .45s,border-color .45s}
+.tm.on{padding:0 7px}
+.tm-r.on{background:var(--r-bg);color:var(--r-ink);border-color:var(--r-bd)}
+.tm-o.on{background:var(--o-bg);color:var(--o-ink);border-color:var(--o-bd)}
+.tm-g.on{background:var(--g-bg);color:var(--g-ink);border-color:var(--g-bd)}
+.tm-b.on{background:var(--b-bg);color:var(--b-ink);border-color:var(--b-bd)}
+.tm.ghost{min-width:20px}
+.tm.ghost.on{border-style:dashed;background:transparent}
+.tm.cur{animation:throb .9s ease-in-out 2}
+@keyframes throb{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+
+/* 空らんと、飛んでくる数 */
+.slot{display:inline-block;border-radius:10px;border:2.5px dashed;margin:0 4px;min-width:62px;text-align:center;transition:border-color .3s,background .3s}
+.slot-o{border-color:var(--o-bd);background:color-mix(in srgb,var(--o-bg) 45%,transparent)}
+.slot-g{border-color:var(--g-bd);background:color-mix(in srgb,var(--g-bg) 45%,transparent)}
+.slot:has(.fly.go){border-color:transparent;background:transparent}
+.slot .tm{margin:0}
+.fly{position:relative;z-index:30;opacity:0;transform:translate(var(--fx,0px),var(--fy,0px)) scale(.8)}
+.fly.go{opacity:1;transform:none;transition:transform .95s cubic-bezier(.3,1.15,.45,1),opacity .2s ease}
+
+/* 左：式とグラフ */
+.eqcard{left:40px;top:30px;width:840px;height:490px}
+.rowsw{position:absolute;left:30px;top:30px;width:370px;font-size:28px}
+.er{display:flex;align-items:center;height:60px;white-space:nowrap}
+.lh{opacity:0;transform:translateY(10px);transition:opacity .4s ease,transform .5s cubic-bezier(.3,1.3,.5,1)}
+.lh.show{opacity:1;transform:none}
+.lhs{width:24px;text-align:right;flex:none}
+.eqs{width:40px;text-align:center;flex:none}
+.nt{margin-top:16px;font-size:21px;line-height:1.55;color:var(--ink);padding-left:30px;position:relative;white-space:nowrap}
+.nt::before{content:"";position:absolute;left:6px;top:.5em;width:12px;height:12px;border-radius:50%;background:var(--dotc,#f5c2cc)}
+.nt .math{font-size:24px}
+.nt b{color:var(--accent)}
+.pl{display:flex;gap:8px;align-items:baseline;font-size:20px;line-height:1.45;margin-top:5px;padding-left:4px;white-space:nowrap}
+.pl .no{flex:none;color:#c9a23a;font-weight:900}
+.pl .math{font-size:23px}
+.hasl{position:relative;display:inline-block}
+.lbl{position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:6px;white-space:nowrap;text-align:center;
+  font-family:"Zen Maru Gothic",sans-serif;font-size:17px;line-height:1.3;font-weight:900}
+.lbl .lh{display:inline-block}
+.lbl.lo{color:var(--o-ink)} .lbl.lg{color:var(--g-ink)} .lbl.lr{color:var(--r-ink)}
+.divider{position:absolute;left:404px;top:28px;bottom:28px;border-left:2px dashed var(--gline)}
+.graph{position:absolute;left:412px;top:16px;overflow:visible}
+.gg{stroke:var(--gline);stroke-width:1}
+.ax{stroke:var(--ink);stroke-width:2}
+.axh{fill:var(--ink)}
+.tk{stroke:var(--ink);stroke-width:1.5}
+.gt{font-family:"STIX Two Text","Times New Roman",serif;font-size:20px;fill:var(--ink);font-weight:500}
+.gt.it{font-style:italic}
+.gt.sm{font-size:17px;fill:var(--muted)}
+.halo{paint-order:stroke;stroke:var(--halo);stroke-width:6px;stroke-linejoin:round}
+.gd{stroke:var(--muted);stroke-width:1.6;stroke-dasharray:5 5}
+.axl{stroke:var(--o-ink);stroke-width:2.6;stroke-dasharray:9 7}
+.gt.o{fill:var(--o-ink);font-weight:700}
+.gt.k{fill:var(--accent);font-weight:700}
+.gs{opacity:0;transition:opacity .45s}
+.gs.show{opacity:1}
+.curve{fill:none;stroke:var(--curve);stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1}
+.curve.show{stroke-dashoffset:0;transition:stroke-dashoffset 1.8s ease-in-out}
+.pt circle{fill:var(--accent);stroke:var(--paper);stroke-width:2.5;transform-box:fill-box;transform-origin:center;transform:scale(0);transition:transform .45s cubic-bezier(.3,1.6,.5,1)}
+.pt.show circle{transform:scale(1)}
+.tmp{opacity:0;transition:opacity .35s}
+.tmp.wv-on{opacity:1}
+.tmp path{fill:none;stroke:var(--note);stroke-width:2.4;stroke-dasharray:6 5}
+.tmp polygon{fill:var(--note)}
+
+.pno{position:absolute;left:14px;top:8px;width:60px;height:60px;border-radius:50%;z-index:5;display:flex;align-items:center;justify-content:center;
+  background:var(--paper);border:3px solid var(--r-bd);color:var(--r-ink);font-family:"Kiwi Maru",serif;font-size:30px;
+  box-shadow:0 0 0 5px var(--r-bg),var(--shadow);transform:rotate(-8deg)}
+
+/* 右：答え・基本の形 */
+.lab{position:absolute;left:22px;top:-16px;z-index:5;background:var(--paper);color:var(--accent);border:2px dashed var(--r-bd);border-radius:999px;padding:0 16px;font-size:18px;font-weight:900}
+.memo{left:902px;top:30px;width:330px;height:300px;padding:26px 16px 0}
+.arow{display:flex;align-items:center;height:66px;gap:6px;font-size:30px}
+.arow.gray{color:var(--muted)}
+.al{width:86px;flex:none;font-size:21px;color:var(--ink);text-align:center;font-family:"Zen Maru Gothic",sans-serif;font-weight:700}
+.arow.gray .al{color:var(--muted);font-size:18px}
+.slot-r{border-color:var(--r-bd);background:color-mix(in srgb,var(--r-bg) 45%,transparent);min-width:110px}
+.slot-r .tm{font-family:"Zen Maru Gothic",sans-serif;font-size:24px;font-weight:900}
+.slot-k{border-color:var(--gline);background:color-mix(in srgb,var(--gline) 40%,transparent);min-width:150px}
+.tm-k.on{color:var(--ink)}
+.legend{left:902px;top:352px;width:330px;height:122px;padding:20px 12px 6px;display:flex;flex-direction:column;justify-content:center;gap:8px;align-items:center}
+.legend .l1{font-size:26px}
+.legend .l2{font-size:16px;white-space:nowrap}
+.legend .cc{padding:0 5px;margin:0 1px}
+.lbl.up{top:auto;bottom:100%;margin-top:0;margin-bottom:2px;font-size:16px}
+
+/* 完成シール */
+.done{z-index:6}
+.seal{display:flex;align-items:center;justify-content:center;width:120px;height:120px;border-radius:50%;
+  background:#fff1c2;border:3px dashed #eec36a;color:#c4536a;font-family:"Kiwi Maru",serif;font-size:30px;
+  box-shadow:0 0 0 6px #fff7dc,0 8px 18px rgba(120,100,140,.18);transform:rotate(-12deg)}
+
+/* 基本の形スライド */
+.end-h{position:absolute;left:72px;top:40px}
+.end-h h2{font-size:40px;display:inline-block;background:linear-gradient(transparent 60%,var(--r-bg) 60%);padding:0 8px}
+.fcard{left:48px;top:118px;width:1184px;height:396px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:22px}
+.fr{white-space:nowrap}
+.fr.big{font-size:58px}
+.fr.mid{font-size:44px}
+.fr.chk{font-size:32px;color:var(--muted)}
+.fr .tm{margin:0 4px}
+
+/* 下：コメント */
+.cbar{left:48px;top:542px;width:1184px;height:150px;padding:8px 34px 0 34px;display:grid;align-items:center;z-index:2}
+.cm{grid-area:1/1;word-break:auto-phrase;line-break:strict;text-wrap:pretty;font-size:27px;line-height:1.6;opacity:0;transform:translateY(10px);transition:opacity .35s ease,transform .5s cubic-bezier(.3,1.3,.5,1)}
+.cm.cur{opacity:1;transform:none}
+.cm b{color:var(--accent);font-weight:900}
+
+/* 表紙・おわり */
+.cover{left:96px;top:120px;width:760px;height:460px;padding:56px 60px;transform:rotate(-1.2deg);display:flex;flex-direction:column;justify-content:center}
+.kicker{display:inline-block;align-self:flex-start;background:var(--b-bg);color:var(--b-ink);border-radius:999px;padding:2px 22px;font-size:22px;font-weight:900;margin-bottom:22px}
+.cover h1{font-size:72px;line-height:1.3}
+.cover h1 .mk{background:linear-gradient(transparent 62%,var(--r-bg) 62%);padding:0 4px}
+.cover .sub{margin-top:30px;font-size:34px}
+.cover .sub2{margin-top:18px;font-size:22px;color:var(--muted)}
+.mini{transform:rotate(3deg)}
+.polaroid{left:880px;top:170px;width:300px;height:330px;padding:18px 18px 0;transform:rotate(4deg)}
+.polaroid svg{display:block;background:var(--paper)}
+.polaroid .cap{font-family:"Kiwi Maru",serif;text-align:center;font-size:22px;margin-top:10px;color:var(--muted)}
+
+/* UI */
+#bar{position:absolute;z-index:5;left:0;bottom:0;height:6px;width:0;transition:width .5s cubic-bezier(.3,1.2,.5,1);
+  background:linear-gradient(90deg,#f5b8c4,#f8dc9a,#b7e2c8,#bcd2f2,#d6c8f0)}
+.ui{position:absolute;z-index:5;right:24px;bottom:12px;font-size:14px;color:var(--muted);transition:opacity .3s}
+.ui.hide,#bar.hide{opacity:0}
+#jump{position:fixed;z-index:20;left:12px;bottom:6px;display:flex;gap:6px;align-items:center;transition:opacity .3s}
+#jump.hide{opacity:0;pointer-events:none}
+#jump span{font:700 12px "Zen Maru Gothic",sans-serif;color:var(--muted);margin-right:2px}
+#jump button{font:700 13px "Zen Maru Gothic",sans-serif;min-width:30px;height:26px;padding:0 8px;border-radius:13px;border:1.5px solid var(--r-bd);background:var(--paper);color:var(--ink);cursor:pointer}
+#jump button:hover{background:var(--r-bg)}
+#jump button.on{background:var(--r-bg);color:var(--r-ink)}
+@media (prefers-reduced-motion: reduce){
+  .slide,.r.show,#bar,.tm,.cm,.lh,.curve.show{transition-duration:.01s}
+  .deco,.tm.cur{animation:none}
+}
+</style>
+</head>
+<body>
+<div id="bg"></div>
+<div id="stage"></div>
+<div id="bar"></div>
+<div class="ui" id="ui"></div>
+<div id="jump"></div>

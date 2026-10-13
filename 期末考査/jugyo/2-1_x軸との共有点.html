@@ -618,6 +618,24 @@ body{overflow:hidden;height:100%;width:100%}
 .pgcard .ov{border-top-color:currentColor}
 .portrait .t-pg .pgcard{left:20px;top:150px;transform-origin:top left;transform:scale(.574)}
 
+/* ===== プリントの 配置で 組み立てる スライド ===== */
+.ptcard{left:48px;top:30px;width:1184px;height:490px}
+.pte{position:absolute;display:flex;align-items:center;white-space:nowrap;font-family:"STIX Two Text","Zen Maru Gothic",serif;font-weight:500;color:var(--ink)}
+.pte.ac{justify-content:center}
+.pte .ja,.pte.ja{font-family:"Zen Maru Gothic",sans-serif;font-weight:700}
+.pte .kfr{font-size:.95em}
+.pte .kfr>span:first-child{border-bottom-width:1.5px}
+.pte.red{color:#c0504d} .pte.blue{color:var(--b-ink)} .pte.gray{color:var(--muted)} .pte.ans{color:var(--accent)}
+.hlo{background:#fad3b4;padding:0 2px;border-radius:2px} .hlg{background:#d5e2bb;padding:0 2px;border-radius:2px} .hlb{background:#cfe3ff;padding:0 3px;border-radius:2px}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .hlo{background:#6a4a30} :root:not([data-theme="light"]) .hlg{background:#44553a} :root:not([data-theme="light"]) .hlb{background:#2f4a6a} }
+:root[data-theme="dark"] .hlo{background:#6a4a30} :root[data-theme="dark"] .hlg{background:#44553a} :root[data-theme="dark"] .hlb{background:#2f4a6a}
+.ptbox{border:2px solid var(--b-ink);border-radius:2px}
+.ptbx2{border:2px solid #938953}
+.ptbig{font-size:1.4em}
+.gk{color:#7aa83a;font-family:"Zen Maru Gothic",sans-serif;font-weight:900}
+.bk{color:var(--b-ink);font-family:"Zen Maru Gothic",sans-serif;font-weight:900}
+.portrait .t-pg .ptcard{left:20px;top:150px;transform-origin:top left;transform:scale(.574)}
+
 /* ===== 手書き ===== */
 #ink{position:fixed;left:0;top:0;z-index:15;pointer-events:none;touch-action:none}
 body.inking #ink{pointer-events:auto;cursor:crosshair}
@@ -1319,6 +1337,30 @@ function PB(o){
   return s;
 }
 
+/* ====== プリントの 配置どおりに 部品で 組み立てる（画像は 使わない） ======
+   P = {clip:[x1,y1,x2,y2]（PDF の pt）, items:[{s:番, r:[x1,y1,x2,y2], h, fs:pt, cls, al}], svg:[…], cm, done}
+   s が ない item は 最初から 出ている（プリントに 印刷されている 部分） */
+function ptSlide(P){
+  const [cx1,cy1,cx2,cy2] = P.clip, w = cx2-cx1, h = cy2-cy1;
+  const s = Math.min(1150/w, 466/h, P.max||2.8);
+  const W = w*s, H = h*s, L = (1184-W)/2, T = (490-H)/2;
+  const X = x => (L+(x-cx1)*s).toFixed(1), Y = y => (T+(y-cy1)*s).toFixed(1);
+  const R = r => `left:${X(r[0])}px;top:${Y(r[1])}px;width:${((r[2]-r[0])*s).toFixed(1)}px;height:${((r[3]-r[1])*s).toFixed(1)}px`;
+  const it = P.items.map(o => o.m!==undefined
+    ? `<div class="pgm" data-wa="${o.m}" data-wb="${o.e||99}" style="${R(o.r)}"></div>`
+    : `<div class="pte ${o.cls||''} ${o.al==='c'?'ac':''}${o.s!==undefined?' lh':''}"${o.s!==undefined?` data-s="${o.s}"`:''} style="${R(o.r)};font-size:${((o.fs||10.5)*s).toFixed(1)}px"><span class="kwr">${o.h}</span></div>`).join('');
+  return `
+  <div class="card abs ptcard">
+    <svg class="pgsv" style="left:${L.toFixed(1)}px;top:${T.toFixed(1)}px" width="${W.toFixed(1)}" height="${H.toFixed(1)}" viewBox="${cx1} ${cy1} ${w} ${h}">${(P.svg||[]).join('')}</svg>
+    ${it}
+  </div>
+  ${P.done ? `<div class="abs r done pgdone" data-s="${P.done}"><div class="seal">完成！</div></div>` : ''}
+  ${cbar(P.cm)}`;
+}
+/* プリントの 緑の 太い 矢印（pt） */
+const GARW = (x1,y1,x2,y2,s) => { const ym=(y1+y2)/2, hh=(y2-y1)*.28, hx=x2-(y2-y1)*.55;
+  return `<g class="gs" data-s="${s}"><polygon points="${x1},${ym-hh} ${hx},${ym-hh} ${hx},${y1} ${x2},${ym} ${hx},${y2} ${hx},${ym+hh} ${x1},${ym+hh}" fill="#c9dca6"/></g>`; };
+
 /* ====== このプリントのスライド ====== */
 
 const IMG = s => s;
@@ -1383,7 +1425,7 @@ const stage = document.getElementById('stage');
 const pages = DECK.pages.map(x=>x.html), names = DECK.pages.map(x=>x.name);
 document.title = DECK.title;
 /* スライドの種類（スマホの縦レイアウトで使う） */
-const kind = h => /pgcard/.test(h)?'pg' : /kcard/.test(h)?'k' : /kfcard/.test(h)?'f' : /qecard/.test(h)?'q' : /ncard/.test(h)?'n' : /class="pcards/.test(h)?'p' : /fxcard/.test(h)?'x' : /class="hrows/.test(h)?'h' : /class="graph"/.test(h)?'g' : /wcard/.test(h)?'w' : /fcard/.test(h)?'b' : 'c';
+const kind = h => /pgcard|ptcard/.test(h)?'pg' : /kcard/.test(h)?'k' : /kfcard/.test(h)?'f' : /qecard/.test(h)?'q' : /ncard/.test(h)?'n' : /class="pcards/.test(h)?'p' : /fxcard/.test(h)?'x' : /class="hrows/.test(h)?'h' : /class="graph"/.test(h)?'g' : /wcard/.test(h)?'w' : /fcard/.test(h)?'b' : 'c';
 stage.innerHTML = pages.map(h=>`<section class="slide t-${kind(h)}">${h}</section>`).join('');
 (function italicVars(){
   const w=document.createTreeWalker(stage,NodeFilter.SHOW_TEXT);

@@ -1,0 +1,235 @@
+/* ===== ２学期期末考査まで ===== */
+/* 表紙の写真：式が かけ算の形に 変わる */
+.fpol{width:264px;height:250px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background-color:var(--paper);
+  background-image:linear-gradient(var(--gline) 1px,transparent 1px),linear-gradient(90deg,var(--gline) 1px,transparent 1px);background-size:24px 24px}
+.fpol .fa{font-size:28px}
+.fpol .fv{font-size:17px;color:var(--accent);font-weight:900}
+.fpol .fb{font-size:30px;background:linear-gradient(transparent 60%,var(--r-bg) 60%);padding:0 4px}
+
+/* 4つのパターン */
+.pcards{position:absolute;left:48px;top:112px;width:1184px;height:410px}
+.pcw{position:absolute;width:578px;height:196px}
+.pcw.p1{left:0;top:0}.pcw.p2{left:606px;top:0}.pcw.p3{left:0;top:216px}.pcw.p4{left:606px;top:216px}
+.pc{position:absolute;inset:0;padding:14px 30px 8px;display:flex;flex-direction:column;justify-content:center;gap:10px}
+.pc-f{font-size:36px;line-height:1.25;white-space:nowrap}
+.pc-k{font-size:19px;color:var(--muted);white-space:nowrap}
+.ct-b{color:var(--b-ink);font-weight:700}.ct-g{color:var(--g-ink);font-weight:700}.ct-r{color:var(--r-ink);font-weight:700}
+.p1 .pc{transform:rotate(-.7deg)}.p2 .pc{transform:rotate(.6deg)}.p3 .pc{transform:rotate(.5deg)}.p4 .pc{transform:rotate(-.6deg)}
+.pc-h{font-family:"Kiwi Maru",serif;font-size:25px;display:flex;align-items:center;gap:12px}
+.pc-no{width:40px;height:40px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex:none;
+  background:var(--r-bg);color:var(--r-ink);border:2px solid var(--r-bd);font-size:21px}
+.kw{color:var(--accent);font-weight:900;border-bottom:2.5px solid var(--r-bd);padding:0 2px;margin:0 2px}
+.xr{color:var(--r-ink)}
+
+/* 因数分解の 1問 */
+.fxcard{left:40px;top:30px;width:600px;height:490px}
+.fxpat{position:absolute;left:62px;top:20px;font-size:17px;font-weight:900;color:var(--accent);border:2px dashed var(--r-bd);border-radius:999px;padding:1px 14px}
+.fxrows{position:absolute;left:40px;right:16px;top:66px;font-size:44px}
+.fxr{display:flex;align-items:center;height:96px;white-space:nowrap;position:relative}
+.fxr .eqs{width:58px}
+.fxr .tm{margin:0 3px}
+/* 数の右上に そえる メモ（9 ＝ 3² など） */
+.upnote{position:absolute;left:78%;bottom:82%;white-space:nowrap;font-size:26px;color:var(--g-ink);background:var(--paper);
+  border:2px dashed var(--g-bd);border-radius:12px;padding:0 10px;line-height:1.4;transform:rotate(-4deg)}
+.upnote.show{transform:rotate(-4deg)}
+.upnote.un-r{color:var(--r-ink);border-color:var(--r-bd);background:var(--r-bg);font-size:28px;padding:0 9px;left:92%;bottom:84%}
+.fxrows .slot{min-width:46px;margin:0 2px}
+.fxrows .slot-r{min-width:40px}
+.fxrows .slot-r .tm{font-family:inherit;font-size:inherit;font-weight:inherit}
+.fxdone{left:506px;top:58px}
+/* 考え方（大きく） */
+.think{left:662px;top:30px;width:570px;height:490px;padding:30px 28px 10px;display:flex;flex-direction:column}
+.tg{font-size:22px;text-align:center;padding:2px 0 12px;margin-bottom:6px;border-bottom:2px dashed var(--gline);white-space:nowrap}
+.tg .cc{font-family:"STIX Two Text",serif;font-size:24px}
+.ts{display:flex;gap:16px;align-items:flex-start;padding:14px 0 10px}
+.ts-n{flex:none;width:40px;height:40px;margin-top:4px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:var(--o-bg);color:var(--o-ink);border:2px solid var(--o-bd);font-size:21px;font-weight:900}
+.ts-l{font-size:21px;color:var(--muted)}
+.ts-m{font-size:40px;line-height:1.3;white-space:nowrap}
+.ts-m .cc,.ts-m .tm{font-size:38px;padding:0 10px}
+.ts-s{font-size:19px;color:var(--note);white-space:nowrap}
+.ts-s .math{font-size:21px}
+.dim{color:var(--muted)}
+
+/* スマホ（縦長） */
+.portrait .t-p .end-h{left:40px;top:40px}
+.portrait .t-p .end-h h2{font-size:34px}
+.portrait .t-p .pcards{left:20px;top:116px;width:680px;height:870px}
+.portrait .t-p .pcw{left:0!important;width:680px;height:200px}
+.portrait .t-p .pcw.p2{top:220px}.portrait .t-p .pcw.p3{top:440px}.portrait .t-p .pcw.p4{top:660px}
+.portrait .t-x .fxcard{left:20px;top:30px;width:680px;height:500px}
+.portrait .t-x .fxrows{left:24px;font-size:34px}
+.portrait .t-x .think{left:20px;top:552px;width:680px;height:436px;padding-top:26px}
+.portrait .t-x .ts{padding:5px 0 3px}
+.portrait .t-x .fxdone{left:560px;top:330px}
+
+/* ===== 2次方程式（因数分解で解く） ===== */
+.qecard{left:48px;top:30px;width:1184px;height:490px}
+.q0{position:absolute;left:48px;top:30px;font-size:40px;white-space:nowrap}
+.q1{position:absolute;left:48px;top:108px;height:66px;display:flex;align-items:center;font-size:38px;white-space:nowrap}
+.qf{display:inline-flex;align-items:center;justify-content:center;height:66px}
+.qf-b{background:var(--b-bg)} .qf-o{background:var(--o-bg)}
+.qz{margin-left:14px}
+.qlab{position:absolute;top:40px;display:flex;align-items:center;gap:8px;color:var(--accent);font-size:28px;font-weight:900;white-space:nowrap}
+.qlab path{stroke-dasharray:1;stroke-dashoffset:1} .qlab polygon{opacity:0}
+.qlab .gs.show path{stroke-dashoffset:0;transition:stroke-dashoffset .5s ease-out}
+.qlab .gs.show polygon{opacity:1;transition:opacity .15s .45s}
+.qlab .gs{opacity:1}
+.lh.late.show{transition-delay:.7s}
+.qarr{position:absolute;left:0;top:174px;overflow:visible}
+.qarr line{stroke-width:3}
+.qb{position:absolute;top:232px;height:136px;display:flex;align-items:center;justify-content:center;font-size:32px}
+.qlines{display:grid;grid-template-columns:auto auto auto;column-gap:12px;row-gap:26px;align-items:center}
+.qc0{justify-self:end;white-space:nowrap} .qc2{justify-self:start;white-space:nowrap}
+.qlines .late.show{transition-delay:.7s}
+.qb .tm{margin:0 2px;line-height:1.15}
+.mva{position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+.mva path{fill:none;stroke:var(--accent);stroke-width:3;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1}
+.mva .gs.show path{stroke-dashoffset:0;transition:stroke-dashoffset .55s ease-out .1s}
+.mva polygon{opacity:0} .mva .gs.show polygon{opacity:1;transition:opacity .15s .6s}
+.mva polygon{fill:var(--accent)}
+.qb-b{background:color-mix(in srgb,var(--b-bg) 70%,transparent)} .qb-o{background:color-mix(in srgb,var(--o-bg) 70%,transparent)}
+.q3{position:absolute;left:120px;top:388px;height:72px;display:flex;align-items:center;font-size:38px;white-space:nowrap}
+.qx{margin-right:14px}
+.qa{display:inline-flex;align-items:center;min-width:240px;height:72px;padding:0 18px;background:color-mix(in srgb,var(--b-bg) 45%,transparent);border-radius:6px}
+.qa .slot{min-width:56px;margin:0 4px}
+.qcm{margin:0 4px}
+.qdup{display:inline-flex;align-items:center;max-width:240px;transition:max-width .6s ease .35s,opacity .4s ease}
+.qdup.on{max-width:0;opacity:0;overflow:hidden}
+.slot-b{border-color:var(--b-bd);background:color-mix(in srgb,var(--b-bg) 45%,transparent)}
+.qjyu{margin-left:36px;display:inline-flex;align-items:center;justify-content:center;width:170px;height:72px;background:var(--r-bg);color:var(--r-ink);
+  font-family:"Kiwi Maru",serif;font-size:32px;border-radius:6px}
+.qpt{position:absolute;left:780px;top:46px;width:360px;height:220px;border:2.5px dashed var(--r-bd);border-radius:14px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px}
+.qpt .lab{left:18px}
+.qpt-m{font-size:38px;display:flex;align-items:center;gap:10px}
+.qs{display:inline-block;width:54px;height:46px;border-radius:6px}
+.qs-b{background:var(--b-bg)} .qs-o{background:var(--o-bg)}
+.qpt-t{font-size:26px;color:var(--accent);font-weight:900}
+.qdone{left:1080px;top:380px}
+/* 分数 */
+.fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;font-size:.8em;line-height:1.1;margin:0 2px}
+.fr>span:first-child{border-bottom:2px solid currentColor;padding:0 3px}
+.cm .fr{font-size:.75em}
+.qb .fr{font-size:.95em}
+.qdiv{margin-left:10px;font-family:"Zen Maru Gothic",sans-serif;font-size:18px;font-weight:900;color:var(--note);border:2px solid var(--b-bd);border-radius:999px;padding:0 8px;vertical-align:middle}
+/* 3行の 箱（①-3）：全体を 少し 上に つめる */
+.qtall .q0{top:44px} .qtall .q1{top:112px} .qtall .qlab{top:44px} .qtall .qarr{top:178px}
+.qtall .qb{top:234px;height:186px;font-size:28px} .qtall .qlines{row-gap:14px} .qtall .q3{top:426px;height:58px} .qtall .qa,.qtall .qjyu{height:58px}
+.qtall .q0 .upnote{left:55%;bottom:100%;font-size:22px}
+/* ※注意！ */
+.ncard{left:48px;top:30px;width:1184px;height:490px;padding:40px 60px;display:flex;flex-direction:column;align-items:center;gap:18px;
+  background:color-mix(in srgb,var(--g-bg) 45%,var(--paper))}
+.n-h{align-self:flex-start;font-size:30px;font-weight:900}
+.n-t{font-size:30px;color:var(--b-ink);font-weight:900}
+.n-eq{display:flex;align-items:flex-start;gap:4px;font-size:46px;margin-top:16px;white-space:nowrap}
+.n-c{display:flex;flex-direction:column;align-items:center}
+.n-u{display:flex;align-items:center;height:66px;line-height:1;border-bottom:4px dotted;padding:0 2px}
+.n-u.b{border-color:var(--b-ink)} .n-u.o{border-color:var(--o-ink)}
+.n-v{font-size:38px;line-height:1.2;text-align:center;margin-top:8px}
+.n-v.b{color:var(--b-ink)} .n-v.o{color:var(--o-ink)}
+.n-z{margin-left:10px;height:66px;display:flex;align-items:center;line-height:1}
+.n-tri{align-self:flex-end;margin:0 0 6px 50px;font-family:"Zen Maru Gothic",sans-serif;font-size:30px;color:#d9443a;font-weight:900}
+.n-tri b{font-size:56px;vertical-align:-8px;margin-left:6px}
+.n-last{font-size:28px;color:var(--b-ink);font-weight:900}
+/* スマホ（縦長） */
+.portrait .t-q .qecard{left:20px;top:30px;width:680px;height:960px}
+.portrait .t-q .qtall .qpt{top:640px}
+.portrait .t-q .qpt{left:40px;top:610px;width:600px;height:190px}
+.portrait .t-q .qjyu{position:absolute;left:0;top:96px;margin:0}
+.portrait .t-q .q3{left:48px}
+.portrait .t-q .qdone{left:540px;top:840px}
+.portrait .t-n .ncard{left:20px;top:30px;width:680px;height:960px;padding:40px 30px;justify-content:center}
+.portrait .t-n .n-t{font-size:24px;text-align:center}
+.portrait .t-n .n-eq{flex-wrap:wrap;justify-content:center}
+.portrait .t-n .n-tri{margin:20px 0 0;width:100%;text-align:center}
+
+/* ===== 解の公式（①-4）：プリントの 色の 枠 ===== */
+:root{--pb:#dbe6f2;--pr:#f2dbdb;--pl:#dbedf5}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){--pb:#34425a;--pr:#5a3a44;--pl:#2f4a55} }
+:root[data-theme="dark"]{--pb:#34425a;--pr:#5a3a44;--pl:#2f4a55}
+.kcard{left:48px;top:30px;width:1184px;height:490px}
+.ksv{position:absolute;left:0;top:0;overflow:visible;pointer-events:none}
+.ksv line,.ksv polyline{stroke-linecap:round}
+.kb0{position:absolute;display:flex;align-items:center;justify-content:center}
+.kpb{background:var(--pb)} .kpr{background:var(--pr)} .kpl{background:var(--pl)} .kpn{background:transparent}
+.kin{font-family:"STIX Two Text","Times New Roman",serif;font-size:30px;white-space:nowrap;display:flex;align-items:center;justify-content:center;width:100%;height:100%}
+.ktx{position:absolute;display:flex;align-items:center;white-space:nowrap}
+.ktitle{font-size:27px}
+.kxe{font-size:38px;justify-content:center}
+.kpm{font-size:36px;justify-content:center;font-family:"STIX Two Text",serif}
+.klab{font-size:19px;color:#c4536a;font-weight:900}
+.kabc{position:absolute;display:flex;align-items:center;gap:22px;font-family:"STIX Two Text",serif;font-size:26px;white-space:nowrap}
+.ka{color:#c4536a} .kb{color:#5e9a3a} .kc{color:var(--b-ink)}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .ka{color:#ffb6c3} :root:not([data-theme="light"]) .kb{color:#a8dc8a} }
+:root[data-theme="dark"] .ka{color:#ffb6c3} :root[data-theme="dark"] .kb{color:#a8dc8a}
+.ov{border-top:2px solid currentColor;padding:0 2px;margin-left:1px}
+.kfr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.15}
+.kfr>span:first-child{border-bottom:2px solid currentColor;padding:0 4px 2px}
+.kfr>span:last-child{padding-top:2px}
+.kin .kfr{font-size:28px}
+.kref{position:absolute;left:996px;top:26px;width:174px;height:120px;border:2.5px dashed var(--b-bd);border-radius:12px;display:flex;align-items:center;justify-content:center}
+.kref .lab{left:14px;color:var(--b-ink);border-color:var(--b-bd)}
+.kfx{font-size:18px;white-space:nowrap;display:inline-flex;align-items:center;gap:4px}
+.kfx .kfr>span:first-child{border-bottom-width:1.5px}
+.kfx.big{font-size:54px;gap:12px}
+.kfx.big .kfr>span:first-child{border-bottom-width:3px;padding:0 10px 4px}
+.kfx.big .ov{border-top-width:3px}
+.kdone{left:1100px;top:390px}
+.kcalc .kin{font-size:23px}
+.ktitle .v+sup{margin-right:4px}
+/* 公式の スライド（プリントの 上の 青い枠） */
+.kfcard{left:48px;top:40px;width:1184px;height:470px;border:4px solid var(--b-ink)}
+.kf-h{position:absolute;left:60px;top:44px;font-size:34px;font-weight:900}
+.kf-c{position:absolute;left:330px;top:50px;font-family:"STIX Two Text",serif;font-size:30px}
+.kf-m{position:absolute;left:0;right:340px;top:150px;display:flex;justify-content:center}
+.kf-k{position:absolute;right:70px;top:230px;font-family:"Kiwi Maru",serif;font-size:56px;color:var(--b-ink)}
+/* スマホ（縦長）：プリントと 同じ 並びを 保つため、カードごと 縮める */
+.portrait .t-k .kcard{left:20px;top:150px;transform-origin:top left;transform:scale(.574)}
+.portrait .t-k .kdone{left:560px;top:450px}
+.portrait .t-f .kfcard{left:20px;top:300px;transform-origin:top left;transform:scale(.574)}
+.kwr{display:inline-block;white-space:nowrap;line-height:1.2}
+.knote{position:absolute;display:flex;align-items:center;justify-content:center;font-family:"STIX Two Text",serif;font-size:21px;color:var(--note)}
+.khf{display:grid;grid-template-rows:1fr 1fr;width:100%;height:100%}
+.khf>span{display:flex;align-items:center;justify-content:center}
+.kin .fr{font-size:.85em}
+
+.kjyu{font-family:"Kiwi Maru",serif;font-size:26px;color:var(--r-ink)}
+.kjp{font-family:"Zen Maru Gothic",sans-serif;font-weight:900;font-size:28px;color:var(--accent)}
+
+/* ===== プリントの 画像を 背景に した スライド ===== */
+.pgcard{left:48px;top:30px;width:1184px;height:490px;background:#fff}
+.pgimg{position:absolute;display:block;user-select:none;pointer-events:none}
+.pgsv{position:absolute;overflow:hidden;pointer-events:none}
+.pgdone{left:1120px;top:548px;transform:scale(.8);z-index:6}
+.pgc{stroke:#d4677f;stroke-width:1.4}
+.pgp{fill:none;stroke:#f08a2a;stroke-width:3.6;stroke-linecap:round;opacity:.6}
+.pgd{fill:#e0465e;stroke:#e0465e;stroke-width:.9}
+.pgd.op{fill:#fff}
+.pgt{font-family:"STIX Two Text",serif;font-size:7.5px;fill:#333}
+.pga{position:absolute;display:flex;align-items:center;justify-content:center;color:#c0304e;font-family:"STIX Two Text","Zen Maru Gothic",serif;font-weight:500;white-space:nowrap}
+.pga.al{justify-content:flex-start;padding-left:6px}
+.pga .kfr{font-size:.85em}
+.pga .ja{font-family:"Zen Maru Gothic",sans-serif;font-weight:900}
+.pgm{position:absolute;border:3px solid #e0465e;border-radius:10px;background:rgba(255,214,90,.18);opacity:0;transition:opacity .35s;pointer-events:none;margin:-4px;padding:4px;box-sizing:content-box}
+.pgm.wv-on{opacity:1}
+.pgcard .ov{border-top-color:currentColor}
+.portrait .t-pg .pgcard{left:20px;top:150px;transform-origin:top left;transform:scale(.574)}
+
+/* ===== プリントの 配置で 組み立てる スライド ===== */
+.ptcard{left:48px;top:30px;width:1184px;height:490px}
+.pte{position:absolute;display:flex;align-items:center;white-space:nowrap;font-family:"STIX Two Text","Zen Maru Gothic",serif;font-weight:500;color:var(--ink)}
+.pte.ac{justify-content:center}
+.pte .ja,.pte.ja{font-family:"Zen Maru Gothic",sans-serif;font-weight:700}
+.pte .kfr{font-size:.95em}
+.pte .kfr>span:first-child{border-bottom-width:1.5px}
+.pte.red{color:#c0504d} .pte.blue{color:var(--b-ink)} .pte.gray{color:var(--muted)} .pte.ans{color:var(--accent)}
+.hlo{background:#fad3b4;padding:0 2px;border-radius:2px} .hlg{background:#d5e2bb;padding:0 2px;border-radius:2px} .hlb{background:#cfe3ff;padding:0 3px;border-radius:2px}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .hlo{background:#6a4a30} :root:not([data-theme="light"]) .hlg{background:#44553a} :root:not([data-theme="light"]) .hlb{background:#2f4a6a} }
+:root[data-theme="dark"] .hlo{background:#6a4a30} :root[data-theme="dark"] .hlg{background:#44553a} :root[data-theme="dark"] .hlb{background:#2f4a6a}
+.ptbox{border:2px solid var(--b-ink);border-radius:2px}
+.ptbx2{border:2px solid #938953}
+.ptbig{font-size:1.4em}
+.gk{color:#7aa83a;font-family:"Zen Maru Gothic",sans-serif;font-weight:900}
+.bk{color:var(--b-ink);font-family:"Zen Maru Gothic",sans-serif;font-weight:900}
+.portrait .t-pg .ptcard{left:20px;top:150px;transform-origin:top left;transform:scale(.574)}
