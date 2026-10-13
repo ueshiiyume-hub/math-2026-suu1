@@ -67,14 +67,17 @@ h1 .mk{background:linear-gradient(transparent 62%,var(--r-bg) 62%);padding:0 4px
 <main>
   <span class="kicker">数学Ⅰ</span>
   <h1>授業の <span class="mk">教材</span></h1>
-  <p class="lead">見たい 教材の カードを クリックしてね</p>
+  <p class="lead">見たい 考査の カードを クリックしてね</p>
   <div class="list" id="list"></div>
 </main>
 <script>
 /* 教材の一覧：新しい教材は この配列の いちばん上に 足す */
 const ITEMS = [
-  { href:'2gakki-chukan/目次.html', date:'2026年10月', title:'２学期中間考査対策プリント　解説',
-    desc:'グラフ・頂点・軸、平方完成、最大値・最小値、2次関数のことば（大問１〜７）',
+  { href:'期末考査/目次.html', date:'２学期', title:'２学期期末考査',
+    desc:'授業プリントの 解説スライド ／ 期末考査対策プリントの 解説',
+    tags:['2次方程式','2次不等式','スライド'] },
+  { href:'2gakki-chukan/目次.html', date:'２学期', title:'２学期中間考査',
+    desc:'中間考査対策プリントの 解説（グラフ・頂点・軸、平方完成、最大値・最小値 など）',
     tags:['2次関数','スライド'] },
 ];
 const tapes = ['pink','mint','yellow','lav','blue'];
