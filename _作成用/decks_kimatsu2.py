@@ -11,102 +11,176 @@ const FX = (n,d) => KF(n,d);
 '''
 
 def add(decks):
-    # ------------------------------------------------------------ ①-6 実数解の個数（部品で 組み立て）
+    # ------------------------------------------------------------ ①-6 実数解の個数（1枚に 1つの ことを 大きく）
     decks['1-6_実数解の個数'] = ('①-6 実数解の個数', COMMON + r"""
 const KK = KIMATSU + '　①-6';
 const POL = `<div class="fpol"><div class="fa math">D ＝ b${P2} − 4ac</div><div class="fv">プラス・0・マイナス</div><div class="fb math">2個・1個・0個</div></div>`;
-const T = (r,h,fs,cls,al) => ({r,h,fs,cls,al});           // 印刷されている 部分（最初から 出ている）
-const E = (s,r,h,fs,cls,al) => ({s,r,h,fs,cls,al});       // クリックで 出る 部分
-const O = t => `<span class="hlo">${t}</span>`;
-const fr = (n,d) => KF(n,d);
+const L  = (s,h,cls='') => `<div class="dl lh ${cls}" data-s="${s}">${h}</div>`;
+const OR = t => `<span class="hlo">${t}</span>`;
+const DIM = (o,t) => `<span class="dimx" data-o="${o}">${t}</span>`;
+const RES = (s,h) => `<div class="dres lh" data-s="${s}">${h}</div>`;
 
-/* 1枚目：実数解の個数を 調べる（①②③） */
-const row = (dy, n, eq, e1, e2, e3, res, st) => [
-  T([62.8,96+dy,200,110.3+dy], `${n}　${eq}`, 10.5),
-  E(st,   [80,114+dy,166,146+dy], `x ＝ ${e1}`, 10.5),
-  E(st+1, [168,114+dy,230,146+dy], e2, 10.5),
-  ...(e3 ? [E(st+1,[232,114+dy,292,146+dy], e3, 10.5)] : []),
-  E(st+2, [336,118+dy,470,136+dy], res, 10.5, 'ja')];
-const s1 = ptSlide({clip:[60,78,470,258],
-  svg:[GARW(293.5,117.3,325,139.5,3), GARW(293.4,173.6,324.9,195.8,6), GARW(293.4,230,324.9,252.1,9)],
-  items:[T([62.8,79.6,200,92],'実数解の個数を調べる',10.5,'ja'),
-    ...row(0,'①',`x${P2} ＋ 2x − 5 ＝ 0`, fr(`−2 ± ${SQ(O('4 ＋ 20'))}`,'2'), `＝ ${fr(`−2 ± ${SQ('24')}`,'2')}`, `＝ −1 ± ${SQ('6')}`, `実数解の個数 <span class="gk ptbig">2</span> 個`, 1),
-    E(2,[230,97,312,117],`−1 ＋ ${SQ('6')}、−1 − ${SQ('6')}`,7.5,'ptbox blue','c'),
-    ...row(54,'②',`x${P2} ＋ 2x ＋ 1 ＝ 0`, fr(`−2 ± ${SQ(O('4 − 4'))}`,'2'), `＝ ${fr(`−2 ± ${SQ('0')}`,'2')}`, '＝ −1', `実数解の個数 <span class="gk ptbig">1</span> 個　<span class="bk">重解</span>`, 4),
-    ...row(108,'③',`x${P2} ＋ 2x ＋ 7 ＝ 0`, fr(`−2 ± ${SQ(O('4 − 28'))}`,'2'), `＝ ${fr(`−2 ± ${SQ('−24')}`,'2')}`, '', `実数解の個数 <span class="gk ptbig">0</span> 個`, 7)],
-  cm:[
-    `<b>実数解の 個数</b> を 調べよう。　3つの式は、数だけの項（−5、1、7）だけが ちがうよ。`,
-    `① 解の公式。　ルートの中は ${M('4 ＋ 20')}。`,
-    `${M('√24 ＝ 2√6')}、約分して ${M('−1 ± √6')}。　＋ と − で <b>2つ</b> の 解。`,
-    `ルートの中が <b>プラス</b> → 実数解 <b>2個</b>。`,
-    `② ルートの中は ${M('4 − 4')}。`,
-    `${M('√0 ＝ 0')}。　＋0 も −0 も 同じ なので ${M('x ＝ −1')} の 1つだけ。`,
-    `ルートの中が <b>0</b> → 実数解 <b>1個</b>（<b>重解</b>）。`,
-    `③ ルートの中は ${M('4 − 28')}。`,
-    `${M('√−24')}。　2乗して マイナスに なる 数は ない。`,
-    `ルートの中が <b>マイナス</b> → 実数解 <b>0個</b>。`
-  ]});
+/* ± から 枝が 分かれる 図。kind：'two' 2つ / 'one' 重なる / 'none' 実数に ない */
+function BR(kind, s, start, top, bot){
+  const P = (d,cls='') => `<path class="${cls}" pathLength="1" d="${d}"/>`;
+  let svg = '', lab = '';
+  if(kind==='two'){
+    svg = P('M150 150 C210 150 230 70 300 70') + P('M150 150 C210 150 230 230 300 230')
+        + `<text class="brs" x="232" y="86">＋</text><text class="brs" x="232" y="232">−</text>`;
+    lab = `<div class="brl" style="left:310px;top:44px">${top}</div><div class="brl" style="left:310px;top:204px">${bot}</div>`;
+  } else if(kind==='one'){
+    svg = P('M150 150 C210 150 220 80 270 100 C300 112 300 140 320 150') + P('M150 150 C210 150 220 220 270 200 C300 188 300 160 320 150')
+        + `<text class="brs" x="214" y="88">＋0</text><text class="brs" x="214" y="236">−0</text>`;
+    lab = `<div class="brl one" style="left:330px;top:124px">${top}</div>`;
+  } else {
+    svg = P('M150 150 C210 150 230 70 290 70','brx') + P('M150 150 C210 150 230 230 290 230','brx')
+        + `<g class="brc"><path d="M290 54 L322 86 M322 54 L290 86"/><path d="M290 214 L322 246 M322 214 L290 246"/></g>`;
+    lab = `<div class="brl no" style="left:340px;top:126px">${top}</div>`;
+  }
+  return `<div class="br lh" data-s="${s}"><div class="brst">${start}</div><svg width="520" height="300" viewBox="0 0 520 300">${svg}</svg>${lab}</div>`;
+}
 
-/* 2枚目：判別式（プリントの 青い 枠） */
-const GR = t => `<span style="color:var(--muted)">${t}</span>`, RD = t => `<span style="color:#c0504d">${t}</span>`;
-const s2 = ptSlide({clip:[62,262,534,394],
-  svg:[`<rect x="66.2" y="264.2" width="463.5" height="128.1" fill="none" stroke="#4f81bc" stroke-width="1.8"/>`,
-       `<g class="gs" data-s="2"><path d="M308 337 Q301 337 301 345 L301 352 Q301 358 297 358 Q301 358 301 364 L301 371 Q301 379 308 379" fill="none" stroke="#c0504d" stroke-width="1.2"/></g>`],
-  items:[T([72.8,270,340,284],`実数解の個数は、解の公式の ${SQ('□')} の部分だけで判別できる！`,10.5,'ja'),
-    E(1,[100,288,250,334],`x ＝ ${KF(`${GR('−b ±')} ${SQ(RD('b'+P2+' − 4ac'))}`, GR('2a'))}`,15),
-    E(1,[251.9,296,400,308],'「＋」、「0」、「−」のどれかで判別する',8,'red ja'),
-    E(2,[74.3,342,300,366],`<span class="ja">判別式</span>　${RD(`D ＝ b${P2} − 4ac`)}　<span class="ja">として利用する</span>`,11),
-    E(3,[312.9,330,500,345],`D ＝ b${P2} − 4ac <span class="ja">がプラス　⇒ 実数解 <span class="gk">2</span> 個</span>`,9.5),
-    E(4,[312.9,348,500,363],`D ＝ b${P2} − 4ac <span class="ja">が 0　　⇒ 実数解 <span class="gk">1</span> 個 <span class="bk">重解</span></span>`,9.5),
-    E(5,[312.9,366,500,381],`D ＝ b${P2} − 4ac <span class="ja">がマイナス ⇒ 実数解 <span class="gk">0</span> 個</span>`,9.5)],
-  cm:[
-    `実数解の 個数は、解の公式の <b>ルートの中</b> だけで 判別できる！`,
-    `ルートの中 ${M('b² − 4ac')} が「＋」「0」「−」の どれか で 決まる。`,
-    `この ${M('b² − 4ac')} を <b>判別式 D</b> と いう。`,
-    `D が <b>プラス</b> → 実数解 <b>2個</b>。`,
-    `D が <b>0</b> → 実数解 <b>1個</b>（重解）。`,
-    `D が <b>マイナス</b> → 実数解 <b>0個</b>。`
-  ]});
+/* 2枚目：問いかけ */
+const q0 = `
+  <div class="card abs dcard">${EQTAPE}
+    <div class="dq0 math">
+      <div>①　x${P2} ＋ 2x ${K('o','− 5')} ＝ 0</div>
+      <div>②　x${P2} ＋ 2x ${K('o','＋ 1')} ＝ 0</div>
+      <div>③　x${P2} ＋ 2x ${K('o','＋ 7')} ＝ 0</div>
+    </div>
+    <div class="dbub lh" data-s="1">解は それぞれ<br><b>何個</b> ある？</div>
+  </div>
+  ${cbar([
+    `3つの 2次方程式。　ちがうのは <b>数だけの項</b>（−5、＋1、＋7）だけ。`,
+    `それぞれ 解は <b>何個</b> あるかな？　まずは 解の公式で 解いてみよう。`
+  ])}`;
 
-/* 3枚目：例 */
-const sm = (s,r,h) => E(s,r,h,7.5,'','c');
-const s3 = ptSlide({clip:[60,400,540,502], max:2.35,
-  items:[T([62.8,403.7,300,416.1],'例　次の 2 次方程式の実数解の個数を求めよ。',10.5,'ja'),
-    T([62.8,420,200,434.4],`⑴　2x${P2} ＋ 3x − 1 ＝ 0`,10.5),
-    T([223,420,360,434.4],`⑵　x${P2} ＋ 10x ＋ 25 ＝ 0`,10.5),
-    T([383.1,420,520,434.4],`⑶　3x${P2} − 4x ＋ 2 ＝ 0`,10.5),
-    sm(1,[94,440,124,448],`<span style="color:#7aa83a">3${P2}</span>`), sm(1,[100,433,160,441],`<span style="color:#e08a3c">−4 × 2 × (−1)</span>`),
-    E(2,[62.8,447,160,464],`D ＝ <span class="hlg">9</span> <span class="hlo">＋ 8</span> ＝ <span class="hlb">17</span>`,10.5),
-    E(3,[173.8,449,212,462],'プラス',10.5,'bk'),
-    T([71.1,481,190,496],'<span class="ja">実数解の個数は</span>',10.5), {r:[145.6,468.9,183.6,498.3], h:'', cls:'ptbx2'}, T([184,481,200,496],'<span class="ja">個</span>',10.5),
-    E(4,[145.6,468.9,183.6,498.3],'2',16,'ans','c'),
-    sm(5,[252,440,284,448],`<span style="color:#7aa83a">10${P2}</span>`), sm(5,[272,433,330,441],`<span style="color:#e08a3c">−4 × 1 × 25</span>`),
-    E(6,[223,447,340,464],`D ＝ <span class="hlg">100</span> <span class="hlo">− 100</span> ＝ 0`,10.5),
-    E(7,[228,476,380,496],'<span class="ja">実数解の個数は 1 個（重解）</span>',10,'ans'),
-    sm(8,[412,440,446,448],`<span style="color:#7aa83a">(−4)${P2}</span>`), sm(8,[422,433,478,441],`<span style="color:#e08a3c">−4 × 3 × 2</span>`),
-    E(9,[383.1,447,490,464],`D ＝ <span class="hlg">16</span> <span class="hlo">− 24</span> ＝ <span class="hlb">−8</span>`,10.5),
-    E(10,[494,449,540,462],'マイナス',10.5,'bk'),
-    T([391.3,481,510,496],'<span class="ja">実数解の個数は</span>',10.5), {r:[465.8,468.9,503.8,498.3], h:'', cls:'ptbx2'}, T([504,481,520,496],'<span class="ja">個</span>',10.5),
-    E(11,[465.8,468.9,503.8,498.3],'0',16,'ans','c')],
-  done:11,
-  cm:[
-    `判別式 D を 使って、⑴〜⑶ の 実数解の 個数を 求めよう。`,
-    `⑴ a ＝ 2、b ＝ 3、c ＝ −1。　${M('b² ＝ 3²')}、${M('−4ac ＝ −4 × 2 × (−1)')}。`,
-    `${M('D ＝ 9 ＋ 8 ＝ 17')}`,
-    `D は <b>プラス</b>。`,
-    `だから 実数解は <b>2個</b>。`,
-    `⑵ a ＝ 1、b ＝ 10、c ＝ 25。　${M('b² ＝ 10²')}、${M('−4ac ＝ −4 × 1 × 25')}。`,
-    `${M('D ＝ 100 − 100 ＝ 0')}`,
-    `D ＝ 0 なので 実数解は <b>1個</b>（重解）。`,
-    `⑶ a ＝ 3、b ＝ −4、c ＝ 2。　${M('b² ＝ (−4)²')}、${M('−4ac ＝ −4 × 3 × 2')}。`,
-    `${M('D ＝ 16 − 24 ＝ −8')}`,
-    `D は <b>マイナス</b>。`,
-    `だから 実数解は <b>0個</b>。　<b>完成！</b>`
-  ]});
+/* 3〜5枚目：実際に 解いてみる */
+const solve = (n, eq, lines, br, res, cms) => `
+  <div class="card abs dcard">${EQTAPE}
+    <div class="dt math">${n}　${eq}</div>
+    <div class="dls math">${lines.map((h,i)=>L(i+1,h)).join('')}</div>
+    ${br}
+    ${RES(lines.length+2, res)}
+  </div>
+  ${cbar(cms)}`;
+const s1 = solve('①', `x${P2} ＋ 2x − 5 ＝ 0`,
+  [`x ＝ ${KF(`−2 ± ${SQ(OR('4 ＋ 20'))}`,'2')}`, `＝ ${KF(`−2 ± ${SQ(OR('24'))}`,'2')} ＝ ${KF(`−2 ± 2${SQ('6')}`,'2')}`, `＝ −1 ± ${SQ('6')}`],
+  BR('two', 4, `−1 ± ${SQ('6')}`, `−1 ＋ ${SQ('6')}`, `−1 − ${SQ('6')}`),
+  `実数解 <b>2</b> 個`, [
+  `① ${M('x² ＋ 2x − 5 ＝ 0')} を 解の公式で 解いてみよう。`,
+  `ルートの中は ${M('4 ＋ 20')}。`,
+  `${M('√24 ＝ 2√6')}。`,
+  `約分して ${M('x ＝ −1 ± √6')}。`,
+  `<b>±</b> が あるので、<b>＋ の方</b> と <b>− の方</b> に 分かれる。`,
+  `ちがう 2つの 解 → 実数解は <b>2個</b>。`]);
+const s2 = solve('②', `x${P2} ＋ 2x ＋ 1 ＝ 0`,
+  [`x ＝ ${KF(`−2 ± ${SQ(OR('4 − 4'))}`,'2')}`, `＝ ${KF(`−2 ± ${SQ(OR('0'))}`,'2')}`, `＝ −1 ± 0`],
+  BR('one', 4, '−1 ± 0', '−1'),
+  `実数解 <b>1</b> 個（重解）`, [
+  `② ${M('x² ＋ 2x ＋ 1 ＝ 0')} を 解いてみよう。`,
+  `ルートの中は ${M('4 − 4')}。`,
+  `${M('4 − 4 ＝ 0')}。　ルートの中が <b>0</b>！`,
+  `${M('√0 ＝ 0')} なので ${M('−1 ± 0')}。`,
+  `＋0 も −0 も 同じ。　2つの 枝が <b>重なって 1つ</b> に なる。`,
+  `解は −1 だけ → 実数解は <b>1個</b>（<b>重解</b>）。`]);
+const s3 = solve('③', `x${P2} ＋ 2x ＋ 7 ＝ 0`,
+  [`x ＝ ${KF(`−2 ± ${SQ(OR('4 − 28'))}`,'2')}`, `＝ ${KF(`−2 ± ${SQ(OR('−24'))}`,'2')}`, `<span class="ja dno">2乗して マイナスに なる数は ない</span>`],
+  BR('none', 4, `${SQ('−24')}`, '実数に ない'),
+  `実数解 <b>0</b> 個`, [
+  `③ ${M('x² ＋ 2x ＋ 7 ＝ 0')} を 解いてみよう。`,
+  `ルートの中は ${M('4 − 28')}。`,
+  `${M('4 − 28 ＝ −24')}。　ルートの中が <b>マイナス</b>！`,
+  `${M('√−24')} は、2乗して −24 に なる数。　でも 2乗して マイナスに なる 数は <b>ない</b>。`,
+  `＋ の方も − の方も 進めない。`,
+  `実数解は <b>0個</b>。`]);
+
+/* 6枚目：比べて 気づく */
+const cmp = (n, root, res) => `<div class="drow">
+    <span class="dn">${n}</span>
+    <span class="math">x ＝ ${KF(`${DIM(1,'−2 ±')} ${SQ(tm('o',root,1))}`, DIM(1,'2'))}</span>
+    <span class="dar lh" data-s="2">→ ${res}</span></div>`;
+const s4 = `
+  <div class="card abs dcard">${EQTAPE}
+    <div class="drows">${cmp('①','24','<b>2</b> 個')}${cmp('②','0','<b>1</b> 個')}${cmp('③','−24','<b>0</b> 個')}</div>
+    <div class="dmsg lh" data-s="3">解の 個数を 決めているのは <b>ルートの中</b> だけ！</div>
+  </div>
+  ${cbar([
+    `3つを 並べて 比べてみよう。`,
+    `−2 ± や 分母の 2 は 3つとも 同じ。　ちがうのは <b>ルートの中</b> だけ。`,
+    `ルートの中が <b>プラス</b> → 2個、<b>0</b> → 1個、<b>マイナス</b> → 0個。`,
+    `つまり、解の 個数を 決めているのは <b>ルートの中</b> だけ！`])}`;
+
+/* 7枚目：解を 求めなくていい → 判別式 */
+const s5 = `
+  <div class="card abs dcard">${EQTAPE}
+    <div class="dfx math">x ＝ ${KF(`${DIM(1,'−b ±')} ${SQ(tm('r',`b${P2} − 4ac`,1))}`, DIM(1,'2a'))}</div>
+    <div class="dpt lh" data-s="2">ここだけ 計算すれば<br>個数が わかる！</div>
+    <div class="dD lh" data-s="3"><span class="ja">判別式</span>　<span class="math">D ＝ b${P2} − 4ac</span></div>
+  </div>
+  ${cbar([
+    `個数を 知りたい だけ なのに、毎回 解を 最後まで 求めるのは 大変…`,
+    `個数を 決めるのは <b>ルートの中</b> だけ。　−b や 2a は 個数に 関係ない。`,
+    `だから <b>解を 求めなくても</b>、ルートの中 ${M('b² − 4ac')} だけ 計算すれば 個数が わかる！`,
+    `この ${M('b² − 4ac')} を <b>判別式</b> と いい、<b>D</b> で 表す。`])}`;
+
+/* 8枚目：まとめ（アニメーションなし） */
+const card = (cls, d, n, sub) => `<div class="card dsc ${cls}"><div class="dsc-d math">${d}</div><div class="dsc-n">実数解 <b>${n}</b> 個</div><div class="dsc-s">${sub}</div></div>`;
+const s6 = `
+  <div class="end-h"><h2>判別式 D ＝ b${P2} − 4ac</h2></div>
+  <div class="dsum">${card('c1','D ＞ 0','2','プラス')}${card('c2','D ＝ 0','1','0（重解）')}${card('c3','D ＜ 0','0','マイナス')}</div>
+  ${cbar([`<b>D の 符号</b> だけで 実数解の 個数が わかる。　プラス → 2個、0 → 1個（重解）、マイナス → 0個。`])}`;
+
+/* 9〜11枚目：例 */
+const ex = (n, eq, abc, b2, ac, d, sign, row, ans, cms) => `
+  <div class="card abs dcard">${EQTAPE}
+    <div class="dt math">${n}　${eq}</div>
+    <div class="dabc lh" data-s="1">${abc}</div>
+    <div class="dxr math"><span>D ＝</span>
+      <span class="dbx g"><span class="dnt lh" data-s="2">${b2[0]}</span><span class="lh" data-s="2">${b2[1]}</span></span>
+      <span class="dbx o"><span class="dnt lh" data-s="3">${ac[0]}</span><span class="lh" data-s="3">${ac[1]}</span></span>
+      <span>＝</span><span class="dbx b"><span class="lh" data-s="4">${d}</span></span>
+      <span class="dsg lh" data-s="5">${sign}</span></div>
+    <div class="dans"><span class="ja">実数解の個数は</span><span class="dabx"><span class="lh" data-s="6">${ans}</span></span><span class="ja">個</span></div>
+    <div class="dtb">
+      <div class="dtr" data-o="${row===0?5:99}"><span class="math">D ＞ 0</span> → 2個</div>
+      <div class="dtr" data-o="${row===1?5:99}"><span class="math">D ＝ 0</span> → 1個</div>
+      <div class="dtr" data-o="${row===2?5:99}"><span class="math">D ＜ 0</span> → 0個</div>
+    </div>
+  </div>
+  <div class="abs r done pgdone" data-s="6"><div class="seal">完成！</div></div>
+  ${cbar(cms)}`;
+const ABC = (a,b,c) => `${KA(`a ＝ ${a}`)}　${KB(`b ＝ ${b}`)}　${KC(`c ＝ ${c}`)}`;
+const e1 = ex('⑴', `2x${P2} ＋ 3x − 1 ＝ 0`, ABC(2,3,'−1'), [`3${P2}`,'9'], ['−4 × 2 × (−1)','＋ 8'], '17', 'プラス', 0, '2', [
+  `例 ⑴ ${M('2x² ＋ 3x − 1 ＝ 0')} の 実数解の 個数を 求めよう。　解は 求めなくて いい！`,
+  `a・b・c を 読みとる。　a ＝ 2、b ＝ 3、c ＝ −1。`,
+  `${M('b² ＝ 3² ＝ 9')}`,
+  `${M('−4ac ＝ −4 × 2 × (−1) ＝ ＋8')}`,
+  `${M('D ＝ 9 ＋ 8 ＝ 17')}`,
+  `D は <b>プラス</b>。`,
+  `だから 実数解は <b>2個</b>。　<b>完成！</b>`]);
+const e2 = ex('⑵', `x${P2} ＋ 10x ＋ 25 ＝ 0`, ABC(1,10,25), [`10${P2}`,'100'], ['−4 × 1 × 25','− 100'], '0', '0', 1, '1', [
+  `例 ⑵ ${M('x² ＋ 10x ＋ 25 ＝ 0')} の 実数解の 個数を 求めよう。`,
+  `a ＝ 1、b ＝ 10、c ＝ 25。`,
+  `${M('b² ＝ 10² ＝ 100')}`,
+  `${M('−4ac ＝ −4 × 1 × 25 ＝ −100')}`,
+  `${M('D ＝ 100 − 100 ＝ 0')}`,
+  `D は <b>0</b>。`,
+  `だから 実数解は <b>1個</b>（重解）。　<b>完成！</b>`]);
+const e3 = ex('⑶', `3x${P2} − 4x ＋ 2 ＝ 0`, ABC(3,'−4',2), [`(−4)${P2}`,'16'], ['−4 × 3 × 2','− 24'], '−8', 'マイナス', 2, '0', [
+  `例 ⑶ ${M('3x² − 4x ＋ 2 ＝ 0')} の 実数解の 個数を 求めよう。`,
+  `a ＝ 3、b ＝ −4、c ＝ 2。`,
+  `${M('b² ＝ (−4)² ＝ 16')}。　b が マイナスでも 2乗すると プラス！`,
+  `${M('−4ac ＝ −4 × 3 × 2 ＝ −24')}`,
+  `${M('D ＝ 16 − 24 ＝ −8')}`,
+  `D は <b>マイナス</b>。`,
+  `だから 実数解は <b>0個</b>。　<b>完成！</b>`]);
 
 const DECK = {title:'①-6 実数解の個数', pages:[
-  {name:'表紙', html:coverF(KK, '<span class="mk">実数解</span>の<br>個数', '判別式 D で 調べる', 'ルートの中だけ 見れば わかる！', POL, 'D の 符号')},
-  {name:'調べる', html:s1}, {name:'判別式', html:s2}, {name:'例', html:s3},
+  {name:'表紙', html:coverF(KK, '<span class="mk">実数解</span>の<br>個数', '判別式 D で 調べる', '解を 求めなくても わかる！', POL, 'D の 符号')},
+  {name:'問い', html:q0}, {name:'①', html:s1}, {name:'②', html:s2}, {name:'③', html:s3},
+  {name:'比べる', html:s4}, {name:'判別式', html:s5}, {name:'まとめ', html:s6},
+  {name:'⑴', html:e1}, {name:'⑵', html:e2}, {name:'⑶', html:e3},
   {name:'終', html:endF(KK + '　実数解の個数', POL)}
 ]};
 """)

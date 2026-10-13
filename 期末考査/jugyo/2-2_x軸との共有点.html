@@ -636,6 +636,72 @@ body{overflow:hidden;height:100%;width:100%}
 .bk{color:var(--b-ink);font-family:"Zen Maru Gothic",sans-serif;font-weight:900}
 .portrait .t-pg .ptcard{left:20px;top:150px;transform-origin:top left;transform:scale(.574)}
 
+/* ===== ①-6：1枚に 1つの ことを 大きく ===== */
+.dcard{left:48px;top:30px;width:1184px;height:490px}
+.dcard .kfr>span:first-child{border-bottom-width:2.5px}
+.dq0{position:absolute;left:90px;top:70px;font-size:48px;line-height:2.1}
+.dbub{position:absolute;left:760px;top:140px;width:330px;padding:26px 20px;border-radius:24px;background:var(--r-bg);border:3px solid var(--r-bd);color:var(--r-ink);font-size:36px;text-align:center;line-height:1.5}
+.dbub b{color:var(--accent);font-size:1.2em}
+.dt{position:absolute;left:56px;top:36px;font-size:38px}
+.dls{position:absolute;left:56px;top:110px;font-size:38px}
+.dl{height:104px;display:flex;align-items:center;gap:10px;white-space:nowrap}
+.dl .kfr,.drow .kfr{margin:0 8px}
+.dno{font-size:28px;color:var(--accent)}
+.br{position:absolute;left:640px;top:80px;width:520px;height:300px}
+.br svg{position:absolute;left:0;top:0;overflow:visible}
+.br path{fill:none;stroke:var(--b-ink);stroke-width:5;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1}
+.br.show path{stroke-dashoffset:0;transition:stroke-dashoffset .8s ease-out .15s}
+.br path.brx{stroke:var(--muted);stroke-dasharray:.04 .03}
+.br.show path.brx{stroke-dashoffset:0}
+.brc path{stroke:#e0465e;stroke-width:6;stroke-dasharray:none;stroke-dashoffset:0;opacity:0;transition:opacity .3s .8s}
+.br.show .brc path{opacity:1}
+.brs{font-family:"STIX Two Text",serif;font-size:30px;fill:var(--b-ink);font-weight:700}
+.brst{position:absolute;left:0;top:126px;width:150px;text-align:center;font-family:"STIX Two Text",serif;font-size:32px;background:var(--b-bg);border-radius:10px;padding:4px 0}
+.brl{position:absolute;font-family:"STIX Two Text",serif;font-size:34px;white-space:nowrap;opacity:0;transition:opacity .4s .8s}
+.br.show .brl{opacity:1}
+.brl.one{color:var(--accent);font-size:40px}
+.brl.no{font-family:"Zen Maru Gothic",sans-serif;font-weight:900;color:#e0465e;font-size:30px}
+.dres{position:absolute;left:760px;top:394px;padding:6px 30px;border-radius:999px;background:var(--accent);color:var(--paper);font-size:34px;font-weight:900}
+.dres b{font-size:1.3em}
+.drows{position:absolute;left:70px;top:30px}
+.drow{height:118px;display:flex;align-items:center;gap:30px;font-size:42px;white-space:nowrap}
+.dn{font-size:36px;width:50px}
+.dar{font-size:38px;color:var(--accent);font-weight:900;margin-left:20px}
+.dar b{font-size:1.25em}
+.dimx{transition:opacity .5s}
+.dimx.on{opacity:.25}
+.dmsg{position:absolute;left:0;right:0;top:396px;text-align:center;font-size:38px;font-weight:900}
+.dmsg b{color:var(--accent);background:linear-gradient(transparent 60%,var(--r-bg) 60%)}
+.dfx{position:absolute;left:60px;top:70px;font-size:60px}
+.dfx .kfr>span:first-child{border-bottom-width:3.5px;padding:0 10px 4px}
+.dfx .ov{border-top-width:3.5px}
+.dpt{position:absolute;left:800px;top:120px;white-space:nowrap;padding:16px 26px;border:3px dashed var(--accent);border-radius:20px;color:var(--accent);font-size:34px;font-weight:900;text-align:center;line-height:1.4}
+.dD{position:absolute;left:0;right:0;top:340px;text-align:center;font-size:52px;color:#c0504d}
+.dD .ja{font-size:40px}
+.dsum{position:absolute;left:48px;top:120px;width:1184px;height:400px;display:flex;gap:34px;justify-content:center}
+.dsc{width:360px;height:360px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;border-top:12px solid}
+.dsc.c1{border-color:#7aa83a} .dsc.c2{border-color:var(--b-ink)} .dsc.c3{border-color:#e0465e}
+.dsc-d{font-size:54px}
+.dsc-n{font-size:40px;font-weight:900}
+.dsc-n b{font-size:1.5em;color:var(--accent)}
+.dsc-s{font-size:26px;color:var(--muted)}
+.dabc{position:absolute;left:56px;top:100px;font-family:"STIX Two Text",serif;font-size:32px}
+.dxr{position:absolute;left:56px;top:210px;display:flex;align-items:center;gap:14px;font-size:46px;white-space:nowrap}
+.dbx{position:relative;display:inline-flex;align-items:center;justify-content:center;min-width:110px;height:76px;padding:0 14px;border-radius:8px}
+.dbx.g{background:#d5e2bb} .dbx.o{background:#fad3b4} .dbx.b{background:#cfe3ff}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .dbx.g{background:#44553a} :root:not([data-theme="light"]) .dbx.o{background:#6a4a30} :root:not([data-theme="light"]) .dbx.b{background:#2f4a6a} }
+:root[data-theme="dark"] .dbx.g{background:#44553a} :root[data-theme="dark"] .dbx.o{background:#6a4a30} :root[data-theme="dark"] .dbx.b{background:#2f4a6a}
+.dnt{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);margin-bottom:6px;font-size:26px;color:var(--note);white-space:nowrap}
+.dnt.show{transform:translateX(-50%)}
+.dsg{margin-left:18px;font-family:"Zen Maru Gothic",sans-serif;font-weight:900;font-size:38px;color:var(--b-ink)}
+.dans{position:absolute;left:56px;top:350px;display:flex;align-items:center;gap:14px;font-size:34px}
+.dabx{display:inline-flex;align-items:center;justify-content:center;width:110px;height:90px;border:3px solid #938953;font-family:"STIX Two Text",serif;font-size:56px;color:var(--accent)}
+.dtb{position:absolute;right:36px;top:318px;width:300px;display:flex;flex-direction:column;gap:8px}
+.dtr{padding:4px 20px;border-radius:12px;border:2px solid var(--gline);font-size:26px;font-weight:900;transition:background .4s,border-color .4s,transform .4s}
+.dtr.on{background:var(--r-bg);border-color:var(--accent);color:var(--r-ink);transform:scale(1.06)}
+.portrait .t-pg .dcard{left:20px;top:150px;transform-origin:top left;transform:scale(.574)}
+.portrait .t-pg .dsum{left:20px;top:150px;width:1184px;transform-origin:top left;transform:scale(.574)}
+
 /* ===== 手書き ===== */
 #ink{position:fixed;left:0;top:0;z-index:15;pointer-events:none;touch-action:none}
 body.inking #ink{pointer-events:auto;cursor:crosshair}
@@ -1421,7 +1487,7 @@ const stage = document.getElementById('stage');
 const pages = DECK.pages.map(x=>x.html), names = DECK.pages.map(x=>x.name);
 document.title = DECK.title;
 /* スライドの種類（スマホの縦レイアウトで使う） */
-const kind = h => /pgcard|ptcard/.test(h)?'pg' : /kcard/.test(h)?'k' : /kfcard/.test(h)?'f' : /qecard/.test(h)?'q' : /ncard/.test(h)?'n' : /class="pcards/.test(h)?'p' : /fxcard/.test(h)?'x' : /class="hrows/.test(h)?'h' : /class="graph"/.test(h)?'g' : /wcard/.test(h)?'w' : /fcard/.test(h)?'b' : 'c';
+const kind = h => /pgcard|ptcard|dcard|dsum/.test(h)?'pg' : /kcard/.test(h)?'k' : /kfcard/.test(h)?'f' : /qecard/.test(h)?'q' : /ncard/.test(h)?'n' : /class="pcards/.test(h)?'p' : /fxcard/.test(h)?'x' : /class="hrows/.test(h)?'h' : /class="graph"/.test(h)?'g' : /wcard/.test(h)?'w' : /fcard/.test(h)?'b' : 'c';
 stage.innerHTML = pages.map(h=>`<section class="slide t-${kind(h)}">${h}</section>`).join('');
 (function italicVars(){
   const w=document.createTreeWalker(stage,NodeFilter.SHOW_TEXT);
