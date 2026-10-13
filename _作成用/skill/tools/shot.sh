@@ -6,7 +6,12 @@
 # 出力: $OUTDIR（なければ ./_shot）/<幅>_<番号-ステップ>.png
 SRC="$1"; W=$2; H=$3; shift 3
 OUT="${OUTDIR:-./_shot}"; mkdir -p "$OUT"
-CHROME="/c/Program Files/Google/Chrome/Application/chrome.exe"
+# Windows（Git Bash）では Chrome、Linux（クラウド）では /opt/pw-browsers/chromium
+if [ -z "$CHROME" ]; then
+  if [ -x "/c/Program Files/Google/Chrome/Application/chrome.exe" ]; then CHROME="/c/Program Files/Google/Chrome/Application/chrome.exe"
+  else CHROME="$(ls /opt/pw-browsers/chromium-*/chrome-linux/chrome 2>/dev/null | head -1)"; fi
+fi
+DIR="$(cd "$OUT" && (pwd -W 2>/dev/null || pwd))"
 for k in "$@"; do
   s=${k%-*}; t=${k#*-}
   python - "$SRC" "$OUT/p.html" "$s" "$t" <<'PY'
@@ -17,5 +22,5 @@ st='maxStep[si]' if t=='e' else t
 h=h.replace('</body>',f'<script>si={s};st={st};fit();render();document.querySelectorAll("*").forEach(e=>e.style.transitionDuration="0s");</script></body>')
 open(dst,'w',encoding='utf-8').write(h)
 PY
-  "$CHROME" --headless=new --disable-gpu --hide-scrollbars --window-size=$W,$H --virtual-time-budget=4000 --screenshot="$OUT/${W}_$k.png" "file:///$(cd "$(dirname "$OUT/p.html")" && pwd -W)/p.html" 2>/dev/null
+  "$CHROME" --headless=new --disable-gpu --hide-scrollbars --window-size=$W,$H --virtual-time-budget=4000 --screenshot="$OUT/${W}_$k.png" --no-sandbox "file:///${DIR#/}/p.html" 2>/dev/null
 done

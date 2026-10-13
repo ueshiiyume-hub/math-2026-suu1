@@ -26,11 +26,11 @@ function BR(kind, s, start, top, bot){
   let svg = '', lab = '';
   if(kind==='two'){
     svg = P('M150 150 C210 150 230 70 300 70') + P('M150 150 C210 150 230 230 300 230')
-        + `<text class="brs" x="232" y="86">＋</text><text class="brs" x="232" y="232">−</text>`;
+        + `<text class="brs" x="190" y="92">＋</text><text class="brs" x="190" y="230">−</text>`;
     lab = `<div class="brl" style="left:310px;top:44px">${top}</div><div class="brl" style="left:310px;top:204px">${bot}</div>`;
   } else if(kind==='one'){
     svg = P('M150 150 C210 150 220 80 270 100 C300 112 300 140 320 150') + P('M150 150 C210 150 220 220 270 200 C300 188 300 160 320 150')
-        + `<text class="brs" x="214" y="88">＋0</text><text class="brs" x="214" y="236">−0</text>`;
+        + `<text class="brs" x="186" y="84">＋0</text><text class="brs" x="186" y="240">−0</text>`;
     lab = `<div class="brl one" style="left:330px;top:124px">${top}</div>`;
   } else {
     svg = P('M150 150 C210 150 230 70 290 70','brx') + P('M150 150 C210 150 230 230 290 230','brx')
@@ -185,59 +185,131 @@ const DECK = {title:'①-6 実数解の個数', pages:[
 ]};
 """)
 
-    # ------------------------------------------------------------ ②-1 x軸との共有点
-    decks['2-1_x軸との共有点'] = ('②-1 x軸との共有点', COMMON + r'''
+    # ------------------------------------------------------------ ②-1 x軸との共有点（1枚に 1つの ことを 大きく）
+    decks['2-1_x軸との共有点'] = ('②-1 x軸との共有点', COMMON + r"""
 const KK = KIMATSU + '　②-1';
 const POL = `<div class="fpol"><div class="fa math">y ＝ x${P2} − 2x − 3</div><div class="fv">y ＝ 0 と する</div><div class="fb math">x ＝ −1, 3</div></div>`;
+const L  = (s,h,cls='') => `<div class="dl lh ${cls}" data-s="${s}"><span>${h}</span></div>`;
 
-const s0 = pgSlide({img:'@@IMG:7:56,80,540,146@@', clip:[56,80,540,146],
-  items:[A(1,[266.3,100.6,325.5,129],'y ＝ 0',13)],
-  cm:[
+/* グラフ（px）：x軸と 下に凸の 放物線 y ＝ k(x − r1)(x − r2)。 o = {w,h,ay:x軸の 高さ, cx:中心の x, sc:1目もりの px, k, r:[r1,r2], top:かき始める 高さ,
+   sd:点の 番, sc2:放物線の 番, lab:[html,html]（点の 下の 文字）, ls:文字の 番} */
+function GR(o){
+  const X = x => o.w/2 + (x-o.cx)*o.sc, Yp = x => o.ay - o.k*(x-o.r[0])*(x-o.r[1]);
+  const m = (o.r[0]+o.r[1])/2, dep = o.k*(m-o.r[0])*(m-o.r[1]);              // 頂点の 深さ（マイナス）
+  const hw = Math.sqrt(((o.ay-o.top) - dep)/o.k);                            // かき始める x の はば
+  let d = ''; for(let i=0;i<=80;i++){ const x = m-hw+2*hw*i/80; d += (i?'L':'M')+X(x).toFixed(1)+' '+Yp(x).toFixed(1)+' '; }
+  const dots = o.r.map(x=>`<circle class="gdot" cx="${X(x).toFixed(1)}" cy="${o.ay}" r="9"/>`).join('');
+  const labs = (o.lab||[]).map((h,i)=>`<div class="glab lh" data-s="${o.ls??o.sd}" style="left:${(X(o.r[i])+(i?1:-1)*(o.lo||0)).toFixed(1)}px;top:${o.ay+16}px"><span>${h}</span></div>`).join('');
+  return `<div class="gbox" style="width:${o.w}px;height:${o.h}px">
+    <svg width="${o.w}" height="${o.h}" viewBox="0 0 ${o.w} ${o.h}">
+      <line class="gax" x1="16" y1="${o.ay}" x2="${o.w-18}" y2="${o.ay}"/><polygon class="gah" points="${o.w-6},${o.ay} ${o.w-22},${o.ay-7} ${o.w-22},${o.ay+7}"/>
+      <text class="gxl" x="${o.w-24}" y="${o.ay+30}">x</text>
+      ${o.sc2!==undefined?`<path class="curve gcv" data-s="${o.sc2}" pathLength="1" d="${d}"/>`:''}
+      <g class="gs" data-s="${o.sd}">${dots}</g>
+    </svg>${labs}</div>`;
+}
+/* プリントの 緑の 矢印（式 → 答え） */
+const GA = (s) => `<svg class="xga gs" data-s="${s}" width="150" height="90" viewBox="0 0 150 90"><path d="M8 82 L56 26 L128 26" fill="none" stroke="#c9dca6" stroke-width="12" stroke-linejoin="round"/><polygon points="122,8 146,26 122,44" fill="#c9dca6"/></svg>`;
+/* 右の 答えの 欄（プリントの { と 水色の 枠） */
+const XR = (xs, xh, ns, nh, tall) => `<div class="xrp">
+    <div class="xbr"></div>
+    <div class="xrow"><span class="xlb">x軸との<br>共有点の <i class="math">x</i>座標</span><span class="xbx${tall?' tall':''}"><span class="lh math" data-s="${xs}">${xh}</span></span></div>
+    <div class="xrow"><span class="xlb">x軸との<br>共有点の 個数</span><span class="xbx"><span class="lh" data-s="${ns}">${nh}</span></span></div>
+  </div>`;
+const YT = s => `<span class="ytag lh" data-s="${s}">y ＝ 0 と する</span>`;
+
+/* 2枚目：考え方（プリントの 上の 帯） */
+const s0 = `
+  <div class="card abs dcard">${EQTAPE}
+    <div class="xband"><span class="xkw">x軸の 共有点</span> に ついて 問われたら、<span class="xblank"><span class="lh math" data-s="3">y ＝ 0</span></span> と して 考える。</div>
+    <div class="xg0">${GR({w:560,h:300,ay:150,cx:1,sc:62,k:22,r:[-1,3],top:30,sd:1,sc2:0,lo:30,lab:[`(−1, ${tm('r','0',2)})`,`(3, ${tm('r','0',2)})`]})}</div>
+    <div class="xbub lh" data-s="2">x軸の 上の 点は<br><i class="math">y</i>座標が いつも <b>0</b></div>
+  </div>
+  ${cbar([
     `<b>x軸との 共有点</b> とは、グラフが x軸と 交わったり 接したり する 点。`,
-    `x軸の上 では <b>y ＝ 0</b>。　だから「<b>y ＝ 0</b> として 考える」！`
-  ]});
+    `この 放物線と x軸との 共有点は (−1, 0) と (3, 0)。`,
+    `x軸の 上の 点は、<i class="math">y</i>座標が いつも <b>0</b>。`,
+    `だから x軸との 共有点を 求める ときは「<b>y ＝ 0</b> と して 考える」！`])}`;
 
-const g1 = PB({xv:455, yv:316.8, q:0.0416, ay:294.8, top:243, s:6, dot:'f', ds:6, lab:[[432,'−1'],[478,'3']]});
-const s1 = pgSlide({img:'@@IMG:7:56,148,540,332@@', clip:[56,148,540,332], svg:[g1],
-  items:[A(1,[154.8,179.1,197.1,204.6],'y ＝ 0',10),
-         A(2,[73.2,207.1,157,232.6],'(x ＋ 1)(x − 3)',10.5), A(2,[168.2,207.1,197.1,232.6],'0',10.5),
-         A(3,[128.3,235.3,157,260.9],'x',10.5), A(3,[168.2,235.3,227.2,260.9],'−1, 3',10.5),
-         A(4,[435.7,169,505.7,197.8],'−1, 3',11), A(5,[435.7,202.8,505.7,231.6],'2個',11)],
-  done:6,
-  cm:[
+/* 3枚目：例⑴ 式 */
+const s1 = `
+  <div class="card abs dcard">${EQTAPE}
+    <div class="dt math">⑴　y ＝ x${P2} − 2x − 3　${YT(1)}</div>
+    <div class="dls math">${L(2,`x${P2} − 2x − 3 ＝ 0`)}${L(3,'(x ＋ 1)(x − 3) ＝ 0')}${L(4,'x ＝ −1, 3')}</div>
+    ${GA(5)}${XR(5,'−1, 3',6,'<b>2</b> 個')}
+  </div>
+  ${cbar([
     `⑴ ${M('y ＝ x² − 2x − 3')} と x軸との 共有点を 求めよう。`,
     `x軸との 共有点 なので <b>y ＝ 0</b> と する。`,
-    `${M('x² − 2x − 3 ＝ 0')} を 因数分解。　${M('(x ＋ 1)(x − 3) ＝ 0')}`,
-    `${M('x ＝ −1, 3')}`,
-    `これが x軸との 共有点の <b>x座標</b>。`,
-    `共有点は <b>2個</b>。`,
-    `グラフは x軸と −1、3 で <b>交わる</b>。　<b>完成！</b>`
-  ]});
+    `y に 0 を 入れると、2次方程式 ${M('x² − 2x − 3 ＝ 0')} に なる。`,
+    `たして −2、かけて −3 → <b>因数分解</b>。`,
+    `${M('x ＝ −1, 3')}。`,
+    `この 解が、そのまま 共有点の <b>x座標</b>。`,
+    `解が 2つ → 共有点も <b>2個</b>。`])}`;
 
-const g2 = PB({xv:455, yv:513, q:0.0352, ay:491.1, top:440, s:6, dot:'f', ds:6,
-  lab:[[430,'1−√21'],[480,'1+√21']]});
-const s2 = pgSlide({img:'@@IMG:7:56,345,540,528@@', clip:[56,345,540,528], svg:[g2],
-  items:[A(1,[154.8,375.4,197.1,400.9],'y ＝ 0',10),
-         A(2,[73.2,403.4,109.8,454.2],'x',10.5), A(2,[120.8,403.4,211.7,454.2],FX(`1 ± ${SQ('1 ＋ 20')}`,'2'),10.5),
-         A(3,[122.5,456.6,211.7,507.4],FX(`1 ± ${SQ('21')}`,'2'),10.5),
-         A(4,[435.7,350.8,505.6,394.1],FX(`1 ± ${SQ('21')}`,'2'),10), A(5,[435.7,399.1,505.7,427.9],'2個',11)],
-  done:6,
-  cm:[
+/* 4枚目：例⑴ グラフ */
+const gnote = s => `<div class="gnote lh" data-s="${s}"><i class="math">x</i>${P2} の 係数が <b>プラス</b><br>→ <b>下に凸</b></div>`;
+const s2 = `
+  <div class="card abs dcard">${EQTAPE}
+    <div class="dt math">⑴　y ＝ x${P2} − 2x − 3　<span class="gsub">グラフの 概形</span></div>
+    <div class="xg1">${GR({w:640,h:360,ay:170,cx:1,sc:84,k:30,r:[-1,3],top:28,sd:1,sc2:2,lo:22,lab:['−1','3']})}</div>
+    ${gnote(2)}
+  </div>
+  <div class="abs r done pgdone" data-s="3"><div class="seal">完成！</div></div>
+  ${cbar([
+    `グラフの 概形を かこう。　まず x軸 だけ。`,
+    `x軸との 共有点 <b>−1</b> と <b>3</b> に 点を 打つ。`,
+    `${M('x²')} の 係数が プラス なので <b>下に凸</b>。　2つの 点を 通るように かく。`,
+    `頂点の 位置は だいたいで よい。　<b>完成！</b>`])}`;
+
+/* 5枚目：例⑵ 式（因数分解 できない → 解の公式） */
+const s3 = `
+  <div class="card abs dcard">${EQTAPE}
+    <div class="dt math">⑵　y ＝ x${P2} − x − 5　${YT(1)}</div>
+    <div class="dls math">${L(2,`x${P2} − x − 5 ＝ 0`)}${L(3,`x ＝ ${KF(`1 ± ${SQ('1 ＋ 20')}`,'2')}`)}${L(4,`＝ ${KF(`1 ± ${SQ('21')}`,'2')}`)}</div>
+    ${GA(5)}${XR(5,KF(`1 ± ${SQ('21')}`,'2'),6,'<b>2</b> 個',1)}
+  </div>
+  ${cbar([
     `⑵ ${M('y ＝ x² − x − 5')} と x軸との 共有点を 求めよう。`,
-    `<b>y ＝ 0</b> と する。　${M('x² − x − 5 ＝ 0')} は 因数分解 できない…`,
-    `<b>解の公式</b>！　a ＝ 1、b ＝ −1、c ＝ −5。　${M(`x ＝ ${FR('1 ± √(1 ＋ 20)',2)}`)}`,
-    `${M(`＝ ${FR('1 ± √21',2)}`)}`,
+    `x軸との 共有点 なので <b>y ＝ 0</b> と する。`,
+    `${M('x² − x − 5 ＝ 0')}。　たして −1、かけて −5 の 組は ない → 因数分解 できない…`,
+    `<b>解の公式</b>！　a ＝ 1、b ＝ −1、c ＝ −5 を 入れる。`,
+    `ルートの中を 計算して ${M('x ＝ (1 ± √21)/2')}。`,
     `これが 共有点の <b>x座標</b>。`,
-    `± で 2つ なので <b>2個</b>。`,
-    `グラフは x軸と 2点で <b>交わる</b>。　<b>完成！</b>`
-  ]});
+    `± で 2つ → 共有点は <b>2個</b>。`])}`;
+
+/* 6枚目：例⑵ グラフ（点の 位置は だいたい） */
+const r21 = Math.sqrt(21);
+const s4 = `
+  <div class="card abs dcard">${EQTAPE}
+    <div class="dt math">⑵　y ＝ x${P2} − x − 5　<span class="gsub">グラフの 概形</span></div>
+    <div class="xg1">${GR({w:640,h:360,ay:150,cx:0.5,sc:72,k:24,r:[(1-r21)/2,(1+r21)/2],top:24,sd:1,sc2:2,lo:62,
+      lab:[KF(`1 − ${SQ('21')}`,'2'),KF(`1 ＋ ${SQ('21')}`,'2')]})}</div>
+    ${gnote(2)}
+  </div>
+  <div class="abs r done pgdone" data-s="3"><div class="seal">完成！</div></div>
+  ${cbar([
+    `グラフの 概形を かこう。`,
+    `共有点の x座標に 点を 打つ。　位置は <b>だいたい</b> で よい。`,
+    `${M('x²')} の 係数が プラス なので <b>下に凸</b>。　2つの 点を 通るように かく。`,
+    `<b>完成！</b>`])}`;
+
+/* 7枚目：まとめ（アニメーションなし） */
+const s5 = `
+  <div class="end-h"><h2>x軸との 共有点 → y ＝ 0</h2></div>
+  <div class="dsum">
+    <div class="card dsc xsc c2"><div class="dsc-s">共有点の <i class="math">x</i>座標</div><div class="xeq">＝</div><div class="dsc-n">2次方程式の <b>解</b></div></div>
+    <div class="card dsc xsc c1"><div class="dsc-s">共有点の 個数</div><div class="xeq">＝</div><div class="dsc-n">2次方程式の <b>解の 個数</b></div></div>
+  </div>
+  ${cbar([`<b>y ＝ 0</b> と して 2次方程式を 解けば、共有点の x座標も 個数も わかる。`])}`;
 
 const DECK = {title:'②-1 x軸との共有点', pages:[
   {name:'表紙', html:coverF(KK, '<span class="mk">x軸</span>との<br>共有点', 'y ＝ 0 と して 考える', '2次方程式を 解けば わかる！', POL, 'y ＝ 0')},
-  {name:'考え方', html:s0}, {name:'⑴', html:s1}, {name:'⑵', html:s2},
+  {name:'考え方', html:s0}, {name:'⑴', html:s1}, {name:'⑴ グラフ', html:s2},
+  {name:'⑵', html:s3}, {name:'⑵ グラフ', html:s4}, {name:'まとめ', html:s5},
   {name:'終', html:endF(KK + '　x軸との共有点', POL)}
 ]};
-''')
+""")
 
     # ------------------------------------------------------------ ②-2 x軸との共有点（重解・なし）
     decks['2-2_x軸との共有点'] = ('②-2 x軸との共有点', COMMON + r'''

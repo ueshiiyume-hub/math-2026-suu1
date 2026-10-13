@@ -151,7 +151,8 @@ function layoutExtra(root){
    生徒は プリントに 書きこむので、枠の 位置・形は 変えない。 */
 const KS = 2.05, KX0 = 62, KL = 24, KT = 18;
 const kpos = (y0) => (x1,y1,x2,y2) => `left:${(KL+(x1-KX0)*KS).toFixed(1)}px;top:${(KT+(y1-y0)*KS).toFixed(1)}px;width:${((x2-x1)*KS).toFixed(1)}px;height:${((y2-y1)*KS).toFixed(1)}px`;
-const SQ = t => `√<span class="ov">${t}</span>`;
+/* ルート：√ を SVG で かいて、上の 線と つなげる（文字の √ だと 線と ずれる） */
+const SQ = t => `<span class="rt"><svg class="rts" viewBox="0 0 10 20" preserveAspectRatio="none"><path d="M0.6 12.4 L2.6 11.2 L5.4 19.4 L9.6 0.6 L10 0.6"/></svg><span class="ov">${t}</span></span>`;
 /* 解の公式（色つき）：a 赤、b 緑、c 青 */
 const KA = t => `<span class="ka">${t}</span>`, KB = t => `<span class="kb">${t}</span>`, KC = t => `<span class="kc">${t}</span>`;
 const FORMULA = (big) => `<span class="kfx math${big?' big':''}">x ＝ <span class="kfr"><span>−${KB('b')} ± ${SQ(`${KB('b')}${P2} − 4${KA('a')}${KC('c')}`)}</span><span>2${KA('a')}</span></span></span>`;

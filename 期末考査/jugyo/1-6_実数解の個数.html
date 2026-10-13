@@ -565,7 +565,10 @@ body{overflow:hidden;height:100%;width:100%}
 .ka{color:#c4536a} .kb{color:#5e9a3a} .kc{color:var(--b-ink)}
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .ka{color:#ffb6c3} :root:not([data-theme="light"]) .kb{color:#a8dc8a} }
 :root[data-theme="dark"] .ka{color:#ffb6c3} :root[data-theme="dark"] .kb{color:#a8dc8a}
-.ov{border-top:2px solid currentColor;padding:0 2px;margin-left:1px}
+.rt{--rw:2px;display:inline-flex;align-items:stretch;white-space:nowrap;vertical-align:bottom;padding-top:.06em}
+.rts{position:static;width:.5em;flex:none;overflow:visible;margin-right:-1px}
+.rts path{fill:none;stroke:currentColor;stroke-width:var(--rw);vector-effect:non-scaling-stroke;stroke-linejoin:round;stroke-linecap:round}
+.ov{border-top:var(--rw) solid currentColor;padding:.04em 3px 0 2px;margin-left:0}
 .kfr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.15}
 .kfr>span:first-child{border-bottom:2px solid currentColor;padding:0 4px 2px}
 .kfr>span:last-child{padding-top:2px}
@@ -576,7 +579,7 @@ body{overflow:hidden;height:100%;width:100%}
 .kfx .kfr>span:first-child{border-bottom-width:1.5px}
 .kfx.big{font-size:54px;gap:12px}
 .kfx.big .kfr>span:first-child{border-bottom-width:3px;padding:0 10px 4px}
-.kfx.big .ov{border-top-width:3px}
+.kfx.big .rt{--rw:3px}
 .kdone{left:1100px;top:390px}
 .kcalc .kin{font-size:23px}
 .ktitle .v+sup{margin-right:4px}
@@ -639,6 +642,7 @@ body{overflow:hidden;height:100%;width:100%}
 /* ===== ①-6：1枚に 1つの ことを 大きく ===== */
 .dcard{left:48px;top:30px;width:1184px;height:490px}
 .dcard .kfr>span:first-child{border-bottom-width:2.5px}
+.dcard .rt{--rw:2.5px}
 .dq0{position:absolute;left:90px;top:70px;font-size:48px;line-height:2.1}
 .dbub{position:absolute;left:760px;top:140px;width:330px;padding:26px 20px;border-radius:24px;background:var(--r-bg);border:3px solid var(--r-bd);color:var(--r-ink);font-size:36px;text-align:center;line-height:1.5}
 .dbub b{color:var(--accent);font-size:1.2em}
@@ -648,11 +652,11 @@ body{overflow:hidden;height:100%;width:100%}
 .dl .kfr,.drow .kfr{margin:0 8px}
 .dno{font-size:28px;color:var(--accent)}
 .br{position:absolute;left:640px;top:80px;width:520px;height:300px}
-.br svg{position:absolute;left:0;top:0;overflow:visible}
-.br path{fill:none;stroke:var(--b-ink);stroke-width:5;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1}
-.br.show path{stroke-dashoffset:0;transition:stroke-dashoffset .8s ease-out .15s}
-.br path.brx{stroke:var(--muted);stroke-dasharray:.04 .03}
-.br.show path.brx{stroke-dashoffset:0}
+.br>svg{position:absolute;left:0;top:0;overflow:visible}
+.br>svg path{fill:none;stroke:var(--b-ink);stroke-width:5;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1}
+.br.show>svg path{stroke-dashoffset:0;transition:stroke-dashoffset .8s ease-out .15s}
+.br>svg path.brx{stroke:var(--muted);stroke-dasharray:.04 .03}
+.br.show>svg path.brx{stroke-dashoffset:0}
 .brc path{stroke:#e0465e;stroke-width:6;stroke-dasharray:none;stroke-dashoffset:0;opacity:0;transition:opacity .3s .8s}
 .br.show .brc path{opacity:1}
 .brs{font-family:"STIX Two Text",serif;font-size:30px;fill:var(--b-ink);font-weight:700}
@@ -674,7 +678,7 @@ body{overflow:hidden;height:100%;width:100%}
 .dmsg b{color:var(--accent);background:linear-gradient(transparent 60%,var(--r-bg) 60%)}
 .dfx{position:absolute;left:60px;top:70px;font-size:60px}
 .dfx .kfr>span:first-child{border-bottom-width:3.5px;padding:0 10px 4px}
-.dfx .ov{border-top-width:3.5px}
+.dfx .rt{--rw:3.5px}
 .dpt{position:absolute;left:800px;top:120px;white-space:nowrap;padding:16px 26px;border:3px dashed var(--accent);border-radius:20px;color:var(--accent);font-size:34px;font-weight:900;text-align:center;line-height:1.4}
 .dD{position:absolute;left:0;right:0;top:340px;text-align:center;font-size:52px;color:#c0504d}
 .dD .ja{font-size:40px}
@@ -696,11 +700,54 @@ body{overflow:hidden;height:100%;width:100%}
 .dsg{margin-left:18px;font-family:"Zen Maru Gothic",sans-serif;font-weight:900;font-size:38px;color:var(--b-ink)}
 .dans{position:absolute;left:56px;top:350px;display:flex;align-items:center;gap:14px;font-size:34px}
 .dabx{display:inline-flex;align-items:center;justify-content:center;width:110px;height:90px;border:3px solid #938953;font-family:"STIX Two Text",serif;font-size:56px;color:var(--accent)}
-.dtb{position:absolute;right:36px;top:318px;width:300px;display:flex;flex-direction:column;gap:8px}
-.dtr{padding:4px 20px;border-radius:12px;border:2px solid var(--gline);font-size:26px;font-weight:900;transition:background .4s,border-color .4s,transform .4s}
+.dtb{position:absolute;right:36px;top:296px;width:300px;display:flex;flex-direction:column;gap:8px}
+.dtr{padding:2px 20px;border-radius:12px;border:2px solid var(--gline);font-size:26px;font-weight:900;transition:background .4s,border-color .4s,transform .4s}
 .dtr.on{background:var(--r-bg);border-color:var(--accent);color:var(--r-ink);transform:scale(1.06)}
 .portrait .t-pg .dcard{left:20px;top:150px;transform-origin:top left;transform:scale(.574)}
 .portrait .t-pg .dsum{left:20px;top:150px;width:1184px;transform-origin:top left;transform:scale(.574)}
+
+/* ===== ②-1：x軸との 共有点 ===== */
+.gbox{position:relative;background:#daeef7;border-radius:4px}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .gbox{background:#2c4252} }
+:root[data-theme="dark"] .gbox{background:#2c4252}
+.gbox>svg{position:absolute;left:0;top:0;overflow:visible}
+.gax{stroke:var(--ink);stroke-width:2.5} .gah{fill:var(--ink)}
+.gxl{font-family:"STIX Two Text",serif;font-style:italic;font-size:26px;fill:var(--ink)}
+.gdot{fill:var(--b-ink);stroke:var(--paper);stroke-width:3}
+.gcv{stroke:var(--b-ink);stroke-width:5}
+.glab{position:absolute;transform:translateX(-50%);font-family:"STIX Two Text",serif;font-size:28px;white-space:nowrap}
+.glab.show{transform:translateX(-50%)}
+.glab .kfr{font-size:24px}
+.xband{position:absolute;left:40px;right:40px;top:40px;height:96px;display:flex;align-items:center;justify-content:center;gap:6px;background:#dce6f0;border-radius:4px;font-size:30px;font-weight:900;white-space:nowrap}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .xband{background:#33405a} }
+:root[data-theme="dark"] .xband{background:#33405a}
+.xkw{color:#4f81bd;font-size:36px}
+.xblank{display:inline-flex;align-items:center;justify-content:center;width:170px;height:66px;margin:0 8px;background:var(--paper);border-radius:4px;font-size:40px;color:var(--accent)}
+.xg0{position:absolute;left:70px;top:160px}
+.xg0 .gbox{background:transparent}
+.xbub{position:absolute;left:700px;top:220px;width:380px;padding:22px 20px;border-radius:24px;background:var(--r-bg);border:3px solid var(--r-bd);color:var(--r-ink);font-size:32px;text-align:center;line-height:1.5;font-weight:900}
+.xbub b{color:var(--accent);font-size:1.4em}
+.ytag{display:inline-block;margin-left:22px;padding:4px 18px;border-radius:8px;background:#dce6f0;color:#4f81bd;font-family:"Zen Maru Gothic",sans-serif;font-weight:900;font-size:30px;vertical-align:middle}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .ytag{background:#33405a;color:#9cc0ff} }
+:root[data-theme="dark"] .ytag{background:#33405a;color:#9cc0ff}
+.xga{position:absolute;left:520px;top:190px}
+.xrp{position:absolute;left:680px;top:130px;padding-left:34px}
+.xbr{position:absolute;left:0;top:6px;bottom:6px;width:22px;border:4px solid #c9dca6;border-right:none;border-radius:22px 0 0 22px}
+.xrow{display:flex;align-items:center;gap:16px;height:130px}
+.xlb{font-size:24px;font-weight:900;width:170px;line-height:1.35}
+.xbx{display:inline-flex;align-items:center;justify-content:center;min-width:210px;height:90px;padding:0 14px;background:#daeef7;border-radius:4px;font-size:40px;color:var(--accent);font-family:"STIX Two Text",serif;white-space:nowrap}
+.xbx.tall{height:120px}
+.xbx b{font-size:1.2em}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .xbx{background:#2c4252} }
+:root[data-theme="dark"] .xbx{background:#2c4252}
+.gsub{margin-left:24px;font-family:"Zen Maru Gothic",sans-serif;font-weight:900;font-size:28px;color:var(--muted)}
+.xg1{position:absolute;left:56px;top:110px}
+.gnote{position:absolute;left:770px;top:200px;padding:20px 28px;border:3px dashed var(--accent);border-radius:20px;color:var(--accent);font-size:32px;font-weight:900;line-height:1.5;white-space:nowrap}
+.xsc{width:440px;gap:16px}
+.xsc .dsc-s{font-size:34px;color:var(--ink);font-weight:900}
+.xsc .xeq{font-size:44px;color:var(--muted);line-height:1}
+.xsc .dsc-n{font-size:38px}
+.xsc .dsc-n b{font-size:1.15em}
 
 /* ===== 手書き ===== */
 #ink{position:fixed;left:0;top:0;z-index:15;pointer-events:none;touch-action:none}
@@ -1309,7 +1356,8 @@ function layoutExtra(root){
    生徒は プリントに 書きこむので、枠の 位置・形は 変えない。 */
 const KS = 2.05, KX0 = 62, KL = 24, KT = 18;
 const kpos = (y0) => (x1,y1,x2,y2) => `left:${(KL+(x1-KX0)*KS).toFixed(1)}px;top:${(KT+(y1-y0)*KS).toFixed(1)}px;width:${((x2-x1)*KS).toFixed(1)}px;height:${((y2-y1)*KS).toFixed(1)}px`;
-const SQ = t => `√<span class="ov">${t}</span>`;
+/* ルート：√ を SVG で かいて、上の 線と つなげる（文字の √ だと 線と ずれる） */
+const SQ = t => `<span class="rt"><svg class="rts" viewBox="0 0 10 20" preserveAspectRatio="none"><path d="M0.6 12.4 L2.6 11.2 L5.4 19.4 L9.6 0.6 L10 0.6"/></svg><span class="ov">${t}</span></span>`;
 /* 解の公式（色つき）：a 赤、b 緑、c 青 */
 const KA = t => `<span class="ka">${t}</span>`, KB = t => `<span class="kb">${t}</span>`, KC = t => `<span class="kc">${t}</span>`;
 const FORMULA = (big) => `<span class="kfx math${big?' big':''}">x ＝ <span class="kfr"><span>−${KB('b')} ± ${SQ(`${KB('b')}${P2} − 4${KA('a')}${KC('c')}`)}</span><span>2${KA('a')}</span></span></span>`;
@@ -1448,11 +1496,11 @@ function BR(kind, s, start, top, bot){
   let svg = '', lab = '';
   if(kind==='two'){
     svg = P('M150 150 C210 150 230 70 300 70') + P('M150 150 C210 150 230 230 300 230')
-        + `<text class="brs" x="232" y="86">＋</text><text class="brs" x="232" y="232">−</text>`;
+        + `<text class="brs" x="190" y="92">＋</text><text class="brs" x="190" y="230">−</text>`;
     lab = `<div class="brl" style="left:310px;top:44px">${top}</div><div class="brl" style="left:310px;top:204px">${bot}</div>`;
   } else if(kind==='one'){
     svg = P('M150 150 C210 150 220 80 270 100 C300 112 300 140 320 150') + P('M150 150 C210 150 220 220 270 200 C300 188 300 160 320 150')
-        + `<text class="brs" x="214" y="88">＋0</text><text class="brs" x="214" y="236">−0</text>`;
+        + `<text class="brs" x="186" y="84">＋0</text><text class="brs" x="186" y="240">−0</text>`;
     lab = `<div class="brl one" style="left:330px;top:124px">${top}</div>`;
   } else {
     svg = P('M150 150 C210 150 230 70 290 70','brx') + P('M150 150 C210 150 230 230 290 230','brx')
