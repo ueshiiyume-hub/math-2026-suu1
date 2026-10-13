@@ -509,6 +509,16 @@ body{overflow:hidden;height:100%;width:100%}
 .qs-b{background:var(--b-bg)} .qs-o{background:var(--o-bg)}
 .qpt-t{font-size:26px;color:var(--accent);font-weight:900}
 .qdone{left:1080px;top:380px}
+/* 分数 */
+.fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;font-size:.8em;line-height:1.1;margin:0 2px}
+.fr>span:first-child{border-bottom:2px solid currentColor;padding:0 3px}
+.cm .fr{font-size:.75em}
+.qb .fr{font-size:.95em}
+.qdiv{margin-left:10px;font-family:"Zen Maru Gothic",sans-serif;font-size:18px;font-weight:900;color:var(--note);border:2px solid var(--b-bd);border-radius:999px;padding:0 8px;vertical-align:middle}
+/* 3行の 箱（①-3）：全体を 少し 上に つめる */
+.qtall .q0{top:44px} .qtall .q1{top:112px} .qtall .qlab{top:44px} .qtall .qarr{top:178px}
+.qtall .qb{top:234px;height:186px;font-size:28px} .qtall .qlines{row-gap:14px} .qtall .q3{top:426px;height:58px} .qtall .qa,.qtall .qjyu{height:58px}
+.qtall .q0 .upnote{left:55%;bottom:100%;font-size:22px}
 /* ※注意！ */
 .ncard{left:48px;top:30px;width:1184px;height:490px;padding:40px 60px;display:flex;flex-direction:column;align-items:center;gap:18px;
   background:color-mix(in srgb,var(--g-bg) 45%,var(--paper))}
@@ -526,6 +536,7 @@ body{overflow:hidden;height:100%;width:100%}
 .n-last{font-size:28px;color:var(--b-ink);font-weight:900}
 /* スマホ（縦長） */
 .portrait .t-q .qecard{left:20px;top:30px;width:680px;height:960px}
+.portrait .t-q .qtall .qpt{top:640px}
 .portrait .t-q .qpt{left:40px;top:610px;width:600px;height:190px}
 .portrait .t-q .qjyu{position:absolute;left:0;top:96px;margin:0}
 .portrait .t-q .q3{left:48px}
@@ -1037,10 +1048,14 @@ function fxSlide({num,pat,rows,thinkLab,think,cm,done}){
   ${cbar(cm)}`;
 }
 
+/* 分数（neg：マイナスを 前に つける） */
+const FR = (n,d,neg) => `${neg?'−':''}<span class="fr"><span>${n}</span><span>${d}</span></span>`;
+
 /* ====== 2次方程式（因数分解で解く）の 1問 ======
    プリントと同じ形：もとの式 → 青と橙の ( ) ＝ 0 → それぞれ ＝ 0 → x ＝
-   P = {num, eq, fb, fo, wb, wo, bl, ol, ab, ao, jyu, merge, point, ofirst, cm}
+   P = {num, eq, fb, fo, wb, wo, bl, ol, ab, ao, jyu, merge, point, ofirst, tall, cm}
    bl/ol = {a:'x', t:'＋ 5', v:'−5'}：「x ＋ 5 ＝ 0」→ クリックで 移項の矢印と「x ＝ −5」。t が なければ「x ＝ v」の 1行
+   d:'2', f:FR(…) を つけると 3行目「x ＝ f」（両辺 ÷ d）を足す（①-3）
    答えの数は 答えの枠へ 飛んでいく */
 /* 矢印（線＋先の三角） */
 function qArrow(x1,y1,x2,y2,c){
@@ -1051,21 +1066,23 @@ function qArrow(x1,y1,x2,y2,c){
 function eqSlide(P){
   let n = 0; const st = {lab: ++n, fac: ++n};   // 矢印「因数分解」→ もう一回 クリックで 式
   if(P.point) st.pt = ++n;
-  const ns = B => B.t ? [++n, ++n] : [++n];
+  const ns = B => B.t ? (B.d ? [++n, ++n, ++n] : [++n, ++n]) : [++n];
   if(P.ofirst){ st.o = ns(P.ol); st.b = ns(P.bl); }   // ⑷：( ) の方から 先に
   else        { st.b = ns(P.bl); st.o = ns(P.ol); }
   st.ans = ++n;
   if(P.merge) st.mg = ++n;          // ⑶：同じ答えを 1つに まとめる
   if(P.jyu) st.jyu = ++n;
   const done = P.jyu ? st.jyu : st.ans;
-  const L = 48, BX = 48, OX = 352, BW = 280;
+  const L = 48, BX = 48, BW = P.tall ? 290 : 280, OX = P.tall ? BX + BW + 16 : 352;
   const bx = L + P.wb/2, ox = L + P.wb + P.wo/2;
   /* 箱の中：「x ＋ 5 ＝ 0」→ 移項の矢印が のびてから「x ＝ −5」（＝ の位置を そろえた 2行） */
   const box = (B,ss,k) => {
     const ln = (s,l,r,cls='') => [l,'＝',r].map((h,i)=>`<span class="qc${i} lh${cls}" data-s="${s}">${h}</span>`).join('');
     const val = `<span${k?` data-k="${k}"`:''}>${B.v}</span>`;
     if(!B.t) return `<div class="qlines">${ln(ss[0],B.a,val)}</div>`;
-    return `<div class="qlines">${ln(ss[0],`${B.a} ${tm('r',`<span class="mvt">${B.t}</span>`,ss[1])}`,'0')}${ln(ss[1],B.a,tm('r',`<span class="mvv">${val}</span>`,ss[1]),' late')}</div>`
+    const v2 = B.d ? B.v : val;
+    const l3 = B.d ? ln(ss[2],'x',`<span data-k="${k}">${B.f}</span><span class="qdiv">÷${B.d}</span>`) : '';
+    return `<div class="qlines">${ln(ss[0],`${B.a} ${tm('r',`<span class="mvt">${B.t}</span>`,ss[1])}`,'0')}${ln(ss[1],B.a,tm('r',`<span class="mvv">${v2}</span>`,ss[1]),' late')}${l3}</div>`
          + `<svg class="mva"><g class="gs" data-s="${ss[1]}"><path pathLength="1" d=""/><polygon points=""/></g></svg>`;
   };
   const ans = P.merge
@@ -1075,7 +1092,7 @@ function eqSlide(P){
     : slotC('b',P.ab,st.ans,'ab');
   return `
   <div class="pno">${P.num}</div>
-  <div class="card abs qecard">${EQTAPE}
+  <div class="card abs qecard${P.tall?' qtall':''}">${EQTAPE}
     <div class="q0 math">${P.eq}</div>
     <div class="qlab" style="left:${L+P.wb+P.wo+100}px"><svg class="gs" data-s="${st.lab}" width="46" height="76" viewBox="0 0 46 76"><path pathLength="1" d="M10 6 C44 14,44 52,18 64" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/><polygon points="6,68 26,72 17,52" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span class="lh" data-s="${st.lab}">因数分解</span></div>
     <div class="q1 math lh" data-s="${st.fac}"><span class="qf qf-b" style="width:${P.wb}px"><span>${P.fb}</span></span><span class="qf qf-o" style="width:${P.wo}px"><span>${P.fo}</span></span><span class="qz">＝ 0</span></div>
