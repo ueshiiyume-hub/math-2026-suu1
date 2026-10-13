@@ -1,0 +1,1636 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>③-3 2次不等式の解法</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@400;500&family=Zen+Maru+Gothic:wght@500;700;900&family=STIX+Two+Text:ital,wght@0,500;0,700;1,500;1,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bgimg:linear-gradient(135deg,#fdeef2 0%,#f4effb 48%,#ebf6f1 100%);
+  --grid:rgba(140,155,200,.17); --grid2:rgba(140,155,200,.30);
+  --ink:#4f4760; --muted:#8c849c; --paper:#fffdf9; --note:#7286c2; --accent:#d4677f;
+  --curve:#e07f96; --gline:rgba(150,160,200,.20); --halo:#fffdf9;
+  --r-bg:#fbdde1; --r-ink:#c4536a; --r-bd:#f1b3bd;
+  --o-bg:#fde7d1; --o-ink:#c2702a; --o-bd:#f3c597;
+  --g-bg:#d8f0e1; --g-ink:#3a8f61; --g-bd:#a6d8b8;
+  --b-bg:#dde8f8; --b-ink:#4f7cc0; --b-bd:#b0c9ec;
+  --shadow:0 1px 0 rgba(120,100,140,.06),0 10px 26px rgba(120,100,140,.13);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bgimg:linear-gradient(135deg,#302c3e 0%,#2b2f40 50%,#2a3532 100%);
+    --grid:rgba(220,210,255,.07); --grid2:rgba(220,210,255,.12);
+    --ink:#f0ebf6; --muted:#b9b1c9; --paper:#3b384f; --note:#a9b8ec; --accent:#ff9fb3;
+    --curve:#ff9fb3; --gline:rgba(220,210,255,.10); --halo:#3b384f;
+    --r-bg:#5a3a48; --r-ink:#ffb6c3; --r-bd:#8a5567;
+    --o-bg:#5a4632; --o-ink:#ffcf9a; --o-bd:#8a6a45;
+    --g-bg:#2f5041; --g-ink:#a2e2bd; --g-bd:#4f7d63;
+    --b-bg:#33435e; --b-ink:#b3cdf5; --b-bd:#56709a;
+  }
+}
+:root[data-theme="dark"]{
+  --bgimg:linear-gradient(135deg,#302c3e 0%,#2b2f40 50%,#2a3532 100%);
+  --grid:rgba(220,210,255,.07); --grid2:rgba(220,210,255,.12);
+  --ink:#f0ebf6; --muted:#b9b1c9; --paper:#3b384f; --note:#a9b8ec; --accent:#ff9fb3;
+  --curve:#ff9fb3; --gline:rgba(220,210,255,.10); --halo:#3b384f;
+  --r-bg:#5a3a48; --r-ink:#ffb6c3; --r-bd:#8a5567;
+  --o-bg:#5a4632; --o-ink:#ffcf9a; --o-bd:#8a6a45;
+  --g-bg:#2f5041; --g-ink:#a2e2bd; --g-bd:#4f7d63;
+  --b-bg:#33435e; --b-ink:#b3cdf5; --b-bd:#56709a;
+}
+html{height:100%}
+body{margin:0;height:100%;overflow:hidden;background:var(--bgimg);color:var(--ink);
+  font-family:"Zen Maru Gothic","Hiragino Maru Gothic ProN","Yu Gothic",Meiryo,sans-serif;font-weight:700;
+  position:relative;user-select:none;-webkit-user-select:none}
+/* 方眼用紙 */
+#bg{position:fixed;inset:0;overflow:hidden;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(var(--grid2) 1px,transparent 1px),
+    linear-gradient(90deg,var(--grid2) 1px,transparent 1px),
+    linear-gradient(var(--grid) 1px,transparent 1px),
+    linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:140px 140px,140px 140px,28px 28px,28px 28px;
+  background-position:-1px -1px}
+.deco{position:absolute;opacity:.55;animation:float var(--t) ease-in-out infinite;animation-delay:var(--d)}
+.deco.dot{border-radius:50%;background:var(--c)}
+.deco.star{background:var(--c);clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+@keyframes float{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-1.6vmin) rotate(8deg)}}
+
+#stage{position:absolute;z-index:1;left:50%;top:50%;width:1280px;height:720px;
+  transform:translate(-50%,-50%) scale(var(--s,1));transform-origin:center center}
+.slide{position:absolute;inset:0;opacity:0;transform:translateY(24px);pointer-events:none;
+  transition:opacity .45s ease, transform .6s cubic-bezier(.3,1.25,.5,1)}
+.slide.active{opacity:1;transform:none}
+.slide.past{transform:translateY(-24px)}
+h1,h2,.pop{font-family:"Kiwi Maru","Zen Maru Gothic",serif;font-weight:500}
+h1,h2{margin:0;color:var(--ink);letter-spacing:.04em}
+.math{font-family:"STIX Two Text","Times New Roman","Zen Maru Gothic",serif;font-weight:500}
+.cm .math{white-space:nowrap}
+.cm b,.cm .cc{white-space:nowrap}
+.v+sup{margin-left:-.12em}
+.v{font-family:"STIX Two Text","Times New Roman",serif;font-style:italic;font-weight:500;font-size:1.08em;padding-right:.1em}
+sup{font-size:.62em;line-height:0;vertical-align:super;position:relative;top:-.05em;margin-left:1px}
+
+/* 出現 */
+.r{opacity:0;transform:translateY(14px)}
+span.r{display:inline-block}
+.r.show{opacity:1;transform:none;transition:opacity .4s ease,transform .55s cubic-bezier(.3,1.3,.5,1)}
+
+/* カード＋マスキングテープ */
+.card{background:var(--paper);border-radius:6px;box-shadow:var(--shadow);box-sizing:border-box}
+.abs{position:absolute}
+.tape{position:absolute;z-index:4;width:116px;height:30px;opacity:.88;pointer-events:none;
+  clip-path:polygon(2% 0,98% 0,100% 16%,97% 32%,100% 50%,97% 68%,100% 84%,98% 100%,2% 100%,0 84%,3% 68%,0 50%,3% 32%,0 16%)}
+.t-pink{background:repeating-linear-gradient(45deg,rgba(255,255,255,.38) 0 6px,rgba(255,255,255,0) 6px 12px),#f5c2cc}
+.t-mint{background:radial-gradient(circle,rgba(255,255,255,.7) 2px,transparent 2.6px) 0 0/12px 12px,#bfe5d0}
+.t-yellow{background:repeating-linear-gradient(90deg,rgba(255,255,255,.35) 0 4px,rgba(255,255,255,0) 4px 14px),#f8e2a2}
+.t-lav{background:linear-gradient(rgba(255,255,255,.35) 1px,transparent 1px) 0 0/8px 8px,linear-gradient(90deg,rgba(255,255,255,.35) 1px,transparent 1px) 0 0/8px 8px,#d8cdf1}
+.t-blue{background:repeating-linear-gradient(-45deg,rgba(255,255,255,.4) 0 5px,rgba(255,255,255,0) 5px 10px),#c4d8f2}
+
+/* 色の札 */
+.cc{display:inline-block;border-radius:10px;padding:0 9px;margin:0 3px;line-height:1.3;border:2px solid;font-weight:700}
+.cc-r{background:var(--r-bg);color:var(--r-ink);border-color:var(--r-bd)}
+.cc-o{background:var(--o-bg);color:var(--o-ink);border-color:var(--o-bd)}
+.cc-g{background:var(--g-bg);color:var(--g-ink);border-color:var(--g-bd)}
+.cc-b{background:var(--b-bg);color:var(--b-ink);border-color:var(--b-bd)}
+.cc.sm{padding:0 7px;border-radius:8px;margin:0 2px}
+
+/* 式：あとから色がつく */
+.tm{display:inline-block;border-radius:10px;padding:0 2px;margin:0 2px;border:2px solid transparent;line-height:1.3;
+  transition:background .45s,color .45s,padding .45s,border-color .45s}
+.tm.on{padding:0 7px}
+.tm-r.on{background:var(--r-bg);color:var(--r-ink);border-color:var(--r-bd)}
+.tm-o.on{background:var(--o-bg);color:var(--o-ink);border-color:var(--o-bd)}
+.tm-g.on{background:var(--g-bg);color:var(--g-ink);border-color:var(--g-bd)}
+.tm-b.on{background:var(--b-bg);color:var(--b-ink);border-color:var(--b-bd)}
+.tm.ghost{min-width:20px}
+.tm.ghost.on{border-style:dashed;background:transparent}
+.tm.cur{animation:throb .9s ease-in-out 2}
+@keyframes throb{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+
+/* 空らんと、飛んでくる数 */
+.slot{display:inline-block;border-radius:10px;border:2.5px dashed;margin:0 4px;min-width:62px;text-align:center;transition:border-color .3s,background .3s}
+.slot-o{border-color:var(--o-bd);background:color-mix(in srgb,var(--o-bg) 45%,transparent)}
+.slot-g{border-color:var(--g-bd);background:color-mix(in srgb,var(--g-bg) 45%,transparent)}
+.slot:has(.fly.go){border-color:transparent;background:transparent}
+.slot .tm{margin:0}
+.fly{position:relative;z-index:30;opacity:0;transform:translate(var(--fx,0px),var(--fy,0px)) scale(.8)}
+.fly.go{opacity:1;transform:none;transition:transform .95s cubic-bezier(.3,1.15,.45,1),opacity .2s ease}
+
+/* 左：式とグラフ */
+.eqcard{left:40px;top:30px;width:840px;height:490px}
+.rowsw{position:absolute;left:30px;top:30px;width:370px;font-size:28px}
+.er{display:flex;align-items:center;height:60px;white-space:nowrap}
+.lh{opacity:0;transform:translateY(10px);transition:opacity .4s ease,transform .5s cubic-bezier(.3,1.3,.5,1)}
+.lh.show{opacity:1;transform:none}
+.lhs{width:24px;text-align:right;flex:none}
+.eqs{width:40px;text-align:center;flex:none}
+.nt{margin-top:16px;font-size:21px;line-height:1.55;color:var(--ink);padding-left:30px;position:relative;white-space:nowrap}
+.nt::before{content:"";position:absolute;left:6px;top:.5em;width:12px;height:12px;border-radius:50%;background:var(--dotc,#f5c2cc)}
+.nt .math{font-size:24px}
+.nt b{color:var(--accent)}
+.pl{display:flex;gap:8px;align-items:baseline;font-size:20px;line-height:1.45;margin-top:5px;padding-left:4px;white-space:nowrap}
+.pl .no{flex:none;color:#c9a23a;font-weight:900}
+.pl .math{font-size:23px}
+.hasl{position:relative;display:inline-block}
+.lbl{position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:6px;white-space:nowrap;text-align:center;
+  font-family:"Zen Maru Gothic",sans-serif;font-size:17px;line-height:1.3;font-weight:900}
+.lbl .lh{display:inline-block}
+.lbl.lo{color:var(--o-ink)} .lbl.lg{color:var(--g-ink)} .lbl.lr{color:var(--r-ink)}
+.divider{position:absolute;left:404px;top:28px;bottom:28px;border-left:2px dashed var(--gline)}
+.graph{position:absolute;left:412px;top:16px;overflow:visible}
+.gg{stroke:var(--gline);stroke-width:1}
+.ax{stroke:var(--ink);stroke-width:2}
+.axh{fill:var(--ink)}
+.tk{stroke:var(--ink);stroke-width:1.5}
+.gt{font-family:"STIX Two Text","Times New Roman",serif;font-size:20px;fill:var(--ink);font-weight:500}
+.gt.it{font-style:italic}
+.gt.sm{font-size:17px;fill:var(--muted)}
+.halo{paint-order:stroke;stroke:var(--halo);stroke-width:6px;stroke-linejoin:round}
+.gd{stroke:var(--muted);stroke-width:1.6;stroke-dasharray:5 5}
+.axl{stroke:var(--o-ink);stroke-width:2.6;stroke-dasharray:9 7}
+.gt.o{fill:var(--o-ink);font-weight:700}
+.gt.k{fill:var(--accent);font-weight:700}
+.gs{opacity:0;transition:opacity .45s}
+.gs.show{opacity:1}
+.curve{fill:none;stroke:var(--curve);stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1}
+.curve.show{stroke-dashoffset:0;transition:stroke-dashoffset 1.8s ease-in-out}
+.pt circle{fill:var(--accent);stroke:var(--paper);stroke-width:2.5;transform-box:fill-box;transform-origin:center;transform:scale(0);transition:transform .45s cubic-bezier(.3,1.6,.5,1)}
+.pt.show circle{transform:scale(1)}
+.tmp{opacity:0;transition:opacity .35s}
+.tmp.wv-on{opacity:1}
+.tmp path{fill:none;stroke:var(--note);stroke-width:2.4;stroke-dasharray:6 5}
+.tmp polygon{fill:var(--note)}
+
+.pno{position:absolute;left:14px;top:8px;width:60px;height:60px;border-radius:50%;z-index:5;display:flex;align-items:center;justify-content:center;
+  background:var(--paper);border:3px solid var(--r-bd);color:var(--r-ink);font-family:"Kiwi Maru",serif;font-size:30px;
+  box-shadow:0 0 0 5px var(--r-bg),var(--shadow);transform:rotate(-8deg)}
+
+/* 右：答え・基本の形 */
+.lab{position:absolute;left:22px;top:-16px;z-index:5;background:var(--paper);color:var(--accent);border:2px dashed var(--r-bd);border-radius:999px;padding:0 16px;font-size:18px;font-weight:900}
+.memo{left:902px;top:30px;width:330px;height:300px;padding:26px 16px 0}
+.arow{display:flex;align-items:center;height:66px;gap:6px;font-size:30px}
+.arow.gray{color:var(--muted)}
+.al{width:86px;flex:none;font-size:21px;color:var(--ink);text-align:center;font-family:"Zen Maru Gothic",sans-serif;font-weight:700}
+.arow.gray .al{color:var(--muted);font-size:18px}
+.slot-r{border-color:var(--r-bd);background:color-mix(in srgb,var(--r-bg) 45%,transparent);min-width:110px}
+.slot-r .tm{font-family:"Zen Maru Gothic",sans-serif;font-size:24px;font-weight:900}
+.slot-k{border-color:var(--gline);background:color-mix(in srgb,var(--gline) 40%,transparent);min-width:150px}
+.tm-k.on{color:var(--ink)}
+.legend{left:902px;top:352px;width:330px;height:122px;padding:20px 12px 6px;display:flex;flex-direction:column;justify-content:center;gap:8px;align-items:center}
+.legend .l1{font-size:26px}
+.legend .l2{font-size:16px;white-space:nowrap}
+.legend .cc{padding:0 5px;margin:0 1px}
+.lbl.up{top:auto;bottom:100%;margin-top:0;margin-bottom:2px;font-size:16px}
+
+/* 完成シール */
+.done{z-index:6}
+.seal{display:flex;align-items:center;justify-content:center;width:120px;height:120px;border-radius:50%;
+  background:#fff1c2;border:3px dashed #eec36a;color:#c4536a;font-family:"Kiwi Maru",serif;font-size:30px;
+  box-shadow:0 0 0 6px #fff7dc,0 8px 18px rgba(120,100,140,.18);transform:rotate(-12deg)}
+
+/* 基本の形スライド */
+.end-h{position:absolute;left:72px;top:40px}
+.end-h h2{font-size:40px;display:inline-block;background:linear-gradient(transparent 60%,var(--r-bg) 60%);padding:0 8px}
+.fcard{left:48px;top:118px;width:1184px;height:396px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:22px}
+.fr{white-space:nowrap}
+.fr.big{font-size:58px}
+.fr.mid{font-size:44px}
+.fr.chk{font-size:32px;color:var(--muted)}
+.fr .tm{margin:0 4px}
+
+/* 下：コメント */
+.cbar{left:48px;top:542px;width:1184px;height:150px;padding:8px 34px 0 34px;display:grid;align-items:center;z-index:2}
+.cm{grid-area:1/1;word-break:auto-phrase;line-break:strict;text-wrap:pretty;font-size:27px;line-height:1.6;opacity:0;transform:translateY(10px);transition:opacity .35s ease,transform .5s cubic-bezier(.3,1.3,.5,1)}
+.cm.cur{opacity:1;transform:none}
+.cm b{color:var(--accent);font-weight:900}
+
+/* 表紙・おわり */
+.cover{left:96px;top:120px;width:760px;height:460px;padding:56px 60px;transform:rotate(-1.2deg);display:flex;flex-direction:column;justify-content:center}
+.kicker{display:inline-block;align-self:flex-start;background:var(--b-bg);color:var(--b-ink);border-radius:999px;padding:2px 22px;font-size:22px;font-weight:900;margin-bottom:22px}
+.cover h1{font-size:72px;line-height:1.3}
+.cover h1 .mk{background:linear-gradient(transparent 62%,var(--r-bg) 62%);padding:0 4px}
+.cover .sub{margin-top:30px;font-size:34px}
+.cover .sub2{margin-top:18px;font-size:22px;color:var(--muted)}
+.mini{transform:rotate(3deg)}
+.polaroid{left:880px;top:170px;width:300px;height:330px;padding:18px 18px 0;transform:rotate(4deg)}
+.polaroid svg{display:block;background:var(--paper)}
+.polaroid .cap{font-family:"Kiwi Maru",serif;text-align:center;font-size:22px;margin-top:10px;color:var(--muted)}
+
+/* UI */
+#bar{position:absolute;z-index:5;left:0;bottom:0;height:6px;width:0;transition:width .5s cubic-bezier(.3,1.2,.5,1);
+  background:linear-gradient(90deg,#f5b8c4,#f8dc9a,#b7e2c8,#bcd2f2,#d6c8f0)}
+.ui{position:absolute;z-index:5;right:24px;bottom:12px;font-size:14px;color:var(--muted);transition:opacity .3s}
+.ui.hide,#bar.hide{opacity:0}
+#jump{position:fixed;z-index:20;left:12px;bottom:6px;display:flex;gap:6px;align-items:center;transition:opacity .3s}
+#jump.hide{opacity:0;pointer-events:none}
+#jump span{font:700 12px "Zen Maru Gothic",sans-serif;color:var(--muted);margin-right:2px}
+#jump button{font:700 13px "Zen Maru Gothic",sans-serif;min-width:30px;height:26px;padding:0 8px;border-radius:13px;border:1.5px solid var(--r-bd);background:var(--paper);color:var(--ink);cursor:pointer}
+#jump button:hover{background:var(--r-bg)}
+#jump button.on{background:var(--r-bg);color:var(--r-ink)}
+@media (prefers-reduced-motion: reduce){
+  .slide,.r.show,#bar,.tm,.cm,.lh,.curve.show{transition-duration:.01s}
+  .deco,.tm.cur{animation:none}
+}
+
+/* ===== 共通の追加 ===== */
+#jump a.home{font:700 13px "Zen Maru Gothic",sans-serif;height:26px;line-height:22px;padding:0 10px;border-radius:13px;border:1.5px solid var(--b-bd);background:var(--b-bg);color:var(--b-ink);text-decoration:none;box-sizing:border-box;margin-right:6px}
+.cc-n{background:transparent;color:var(--muted);border-color:var(--muted)}
+.tm-n.on{color:var(--muted);border-color:transparent;background:transparent;padding:0 2px}
+.fr .lbl.up{font-size:22px;margin-bottom:6px}
+
+/* ===== 平方完成 ===== */
+.hrows{position:absolute;left:96px;right:8px;top:22px;font-size:34px}
+.hrows .er{height:88px;position:relative}
+.hrows .lhs{width:34px}
+.hrows .eqs{width:46px}
+.hrows .slot{min-width:0;margin:0 2px}
+.bd{flex:none}
+.note{position:absolute;left:520px;top:-30px;bottom:30px;width:196px;display:flex;align-items:center;gap:6px;color:var(--note);font-size:20px;line-height:1.3;white-space:nowrap;
+  font-family:"Zen Maru Gothic",sans-serif;font-weight:900}
+.note svg{flex:none}
+.wv{position:relative;display:inline-block}
+.wl{position:absolute;left:0;right:0;bottom:-12px;height:10px;pointer-events:none;opacity:0;background:var(--accent);
+  -webkit-mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='10' viewBox='0 0 16 10'><path d='M0 5 Q4 0 8 5 T16 5' fill='none' stroke='%23000' stroke-width='3' stroke-linecap='round'/></svg>") repeat-x left center/16px 10px;
+          mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='10' viewBox='0 0 16 10'><path d='M0 5 Q4 0 8 5 T16 5' fill='none' stroke='%23000' stroke-width='3' stroke-linecap='round'/></svg>") repeat-x left center/16px 10px;
+  transition:opacity .35s ease .9s}
+.wv.wv-on .wl{opacity:1;animation:wdraw .6s ease-out;transition:opacity 0s}
+@keyframes wdraw{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+.pg{display:inline-block}
+.dist{position:absolute;left:0;top:0;overflow:visible;pointer-events:none}
+.dg{opacity:0;transition:opacity .3s}
+.dg.wv-on{opacity:1}
+.dg path{fill:none;stroke:var(--note);stroke-width:3.5;stroke-linecap:round;stroke-dasharray:1}
+.dg polygon{fill:var(--note)}
+.dg.wv-on path{animation:ddraw .6s ease-out}
+.dg.wv-on polygon{animation:dpop .25s ease-out .5s backwards}
+@keyframes ddraw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+@keyframes dpop{from{opacity:0}to{opacity:1}}
+.dlbl{position:absolute;top:100%;left:2px;margin-top:-2px;white-space:nowrap;font-family:"Zen Maru Gothic",sans-serif;font-weight:900;font-size:17px;color:var(--note);opacity:0;transition:opacity .3s}
+.dlbl.wv-on{opacity:1}
+.ans{position:relative;display:inline-block;padding-bottom:12px}
+.ulh{position:absolute;left:0;right:0;bottom:0;height:4px;border-radius:3px;background:var(--accent);transform:scaleX(0);transform-origin:left center;transition:transform .5s ease-out}
+.sl{position:absolute;left:100%;bottom:-6px;margin-left:-2px;overflow:visible}
+.sl path{fill:none;stroke:var(--accent);stroke-width:4;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1}
+.ans.ul-on .ulh{transform:scaleX(1);transition-delay:.5s}
+.ans.ul-on .sl .s1{stroke-dashoffset:0;transition:stroke-dashoffset .18s ease-out 1.05s}
+.ans.ul-on .sl .s2{stroke-dashoffset:0;transition:stroke-dashoffset .18s ease-out 1.25s}
+.ct{display:inline-block;border-radius:12px;padding:0 6px;transition:all .4s}
+.ct.on{outline:3px dashed var(--r-bd);outline-offset:4px;animation:throb .9s ease-in-out 2}
+.hmemo{left:902px;top:30px;width:330px;height:250px;padding:26px 18px 0}
+.mrow{display:flex;align-items:center;height:104px;gap:12px}
+.ml{width:146px;flex:none;font-size:23px;line-height:1.25;text-align:center;color:var(--ink)}
+.mbox{flex:1;height:68px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:36px;font-family:"STIX Two Text",serif}
+.mbox.bo{background:color-mix(in srgb,var(--o-bg) 50%,transparent);border:2.5px dashed var(--o-bd)}
+.mbox.bg{background:color-mix(in srgb,var(--g-bg) 50%,transparent);border:2.5px dashed var(--g-bd)}
+.hlegend{left:902px;top:302px;width:330px;height:150px;padding:22px 14px 8px;display:grid;grid-template-columns:1fr 1fr;gap:6px 4px;align-content:center}
+.hlegend .cc{margin:0;padding:0 6px;display:block;text-align:center;white-space:nowrap;font-size:17px}
+
+/* ===== 最大・最小 ===== */
+.slot-w{border-color:var(--gline);background:color-mix(in srgb,var(--gline) 40%,transparent);min-width:190px}
+.slot-w .tm{font-family:"Zen Maru Gothic",sans-serif;font-size:21px;font-weight:900;color:var(--accent)}
+.mmrow{font-size:28px}
+
+/* ===== ことば ===== */
+.wcard{left:40px;top:30px;width:840px;height:490px;padding:44px 40px 0}
+.sent{font-size:25px;line-height:1.5;margin:0 0 26px;padding-left:22px;position:relative}
+.sent::before{content:"";position:absolute;left:0;top:.55em;width:10px;height:10px;border-radius:50%;background:var(--r-bd)}
+.wslot{position:relative;display:inline-block;min-width:118px;height:42px;vertical-align:middle;border:2.5px dashed var(--r-bd);border-radius:10px;text-align:center;margin:2px 6px;
+  background:color-mix(in srgb,var(--r-bg) 35%,transparent);transition:border-color .3s,background .3s;box-sizing:border-box}
+.wslot.sm{min-width:64px}
+.wslot .num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--r-ink);font-size:22px;transition:opacity .3s}
+.wslot:has(.fly.go){border-color:transparent;background:transparent}
+.wslot:has(.fly.go) .num{opacity:0}
+.wslot .tm{margin:0;font-size:24px;line-height:36px}
+.tm-w{border-color:var(--b-bd);background:var(--b-bg);color:var(--b-ink);padding:0 8px;margin:3px 3px;font-size:18px;transition:opacity .4s}
+.tm-w.on{opacity:.35;text-decoration:line-through;padding:0 8px}
+.zcard{left:902px;top:30px;width:330px;height:250px;padding:18px 10px 0;display:flex;justify-content:center}
+.gocard{left:902px;top:302px;width:330px;height:172px;padding:24px 10px 6px;display:flex;flex-wrap:wrap;align-content:center;justify-content:center}
+.hl line{transition:stroke .4s,stroke-width .4s}
+.hl.on line{stroke:var(--accent);stroke-width:4}
+.hl circle{transition:r .4s,fill .4s}
+.hl.on circle{fill:var(--accent)}
+.hl text{transition:fill .4s}
+.hl.on text{fill:var(--accent)}
+
+/* ===== 目次 ===== */
+.mcard{position:absolute;width:250px;height:160px;padding:26px 22px 0;text-decoration:none;color:var(--ink);transition:transform .25s}
+.mcard:hover{transform:translateY(-6px) rotate(0deg) !important}
+.mcard .no{font-family:"Kiwi Maru",serif;font-size:22px;color:var(--accent)}
+.mcard .tt{font-family:"Kiwi Maru",serif;font-size:27px;line-height:1.35;margin-top:6px}
+.mcard .ds{font-size:15px;color:var(--muted);margin-top:8px}
+#jump{flex-wrap:wrap;max-width:calc(100% - 24px)}
+#jump button,#jump a.home,#jump span{white-space:nowrap;flex:none}
+.slot-w{margin:0 2px}
+.slot-w .tm{white-space:nowrap;font-size:18px;padding:0 4px}
+.mcard{height:178px}
+.mcard .tt{font-size:25px}
+
+/* もとの式（平方完成する前） */
+.er.orig{height:40px;font-size:26px}
+.otag{margin-left:12px;font-family:"Zen Maru Gothic",sans-serif;font-size:15px;font-weight:900;color:var(--muted);border:1.5px dashed var(--muted);border-radius:999px;padding:0 10px;line-height:1.5}
+/* 最大値・最小値の強調 */
+.mmring{fill:none;stroke:var(--accent);stroke-width:3;opacity:0;transform-box:fill-box;transform-origin:center}
+.gs.show .mmring{animation:ring 1.8s ease-out infinite}
+.gs.show .mmring.d2{animation-delay:.9s}
+@keyframes ring{0%{transform:scale(.5);opacity:.9}100%{transform:scale(3.2);opacity:0}}
+.popb{transform-box:fill-box;transform-origin:center;transform:scale(0);transition:transform .55s cubic-bezier(.3,1.7,.5,1) .35s}
+.gs.show .popb{transform:scale(1)}
+.mmbadge{fill:var(--accent)}
+.mmbt{fill:var(--paper);font-family:"Zen Maru Gothic",sans-serif;font-weight:900;font-size:19px}
+.gs.show .mmline{animation:march 1s linear infinite}
+@keyframes march{to{stroke-dashoffset:-20}}
+.gs.show .arrw{animation:nudge 1s ease-in-out infinite}
+@keyframes nudge{50%{transform:translate(var(--dx),var(--dy))}}
+@media (prefers-reduced-motion: reduce){ .gs.show .mmring,.gs.show .mmline,.gs.show .arrw{animation:none} .popb{transition-duration:.01s} }
+
+/* ===== スマホ（縦長の画面）：720×1280 の縦の台紙に組みかえ ===== */
+body{touch-action:manipulation}
+@media (hover:none){ .ui{display:none} }
+@media (max-height:500px){ #jump{flex-wrap:nowrap;overflow-x:auto;max-width:calc(100% - 24px)} }
+body.portrait #stage{width:720px;height:1280px;top:calc(50% - 23px)}
+body.portrait .ui{display:none}
+body.portrait #jump{left:0;right:0;bottom:6px;padding:6px 8px;flex-wrap:nowrap;overflow-x:auto;max-width:none;
+  background:color-mix(in srgb,var(--paper) 85%,transparent)}
+body.portrait .cbar{left:20px;top:1010px;width:680px;height:250px;padding:10px 26px 0}
+body.portrait .cm{font-size:26px;line-height:1.55}
+body.portrait .pno{left:4px;top:2px}
+/* グラフ・最大最小 */
+.portrait .t-g .eqcard{left:20px;top:30px;width:680px;height:640px}
+.portrait .t-g .divider{display:none}
+.portrait .t-g .graph{left:310px;top:222px;width:350px;height:393px}
+.portrait .t-g .memo{left:20px;top:700px}
+.portrait .t-g .legend{left:370px;top:700px}
+.portrait .t-g .done{left:560px!important;top:852px!important}
+/* 平方完成 */
+.portrait .t-h .eqcard{left:20px;top:30px;width:680px;height:520px}
+.portrait .t-h .hrows{left:14px;font-size:30px}
+.portrait .t-h .hrows .er{height:92px}
+.portrait .t-h .note{left:470px;width:180px;font-size:17px}
+.portrait .t-h .note svg{width:26px}
+.portrait .t-h .hmemo{left:20px;top:590px;height:260px}
+.portrait .t-h .hlegend{left:370px;top:590px;height:260px}
+.portrait .t-h .done{left:560px!important;top:862px!important}
+/* ことば */
+.portrait .t-w .wcard{left:20px;top:30px;width:680px;height:600px;padding:40px 28px 0}
+.portrait .t-w .zcard{left:20px;top:662px;height:300px;align-items:center}
+.portrait .t-w .gocard{left:370px;top:662px;height:300px}
+.portrait .t-w .done{left:574px!important;top:880px!important}
+/* 基本のスライド */
+.portrait .t-b .end-h{left:40px;top:40px}
+.portrait .t-b .end-h h2{font-size:34px}
+.portrait .t-b .fcard{left:20px;top:116px;width:680px;height:860px;padding:0 26px;gap:30px}
+.portrait .t-b .fr{white-space:normal;text-align:center;line-height:1.5}
+.portrait .t-b .fr.big{font-size:46px!important}
+.portrait .t-b .fr.mid{font-size:30px!important}
+.portrait .t-b .fr.chk{font-size:26px}
+/* 表紙・おわり */
+.portrait .t-c .cover{left:40px!important;top:110px!important;width:640px;height:560px!important;padding:44px 40px}
+.portrait .t-c .cover h1{font-size:60px}
+.portrait .t-c .cover .sub{font-size:28px}
+.portrait .t-c .polaroid{left:210px;top:740px}
+/* 目次 */
+.portrait .mtitle h2{font-size:31px!important}
+.portrait .toplink{left:60px!important;right:auto!important;top:150px!important}
+
+/* スマホで ページの幅が広がらないように、画面の外にはみ出した部分は 必ず切り取る */
+html{overflow:hidden;height:100%}
+body{overflow:hidden;height:100%;width:100%}
+
+/* ===== ２学期期末考査まで ===== */
+/* 表紙の写真：式が かけ算の形に 変わる */
+.fpol{width:264px;height:250px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background-color:var(--paper);
+  background-image:linear-gradient(var(--gline) 1px,transparent 1px),linear-gradient(90deg,var(--gline) 1px,transparent 1px);background-size:24px 24px}
+.fpol .fa{font-size:28px}
+.fpol .fv{font-size:17px;color:var(--accent);font-weight:900}
+.fpol .fb{font-size:30px;background:linear-gradient(transparent 60%,var(--r-bg) 60%);padding:0 4px}
+
+/* 4つのパターン */
+.pcards{position:absolute;left:48px;top:112px;width:1184px;height:410px}
+.pcw{position:absolute;width:578px;height:196px}
+.pcw.p1{left:0;top:0}.pcw.p2{left:606px;top:0}.pcw.p3{left:0;top:216px}.pcw.p4{left:606px;top:216px}
+.pc{position:absolute;inset:0;padding:14px 30px 8px;display:flex;flex-direction:column;justify-content:center;gap:10px}
+.pc-f{font-size:36px;line-height:1.25;white-space:nowrap}
+.pc-k{font-size:19px;color:var(--muted);white-space:nowrap}
+.ct-b{color:var(--b-ink);font-weight:700}.ct-g{color:var(--g-ink);font-weight:700}.ct-r{color:var(--r-ink);font-weight:700}
+.p1 .pc{transform:rotate(-.7deg)}.p2 .pc{transform:rotate(.6deg)}.p3 .pc{transform:rotate(.5deg)}.p4 .pc{transform:rotate(-.6deg)}
+.pc-h{font-family:"Kiwi Maru",serif;font-size:25px;display:flex;align-items:center;gap:12px}
+.pc-no{width:40px;height:40px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex:none;
+  background:var(--r-bg);color:var(--r-ink);border:2px solid var(--r-bd);font-size:21px}
+.kw{color:var(--accent);font-weight:900;border-bottom:2.5px solid var(--r-bd);padding:0 2px;margin:0 2px}
+.xr{color:var(--r-ink)}
+
+/* 因数分解の 1問 */
+.fxcard{left:40px;top:30px;width:600px;height:490px}
+.fxpat{position:absolute;left:62px;top:20px;font-size:17px;font-weight:900;color:var(--accent);border:2px dashed var(--r-bd);border-radius:999px;padding:1px 14px}
+.fxrows{position:absolute;left:40px;right:16px;top:66px;font-size:44px}
+.fxr{display:flex;align-items:center;height:96px;white-space:nowrap;position:relative}
+.fxr .eqs{width:58px}
+.fxr .tm{margin:0 3px}
+/* 数の右上に そえる メモ（9 ＝ 3² など） */
+.upnote{position:absolute;left:78%;bottom:82%;white-space:nowrap;font-size:26px;color:var(--g-ink);background:var(--paper);
+  border:2px dashed var(--g-bd);border-radius:12px;padding:0 10px;line-height:1.4;transform:rotate(-4deg)}
+.upnote.show{transform:rotate(-4deg)}
+.upnote.un-r{color:var(--r-ink);border-color:var(--r-bd);background:var(--r-bg);font-size:28px;padding:0 9px;left:92%;bottom:84%}
+.fxrows .slot{min-width:46px;margin:0 2px}
+.fxrows .slot-r{min-width:40px}
+.fxrows .slot-r .tm{font-family:inherit;font-size:inherit;font-weight:inherit}
+.fxdone{left:506px;top:58px}
+/* 考え方（大きく） */
+.think{left:662px;top:30px;width:570px;height:490px;padding:30px 28px 10px;display:flex;flex-direction:column}
+.tg{font-size:22px;text-align:center;padding:2px 0 12px;margin-bottom:6px;border-bottom:2px dashed var(--gline);white-space:nowrap}
+.tg .cc{font-family:"STIX Two Text",serif;font-size:24px}
+.ts{display:flex;gap:16px;align-items:flex-start;padding:14px 0 10px}
+.ts-n{flex:none;width:40px;height:40px;margin-top:4px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:var(--o-bg);color:var(--o-ink);border:2px solid var(--o-bd);font-size:21px;font-weight:900}
+.ts-l{font-size:21px;color:var(--muted)}
+.ts-m{font-size:40px;line-height:1.3;white-space:nowrap}
+.ts-m .cc,.ts-m .tm{font-size:38px;padding:0 10px}
+.ts-s{font-size:19px;color:var(--note);white-space:nowrap}
+.ts-s .math{font-size:21px}
+.dim{color:var(--muted)}
+
+/* スマホ（縦長） */
+.portrait .t-p .end-h{left:40px;top:40px}
+.portrait .t-p .end-h h2{font-size:34px}
+.portrait .t-p .pcards{left:20px;top:116px;width:680px;height:870px}
+.portrait .t-p .pcw{left:0!important;width:680px;height:200px}
+.portrait .t-p .pcw.p2{top:220px}.portrait .t-p .pcw.p3{top:440px}.portrait .t-p .pcw.p4{top:660px}
+.portrait .t-x .fxcard{left:20px;top:30px;width:680px;height:500px}
+.portrait .t-x .fxrows{left:24px;font-size:34px}
+.portrait .t-x .think{left:20px;top:552px;width:680px;height:436px;padding-top:26px}
+.portrait .t-x .ts{padding:5px 0 3px}
+.portrait .t-x .fxdone{left:560px;top:330px}
+
+/* ===== 2次方程式（因数分解で解く） ===== */
+.qecard{left:48px;top:30px;width:1184px;height:490px}
+.q0{position:absolute;left:48px;top:30px;font-size:40px;white-space:nowrap}
+.q1{position:absolute;left:48px;top:108px;height:66px;display:flex;align-items:center;font-size:38px;white-space:nowrap}
+.qf{display:inline-flex;align-items:center;justify-content:center;height:66px}
+.qf-b{background:var(--b-bg)} .qf-o{background:var(--o-bg)}
+.qz{margin-left:14px}
+.qlab{position:absolute;top:40px;display:flex;align-items:center;gap:8px;color:var(--accent);font-size:28px;font-weight:900;white-space:nowrap}
+.qlab path{stroke-dasharray:1;stroke-dashoffset:1} .qlab polygon{opacity:0}
+.qlab .gs.show path{stroke-dashoffset:0;transition:stroke-dashoffset .5s ease-out}
+.qlab .gs.show polygon{opacity:1;transition:opacity .15s .45s}
+.qlab .gs{opacity:1}
+.lh.late.show{transition-delay:.7s}
+.qarr{position:absolute;left:0;top:174px;overflow:visible}
+.qarr line{stroke-width:3}
+.qb{position:absolute;top:232px;height:136px;display:flex;align-items:center;justify-content:center;font-size:32px}
+.qlines{display:grid;grid-template-columns:auto auto auto;column-gap:12px;row-gap:26px;align-items:center}
+.qc0{justify-self:end;white-space:nowrap} .qc2{justify-self:start;white-space:nowrap}
+.qlines .late.show{transition-delay:.7s}
+.qb .tm{margin:0 2px;line-height:1.15}
+.mva{position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+.mva path{fill:none;stroke:var(--accent);stroke-width:3;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1}
+.mva .gs.show path{stroke-dashoffset:0;transition:stroke-dashoffset .55s ease-out .1s}
+.mva polygon{opacity:0} .mva .gs.show polygon{opacity:1;transition:opacity .15s .6s}
+.mva polygon{fill:var(--accent)}
+.qb-b{background:color-mix(in srgb,var(--b-bg) 70%,transparent)} .qb-o{background:color-mix(in srgb,var(--o-bg) 70%,transparent)}
+.q3{position:absolute;left:120px;top:388px;height:72px;display:flex;align-items:center;font-size:38px;white-space:nowrap}
+.qx{margin-right:14px}
+.qa{display:inline-flex;align-items:center;min-width:240px;height:72px;padding:0 18px;background:color-mix(in srgb,var(--b-bg) 45%,transparent);border-radius:6px}
+.qa .slot{min-width:56px;margin:0 4px}
+.qcm{margin:0 4px}
+.qdup{display:inline-flex;align-items:center;max-width:240px;transition:max-width .6s ease .35s,opacity .4s ease}
+.qdup.on{max-width:0;opacity:0;overflow:hidden}
+.slot-b{border-color:var(--b-bd);background:color-mix(in srgb,var(--b-bg) 45%,transparent)}
+.qjyu{margin-left:36px;display:inline-flex;align-items:center;justify-content:center;width:170px;height:72px;background:var(--r-bg);color:var(--r-ink);
+  font-family:"Kiwi Maru",serif;font-size:32px;border-radius:6px}
+.qpt{position:absolute;left:780px;top:46px;width:360px;height:220px;border:2.5px dashed var(--r-bd);border-radius:14px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px}
+.qpt .lab{left:18px}
+.qpt-m{font-size:38px;display:flex;align-items:center;gap:10px}
+.qs{display:inline-block;width:54px;height:46px;border-radius:6px}
+.qs-b{background:var(--b-bg)} .qs-o{background:var(--o-bg)}
+.qpt-t{font-size:26px;color:var(--accent);font-weight:900}
+.qdone{left:1080px;top:380px}
+/* 分数 */
+.fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;font-size:.8em;line-height:1.1;margin:0 2px}
+.fr>span:first-child{border-bottom:2px solid currentColor;padding:0 3px}
+.cm .fr{font-size:.75em}
+.qb .fr{font-size:.95em}
+.qdiv{margin-left:10px;font-family:"Zen Maru Gothic",sans-serif;font-size:18px;font-weight:900;color:var(--note);border:2px solid var(--b-bd);border-radius:999px;padding:0 8px;vertical-align:middle}
+/* 3行の 箱（①-3）：全体を 少し 上に つめる */
+.qtall .q0{top:44px} .qtall .q1{top:112px} .qtall .qlab{top:44px} .qtall .qarr{top:178px}
+.qtall .qb{top:234px;height:186px;font-size:28px} .qtall .qlines{row-gap:14px} .qtall .q3{top:426px;height:58px} .qtall .qa,.qtall .qjyu{height:58px}
+.qtall .q0 .upnote{left:55%;bottom:100%;font-size:22px}
+/* ※注意！ */
+.ncard{left:48px;top:30px;width:1184px;height:490px;padding:40px 60px;display:flex;flex-direction:column;align-items:center;gap:18px;
+  background:color-mix(in srgb,var(--g-bg) 45%,var(--paper))}
+.n-h{align-self:flex-start;font-size:30px;font-weight:900}
+.n-t{font-size:30px;color:var(--b-ink);font-weight:900}
+.n-eq{display:flex;align-items:flex-start;gap:4px;font-size:46px;margin-top:16px;white-space:nowrap}
+.n-c{display:flex;flex-direction:column;align-items:center}
+.n-u{display:flex;align-items:center;height:66px;line-height:1;border-bottom:4px dotted;padding:0 2px}
+.n-u.b{border-color:var(--b-ink)} .n-u.o{border-color:var(--o-ink)}
+.n-v{font-size:38px;line-height:1.2;text-align:center;margin-top:8px}
+.n-v.b{color:var(--b-ink)} .n-v.o{color:var(--o-ink)}
+.n-z{margin-left:10px;height:66px;display:flex;align-items:center;line-height:1}
+.n-tri{align-self:flex-end;margin:0 0 6px 50px;font-family:"Zen Maru Gothic",sans-serif;font-size:30px;color:#d9443a;font-weight:900}
+.n-tri b{font-size:56px;vertical-align:-8px;margin-left:6px}
+.n-last{font-size:28px;color:var(--b-ink);font-weight:900}
+/* スマホ（縦長） */
+.portrait .t-q .qecard{left:20px;top:30px;width:680px;height:960px}
+.portrait .t-q .qtall .qpt{top:640px}
+.portrait .t-q .qpt{left:40px;top:610px;width:600px;height:190px}
+.portrait .t-q .qjyu{position:absolute;left:0;top:96px;margin:0}
+.portrait .t-q .q3{left:48px}
+.portrait .t-q .qdone{left:540px;top:840px}
+.portrait .t-n .ncard{left:20px;top:30px;width:680px;height:960px;padding:40px 30px;justify-content:center}
+.portrait .t-n .n-t{font-size:24px;text-align:center}
+.portrait .t-n .n-eq{flex-wrap:wrap;justify-content:center}
+.portrait .t-n .n-tri{margin:20px 0 0;width:100%;text-align:center}
+
+/* ===== 解の公式（①-4）：プリントの 色の 枠 ===== */
+:root{--pb:#dbe6f2;--pr:#f2dbdb;--pl:#dbedf5}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){--pb:#34425a;--pr:#5a3a44;--pl:#2f4a55} }
+:root[data-theme="dark"]{--pb:#34425a;--pr:#5a3a44;--pl:#2f4a55}
+.kcard{left:48px;top:30px;width:1184px;height:490px}
+.ksv{position:absolute;left:0;top:0;overflow:visible;pointer-events:none}
+.ksv line,.ksv polyline{stroke-linecap:round}
+.kb0{position:absolute;display:flex;align-items:center;justify-content:center}
+.kpb{background:var(--pb)} .kpr{background:var(--pr)} .kpl{background:var(--pl)} .kpn{background:transparent}
+.kin{font-family:"STIX Two Text","Times New Roman",serif;font-size:30px;white-space:nowrap;display:flex;align-items:center;justify-content:center;width:100%;height:100%}
+.ktx{position:absolute;display:flex;align-items:center;white-space:nowrap}
+.ktitle{font-size:27px}
+.kxe{font-size:38px;justify-content:center}
+.kpm{font-size:36px;justify-content:center;font-family:"STIX Two Text",serif}
+.klab{font-size:19px;color:#c4536a;font-weight:900}
+.kabc{position:absolute;display:flex;align-items:center;gap:22px;font-family:"STIX Two Text",serif;font-size:26px;white-space:nowrap}
+.ka{color:#c4536a} .kb{color:#5e9a3a} .kc{color:var(--b-ink)}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .ka{color:#ffb6c3} :root:not([data-theme="light"]) .kb{color:#a8dc8a} }
+:root[data-theme="dark"] .ka{color:#ffb6c3} :root[data-theme="dark"] .kb{color:#a8dc8a}
+.ov{border-top:2px solid currentColor;padding:0 2px;margin-left:1px}
+.kfr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.15}
+.kfr>span:first-child{border-bottom:2px solid currentColor;padding:0 4px 2px}
+.kfr>span:last-child{padding-top:2px}
+.kin .kfr{font-size:28px}
+.kref{position:absolute;left:996px;top:26px;width:174px;height:120px;border:2.5px dashed var(--b-bd);border-radius:12px;display:flex;align-items:center;justify-content:center}
+.kref .lab{left:14px;color:var(--b-ink);border-color:var(--b-bd)}
+.kfx{font-size:18px;white-space:nowrap;display:inline-flex;align-items:center;gap:4px}
+.kfx .kfr>span:first-child{border-bottom-width:1.5px}
+.kfx.big{font-size:54px;gap:12px}
+.kfx.big .kfr>span:first-child{border-bottom-width:3px;padding:0 10px 4px}
+.kfx.big .ov{border-top-width:3px}
+.kdone{left:1100px;top:390px}
+.kcalc .kin{font-size:23px}
+.ktitle .v+sup{margin-right:4px}
+/* 公式の スライド（プリントの 上の 青い枠） */
+.kfcard{left:48px;top:40px;width:1184px;height:470px;border:4px solid var(--b-ink)}
+.kf-h{position:absolute;left:60px;top:44px;font-size:34px;font-weight:900}
+.kf-c{position:absolute;left:330px;top:50px;font-family:"STIX Two Text",serif;font-size:30px}
+.kf-m{position:absolute;left:0;right:340px;top:150px;display:flex;justify-content:center}
+.kf-k{position:absolute;right:70px;top:230px;font-family:"Kiwi Maru",serif;font-size:56px;color:var(--b-ink)}
+/* スマホ（縦長）：プリントと 同じ 並びを 保つため、カードごと 縮める */
+.portrait .t-k .kcard{left:20px;top:150px;transform-origin:top left;transform:scale(.574)}
+.portrait .t-k .kdone{left:560px;top:450px}
+.portrait .t-f .kfcard{left:20px;top:300px;transform-origin:top left;transform:scale(.574)}
+.kwr{display:inline-block;white-space:nowrap;line-height:1.2}
+.knote{position:absolute;display:flex;align-items:center;justify-content:center;font-family:"STIX Two Text",serif;font-size:21px;color:var(--note)}
+.khf{display:grid;grid-template-rows:1fr 1fr;width:100%;height:100%}
+.khf>span{display:flex;align-items:center;justify-content:center}
+.kin .fr{font-size:.85em}
+
+.kjyu{font-family:"Kiwi Maru",serif;font-size:26px;color:var(--r-ink)}
+.kjp{font-family:"Zen Maru Gothic",sans-serif;font-weight:900;font-size:28px;color:var(--accent)}
+
+/* ===== プリントの 画像を 背景に した スライド ===== */
+.pgcard{left:48px;top:30px;width:1184px;height:490px;background:#fff}
+.pgimg{position:absolute;display:block;user-select:none;pointer-events:none}
+.pgsv{position:absolute;overflow:hidden;pointer-events:none}
+.pgdone{left:1120px;top:548px;transform:scale(.8);z-index:6}
+.pgc{stroke:#d4677f;stroke-width:1.4}
+.pgp{fill:none;stroke:#f08a2a;stroke-width:3.6;stroke-linecap:round;opacity:.6}
+.pgd{fill:#e0465e;stroke:#e0465e;stroke-width:.9}
+.pgd.op{fill:#fff}
+.pgt{font-family:"STIX Two Text",serif;font-size:7.5px;fill:#333}
+.pga{position:absolute;display:flex;align-items:center;justify-content:center;color:#c0304e;font-family:"STIX Two Text","Zen Maru Gothic",serif;font-weight:500;white-space:nowrap}
+.pga.al{justify-content:flex-start;padding-left:6px}
+.pga .kfr{font-size:.85em}
+.pga .ja{font-family:"Zen Maru Gothic",sans-serif;font-weight:900}
+.pgm{position:absolute;border:3px solid #e0465e;border-radius:10px;background:rgba(255,214,90,.18);opacity:0;transition:opacity .35s;pointer-events:none;margin:-4px;padding:4px;box-sizing:content-box}
+.pgm.wv-on{opacity:1}
+.pgcard .ov{border-top-color:currentColor}
+.portrait .t-pg .pgcard{left:20px;top:150px;transform-origin:top left;transform:scale(.574)}
+
+/* ===== 手書き ===== */
+#ink{position:fixed;left:0;top:0;z-index:15;pointer-events:none;touch-action:none}
+body.inking #ink{pointer-events:auto;cursor:crosshair}
+/* ペンを 使う 端末では、さわった瞬間に スクロール判定で 線が 切れないように する */
+body.pen-dev, body.pen-dev *{touch-action:none}
+#inkbar{position:fixed;z-index:25;right:12px;top:10px;display:flex;align-items:center;gap:6px;padding:5px;border-radius:999px;
+  background:color-mix(in srgb,var(--paper) 88%,transparent);box-shadow:var(--shadow);transition:opacity .3s}
+#inkbar.hide{opacity:0;pointer-events:none}
+#inkbar button{font:900 15px "Zen Maru Gothic",sans-serif;height:36px;min-width:36px;padding:0 10px;border-radius:18px;border:2px solid var(--r-bd);background:var(--paper);color:var(--ink);cursor:pointer}
+#inkbar .ink-tg{font-size:18px}
+body.inking #inkbar .ink-tg{background:var(--accent);border-color:var(--accent);color:var(--paper)}
+#inkbar .ink-tools{display:none;gap:6px;align-items:center}
+body.inking #inkbar .ink-tools{display:flex}
+#inkbar .ink-c{width:36px;padding:0;background:var(--c);border-color:transparent}
+#inkbar .ink-c.sel{box-shadow:0 0 0 3px var(--paper),0 0 0 6px var(--c)}
+#inkbar .ink-er.sel{background:var(--r-bg)}
+#inkbar .ink-w{width:36px;padding:0;display:flex;align-items:center;justify-content:center;border-color:var(--gline)}
+#inkbar .ink-w i{display:block;border-radius:50%;background:var(--ink)}
+#inkbar .ink-w.sel{border-color:var(--accent);background:var(--r-bg)}
+#inkbar .ink-sep{width:1px;height:24px;background:var(--gline);margin:0 2px}
+body.portrait #inkbar .ink-tools{flex-wrap:wrap;max-width:calc(100vw - 70px)}
+body.portrait #inkbar{top:6px;right:6px}
+
+</style>
+</head>
+<body>
+<div id="bg"></div>
+<div id="stage"></div>
+<div id="bar"></div>
+<div class="ui" id="ui"></div>
+<div id="jump"></div>
+<script>
+/* ====== 小道具 ====== */
+const K  = (k,t) => `<span class="cc cc-${k} sm">${t}</span>`;
+const M  = t => `<span class="math">${t}</span>`;
+const S  = (n,html,cls='') => `<span class="r ${cls}" data-s="${n}">${html}</span>`;
+const tm = (k,t,o,x='') => `<span class="tm tm-${k}" data-o="${o}"${x}>${t}</span>`;
+const TP = (c,css) => `<span class="tape t-${c}" style="${css}"></span>`;
+const ab = Math.abs;
+const fmt = n => n<0 ? '−'+ab(n) : String(n);
+const sgn = n => (n<0 ? '− ' : '＋ ') + ab(n);
+const sf  = n => (n<0 ? '−' : '＋') + ab(n);
+const P2='<sup>2</sup>', X2='x<sup>2</sup>';
+const slotC = (k,txt,f,src) => `<span class="slot slot-${k}"><span class="tm tm-${k} on fly" data-f="${f}" data-src="${src}">${txt}</span></span>`;
+const cbar = list => `<div class="card abs cbar">${TP('mint','left:-30px;top:2px;transform:rotate(-38deg)')}${TP('mint','right:-30px;top:2px;transform:rotate(38deg)')}<div class="lab">いま やっていること</div>${list.map((c,i)=>`<div class="cm" data-m="${i}">${c}</div>`).join('')}</div>`;
+const SEAL = s => `<div class="abs r done" data-s="${s}" style="left:1146px;top:456px"><div class="seal">完成！</div></div>`;
+/* ax²＋bx＋c を 文字列に */
+function polyStr(a,b,c){
+  let s = `${a===1?'':a===-1?'−':fmt(a)}x${P2}`;
+  if(b) s += ` ${b<0?'−':'＋'} ${ab(b)===1?'':ab(b)}x`;
+  if(c) s += ` ${c<0?'−':'＋'} ${ab(c)}`;
+  return s;
+}
+
+/* ====== グラフ（SVG） ====== */
+const GW=410, GH=460;
+function graphSVG(P,st){
+  const {a,p,q,x1,y1}=P;
+  const xs=[p-2,p+2,0,x1], ys=[q,y1,0,q+Math.sign(a)*Math.min(ab(a)*4,6)];
+  const xmin=Math.min(...xs)-.9, xmax=Math.max(...xs)+.9, ymin=Math.min(...ys)-.9, ymax=Math.max(...ys)+.9;
+  const u=Math.min(GW/(xmax-xmin), GH/(ymax-ymin), 48);
+  const ox=GW/2-u*(xmin+xmax)/2, oy=GH/2+u*(ymin+ymax)/2;
+  const X=x=>+(ox+u*x).toFixed(1), Y=y=>+(oy-u*y).toFixed(1);
+  const vx0=-ox/u, vx1=(GW-ox)/u, vy0=(oy-GH)/u, vy1=oy/u;
+  let s='';
+  for(let i=Math.ceil(vx0);i<=Math.floor(vx1);i++) s+=`<line class="gg" x1="${X(i)}" y1="0" x2="${X(i)}" y2="${GH}"/>`;
+  for(let j=Math.ceil(vy0);j<=Math.floor(vy1);j++) s+=`<line class="gg" x1="0" y1="${Y(j)}" x2="${GW}" y2="${Y(j)}"/>`;
+  /* 座標軸 */
+  s+=`<line class="ax" x1="2" y1="${Y(0)}" x2="${GW-4}" y2="${Y(0)}"/><polygon class="axh" points="${GW+2},${Y(0)} ${GW-11},${Y(0)-6} ${GW-11},${Y(0)+6}"/>`;
+  s+=`<line class="ax" x1="${X(0)}" y1="${GH-2}" x2="${X(0)}" y2="6"/><polygon class="axh" points="${X(0)},0 ${X(0)-6},13 ${X(0)+6},13"/>`;
+  s+=`<text class="gt it" x="${GW-6}" y="${Y(0)+24}">x</text><text class="gt it" x="${X(0)+10}" y="16">y</text><text class="gt it" x="${X(0)-18}" y="${Y(0)+20}">O</text>`;
+  for(let i=Math.ceil(vx0);i<=Math.floor(vx1);i++) if(i) s+=`<line class="tk" x1="${X(i)}" y1="${Y(0)-4}" x2="${X(i)}" y2="${Y(0)+4}"/>`;
+  for(let j=Math.ceil(vy0);j<=Math.floor(vy1);j++) if(j) s+=`<line class="tk" x1="${X(0)-4}" y1="${Y(j)}" x2="${X(0)+4}" y2="${Y(j)}"/>`;
+  /* 放物線 */
+  const yedge = a>0 ? vy1-.15 : vy0+.15;
+  const d = Math.min(Math.sqrt((yedge-q)/a), p-vx0-.1, vx1-p-.1);
+  let path=''; for(let i=0;i<=80;i++){ const x=p-d+2*d*i/80; path+=(i?'L':'M')+X(x)+' '+Y(a*(x-p)**2+q)+' '; }
+  s+=`<path class="curve" data-s="${st.cu}" pathLength="1" d="${path}"/>`;
+  /* 頂点（原点のときはラベルなし） */
+  const vlab = a>0 ? Y(q)+30 : Y(q)-16;
+  if(p||q) s+=`<g class="gs" data-s="${st.pv}"><text class="gt k halo" x="${X(p)+(p<=0?-6:6)}" y="${vlab}" text-anchor="${p<=0?'end':'start'}">(${fmt(p)}, ${fmt(q)})</text></g>`;
+  s+=`<g class="pt" data-s="${st.pv}"><circle cx="${X(p)}" cy="${Y(q)}" r="7"/></g>`;
+  /* もう1点 */
+  if(!P.noPt){
+    const [an,dx] = x1>=p ? ['start',11] : ['end',-11];
+    s+=`<g class="gs" data-s="${st.ptg}"><text class="gt k halo" x="${X(x1)+dx}" y="${y1===0?Y(y1)-12:Y(y1)+7}" text-anchor="${an}">(${fmt(x1)}, ${fmt(y1)})</text></g>`;
+    s+=`<g class="pt" data-s="${st.ptg}"><circle cx="${X(x1)}" cy="${Y(y1)}" r="6"/></g>`;
+  }
+  if(P.extra) s+=P.extra({X,Y,d,u});
+  return `<svg class="graph" width="${GW}" height="${GH}" viewBox="0 0 ${GW} ${GH}">${s}</svg>`;
+}
+
+/* ====== 式の読みとり（形・横・縦） ====== */
+function readEq(P,st){
+  const {a,p,q}=P;
+  const aS = a===1 ? '' : a===-1 ? '−' : fmt(a);
+  const qT = q===0 ? '' : ` ${q<0?'−':'＋'} ${ab(q)}`;
+  const body = p===0 ? `x${P2}` : `(x ${p<0?'＋':'−'} ${ab(p)})${P2}`;
+  const eqTxt = `y ＝ ${aS}${body}${qT}`;
+  const up = a>0, dir = up ? '下に凸' : '上に凸';
+  const aC = a===1 ? 'なし' : a===-1 ? '−' : fmt(a);
+  const pC = p===0 ? 'なし' : p<0 ? `＋${-p}` : `−${p}`;
+  const qC = q===0 ? 'なし' : `${q<0?'−':'＋'}${ab(q)}`;
+  const V = `(${fmt(p)}, ${fmt(q)})`;
+  const cm = [
+    `基本の形 ${M('y ＝ a(x − p)² ＋ q')} と 見くらべよう。　${K('r',aC)} が <b>形</b>、${K('o',pC)} が <b>横</b>、${K('g',qC)} が <b>縦</b> だよ。`,
+    a===1  ? `<b>形</b> は x² の前に 何も 書いていない ので <b>1</b>、つまり <b>＋</b>。　だから グラフの 向きは <b>${dir}</b>。`
+    : a===-1 ? `<b>形</b> は ${K('r','−')}（−1 の 1 が 省略されている）。　だから グラフの 向きは <b>${dir}</b>。`
+    : `<b>形</b> の ${K('r',aC)} は ${up?'＋':'−'}。　だから グラフの 向きは <b>${dir}</b>。`,
+    p===0 ? `<b>横</b> の かっこ が ない ので、頂点の <b>x座標</b> は <b>0</b>。`
+          : `<b>横</b> の ${K('o',pC)} は 頂点の <b>x座標</b>。　<b>プラスマイナスが逆転</b> して → <b>${fmt(p)}</b>`,
+    q===0 ? `<b>縦</b> の 数 が ない ので、頂点の <b>y座標</b> は <b>0</b>。　　頂点は ${M(V)}。`
+          : `<b>縦</b> の ${K('g',qC)} は 頂点の <b>y座標</b>。　<b>そのまま</b> → <b>${fmt(q)}</b>　　頂点は ${M(V)}。`
+  ];
+  const lb = (s,cls,t) => `<span class="lbl ${cls}"><span class="lh" data-s="${s}">${t}</span></span>`;
+  const top = (cls,t) => lb(st.col,`up ${cls}`,t);
+  const gtm = (k,o,x='') => `<span class="tm tm-${k} ghost" data-o="${o}"${x}>&nbsp;</span>`;
+  const aPart = `<span class="hasl"${p===0?' style="margin-right:20px"':''}>${aS?tm('r',aS,st.col,' data-k="a"'):gtm('r',st.col,' data-k="a"')}${top('lr','形')}${lb(st.dir,'lr',(up?(a===1?'1 →':'＋ →'):'− →')+'<br>'+dir)}</span>`;
+  const pPart = p===0
+    ? `<span class="hasl">${tm('o',`x${P2}`,st.col,' data-k="p"')}${top('lo','横')}${lb(st.vx,'lo','なし<br>→ 0')}</span>`
+    : `( x <span class="hasl">${tm('o',sgn(-p),st.col,' data-k="p"')}${top('lo','横')}${lb(st.vx,'lo','±逆転<br>→ '+fmt(p))}</span> )${P2}`;
+  const qPart = `<span class="hasl" style="margin-left:${p===0?20:6}px">${q===0?gtm('g',st.col,' data-k="q"'):tm('g',sgn(q),st.col,' data-k="q"')}${top('lg','縦')}${lb(st.vy,'lg',q===0?'なし<br>→ 0':'そのまま<br>→ '+fmt(q))}</span>`;
+  const r0 = `<div class="er" style="margin-top:12px"><span class="lhs">y</span><span class="eqs">＝</span><span>${aPart}${pPart}${qPart}</span></div>`;
+  const rowDir = `<div class="arow"><span class="al">向き</span>${slotC('r',dir,st.dir,'a')}</div>`;
+  const rowV = `<div class="arow math"><span class="al">頂点</span>(${slotC('o',fmt(p),st.vx,'p')},${slotC('g',fmt(q),st.vy,'q')})</div>`;
+  return {aS,qT,eqTxt,up,dir,V,cm,r0,rowDir,rowV};
+}
+/* 平方完成する前の式（もとの式）。kst：数だけの項を青く光らせる番（なければ光らせない） */
+function origRow(o,kst){
+  const cpart = o.c ? tm('b',sgn(o.c),kst===undefined?99:kst) : (kst!==undefined ? S(kst,K('b','＋ 0')) : '');
+  return `<div class="er orig"><span class="lhs">y</span><span class="eqs">＝</span><span>${polyStr(o.a,o.b,0)} ${cpart}</span><span class="otag">もとの式</span></div>`;
+}
+function topRows(P,R){
+  if(!P.orig) return `<div class="rowsw math" style="font-size:32px">${R.r0}</div>`;
+  return `<div class="rowsw math" style="font-size:32px;top:22px">${origRow(P.orig,P.kst)}`
+    + R.r0.replace('margin-top:12px','margin-top:34px').replace('<span class="lhs">y</span>','<span class="lhs"></span>') + `</div>`;
+}
+const LEGEND = `<div class="card abs legend">${TP('lav','right:24px;top:-14px;transform:rotate(-5deg)')}
+    <div class="lab">基本の形</div>
+    <div class="l1 math">y ＝ ${K('r','a')}(x − ${K('o','p')})${P2} ＋ ${K('g','q')}</div>
+    <div class="l2">${K('r','形')}向き　${K('o','横')}x座標　${K('g','縦')}y座標</div>
+  </div>`;
+const EQTAPE = `${TP('pink','left:-34px;top:4px;transform:rotate(-40deg)')}${TP('pink','right:-34px;top:4px;transform:rotate(40deg)')}`;
+
+/* ====== グラフ・頂点・軸 の 1問 ======
+   P = {num, a, p, q}　　y軸との交点を もとの式から読むとき：yint:c, orig:{a,b} */
+function genGraph(P){
+  const {num,a,p,q}=P;
+  const x1 = p!==0 ? 0 : 1;                      // 頂点がy軸上なら x=1 の点
+  const y1 = a*(x1-p)**2+q;
+  Object.assign(P,{x1,y1});
+  const aOne = ab(a)===1;
+  const Q1 = `(${fmt(x1)}, ${fmt(y1)})`;
+  const eqv = (m) => m===fmt(y1) ? m : `${m} ＝ ${fmt(y1)}`;
+  const st={col:1,dir:2,vx:3,vy:4,ax:5,pv:6,cu:7,pt:8};
+  const R = readEq(P,st), aS=R.aS, qT=R.qT;
+
+  /* もう1点：1行ずつ［番号, 左に書く式, コメント］ */
+  let L, head='もう1点';
+  if(P.yint!==undefined){
+    const c=P.yint, o=P.orig;
+    head='y軸との交点';
+    L = [
+      ['①', `<span class="math">y ＝ ${polyStr(o.a,o.b,0)} <span class="cc cc-b sm">${sgn(c)}</span></span> なので`,
+            `<b>もう1点</b> は <b>y軸との交点</b>。　平方完成する <b>前</b> の もとの式を 見よう。　${c===0?`数だけの項が ないので ${K('b','＋ 0')} と 考えるよ。`:`数だけの項は ${K('b',sgn(c))}。`}`],
+      ['②', `y軸との交点は <span class="math" data-k="pt1">(0, <span class="cc cc-b sm">${fmt(c)}</span>)</span>`,
+            `y軸上 では ${M('x ＝ 0')}。　x に 0 を 入れると x の項は 全部 0 に なるから、残るのは 数だけの項。　だから y軸との交点は <b>${M(Q1)}</b>。`],
+      ['※', `計算不要`, `もとの式の <b>数だけの項</b> が そのまま y座標！　<b>計算しなくても</b> 読みとれるよ。`]
+    ];
+  } else if(p!==0){
+    const subst = `${aS}(0 ${p<0?'＋':'−'} ${ab(p)})${P2}${qT}`;
+    const kakko = `${aS}(${fmt(-p)})${P2}${qT}`;
+    const sq = p*p;
+    const mul = aOne ? `${a<0?'−':''}${sq}${qT}` : `${fmt(a)} × ${sq}${qT}`;
+    L = [
+      ['①', `y軸上なので <span class="math">x ＝ 0</span><br><span class="math">x ＝ 0</span> を代入`,
+            `<b>もう1点</b> 求めよう。　① <b>y軸上</b> の点なので ${M('x ＝ 0')}。　だから ${M('x ＝ 0')} を <b>代入</b> するよ。`],
+      ['②', `<span class="math">y ＝ ${subst}</span>`, `② 式の x に 0 を 代入した式。　${M(`y ＝ ${subst}`)}`],
+      ['③', `<span class="math">　＝ ${kakko}</span>`, `③ まず <b>括弧の中</b> を 計算。　${M(`0 ${p<0?'＋':'−'} ${ab(p)} ＝ ${fmt(-p)}`)} だから ${M(`y ＝ ${kakko}`)}`],
+      ['④', `<span class="math">　＝ ${eqv(mul)}</span>`, `④ <b>全部</b> 計算する。　${M(`y ＝ ${eqv(mul)}`)}`],
+      ['⑤', `<span class="math">x ＝ 0, y ＝ ${fmt(y1)}</span> なので<br><span class="math" data-k="pt1">${Q1}</span>`,
+            `⑤ だから ${M('x ＝ 0')}、${M(`y ＝ ${fmt(y1)}`)} なので、もう1点は <b>${M(Q1)}</b>。`]
+    ];
+  } else {
+    const subst = aOne ? `${a<0?'−':''}1${P2}${qT}` : `${fmt(a)} × 1${P2}${qT}`;
+    const mul = aOne ? `${a<0?'−':''}1${qT}` : `${fmt(a)} × 1${qT}`;
+    L = [
+      ['①', `頂点が y軸上なので<br><span class="math">x ＝ 1</span> のときを求める`,
+            `<b>もう1点</b> 求めよう。　① 頂点が <b>y軸上</b> にあるので、${M('x ＝ 0')} だと 頂点と 同じ点に なってしまう。　だから <b>${M('x ＝ 1')}</b> のときを 求めるよ。`],
+      ['②', `<span class="math">y ＝ ${subst}</span>`, `② 式の x に 1 を 代入した式。　${M(`y ＝ ${subst}`)}`],
+      ['③', `<span class="math">　＝ ${eqv(mul)}</span>`, `③ <b>全部</b> 計算する。　${M(`y ＝ ${eqv(mul)}`)}`],
+      ['④', `<span class="math">x ＝ 1, y ＝ ${fmt(y1)}</span> なので<br><span class="math" data-k="pt1">${Q1}</span>`,
+            `④ だから ${M('x ＝ 1')}、${M(`y ＝ ${fmt(y1)}`)} なので、もう1点は <b>${M(Q1)}</b>。`]
+    ];
+  }
+  st.ptg = st.pt + L.length; st.dn = st.ptg + 1;
+  if(P.orig){ if(P.yint!==undefined) P.orig.c = P.yint; P.kst = st.pt; }
+
+  const cm = [
+    P.yint!==undefined
+      ? `${num} 前のスライドで 平方完成 した 式 ${M(R.eqTxt)} を 使って、<b>グラフ</b> と <b>向き・頂点・軸</b> を 答えよう！`
+      : (P.intro || `${num} ${M(R.eqTxt)} の <b>グラフ</b> をかいて、<b>向き・頂点・軸</b> を 答えよう！`),
+    ...R.cm,
+    `軸は 頂点の x座標 を 使って <b>${M(`x ＝ ${fmt(p)}`)}</b>。${p===0?'　（y軸 そのもの だね）':''}`,
+    `グラフを かこう。　まず <b>頂点</b> ${M(R.V)} を とる。`,
+    `頂点から ${R.dir} の <b>放物線</b> を かこう。`,
+    ...L.map(l=>l[2]),
+    `点 ${M(Q1)} を グラフに かきこもう。`,
+    `<b>完成！</b>　${R.dir}、頂点 ${M(R.V)}、軸 ${M(`x ＝ ${fmt(p)}`)} です。`
+  ];
+  const n2 = `<div class="nt lh" data-s="${st.pt}" style="--dotc:#f3d58a"><b>【${head}】</b></div>`
+    + L.map((l,i)=>`<div class="pl lh" data-s="${st.pt+i}"><span class="no">${l[0]}</span><span>${l[1]}</span></div>`).join('');
+
+  return `
+  <div class="pno">${num}</div>
+  <div class="card abs eqcard">${EQTAPE}
+    ${topRows(P,R)}
+    <div class="rowsw" style="top:${P.orig?196:148}px">${n2}</div>
+    <div class="divider"></div>
+    ${graphSVG(P,st)}
+  </div>
+  <div class="card abs memo">${TP('yellow','right:22px;top:-14px;transform:rotate(4deg)')}
+    <div class="lab">答え</div>
+    ${R.rowDir}${R.rowV}
+    <div class="arow math"><span class="al">軸</span>x ＝${slotC('o',fmt(p),st.ax,'p')}</div>
+    <div class="arow math gray"><span class="al">もう一点</span>${slotC('k',Q1,st.ptg,'pt1')}</div>
+  </div>
+  ${LEGEND}
+  ${SEAL(st.dn)}
+  ${cbar(cm)}`;
+}
+
+/* ====== 最大値・最小値 の 1問 ====== */
+function mmSlide(P){
+  const {num,a,p,q}=P;
+  Object.assign(P,{x1:p,y1:q,noPt:true});
+  const st={col:1,dir:2,vx:3,vy:4,pv:5,cu:6,ext:7,none:8,dn:9};
+  const R = readEq(P,st), up=R.up;
+  const big = up?'最小値':'最大値', non = up?'最大値':'最小値';
+  P.extra = ({X,Y,d,u})=>{
+    const bw=136, bx = p>0 ? X(0)-10-bw : X(0)+(p?10:18), by=Y(q)-18;
+    let s=`<g class="gs" data-s="${st.ext}">${p?`<line class="gd mmline" x1="${X(p)}" y1="${Y(q)}" x2="${X(0)}" y2="${Y(q)}"/>`:''}
+      <circle class="mmring" cx="${X(p)}" cy="${Y(q)}" r="12"/><circle class="mmring d2" cx="${X(p)}" cy="${Y(q)}" r="12"/>
+      <g class="popb"><rect class="mmbadge" x="${bx}" y="${by}" width="${bw}" height="36" rx="18"/><text class="mmbt" x="${bx+bw/2}" y="${by+25}" text-anchor="middle">${big} ${fmt(q)}</text></g>
+      <text class="gt k halo" x="${X(p)}" y="${up?Y(q)+56:Y(q)-42}" text-anchor="middle" style="font-family:'Zen Maru Gothic';font-weight:900">いちばん${up?'下':'上'}！</text></g>`;
+    let arr='';
+    [-1,1].forEach(sd=>{
+      const xe=p+sd*d, ye=a*d*d+q, ang=Math.atan2(-2*a*d*u, sd*u);
+      const hx=X(xe), hy=Y(ye);
+      const tri=[[6,0],[-10,-7],[-10,7]].map(([dx,dy])=>`${(hx+dx*Math.cos(ang)-dy*Math.sin(ang)).toFixed(1)},${(hy+dx*Math.sin(ang)+dy*Math.cos(ang)).toFixed(1)}`).join(' ');
+      arr+=`<g class="arrw" style="--dx:${(7*Math.cos(ang)).toFixed(1)}px;--dy:${(7*Math.sin(ang)).toFixed(1)}px"><polygon points="${tri}" fill="var(--note)"/></g>`;
+    });
+    const xe=p-d, ye=a*d*d+q;
+    arr+=`<text class="gt halo" x="${X(xe)+10}" y="${Y(ye)+(up?34:-24)}" style="font-family:'Zen Maru Gothic';font-weight:900;fill:var(--note)"><tspan>どこまでも</tspan><tspan x="${X(xe)+10}" dy="22">→ ${non} なし</tspan></text>`;
+    s+=`<g class="gs" data-s="${st.none}">${arr}</g>`;
+    return s;
+  };
+  const extT = `x ＝ ${fmt(p)} で、${big} ${fmt(q)}`;
+  const cm = [
+    P.intro || `${num} ${M(R.eqTxt)} の <b>最大値・最小値</b> を 求めよう！　まず グラフを かいて 考えるよ。`,
+    ...R.cm,
+    `グラフに <b>頂点</b> ${M(R.V)} を とる。`,
+    `頂点から ${R.dir} の <b>放物線</b> を かこう。`,
+    `${R.dir} の グラフは 頂点が <b>いちばん${up?'下':'上'}</b>。　だから ${M(`x ＝ ${fmt(p)}`)} の とき <b>${big} ${fmt(q)}</b>。`,
+    up ? `グラフの 上の方は <b>どこまでも</b> 大きくなる。　いちばん大きい 値は 決まらないので <b>最大値 なし</b>。`
+       : `グラフの 下の方は <b>どこまでも</b> 小さくなる。　いちばん小さい 値は 決まらないので <b>最小値 なし</b>。`,
+    `<b>完成！</b>　${up?`最大値 なし、${M(extT)}`:`${M(extT)}、最小値 なし`}。`
+  ];
+  const notes = `<div class="nt lh" data-s="${st.ext}" style="--dotc:var(--r-bd)">${R.dir} → 頂点が いちばん${up?'下':'上'}<br><span class="math">→ ${extT}</span></div>
+    <div class="nt lh" data-s="${st.none}" style="--dotc:var(--b-bd)">${up?'上':'下'}は どこまでも のびる<br>→ ${non} なし</div>`;
+  const vs = `<span class="slot slot-w"><span class="tm tm-w2 on fly" data-f="${st.ext}" data-src="q">${extT}</span></span>`;
+  const ns = `<span class="slot slot-w"><span class="tm tm-w2 on fly" data-f="${st.none}" data-src="none">なし</span></span>`;
+  return `
+  <div class="pno">${num}</div>
+  <div class="card abs eqcard">${EQTAPE}
+    ${topRows(P,R)}
+    <div class="rowsw" style="top:${P.orig?200:160}px">${notes}</div>
+    <div class="divider"></div>
+    ${graphSVG(P,st)}
+  </div>
+  <div class="card abs memo">${TP('yellow','right:22px;top:-14px;transform:rotate(4deg)')}
+    <div class="lab">答え</div>
+    ${R.rowDir}${R.rowV}
+    <div class="arow"><span class="al">最大値</span>${up?ns:vs}</div>
+    <div class="arow"><span class="al">最小値</span>${up?vs:ns}</div>
+  </div>
+  ${LEGEND}
+  ${SEAL(st.dn)}
+  ${cbar(cm)}`;
+}
+
+/* ====== 平方完成 の 1問 ======
+   P = {num, a, b, c}　（y ＝ ax² ＋ bx ＋ c）　next:true なら 最後に「次はグラフ」と添える */
+const ARW = `<svg width="34" height="46" viewBox="0 0 44 60"><path d="M10 4 C34 10,36 36,17 46" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/><polygon points="3,52 20,56 12,38" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>`;
+const WV = (a,b,html) => `<span class="wv" data-wa="${a}" data-wb="${b}">${html}<span class="wl"></span></span>`;
+const ANS = (s,html) => `<span class="ans" data-a="${s}">${html}<span class="ulh"></span><svg class="sl" width="34" height="30" viewBox="0 0 34 30"><path class="s1" d="M8 27 L15 4" pathLength="1"/><path class="s2" d="M21 27 L28 4" pathLength="1"/></svg></span>`;
+const hslot = (k,txt,f,x='') => `<span class="slot slot-${k}"${x}><span class="tm tm-${k} on fly" data-f="${f}" data-src="memo-${k}">${txt}</span></span>`;
+const hrow = (s,lhs,body,note) =>
+  `<div class="er${s===null?'':' lh'}"${s===null?'':` data-s="${s}"`}><span class="lhs">${lhs}</span><span class="eqs">＝</span><span class="bd">${body}</span>${note?`<span class="note">${ARW}<span>${note}</span></span>`:''}</div>`;
+
+function heihoSlide(P){
+  const {num,a,b,c}=P, one=(a===1);
+  const bb=b/a, h=bb/2, h2=h*h;          // bb：かっこの中の x の係数 / h：その半分
+  const g1=-h2, g2=-a*h2, fin=c+g2;      // g1：{ }の中の数 / g2：分配後の数 / fin：最後の定数
+  const aS = a===1 ? '' : a===-1 ? '−' : fmt(a);
+  const aP = a<0 ? `(${fmt(a)})` : fmt(a);
+  const hx = `x ${h<0?'−':'＋'} ${ab(h)}`;
+  const ans = `${aS}(${hx})² ${fin<0?'−':'＋'} ${ab(fin)}`;
+  const xt = n => `${ab(n)===1?'':ab(n)}x`;   // 1x → x
+  const c0 = `${num} ${M('y ＝ '+polyStr(a,b,c))} を <b>平方完成</b> しよう！　平方完成は ${M('a(x − p)² ＋ q')} の形に 書きかえることだよ。`;
+  const cm=[c0]; let n=0; const nx=t=>{n++;cm.push(t);return n;};
+  const st={};
+  const bTxt = one ? `${b<0?'−':'＋'}${xt(b)}` : `x² ${b<0?'−':'＋'} ${xt(b)}`;
+
+  if(one) st.pre = nx(`まず 式の中の <b>x の項</b> に 注目！　<b>波線</b> の部分だよ。`);
+  st.col = one
+    ? nx(`まず 色分け！　${K('b',bTxt)}（青）が <b>x の項</b>。${c!==0?`　${K('n',sf(c))}（灰）は 数だけの項で、あとで使うよ。`:''}　公式に使うのは 青の <b>${fmt(b)}</b> です。`)
+    : nx(`${K('r',aS)} 赤の <b>${fmt(a)}</b> に注目！　点線で囲んだ <b>x² の項と x の項（2項）</b> を ${fmt(a)} で くくりだして、公式を使う準備をするよ。${c!==0?`　${K('n',sf(c))} 灰は 数だけの項なので 外のまま。`:''}`);
+  if(!one) st.f1 = nx(`<b>公式を使う準備</b>！　${fmt(a)} で くくりだして、かっこの中を <b>x² ＋ ○x</b> の形にする。　${M(`${fmt(b)}x ÷ ${aP} ＝ ${fmt(bb)}x`)} なので かっこの中は ${M(`x² ${bb<0?'−':'＋'} ${xt(bb)}`)}。　この かっこの中に 公式が 使えるよ。`);
+  st.o = nx(`${one?'青の':'かっこの中の'} <b>${fmt(bb)}</b> の <b>半分</b>：${M(`${fmt(bb)} ÷ 2 ＝ ${fmt(h)}`)}。　公式メモの <b>「半分」</b>の欄に 入れよう。`);
+  st.g = nx(`つぎは <b>マイナス 半分の2乗</b>。　半分 ${fmt(h)} を 2乗して マイナスを つけて ${M(`−(${fmt(h)})² ＝ −${h2}`)}。　緑の欄に 入れよう。`);
+  if(one){
+    st.f2 = nx(`公式を使う！　${M('(x ＋ □)² − △')} の形の <b>空らん</b> に、右の 公式メモの 数を 入れていくよ。${c!==0?`　${K('n',sf(c))} 灰は そのまま 後ろに つけるよ。`:''}`);
+    st.fo = nx(`まず <b>半分</b>（橙）の <b>${fmt(h)}</b> を メモから □ へ！　${M(`(${hx})²`)}`);
+    st.fg = nx(`つぎに <b>マイナス半分の2乗</b>（緑）の <b>${fmt(g1)}</b> を メモから △ へ！　${M(`(${hx})² − ${h2}`)}${c===0?'　これで 平方完成！':''}`);
+    if(c!==0){
+      st.cw = nx(`つぎに 計算するのは、<b>波線</b> の部分！　${K('g',sf(g1))} と ${K('n',sf(c))} を あわせるよ。`);
+      st.f4 = nx(`計算する！　${M(`${fmt(g1)} ${c<0?'−':'＋'} ${ab(c)} ＝ ${fmt(fin)}`)}。　答えは <b>${M('y ＝ '+ans)}</b>。`);
+    }
+  } else {
+    st.f2 = nx(`公式を使う！　かっこの中を ${M('(x ＋ □)² − △')} の形にする。　空らんに 右の 公式メモの 数を 入れていくよ。　まわりの { } は あとで 外すよ。`);
+    st.fo = nx(`まず <b>半分</b>（橙）の <b>${fmt(h)}</b> を メモから □ へ！　${M(`(${hx})²`)}`);
+    st.fg = nx(`つぎに <b>マイナス半分の2乗</b>（緑）の <b>${fmt(g1)}</b> を メモから △ へ！　${M(`(${hx})² − ${h2}`)}`);
+    st.d1 = nx(`<b>分配</b> して { } を 外す！　まず ${fmt(a)} と ${M('( )²')} の分配。　${fmt(a)} が ${M('( )²')} に <b>くっついて</b> ${M(`${aS}(${hx})²`)} になるよ。`);
+    st.d2 = nx(`つぎに ${fmt(a)} と ${fmt(g1)} の分配。　<b>かけ算</b> して ${M(`${aP} × (${fmt(g1)}) ＝ ${sf(g2)}`)}。${c===0?`　これで 平方完成！　答えは <b>${M('y ＝ '+ans)}</b>。`:''}`);
+    if(c!==0){
+      st.d3 = nx(`最後に、{ } の外に あった 灰色の ${K('n',sf(c))} を そのまま 後ろに つけるよ。`);
+      st.cw = nx(`つぎに 計算するのは、<b>波線</b> の部分！　${K('g',sf(g2))} と ${K('n',sf(c))} を あわせるよ。`);
+      st.f4 = nx(`計算する！　${M(`${fmt(g2)} ${c<0?'−':'＋'} ${ab(c)} ＝ ${fmt(fin)}`)}。　答えは <b>${M('y ＝ '+ans)}</b>。`);
+    }
+  }
+  st.dn = nx(`これで <b>完成</b>！　ここから 頂点は ${M(`(${fmt(-h)}, ${fmt(fin)})`)} と 読みとれるよ。${P.next?'　つぎの スライドで グラフを かこう！':''}`);
+
+  /* 式の行 */
+  const L0 = one
+    ? `${WV(st.f2,st.fg,`${X2} ${WV(st.pre,st.col,tm('b',`${b<0?'− ':'＋ '}${xt(b)}`,st.col))}`)}${c!==0?tm('n',sgn(c),st.col):''}`
+    : `<span class="ct" data-o="${st.col}">${tm('r',aS,st.col)}${X2} ${b<0?'−':'＋'} ${xt(b)}</span> ${c!==0?tm('n',sgn(c),st.col):''}`;
+  let rows = hrow(null,'y',L0), dist = '';
+  if(one){
+    let L1 = `( x ${hslot('o',sgn(h),st.fo)} )${P2} ${c!==0?WV(st.cw,st.f4,`${hslot('g',sgn(g1),st.fg)}${tm('n',sgn(c),st.f2)}`):hslot('g',sgn(g1),st.fg)}`;
+    if(c===0) L1 = ANS(st.dn, L1);
+    rows += hrow(st.f2,'',L1,'公式を使う');
+    if(c!==0) rows += hrow(st.f4,'',ANS(st.f4,`( x ${sgn(h)} )${P2} ${sgn(fin)}`),'計算する');
+  } else {
+    const lblEnd = c!==0 ? st.cw : st.dn;
+    rows += hrow(st.f1,'',`${tm('r',aS,st.f1)}( ${WV(st.f2,st.fg,`${X2} ${tm('b',`${bb<0?'− ':'＋ '}${xt(bb)}`,st.f1)}`)} )${c!==0?tm('n',sgn(c),st.f1):''}`,`公式の準備<br>${fmt(a)} で くくりだす`);
+    rows += hrow(st.f2,'',`${tm('r',aS,st.f2,' data-k="r3"')}{ <span class="pg" data-k="par">( x ${hslot('o',sgn(h),st.fo)} )${P2}</span> ${hslot('g',sgn(g1),st.fg,' data-k="grn"')} }${c!==0?tm('n',sgn(c),st.f2):''}`,'公式を使う');
+    const lbl = (a0,t) => `<span class="dlbl" data-wa="${a0}" data-wb="${lblEnd}">${t}</span>`;
+    const orgC = `<span class="hasl">${tm('o',`${aS}( x ${sgn(h)} )${P2}`,st.d1)}${lbl(st.d1,`${fmt(a)} と ( )² が くっつく`)}</span>`;
+    const grnC = `<span class="hasl">${tm('g',sgn(g2),st.d2)}${lbl(st.d2,`${aP} × (${fmt(g1)}) ＝ ${sf(g2)}`)}</span>`;
+    const tail = c!==0 ? WV(st.cw,st.f4,`${S(st.d2,grnC)}${S(st.d3,tm('n',sgn(c),st.d3))}`) : S(st.d2,grnC);
+    rows += hrow(st.d1,'', c!==0 ? `${orgC}${tail}` : ANS(st.dn,`${orgC}${tail}`), '分配して<br>{ } を外す');
+    const dg = (a0,to,hh,dx) => `<g class="dg" data-wa="${a0}" data-wb="${lblEnd}" data-fr="r3" data-to="${to}" data-h="${hh}" data-dx="${dx}"><path pathLength="1" d=""/><polygon points=""/></g>`;
+    dist = `<svg class="dist" width="724" height="460">${dg(st.d1,'par',18,0)}${dg(st.d2,'grn',34,12)}</svg>`;
+    if(c!==0) rows += hrow(st.f4,'',ANS(st.f4,`${aS}( x ${sgn(h)} )${P2} ${sgn(fin)}`),'計算する');
+  }
+
+  return `
+  <div class="pno">${num}</div>
+  <div class="card abs eqcard">${EQTAPE}<div class="hrows math">${rows}${dist}</div></div>
+  <div class="card abs hmemo">${TP('yellow','right:22px;top:-14px;transform:rotate(4deg)')}<div class="lab">公式メモ</div>
+    <div class="mrow"><div class="ml">半分</div><div class="mbox bo" data-k="memo-o">${S(st.o,`<span class="cc cc-o">${fmt(h)}</span>`)}</div></div>
+    <div class="mrow"><div class="ml">マイナス<br>半分の2乗</div><div class="mbox bg" data-k="memo-g">${S(st.g,`<span class="cc cc-g">${fmt(g1)}</span>`)}</div></div>
+  </div>
+  <div class="card abs hlegend">${TP('lav','right:24px;top:-14px;transform:rotate(-5deg)')}<div class="lab">色の ルール</div>
+    <span class="cc cc-r">x² の前の数</span><span class="cc cc-b">x の項</span>
+    <span class="cc cc-n">数だけの項</span><span class="cc cc-o">半分</span>
+    <span class="cc cc-g">−半分の2乗</span>
+  </div>
+  ${SEAL(st.dn)}
+  ${cbar(cm)}`;
+}
+
+/* ====== 表紙・基本・おわり ====== */
+const miniGraph = `<svg width="264" height="250" viewBox="0 0 264 250">
+  ${[...Array(12)].map((_,i)=>`<line class="gg" x1="${i*24}" y1="0" x2="${i*24}" y2="250"/>`).join('')}
+  ${[...Array(11)].map((_,i)=>`<line class="gg" x1="0" y1="${i*24+10}" x2="264" y2="${i*24+10}"/>`).join('')}
+  <line class="ax" x1="0" y1="178" x2="264" y2="178"/><line class="ax" x1="144" y1="250" x2="144" y2="0"/>
+  <path d="M 52 20 Q 120 330 188 20" fill="none" stroke="var(--curve)" stroke-width="4" stroke-linecap="round"/>
+  <line class="axl" x1="120" y1="0" x2="120" y2="250"/>
+  <circle cx="120" cy="175" r="7" fill="var(--accent)" stroke="var(--paper)" stroke-width="2.5"/>
+</svg>`;
+const cover = (kicker,title,sub,sub2,cap) => `
+<div class="card abs cover">${TP('pink','left:-26px;top:-4px;transform:rotate(-38deg)')}${TP('mint','right:-26px;bottom:-4px;transform:rotate(-38deg)')}
+  <div class="kicker">${kicker}</div>
+  <h1>${title}</h1>
+  <div class="r" data-s="1"><div class="sub math">${sub}</div></div>
+  <div class="r" data-s="2"><div class="sub2">${sub2}</div></div>
+</div>
+<div class="card abs polaroid">${TP('yellow','left:92px;top:-14px;transform:rotate(-3deg)')}${miniGraph}<div class="cap">${cap}</div></div>`;
+const FORM_SUB = `y ＝ ${K('r','a')}(x − ${K('o','p')})${P2} ＋ ${K('g','q')}`;
+const basicWrap = (title,body,cms,tape='blue') => `
+<div class="end-h"><h2>${title}</h2></div>
+<div class="card abs fcard">${TP(tape,'left:-30px;top:2px;transform:rotate(-40deg)')}${TP(tape,'right:-30px;top:2px;transform:rotate(40deg)')}${body}</div>
+${cbar(cms)}`;
+const upL = (k,t,s) => `<span class="lbl up l${k}"><span class="lh" data-s="${s}">${t}</span></span>`;
+const graphBasic = basicWrap('グラフの 読み方（形・横・縦）', `
+  <div class="fr math big" style="margin-top:20px">y ＝ <span class="hasl">${tm('r','a',1)}${upL('r','形',1)}</span>( x − <span class="hasl">${tm('o','p',1)}${upL('o','横',1)}</span> )${P2} ＋ <span class="hasl">${tm('g','q',1)}${upL('g','縦',1)}</span></div>
+  <div class="fr mid lh" data-s="2" style="font-size:34px">${K('r','形')} → グラフの <b>向き</b>　＋ なら 下に凸 ∪ 、− なら 上に凸 ∩</div>
+  <div class="fr mid lh" data-s="3" style="font-size:34px">${K('o','横')} → 頂点の <b>x座標</b>　<span style="color:var(--accent)">プラスマイナスが逆転！</span></div>
+  <div class="fr mid lh" data-s="4" style="font-size:34px">${K('g','縦')} → 頂点の <b>y座標</b>　そのまま</div>
+  <div class="fr chk lh" data-s="5">軸は 頂点の x座標 を 使って <span class="math">x ＝ p</span></div>`,
+  [
+  `2次関数 ${M('y ＝ a(x − p)² ＋ q')} の グラフ。　この形なら 式から そのまま <b>向き・頂点・軸</b> が 読みとれるよ。`,
+  `赤の ${K('r','a')} が <b>形</b>、橙の ${K('o','p')} が <b>横</b>、緑の ${K('g','q')} が <b>縦</b>。`,
+  `<b>形</b> は グラフの 向き。　プラスなら <b>下に凸</b>、マイナスなら <b>上に凸</b>。`,
+  `<b>横</b> は 頂点の x座標。　かっこの中の 数の <b>プラスマイナスが逆転</b> するので 注意！　${M('(x ＋ 1)²')} なら −1。`,
+  `<b>縦</b> は 頂点の y座標。　こちらは <b>そのまま</b>。`,
+  `軸は 頂点を 通る たての直線 <b>${M('x ＝ p')}</b>。`
+]);
+const heihoBasic = basicWrap('平方完成の 公式', `
+  <div class="fr math big">${X2} ${tm('b','＋ ○x',1)}</div>
+  <div class="fr math big lh" data-s="2">＝ ( x ${tm('o','＋ ○の半分',2)} )${P2} ${tm('g','− (○の半分)'+P2,3)}</div>
+  <div class="fr math mid lh" data-s="4">例　${X2} ${tm('b','＋ 6x',4)} ＝ ( x ${tm('o','＋ 3',5)} )${P2} ${tm('g','− 9',6)}</div>
+  <div class="fr math chk lh" data-s="7">たしかめ：(x ＋ 3)<sup>2</sup> − 9 ＝ x<sup>2</sup> ＋ 6x ＋ 9 − 9 ＝ x<sup>2</sup> ＋ 6x</div>`,
+  [
+  `平方完成 とは、式を <b>a(x − p)² ＋ q</b> の形に 書きかえること。　まず 公式を 確認しよう！`,
+  `${M('x² ＋ ○x')} の <b>○</b>（x の係数）に 注目！　この数を 使って 書きかえるよ。`,
+  `かっこの中には ○ の <b>半分</b> を 入れる！　${M('(x ＋ ○の半分)²')}`,
+  `展開すると よぶんな ${M('(○の半分)²')} が 出てくる。　それを <b>引いて</b> つじつまを合わせる → <b>マイナス 半分の2乗</b>。`,
+  `例で やってみよう。　${M('x² ＋ 6x')} では ○ ＝ 6 です。`,
+  `6 の <b>半分</b> は 3。　${M('(x ＋ 3)²')}`,
+  `3 の2乗は 9。　引くので <b>− 9</b>。　${M('x² ＋ 6x ＝ (x ＋ 3)² − 9')}`,
+  `たしかめ：展開して 9 を 引くと、もとの ${M('x² ＋ 6x')} に もどる！　これが <b>平方完成</b> です。`
+], 'lav');
+const mmBasic = basicWrap('最大値・最小値の 考え方', `
+  <div class="fr mid lh" data-s="1" style="font-size:38px">${K('r','＋')} 下に凸 ∪ → 頂点が いちばん下</div>
+  <div class="fr mid lh" data-s="2" style="font-size:36px">→ 頂点で <b style="color:var(--accent)">最小値</b>　／　最大値は <b style="color:var(--accent)">なし</b></div>
+  <div class="fr mid lh" data-s="3" style="font-size:38px;margin-top:18px">${K('r','−')} 上に凸 ∩ → 頂点が いちばん上</div>
+  <div class="fr mid lh" data-s="4" style="font-size:36px">→ 頂点で <b style="color:var(--accent)">最大値</b>　／　最小値は <b style="color:var(--accent)">なし</b></div>`,
+  [
+  `2次関数の <b>最大値・最小値</b> は、グラフを かいて 考えるよ。　大事なのは <b>向き</b> と <b>頂点</b>。`,
+  `${K('r','＋')} なら 下に凸。　グラフは 頂点が <b>いちばん下</b>。`,
+  `だから 頂点の y座標が <b>最小値</b>。　上の方は どこまでも 大きくなるので <b>最大値は なし</b>。`,
+  `${K('r','−')} なら 上に凸。　グラフは 頂点が <b>いちばん上</b>。`,
+  `だから 頂点の y座標が <b>最大値</b>。　下の方は どこまでも 小さくなるので <b>最小値は なし</b>。`
+], 'yellow');
+const endHtml = `
+<div class="card abs cover" style="height:380px;top:150px">${TP('lav','left:-26px;top:-4px;transform:rotate(-38deg)')}${TP('yellow','right:-26px;top:-4px;transform:rotate(38deg)')}
+  <div class="kicker">数学Ⅰ　２学期中間考査対策</div>
+  <h1>おつかれさま<br><span class="mk">でした！</span></h1>
+</div>
+<div class="card abs polaroid">${TP('pink','left:92px;top:-14px;transform:rotate(3deg)')}${miniGraph}<div class="cap">よくできました</div></div>`;
+
+/* ====== ２学期期末考査まで：共通の小道具 ====== */
+const KIMATSU = '数学Ⅰ　２学期期末考査まで';
+/* 表紙・おわりの 写真の中身：式が 変わる様子 */
+const fpol = (a,b,msg) => `<div class="fpol"><div class="fa math">${a}</div><div class="fv">↓ ${msg}</div><div class="fb math">${b}</div></div>`;
+const coverF = (kicker,title,sub,sub2,pol,cap) => `
+<div class="card abs cover">${TP('pink','left:-26px;top:-4px;transform:rotate(-38deg)')}${TP('mint','right:-26px;bottom:-4px;transform:rotate(-38deg)')}
+  <div class="kicker">${kicker}</div>
+  <h1>${title}</h1>
+  <div class="r" data-s="1"><div class="sub">${sub}</div></div>
+  <div class="r" data-s="2"><div class="sub2">${sub2}</div></div>
+</div>
+<div class="card abs polaroid">${TP('yellow','left:92px;top:-14px;transform:rotate(-3deg)')}${pol}<div class="cap">${cap}</div></div>`;
+const endF = (kicker,pol,cap='よくできました') => `
+<div class="card abs cover" style="height:380px;top:150px">${TP('lav','left:-26px;top:-4px;transform:rotate(-38deg)')}${TP('yellow','right:-26px;top:-4px;transform:rotate(38deg)')}
+  <div class="kicker">${kicker}</div>
+  <h1>おつかれさま<br><span class="mk">でした！</span></h1>
+</div>
+<div class="card abs polaroid">${TP('pink','left:92px;top:-14px;transform:rotate(3deg)')}${pol}<div class="cap">${cap}</div></div>`;
+
+/* ====== 因数分解：4つのパターン ====== */
+/* 文字の公式は 使わず、実際の式＋色の数＋キーワード で 見せる */
+const KW = t => `<span class="kw">${t}</span>`;
+/* 色だけ つける（枠なし）：b 青、g 緑、r 赤 */
+const CT = (k,t) => `<span class="ct-${k}">${t}</span>`;
+const PAT = [
+  {no:'⑴', name:'たして・かけて',
+   expr:`x${P2} ${CT('b','＋ 2')}x ${CT('g','− 15')}`, res:`(x ＋ 5)(x − 3)`,
+   kw:`${CT('b','たして ＋2')}　${CT('g','かけて −15')}`},
+  {no:'⑵', name:'2乗 − 2乗',
+   expr:`x${P2} ${CT('g','− 9')}`, res:`(x ＋ 3)(x − 3)`,
+   kw:`x の項が ない　${CT('g','9 ＝ 3²')}`},
+  {no:'⑶', name:'同じ (　) が 2つ',
+   expr:`x${P2} ${CT('b','＋ 6')}x ${CT('g','＋ 9')}`, res:`(x ＋ 3)${P2}`,
+   kw:`${CT('b','たして ＋6')}　${CT('g','かけて ＋9')}　→ 2乗で まとめる`},
+  {no:'⑷', name:'共通因数で くくる',
+   expr:`${CT('r','x')}${P2} ＋ 6${CT('r','x')}`, res:`${CT('r','x')}(x ＋ 6)`,
+   kw:`数だけの項が ない　${CT('r','x')} で くくる`}
+];
+/* 4つのパターンを 一覧で 見せる（アニメーションなし） */
+function patOverview(title, cms){
+  const tp = ['pink','mint','yellow','lav'];
+  const card = (p,i) => `<div class="pcw p${i+1}"><div class="card pc">${TP(tp[i],'left:50%;margin-left:-58px;top:-14px;transform:rotate(-2deg)')}
+      <div class="pc-h"><span class="pc-no">${p.no}</span>${p.name}</div>
+      <div class="pc-f math">${p.expr} ＝ ${p.res}</div>
+      <div class="pc-k">${p.kw}</div></div></div>`;
+  return `<div class="end-h"><h2>${title}</h2></div>
+  <div class="pcards">${PAT.map(card).join('')}</div>
+  ${cbar(cms)}`;
+}
+
+/* ====== 因数分解の 1問 ======
+   左：式の変形（もとの式 → 答え）、右：考え方（大きく見せる）、下：ことばの説明 */
+const frow = (s,eq,body) =>
+  `<div class="fxr${s===null?'':' lh'}"${s===null?'':` data-s="${s}"`}><span class="eqs">${eq}</span><span class="bd">${body}</span></div>`;
+const tgoal = (s,html) => `<div class="tg lh" data-s="${s}">${html}</div>`;
+/* 考え方の 1段。n：番号、label：何をするか、big：大きく見せる式、sub：補足
+   s を [問いの番, 答えの番] にすると、問いを先に出し、次のクリックで答えを出す */
+const tstep = (s,n,label,big,sub='') => {
+  const [sl,sb] = Array.isArray(s) ? s : [s,s];
+  return `<div class="ts lh" data-s="${sl}"><div class="ts-n">${n}</div><div><div class="ts-l">${label}</div><div class="ts-m math lh" data-s="${sb}">${big}</div>${sub?`<div class="ts-s">${sub}</div>`:''}</div></div>`;
+};
+function fxSlide({num,pat,rows,thinkLab,think,cm,done}){
+  const p = PAT[pat];
+  return `
+  <div class="pno">${num}</div>
+  <div class="card abs fxcard">${EQTAPE}<div class="fxpat">${p.no} ${p.name}</div><div class="fxrows math">${rows}</div></div>
+  <div class="card abs think">${TP('yellow','right:30px;top:-14px;transform:rotate(4deg)')}<div class="lab">${thinkLab}</div>${think}</div>
+  <div class="abs r done fxdone" data-s="${done}"><div class="seal">完成！</div></div>
+  ${cbar(cm)}`;
+}
+
+/* 分数（neg：マイナスを 前に つける） */
+const FR = (n,d,neg) => `${neg?'−':''}<span class="fr"><span>${n}</span><span>${d}</span></span>`;
+
+/* ====== 2次方程式（因数分解で解く）の 1問 ======
+   プリントと同じ形：もとの式 → 青と橙の ( ) ＝ 0 → それぞれ ＝ 0 → x ＝
+   P = {num, eq, fb, fo, wb, wo, bl, ol, ab, ao, jyu, merge, point, ofirst, tall, cm}
+   bl/ol = {a:'x', t:'＋ 5', v:'−5'}：「x ＋ 5 ＝ 0」→ クリックで 移項の矢印と「x ＝ −5」。t が なければ「x ＝ v」の 1行
+   d:'2', f:FR(…) を つけると 3行目「x ＝ f」（両辺 ÷ d）を足す（①-3）
+   答えの数は 答えの枠へ 飛んでいく */
+/* 矢印（線＋先の三角） */
+function qArrow(x1,y1,x2,y2,c){
+  const a=Math.atan2(y2-y1,x2-x1), L=14, W=7, bx=x2-L*Math.cos(a), by=y2-L*Math.sin(a);
+  const p=[[x2,y2],[bx-W*Math.sin(a),by+W*Math.cos(a)],[bx+W*Math.sin(a),by-W*Math.cos(a)]].map(q=>q.map(v=>v.toFixed(1)).join(',')).join(' ');
+  return `<line x1="${x1}" y1="${y1}" x2="${bx.toFixed(1)}" y2="${by.toFixed(1)}" stroke="${c}"/><polygon points="${p}" fill="${c}"/>`;
+}
+function eqSlide(P){
+  let n = 0; const st = {lab: ++n, fac: ++n};   // 矢印「因数分解」→ もう一回 クリックで 式
+  if(P.point) st.pt = ++n;
+  const ns = B => B.t ? (B.d ? [++n, ++n, ++n] : [++n, ++n]) : [++n];
+  if(P.ofirst){ st.o = ns(P.ol); st.b = ns(P.bl); }   // ⑷：( ) の方から 先に
+  else        { st.b = ns(P.bl); st.o = ns(P.ol); }
+  st.ans = ++n;
+  if(P.merge) st.mg = ++n;          // ⑶：同じ答えを 1つに まとめる
+  if(P.jyu) st.jyu = ++n;
+  const done = P.jyu ? st.jyu : st.ans;
+  const L = 48, BX = 48, BW = P.tall ? 290 : 280, OX = P.tall ? BX + BW + 16 : 352;
+  const bx = L + P.wb/2, ox = L + P.wb + P.wo/2;
+  /* 箱の中：「x ＋ 5 ＝ 0」→ 移項の矢印が のびてから「x ＝ −5」（＝ の位置を そろえた 2行） */
+  const box = (B,ss,k) => {
+    const ln = (s,l,r,cls='') => [l,'＝',r].map((h,i)=>`<span class="qc${i} lh${cls}" data-s="${s}">${h}</span>`).join('');
+    const val = `<span${k?` data-k="${k}"`:''}>${B.v}</span>`;
+    if(!B.t) return `<div class="qlines">${ln(ss[0],B.a,val)}</div>`;
+    const v2 = B.d ? B.v : val;
+    const l3 = B.d ? ln(ss[2],'x',`<span data-k="${k}">${B.f}</span><span class="qdiv">÷${B.d}</span>`) : '';
+    return `<div class="qlines">${ln(ss[0],`${B.a} ${tm('r',`<span class="mvt">${B.t}</span>`,ss[1])}`,'0')}${ln(ss[1],B.a,tm('r',`<span class="mvv">${v2}</span>`,ss[1]),' late')}${l3}</div>`
+         + `<svg class="mva"><g class="gs" data-s="${ss[1]}"><path pathLength="1" d=""/><polygon points=""/></g></svg>`;
+  };
+  const ans = P.merge
+    ? `${slotC('b',P.ab,st.ans,'ab')}<span class="qdup" data-o="${st.mg}"><span class="qcm">,</span>${slotC('o',P.ao,st.ans,'ao')}</span>`
+    : P.ao
+    ? `${slotC('b',P.ab,st.ans,'ab')}<span class="qcm">,</span>${slotC('o',P.ao,st.ans,'ao')}`
+    : slotC('b',P.ab,st.ans,'ab');
+  return `
+  <div class="pno">${P.num}</div>
+  <div class="card abs qecard${P.tall?' qtall':''}">${EQTAPE}
+    <div class="q0 math">${P.eq}</div>
+    <div class="qlab" style="left:${L+P.wb+P.wo+100}px"><svg class="gs" data-s="${st.lab}" width="46" height="76" viewBox="0 0 46 76"><path pathLength="1" d="M10 6 C44 14,44 52,18 64" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/><polygon points="6,68 26,72 17,52" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span class="lh" data-s="${st.lab}">因数分解</span></div>
+    <div class="q1 math lh" data-s="${st.fac}"><span class="qf qf-b" style="width:${P.wb}px"><span>${P.fb}</span></span><span class="qf qf-o" style="width:${P.wo}px"><span>${P.fo}</span></span><span class="qz">＝ 0</span></div>
+    <svg class="qarr" width="700" height="60" viewBox="0 0 700 60">
+      <g class="gs" data-s="${st.b[0]}">${qArrow(bx,4,bx,56,'var(--b-ink)')}</g>
+      <g class="gs" data-s="${st.o[0]}">${qArrow(ox,4,OX+BW/2,56,'var(--o-ink)')}</g>
+    </svg>
+    <div class="qb qb-b math lh" data-s="${st.b[0]}" style="left:${BX}px;width:${BW}px">${box(P.bl,st.b,'ab')}</div>
+    <div class="qb qb-o math lh" data-s="${st.o[0]}" style="left:${OX}px;width:${BW}px">${box(P.ol,st.o,'ao')}</div>
+    <div class="q3 math"><span class="qx">x ＝</span><span class="qa">${ans}</span>${P.jyu?`<span class="qjyu lh" data-s="${st.jyu}">重解</span>`:''}</div>
+    <div class="qpt${P.point?' lh':''}"${P.point?` data-s="${st.pt}"`:''}>${TP('yellow','right:20px;top:-14px;transform:rotate(4deg)')}<div class="lab">ポイント</div>
+      <div class="qpt-m math"><span class="qs qs-b"></span> × <span class="qs qs-o"></span> ＝ 0</div>
+      <div class="qpt-t">→ どちらかが 0</div>
+    </div>
+  </div>
+  <div class="abs r done qdone" data-s="${done}"><div class="seal">完成！</div></div>
+  ${cbar(P.cm)}`;
+}
+
+/* 移項の矢印を、＋5 の下から −5 の上へ かく（engine.js の relayout から 呼ばれる） */
+function layoutExtra(root){
+  root.querySelectorAll('.qb').forEach(b=>{
+    const t=b.querySelector('.mvt'), v=b.querySelector('.mvv'), g=b.querySelector('.mva g');
+    if(!t||!v||!g) return;
+    const [bx,by]=pos(b), r=e=>{ const [x,y]=pos(e); return [x-bx,y-by,e.offsetWidth,e.offsetHeight]; };
+    const [tx,ty,tw,th]=r(t.closest('.tm')), [vx,vy,vw]=r(v.closest('.tm'));
+    const x1=tx+tw/2, y1=ty+th+2, x2=vx+vw/2, y2=vy-2, d=(y2-y1)*.9;
+    g.querySelector('path').setAttribute('d',`M${x1} ${y1} C${x1} ${y1+d} ${x2} ${y2-d} ${x2} ${y2-10}`);
+    g.querySelector('polygon').setAttribute('points',`${x2-7},${y2-12} ${x2+7},${y2-12} ${x2},${y2}`);
+  });
+}
+
+/* ====== 解の公式（①-4）：プリントの 枠の 位置を そのまま 拡大して 再現する ======
+   座標は プリント（PDF）の pt。 KS 倍して、問題番号の 行を 原点に する。
+   生徒は プリントに 書きこむので、枠の 位置・形は 変えない。 */
+const KS = 2.05, KX0 = 62, KL = 24, KT = 18;
+const kpos = (y0) => (x1,y1,x2,y2) => `left:${(KL+(x1-KX0)*KS).toFixed(1)}px;top:${(KT+(y1-y0)*KS).toFixed(1)}px;width:${((x2-x1)*KS).toFixed(1)}px;height:${((y2-y1)*KS).toFixed(1)}px`;
+const SQ = t => `√<span class="ov">${t}</span>`;
+/* 解の公式（色つき）：a 赤、b 緑、c 青 */
+const KA = t => `<span class="ka">${t}</span>`, KB = t => `<span class="kb">${t}</span>`, KC = t => `<span class="kc">${t}</span>`;
+const FORMULA = (big) => `<span class="kfx math${big?' big':''}">x ＝ <span class="kfr"><span>−${KB('b')} ± ${SQ(`${KB('b')}${P2} − 4${KA('a')}${KC('c')}`)}</span><span>2${KA('a')}</span></span></span>`;
+
+/* 1問。P = {num, eq, abc, y0, b1:[-b], b2:[b²], b3:[-4ac], calc, b4:[2a], row2:[…], cm}
+   各 枠は [出る番, 中身]。row2 は 下の段（プリントの 問題ごとに 形が ちがう）
+   notes：[[番, ⑴ の座標 [x1,y1,x2,y2], 中身]]（枠の 近くの 小さな 計算メモ） */
+function kfSlide(P){
+  const at = kpos(P.y0);
+  const wrap = h => /^<div class="khf"/.test(h) ? h : `<span class="kwr">${h}</span>`;
+  const bx = (cls,r,[s,h],x='') => `<div class="kb0 ${cls}" style="${at(...r)}"${x}>${h!==undefined?`<div class="kin lh" data-s="${s}">${wrap(h)}</div>`:''}</div>`;
+  const tx = (r,h,cls='') => `<div class="ktx ${cls}" style="${at(...r)}"><span class="kwr">${h}</span></div>`;
+  const Y = P.y0, d = y => y - 210.2 + Y;          // ⑴ の 位置を 基準に、問題ごとの ずれ
+  // ルート記号と 分数の線（SVG、pt → px）
+  const X = x => (KL+(x-KX0)*KS).toFixed(1), YY = y => (KT+(y-Y)*KS).toFixed(1);
+  const svg = `<svg class="ksv" width="1184" height="490">
+    <polyline points="${X(176)},${YY(d(252))} ${X(180)},${YY(d(249.5))} ${X(184.5)},${YY(d(262))} ${X(189)},${YY(d(238.2))} ${X(290.3)},${YY(d(238.2))}" fill="none" stroke="var(--ink)" stroke-width="2.4" stroke-linejoin="round"/>
+    <line x1="${X(112.5)}" y1="${YY(d(271.1))}" x2="${X(300.4)}" y2="${YY(d(271.1))}" stroke="var(--ink)" stroke-width="2.4"/>
+    ${(P.lines||[]).map(([x1,y,x2])=>`<line x1="${X(x1)}" y1="${YY(y)}" x2="${X(x2)}" y2="${YY(y)}" stroke="var(--ink)" stroke-width="2"/>`).join('')}
+    ${(P.arrows||[]).map(([x1,y1,x2,y2])=>`<g class="gs" data-s="${P.arrowS}">${qArrow(+X(x1),+YY(y1),+X(x2),+YY(y2),'var(--note)')}</g>`).join('')}
+  </svg>`;
+  return `
+  <div class="card abs kcard">
+    ${tx([KX0,Y,340,Y+14.4],`${P.num}　${P.eq}`,'ktitle math')}
+    <div class="kabc lh" data-s="${P.abc[0]}" style="${at(230,Y-2,520,Y+16)}">${P.abc[1]}</div>
+    ${tx([76,d(261.1),112,d(281.1)],'x ＝','kxe math')}
+    ${tx([157.2,d(241.7),176,d(268.7)],'±','kpm math')}
+    ${bx('kpb',[113.7,d(241.7),157.2,d(268.7)],P.b1)}
+    ${bx('kpb',[186.5,d(241.7),229.9,d(268.7)],P.b2)}
+    ${bx('kpr',[229.2,d(241.7),285.4,d(268.7)],P.b3)}
+    ${bx('kpb',[179.9,d(273.7),239.2,d(300.6)],P.b4)}
+    ${tx([350.4,d(225.7),460,d(235.7)],'−4ac の計算','klab')}
+    ${(P.notes||[]).map(([s,r,h])=>`<div class="knote lh" data-s="${s}" style="${at(r[0],d(r[1]),r[2],d(r[3]))}"><span class="kwr">${h}</span></div>`).join('')}
+    ${bx('kpr kcalc',[350.5,d(240.6),465.2,d(267.5)],P.calc)}
+    ${P.row2.map(r=>r.t ? tx(r.r,r.t,'kxe math') : bx(r.c,r.r,r.v)).join('')}
+    ${svg}
+    <div class="kref">${TP('lav','right:20px;top:-14px;transform:rotate(-4deg)')}<div class="lab">解の公式</div>${FORMULA()}</div>
+  </div>
+  <div class="abs r done kdone" data-s="${P.done}"><div class="seal">完成！</div></div>
+  ${cbar(P.cm)}`;
+}
+/* 分数（枠の中：上と下に 分けて 書く） */
+const KF = (n,dn) => `<span class="kfr"><span>${n}</span><span>${dn}</span></span>`;
+/* 枠の中を 上下に 分けて 書く（プリントに 分数の線が 印刷されている 枠） */
+const KH = (n,dn) => `<div class="khf"><span>${n}</span><span>${dn}</span></div>`;
+
+/* ====== プリントの 画像を 背景に 置き、空らんに 答えを 出す（①-6〜③-4） ======
+   P = {img, clip:[x1,y1,x2,y2]（PDF の pt）, items:[…], svg:[…], cm, done}
+   items：{s:番, r:[x1,y1,x2,y2], h:'中身', fs:文字の大きさ(pt), al:'l'|'c'}　空らんの 答え
+          {m:番, e:消える番, r:[…]}　マーカー（強調の わく）
+   svg  ：PB(…) などの 文字列（座標は PDF の pt のまま） */
+function pgSlide(P){
+  const [cx1,cy1,cx2,cy2] = P.clip, w = cx2-cx1, h = cy2-cy1;
+  const s = Math.min(1150/w, 466/h, P.max||2.6);
+  const W = w*s, H = h*s, L = (1184-W)/2, T = (490-H)/2;
+  const X = x => (L+(x-cx1)*s).toFixed(1), Y = y => (T+(y-cy1)*s).toFixed(1);
+  const R = r => `left:${X(r[0])}px;top:${Y(r[1])}px;width:${((r[2]-r[0])*s).toFixed(1)}px;height:${((r[3]-r[1])*s).toFixed(1)}px`;
+  const it = P.items.map(o => o.m!==undefined
+    ? `<div class="pgm"${o.e?` data-wa="${o.m}" data-wb="${o.e}"`:` data-wa="${o.m}" data-wb="99"`} style="${R(o.r)}"></div>`
+    : `<div class="pga ${o.al==='l'?'al':''} lh" data-s="${o.s}" style="${R(o.r)};font-size:${((o.fs||11)*s).toFixed(1)}px"><span class="kwr">${o.h}</span></div>`).join('');
+  return `
+  <div class="card abs pgcard">
+    <img class="pgimg" src="${P.img}" style="left:${L.toFixed(1)}px;top:${T.toFixed(1)}px;width:${W.toFixed(1)}px;height:${H.toFixed(1)}px" alt="">
+    <svg class="pgsv" style="left:${L.toFixed(1)}px;top:${T.toFixed(1)}px" width="${W.toFixed(1)}" height="${H.toFixed(1)}" viewBox="${cx1} ${cy1} ${w} ${h}">${(P.svg||[]).join('')}</svg>
+    ${it}
+  </div>
+  ${P.done ? `<div class="abs r done pgdone" data-s="${P.done}"><div class="seal">完成！</div></div>` : ''}
+  ${cbar(P.cm)}`;
+}
+/* 放物線（PDF の pt で）：y ＝ yv − q (x − xv)²（下に凸。画面では 上に 開く）
+   o = {xv, yv, q, ay:x軸の y, top:かき始める y, s:かく番, lab:[[x,'文字'],…], dot:'o'|'f'|null, ds:点の番,
+        paint:'up'|'down'|'all'|'up0'|null, ps:塗る番, draw:false（すでに 印刷されている 線に 塗るだけ）} */
+function PB(o){
+  const xh = Math.sqrt(Math.max(0,(o.yv-o.top)/o.q));
+  const f = x => o.yv - o.q*(x-o.xv)**2;
+  const path = (a,b) => { let d=''; const n=60; for(let i=0;i<=n;i++){ const x=a+(b-a)*i/n; d+=(i?'L':'M')+x.toFixed(2)+' '+f(x).toFixed(2)+' '; } return d; };
+  const x1 = o.xv-xh, x2 = o.xv+xh;
+  const rr = o.yv>o.ay+0.01 ? Math.sqrt((o.yv-o.ay)/o.q) : (Math.abs(o.yv-o.ay)<0.01 ? 0 : null);
+  const roots = rr===null ? [] : rr===0 ? [o.xv] : [o.xv-rr, o.xv+rr];
+  let s = '';
+  if(o.draw!==false) s += `<path class="curve pgc" data-s="${o.s}" pathLength="1" d="${path(x1,x2)}"/>`;
+  if(o.paint){
+    let seg = [];
+    if(o.paint==='all' || o.paint==='up0' || (o.paint==='up' && roots.length<2)) seg = [[x1,x2]];
+    else if(o.paint==='up') seg = [[x1,roots[0]],[roots[1],x2]];
+    else if(o.paint==='down' && roots.length===2) seg = [[roots[0],roots[1]]];
+    s += `<g class="gs" data-s="${o.ps}">${seg.map(([a,b])=>`<path class="pgp" d="${path(a,b)}"/>`).join('')}</g>`;
+  }
+  if(o.dot) s += `<g class="gs" data-s="${o.ds??o.s}">${roots.map(x=>`<circle class="pgd ${o.dot==='o'?'op':''}" cx="${x.toFixed(2)}" cy="${o.ay}" r="2.6"/>`).join('')}</g>`;
+  if(o.lab) s += `<g class="gs" data-s="${o.ls??o.s}">${o.lab.map(([x,t])=>`<text class="pgt" x="${x}" y="${o.ay+9}" text-anchor="middle">${t}</text>`).join('')}</g>`;
+  return s;
+}
+
+/* ====== このプリントのスライド ====== */
+
+const IMG = s => s;
+const A = (s,r,h,fs,al) => ({s,r,h,fs,al});
+const MK = (m,r,e) => ({m,r,e});
+const JA = t => `<span class="ja">${t}</span>`;
+const FX = (n,d) => KF(n,d);
+
+const KK = KIMATSU + '　③-3';
+const POL = `<div class="fpol"><div class="fa math">接する・交わらない</div><div class="fv">とき は？</div><div class="fb math">すべての実数 / 解なし</div></div>`;
+/* 1問：dy は ⑴ からの ずれ（162pt ずつ） */
+const q = (img, dy, lines, g, ans, cms) => {
+  const top = 125.4+dy, ay = top+76.9;
+  const gr = PB(Object.assign({xv:300.4, q:0.03, ay, top:top+6, s:4, ls:4}, g(ay)));
+  return pgSlide({img, clip:[56,98+dy,540,240+dy], svg:[gr],
+    items:[...lines.map((t,i)=>A(i+1,[68,top+6+i*34,240,top+38+i*34],t,10.5,'l')), A(6,[359.6,204+dy,527.3,235.2+dy],ans,11)],
+    done:6, cm:cms});
+};
+const s1 = q('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAB6QAAAI/CAIAAABf0vA8AAAACXBIWXMAAA7EAAAOxAGVKw4bAAA+hElEQVR4nOzdCbwd8p338SMI0thiqS20DB3bGEpTlCoGFWp0dFLtYNJq0VpKa2vxTKtVbUZRSlQpGoylktQSiaUiUhFUIvsuN4ns+3Zvtj5nnGfu85+EOPf+z5L/3/vzer+eVyXnnnNyMK/f8216U/jbS4XQmr90/JskSZIkSZIkSRts0+5ce9kecWbB2C1JkiRJkiRJSiljtyRJkiRJkiQp+YzdkiRJkiRJkqTkM3ZLkiRJkiRJkpLP2C1JkiRJkiRJSj5jtyRJkiRJkiQp+YzdkiRJkiRJkqTkM3ZLkiRJkiRJkpLP2C1JkiRJkiRJSj5jtyRJkiRJkiQp+YzdkiRJkiRJkqTkM3ZLkiRJkiRJkpLP2C1JkiRJkiRJSj5jtyRJkiRJkiQp+YzdkiRJkiRJkqTkM3ZLkiRJkiRJkpLP2C1JkiRJkiRJSj5jtyRJkiRJkiQp+YzdkiRJkiRJkqTkM3ZLkiRJkiRJkpLP2C1JkiRJkiRJSj5jtyRJkiRJkiQp+YzdkiRJkiRJkqTkM3ZLkiRJkiRJkpKvLmP3mjVr7rjjjvHjx1fqCVevXn3rrbe+8847lXrCmrV06dKGhobp06evXLmy3u9FkiRJkiRJkpKtLmN3t27dCoXCt771rUo94VtvvVV8wn322aexsbFSz1m9FixYcO+9955xxhm77rpr4X/adNNNjzrqqJ49e9b73UmSJEmSJElSgtV+7J46deoWW2xRKBRef/31Sj3nmjVr9t9//+Jz/uIXv6jUc1ape+65p23btqWB+8QTT+zevfv9999/3nnnbbzxxqUfvPLKK+v9HiVJkiRJkiQptWo/dp977rmFQuHrX/96BZ+zWL9+/YpP26FDh8WLF1f2mSvbj370o9KofeONN4Y//vTTTzf/Lu8xY8bU6+1JkiRJkiRJUpLVeOyeOnXqxhtvvNFGG02YMKGcx0+fPn3IkCFlPvkXvvCFQqHw05/+NOINVr3S2N2pU6d1f+qQQw4pjd133HFH7d+Ysqlr166PP/54Et/SR5IkSZIkSapYNR67L7/88kKh8KUvfamcB/fv33/TTTct/7eB9+rVq/jgj3/846tWrYp7m1WsoaFh4MCBU6dOXfenzj777NLYfcMNN9T+jSmbtttuu+I/Re3btz/rrLOeffbZDflfB0mSJEmSJKli1XLsXrly5fbbb18oFJ5++ulyHn/JJZeUxt/NNtusnMevXr26Y8eOxcc/8cQTce+0Pp122mmlX+/vf//7er8XJVxp7G6u+C/dBRdcMHDgwHq/L0mSJEmSJKma1XLs7t27d6FQ2GabbVauXFnO47/73e+W1rqNN964zJe44oorio8/4YQTIt5mfVq1atVOO+1UWvZnzJhR77dTyYYPH37Xez333HP1fi8bSmvWrCl+LD169PjJT35y8cUXX3LJJcX/8Pjjj1fkb/3dd999zDHHtGnTpvC/69ixY/FfkKFDh8a/REubO3fuAw88cN111xV/sT//+c8fe+yxpUuX1v5tSJIkSZIkKedqOXb/27/9W6FQOOecc8p8fCvG7sGDB5cev2DBgla+yzp10003lX6xP/vZz+r9XirZsmXL9tprr9Iv7V/+5V/q/XbqX58+fYr/Cqz1m6+ba9OmTfFTet/vctPSZs2adddddx133HHrrt777rvvT3/60zK/b35kCxcuLP56N9lkk7XewxZbbHHJJZf4xuKSJEmSJEmqWDUbu1evXr3tttsWCoWnnnqqzC9pxdhdbJdddil+ycMPP9yqt1mf3nzzzc0226z4tk855ZR6v5cK1/y9aIzdDz744J577tn8aey2225XX3118R/UBx544PLLL99hhx2af6pDhw4jR46s1OvOmTPnnnvuOfHEE9ddnA877LBbb721ev9LgokTJ+6+++6l1zrrrLP69OnzxhtvFF+xeevff//9586dW6VXlyRJkiRJ0kermo3dL7/8cmm2XrZsWZlf0rqxu2vXrsUv6dKlS6veZh2aPHnyzjvvXHzPn/3sZ8v/cFrRCy+88Jv3mjRpUvVeJWzgwIEbbbRRWmN39T6lzp07N38UX/3qV5cvXx7+7Pz58zt16tT8gAMOOGDNmjWVfQPz5s277777Tj755NKf+9pc8e/Rsccee88991T2fw+xcOHCv//7vy+9xC233BL+1Lhx47bZZpvSTx1zzDH+CE1JkiRJkiRVoJqN3ddff32hUDjkkEPK/5LWjd2/+93vil+y8847t/w91qGZM2fuvffexTd86KGHLly4sKqvdc4555Q+z969e1f1hUotX7689EtLa+yu3qfUPHZ36tRp9erV6z5g0qRJbdu2bf64nn322cq+geaK/6T16NHj1FNPDV+u2KabbvqlL33p0UcfXWuIb10XXXRR6Wk/97nPrfuzd955Z/Pr+hNZJUmSJEmSVIFqNnaffPLJhULhwgsvLP9LWjd2jxgxovRVU6ZMafnbrGlz5szZb7/9Sv8dQA2+yXiNx+7LLrus+Fo77bTTpz/9aWP334Kx+5VXXvmgx5T+NSn1gx/8oLJvYN0WL1788MMPn3766Ztvvnm4en/sYx/7+te//swzz7T691w3NDQ0L+lPPvnkug9obGzccsstSw/Yc88933f9lyRJkiRJklpQzcbu0nfpve+++8r/ktaN3cW22GKL4lc99thjLXyPNW3BggX/+I//WHyfxf93/vz5NXjFWo7dgwYNKn0Dk8cff/zoo482dhe77bbbvvnNb1566aXreUzpfwBR6swzz6zsG1hPS5cuLf77csYZZ5T+3WnuO9/5Tuue8Jprrik9w+abb/5Bfwplly5dml9oPf8FgCRJkiRJklRWtRm758yZU5q0BgwYUP5XtXrs3n///Ytfdf3117fwbdaupqamww8/vPDet2au2R/QV7Oxu7Gx8VOf+lTxhTp37lz8y8MOO8zYXWZ33HFH8/579tln1/4NLF269Hvf+17zd1o/77zzWvc8pf/JQrHPf/7zH/SY8DuZXHXVVa18x5IkSZIkSVKp2ozdgwcPLk1a06ZNK/+rWj12n3LKKcWvOuecc1r2LlvS9OnT1/+HSa5Zs2b27Nkf9G24zz777OI7/OQnPzljxoy1fmr8+PFDhgyp2BsNqtmMe8UVVxRfpV27dg0NDcW/PPDAA1sxdkd+wq2uvmP3tdde27z//vCHP6zZ6xY/zJdffrn4b1zpz0ptrnVj98SJE5uf4YILLvighw0aNKj5YZ06dYp4+5IkSZIkSVKtxu5HHnmkUChssskmLfqqVo/dF154YfGrjjrqqBZ9VTktWbLk8ssvb9++ffH5N9poo65du677vYaLP3LddddttdVWpTe/7ndTuffee4s/vuWWW44bN26tn2pqavrEJz5x5JFHVvyd/61WM+7gwYPbtGlTfJWbb7659COl3+Vd5thdkU84pvqO3eF39ujbt2+1X674Sb744ovnn3/+jjvuGG7cxb+Dxx9//O9///vW/XcJDz30UPNTNf9jsG4LFixofti2224b8euQJEmSJEmSajV2l745Q0v3rFaP3T/60Y+KX7Xffvu16Ks+tEWLFnXq1Knwv+vWrVv4mNWrV59++unhA8aOHRs+YOrUqaU/l+/UU0+9K6h79+4333zzkUceWfypU045pbLvvFQNZtympqZ999238N4fudk8Uu+5555ljt0V+YQjq+PY3djYuPXWW5defdddd12zZk2VXmjVqlXPPffcueeeW/pO+mHFz/+2226bOXNmzPNfffXVzU/Yo0eP9TyyXbt2zY+cN29ezItKkiRJkiTpo15txu5u3boVCoXddtutRV/V6rH7xhtvLH7VHnvs0aKv+tBOOumk4tNeffXVvXr12muvvUrvba1XaX7PH/T7Vb/5zW8WPqyzzjqrsu+8VA1m3NLK2aZNm7/+9a/NP7j77ruXOXZX5BOOrI5j9+23397867rnnnsq/vwrV67s06dP165dix/aWv/I7bfffjfccMOkSZMq8kJnnnlm8zMXX3E9j/zEJz7R/MihQ4dW5NUlSZIkSZL0Ea02Y/d1111XKBT22WefFn1Vq8fu2267rfhV2223XYu+av3dfffdheAPvXziiSeaR7rRo0eXfvC+++4rvds77rhj2rRpe++999e+9rW1nqdt27YfOnZfcsklFXznzVV7xn3zzTeLv/bi81966aXhj++2227ljN2V+oQjq9fYPXfu3A4dOpRe+qSTTqrgMzc1NT311FNnn312828bb26PPfa46qqrhg0bVsGXK3bcccc1v8TLL7+8nkcedNBBzY989dVXK/s2JEmSJEmS9NGqNmP39ddfX8ux+9Zbby1+1Y477tiir1p/TU1Nt912W/O35li+fPlmm21Wenv33Xdf8UdGjRq1xRZbFP/ywQcfrODrVrCqzrgrVqw44IADik/esWPHpUuXhj+16667ljN2byCfcL3G7lNPPbX0un/3d383f/78+CdsbGzs1avX1772tdK3zQnbYYcdiv9yVW9cPvTQQ5tfa9CgQet55BFHHNH8yOeff75K70eSJEmSJEkfiWozdv/qV78q1PDbmNxwww3Fr/rkJz/Zoq9qaUcffXTp7V122WWNjY0HHnhg8T///Oc/r+qLxlTVGfeaa64pPfnTTz+91k+VOXavW10+4bqM3TfddFPpRbfeeusxY8ZEPluvXr26dOnysY99bK2Ne8sttyz+6vr1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', 0, [`x${P2} ＋ 4x ＋ 2 ＝ 0`, `x ＝ ${FX(`−4 ± ${SQ('16 − 8')}`,'2')}`, `＝ −2 ± ${SQ('2')}`],
+  ay=>({yv:ay+21, q:0.04, paint:'up', ps:5, dot:'f', ds:5, lab:[[276,'−2−√2'],[325,'−2+√2']]}),
+  `x ≦ −2 − ${SQ('2')}, −2 ＋ ${SQ('2')} ≦ x`, [
+  `⑴ ${M('x² ＋ 4x ＋ 2 ≧ 0')} を 解こう！`,
+  `Step❶ ${M('x² ＋ 4x ＋ 2 ＝ 0')}。　因数分解 できないので 解の公式。`,
+  `${M(`x ＝ ${FR('−4 ± √(16 − 8)',2)}`)}`,
+  `${M(`＝ ${FR('−4 ± 2√2',2)} ＝ −2 ± √2`)}`,
+  `グラフを かく。　x軸と 2点で 交わる。`,
+  `Step❷ <b>≧ 0</b> → 上を 塗る。　＝ が あるので 黒丸。`,
+  `Step❸ <b>${M('x ≦ −2 − √2, −2 ＋ √2 ≦ x')}</b>　<b>完成！</b>`]);
+const s2 = q('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAB6QAAAI+CAIAAACUjiOZAAAACXBIWXMAAA7EAAAOxAGVKw4bAABBRklEQVR4nOzdB5jcVcHv8YGEQGgGAgJSRBBEEQQEQjFEygsoIEU0hioYL6IUpSvCvQoISAnNAFIkvnSUHiBICwEJCQgJpPdeN6RsQsom3pG57zznpizLnp0ZzuHzfT6PD2T/mfnvJPE5/rLOFv79SiG07J9b/luSJEmSJEmSpE9tk25dftke1KVg7JYkSZIkSZIkpZSxW5IkSZIkSZKUfMZuSZIkSZIkSVLyGbslSZIkSZIkScln7JYkSZIkSZIkJZ+xW5IkSZIkSZKUfMZuSZIkSZIkSVLyGbslSZIkSZIkScln7JYkSZIkSZIkJZ+xW5IkSZIkSZKUfMZuSZIkSZIkSVLyGbslSZIkSZIkScln7JYkSZIkSZIkJZ+xW5IkSZIkSZKUfMZuSZIkSZIkSVLyGbslSZIkSZIkScln7JYkSZIkSZIkJZ+xW5IkSZIkSZKUfMZuSZIkSZIkSVLyGbslSZIkSZIkScln7JYkSZIkSZIkJZ+xW5IkSZIkSZKUfMZuSZIkSZIkSVLy1WTsXrZsWffu3UeOHNlSD7h06dIbb7xx7NixLfWAkiRJkiRJkqSUqsnYfc011xQKhZ/+9Kct9YDvvPNO8QG33377hQsXttRjVqf58+ePHz9+ypQpS5YsqfW9SJIkSZIkSVKyVX/snjhxYtu2bQuFQv/+/VvqMZctW7bjjjsWH/Pqq69uqcesXLNnz7777ruPPfbYzTffvPA/rbHGGh07dnzsscdqfXeSJEmSJEmSlGDVH7u7du1aKBSOP/74FnzMYs8//3zxYTfccMN58+a17CO3bHfddVebNm1KA/chhxxy22239ejR47TTTmvVqlXpBy+88MJa36MkSZIkSZIkpVaVx+6JEye2atVqtdVWGzVqVONX9uvX7/rrrz/99NNPOumkM84448orr3zllVcWLVrUyE/Zf//9C4XC5Zdf3lJ3W4kuvvji0qh91VVXhT/es2fP8ld5Dxs2rFa3J0mSJEmSJElJVuWx+/zzzy8UCt/73vcaueauu+760pe+VFhZG2200aWXXrqqN+Z+/PHHi9dssskmDQ0NLXXDLV5p7O7QocOKH9ptt91Kn2b37t2rf2OSJEmSJEmSlHDVHLuXLFmy0UYbFQqFnj17rvSCUaNG7bPPPiuducN22GGH4cOHr/jTly5duuWWWxYvePTRR1vkhivR+PHjX3/99YkTJ674oZNOOqn0Cf7hD3+o/o1JkiRJkiRJUsJVc+x+4oknCoVCu3btlixZsuJHx40bt8UWW4SjdseOHc8999wrrrii+J+dOnVabbXVyh8qXjlp0qQVH+SCCy4ofvTggw9ukRuuckceeWTps/vLX/5S63tp4RYvXvz666/fcsst55133se+g81npAkTJvTo0ePyyy8/66yzzj///G7duvXt27fWN1Wp6urq/vrXv1566aXFT/bKK6985JFH5s+fX+ubkiRJkiRJUl5Vc+w+4YQTCoXCySefvOKH6uvrv/zlL5e37P3222/Fr90eNmzY7rvvXr7mmGOOWfFx+vXrV/xQq1atZs+e3SL3XLUaGho23XTT4s2vueaaU6dOrfXttFhvvPHGcccdt+6665Z/4Tp16lTrm6pxTz31VPkta5Zriy22eOCBB2p9gy3ZnDlzin/kW7duvdxn2rZt27PPPntVb0kkSZIkSZIkfeKqNnYvXbp0gw02KBQKTz/99Iof/e1vf1tewY466qjFixev9EHq6+u/8pWvlK8cMmTIitd84QtfKH4oucXwuuuuK31SV1xxRa3vpWUaPHjwwQcfXP7FWnPNNffcc8/jjz/+0ksvrfWt1awFCxYce+yxpRekXbt2F1xwQa9evd55552XXnrp7LPPXmONNUof6tq1a63vtGUaPXr0VlttVfqkTjzxxGefffatt9668cYb27dvX/rBHXfcsa6urta3KUmSJEmSpCyq2tj96quvlr7mesGCBSt+dPvtty+NX5tvvnl9fX0jj/Pwww+X99M//vGPK15wyimnFD/UuXPn+HuuWm+//faaa65ZvO3DDz+8cs/y4osv/umjxowZU7lnKXXDDTe0adOm9Mu05557Fn/VUnnbisq9Sg0NDd/+9rdLr8nOO++84tfvF5+6+AekdMFvf/vbln326jdnzpwddtih9OkUfz+EHxoxYkS7du1KHyq+Jp/m7ygrSZIkSZKkZKra2H3ZZZcVCoXddtttpR/97ne/W1q+PvZ7S9bV1ZXH7lNPPXXFC+68887ihzbbbLP4e65O48aNK95t8Z732muvlf5NQEt18sknl163J554onLPsnTp0tLfNxRbZ5117rnnnso9VyWq3Kt08cUXl9/BY6XfobTY73//+9I1rVu3Xun/caFqzZ079/rrr//Vr37V7Ec488wzS5/Lt771rRU/euutt5b/IOf3JvWSJEmSJEmqQVUbu0tz9hlnnLHSj86bN++OO+549tlnP/ZxGhoayhvZ0UcfveIFgwYNKn10woQJsTdd+aZNm7bddtsV73b33XefM2dORZ+rOmP3iSeeWHqWjTba6N13363cE1WoCr1K06dPb9u2bemRV/Wn4N8f/V1O+SviTzjhhBa8gaY3duzYX/7yl6W3Wf/+97/fvAcZP358+RN56qmnVrxg4cKF6623XumCbbbZZunSpXF3LUmSJEmSpM98VRu7S+/SG/91vsOHDy+P3at6a+PSqvjII49EPlelmzlz5te+9rXSF7xX4TtqVmHsvvnmm0tPsdZaa/Xv379Cz1LRKvQq3XTTTeXfty+99FIjV5b/Xw7rrLNORb/Sf8X69u37gx/8YPXVVy/farPH7vK78Bd/J6zqu1B27ty5/ESvvfZaxI1LkiRJkiRJ1Rq7Z86cWZq0+vTpE/lQl19+eXkgW9V0vuOOOxY/etlll0U+V0WbPXv2LrvsUrzP4n9+8MEHVXjGSo/dAwYMKH8x780331yJp6hCFXqVjjjiiPLv2xkzZjRy5aWXXlq+8h//+EcL3sOqWrp06d///ve99967ENS6desuXbq88847zXvM0t/iFOvUqdOqrgnfyeSiiy5q5t1LkiRJkiRJpaozdvfr1680aU2aNCnmcWbOnPm5z32u9FDrrrvuqjbiww8/vHjBySefHPNcjTdlypTGv+p22bJlM2bMWNU7kyxatKi0LX7961+vq6urzD0uX6XH7p122qn0+Ntvv33x0498tMhXuNlV6FX66le/Wh52G7/yb3/7W/nKa6+9tgXvYcXmzZt34403br311uHMvdFGG1188cWTJ09u9sOOHj26/Ginn376qi7r27dv+bIOHTo0++kkSZIkSZKk/1Sdsfuhhx4qfa1o5OOU3+Gh2KWXXrqqy84444ziBR07dox8uhWrr68///zzS29nvNpqq51yyikrvtdw8UeK97b++uuX7nOl76Zy0kknFT/0pS99aerUqct9aOTIkRV6q+uKjt1PPvlk+Zcm5s1qWuoVbnYVepU23XTT0sOuvvrqjV/50ksvlV/J4qffgvcQNmHChHPPPbf8Gpbaeeed//KXv6zqXUea3v33319+zG7duq3qstmzZ5cv22CDDSKfVJIkSZIkSZ/1qjN2d+/ePX7POu+888rT2K677rpkyZJVXXnxxRcXr/na174W83QrNnfu3A4dOhT+/6655prwmqVLlx599NHhBcOHD1/uce6+++7ij6+33nojRoxY7kOLFi3aeuut991335a981IVHbv32muv0oNvueWWjfzSNF5LvcIxVehV+spXvlK+4fr6+kaufOutt8pXrvRbsEbWv3//zp07t2rVqvwsq6222lFHHdW7d++Weopf//rX5Qe/9957G7ly7bXXLl85a9aslroBSZIkSZIkfRarzth9zTXXFAqFLbbYotmPEL5Vd/FxJk6c2MjFV111VfGyL37xi81+upV26KGHFh/217/+9eOPP77tttuWbma5Z/nFL34R7rAr7vvFO19vvfWKHzriiCNuD7rtttu6deu27777Fj90+OGHt+ydl6rc2N2/f//yp3z22Wcv99GFCxfOnTu3KY/TIq9wZBV6lfbbb7/yPTf+rTsHDhxYvvLAAw9sqRtYtmxZ8VX91re+Fb56n/vc584555yxY8e21LOU6tKlS/kpnn322UauDN9BZcCAAS17G5IkSZIkSfpsVZ2xu/Q997bffvvm/fSrr766vIhtuummH/uVvDfffHPxyvbt2zfv6VbaHXfcUQi+6eWjjz5avqWhQ4eWfvCee+4p/murVq26d+8+adKk7bbb7rjjjlvucX7yk58UPq4TTzyxBe+8XOXG7osuuqh8888888y/P3rH7csvv7xjx47rrLNO6cfbtm3bqVOnHj16rPi2JKVa6hWOrEKv0oUXXlj+dBr/1qnFF7B85be//e34p54/f/4tt9yyzTbbhL/Hin8Yi69h8UPxj79iBx54YPmJXn311Uau/MY3vlG+8o033qjEzUiSJEmSJOmzUnXG7ssuu6zZY/dyS/ewYcM+9qfceOONxYs///nPN+PpVtWiRYtuvvnm8lD74YcfrrnmmqW7Kr1F9ZAhQ9q2bVv81/vuu6+Rx2nTps3Hjt0rfnF0i1S5sbv83iOtW7eeOHHiz372s+I/rOqzO/TQQ+fNm7fig7TUKxxZhV6lN998s/wKFH9nrupL3evr6zt16lS+8rDDDot50kmTJl1wwQXl7+la6pBDDnnu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SZIkSZIkfUar5th9xhlnFAqFY445ZrkfD9+aufjR25vcww8/vNxG1qtXr+KDrL322gsXLmyRe16x0hi65557lp7697//fenOv/jFL4aX9enTp0I30OwqN+OGb9t95ZVXruqyIUOGlC9r5G0ravsK12Tsrq+vL7+z9le/+tU5c+ZU+hmXLVv26KOP7rPPPuHkvdZaa3Xt2rWRr7hves8//3z5YX/zm9+seMHixYs32mij0gXXXHNN/DNKkiRJkiTps141x+7XX3+9NKjNnz8//PErrrii0NyWm8m6du1a/MEuXbq0yA2XmjFjxpFHHvnf//3fDQ0Np59+evHxN9hgg3HjxpU++tJLL5Vvpvw16bfeemvxX++7774WvI34Kjrjdu7cufTg7du3nz59+kqv+e53v1u6pvgCFl/V8o9/ql7h6o/dQ4cO3WWXXUpP+qUvfanZ71bfvN58880f/vCH5bfLL3XAAQc89dRTy5Yti3nkPffcs/Ro66233syZM5f7aOm99Yt94QtfWO6/ECRJkiRJkqTmVM2x+9//8y4Wy72TyTPPPNPssTv8otGFCxeW3sPkhRdeaKkbLvbEE08UH7NVq1Ybb7xx8R9WX331559/vvzRRYsWrb322qWbOeigg0aPHn3nnXe2bt16t912W7x4cQveRnwVnXFnzJhRepuaYnvsscdyi+38+fNPOeWU0kfXWGON5d6Q+lP1Cldt7P7www9ffvnlH//4x8XPpfSMBx54YF1dXUWfdFWNGzfunHPOWW+99cI/XNtss81DDz3U7MccPnx4+f3B99lnn7lz55Y/9Nprr7Vt27b4423atOnXr19LfAaSJEmSJEn6zFflsfuWW24pFAp77bXXcj9+1113HX300Qd+wjp37hx+gXCPHj2KD7799tu31N2WuvDCC8MF8Lbbblvugh//+MfLTfBbbrnlSr8PZ22r9Iw7YcKEHXfcsfQU66yzznHHHXfllVdeddVVp556avv27cuvzKuvvrrcT/xUvcJVGLtvvPHGzTffPPxi6k033fSee+6p0NM1vXnz5t1www3lv7Qo9v3vfz/mAXv37l36C4zCR2/MfdZZZ1199dXFP7alz734u+K5555rqZuXJEmSJEnSZ70qj93z5s3bcMMNC4XCa6+91lKPWa60tK44lUa23377lda69ddff6WL5PTp08vfd7HY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', 162, [`x${P2} ＋ 6x ＋ 9 ＝ 0`, `(x ＋ 3)${P2} ＝ 0`, 'x ＝ −3（重解）'],
+  ay=>({yv:ay, q:0.032, dot:'o', ds:5, lab:[[300.4,'−3']]}), JA('解なし'), [
+  `⑵ ${M('x² ＋ 6x ＋ 9 ＜ 0')} を 解こう！`,
+  `Step❶ ${M('x² ＋ 6x ＋ 9 ＝ 0')}。`,
+  `${M('(x ＋ 3)² ＝ 0')}`,
+  `${M('x ＝ −3')}（重解）。`,
+  `グラフは x軸と −3 で <b>接する</b>。`,
+  `Step❷ <b>＜ 0</b> → 下を 塗りたい けど、x軸より 下の 部分が <b>ない</b>。`,
+  `だから <b>解なし</b>。　<b>完成！</b>`]);
+const s3 = q('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAB6QAAAI/CAIAAABf0vA8AAAACXBIWXMAAA7EAAAOxAGVKw4bAAA/qklEQVR4nOzdB7TU1aHv8QFsGLsSe4vRZ9SbXI2KPaba9SbRiyTR2PKIidFIJAaN5saC7SUq9liixhI73FiJxqCoCBZAOngoB0R6F5CSN89Zd9Z+HDge2VPYm893fVaWMn9n/gzq2vlxnFP41z8LoWWvb/8vSZIkSZIkSZJW2ybetvyyPaRjwdgtSZIkSZIkSUopY7ckSZIkSZIkKfmM3ZIkSZIkSZKk5DN2S5IkSZIkSZKSz9gtSZIkSZIkSUo+Y7ckSZIkSZIkKfmM3ZIkSZIkSZKk5DN2S5IkSZIkSZKSz9gtSZIkSZIkSUo+Y7ckSZIkSZIkKfmM3ZIkSZIkSZKk5DN2S5IkSZIkSZKSz9gtSZIkSZIkSUo+Y7ckSZIkSZIkKfmM3ZIkSZIkSZKk5DN2S5IkSZIkSZKSz9gtSZIkSZIkSUo+Y7ckSZIkSZIkKfmM3ZIkSZIkSZKk5DN2S5IkSZIkSZKSz9gtSZIkSZIkSUo+Y7ckSZIkSZIkKfmM3ZIkSZIkSZKk5DN2S5IkSZIkSZKSry5j97Jly2699dbRo0dX6gmXLl164403jh07tlJPWLPmz58/fvz4SZMmLV68uN73IkmSJEmSJEnJVpex+7rrrisUCj/5yU8q9YTvvvtu8Ql32223hQsXVuo5q9esWbPuueeeE088cdttty38T2uvvfahhx761FNP1fvuJEmSJEmSJCnBaj92T5gwoW3btoVCoX///pV6zmXLlu25557F57zmmmsq9ZxV6u67715nnXVKA/cRRxxx++2333fffZ06dWrTpk3pBy+88MJ636MkSZIkSZIkpVbtx+6zzjqrUCj88Ic/rOBzFuvVq1fxaTfbbLO5c+dW9pkr28UXX1wata+++urwx5955pnyV3mPGDGiXrcnSZIkSZIkSUlW47F7woQJbdq0adWq1fvvv9/MZYMHD77lllu6dOly5plnnnXWWRdeeOFf//rXKVOmNP/kX//61wuFwhVXXFGpu61GpbG7ffv2TR/aZ599SmP3rbfeWvsbkyRJkiRJkqSEq/HY3aVLl0KhcPzxx6/w0aVLl95555277LJLYUW1adPmxBNPHDNmzMqevEePHsXLttxyyyVLllTqhive+PHjX3vttQkTJjR96NRTTy39TLt161b7G5MkSZIkSZKkhKvl2L148eItttiiUCg888wzTR+dOnVq6Uuzm69t27ZPP/30Cp9/6dKl22+/ffGaJ598siI3XONOOOGE0s/xz3/+c73vRZIkSZIkSZKSqpZjd8+ePQuFwiabbLJ48eLlHpozZ86XvvSl8Iu4v/nNb1522WV/+tOf7rzzzgsvvLD0/SfLj7700ksrfIlf//rXxQu+853vVOSGa9mSJUu22mqr4s2vu+66H374Yb1vZ9VbtmzZ4MGDH3jggeIv37nnnnveeecV/+Dxxx9P+idV7RobG88///wV/iZQHk2fPv3++++/9NJLi39LXHXVVY899tj8+fPrfVOSJEmSJEnKq1qO3T/60Y8KhcKPf/zjpg+dd9555S374IMPHj16dNNr7r333rXXXrt0zQ477LBgwYKm1/Tr16+0hs+aNasi91yz/vCHP5R+aldeeWW972UVe+6554q/uJtvvvkKvyS/devW3//+91f4+S1rch9//PFVV13Vtm3b4lt07bXX1vt2Kt/s2bOLf1estdZaTf8TjeI/9QsXLqz3DUqSJEmSJCmXajZ2L126dNNNNy0UCiv8EJIDDjigNIHtt99+K1yxS912223lsezxxx9f4TXbbLNN8dGHH344/p5r1ttvv73uuusWb/vYY4+t972sSg8++OAXvvCF8i/Ndttt17Vr1+Ivwf3339+lS5d27dqVH9pss82GDh1a7/tdXXr++ee/+MUvlt+c7t271/uOKlxDQ8MOO+xQ+tmdcsopzz333FtvvXXjjTeWf0dkzz33nD59er1vU5IkSZIkSVlUs7H7lVdeKX3N9UcffdT00UceeaRt27Z77LHHBx980MyTLFu2rPRZHyv7CvFip59+evHRDh06xN9zbRo3btzWW29dvOcDDjhghW/O6t8xxxxTXmxPPvnk5X67YubMme3bty9fsNdeexV/Het1q5/aSy+9dMsnNfOtUOMbO3Zs+SPay91+++3Ve8XaN3v27N133730U7vhhhvCh0aNGrXJJpuUHjr88MNX5+8oK0mSJEmSpGSq2dh9+eWXFwqFffbZZ2UXLF26tCXPc/zxx5c2sm984xsrvOCuu+4qPrr11luv4o3WtsmTJ++6667FG953331nz55d79tZxcpjd/v27Vf46zhmzJh11lmnvOo+//zztb/JFvbjH/+4dJM9e/asxvMvXLjwsssuW2+99QpNuvPOOyvyEkcfffRjjz3Wwn+gqtcvfvGL0s/rkEMOafpo+F9p+I6skiRJkiRJqkA1G7uPPvroQqFwzjnnRD7PiSeeWBrIDjzwwBVeMGTIkNIFjY2Nka9V7aZNm7bHHnuUfg8guQ8ZDyuP3X369FnZNaW/AUpdcMEFtby9z1RVx+6nn3565513Lj55u3btunXr9s9//vOggw4qvy133XVXRV6l9CEhO+yww/XXXz9nzpyKPOdnbfz48eXf3vjb3/7W9IKFCxduuOGGpQu+8IUv1H2alyRJkiRJUvLVbOwuDXD33ntv5PPsv//+5Y/LWNk1pW/399hjj0W+VlWbNWvWv//7vxfvs/i/M2fOrPftRHXTTTedeeaZ559/fjPXlL60v1THjh1rdm+fteqN3Y2NjWuttVbr1q1/+ctfzp07t/SDpf8QodTdd99dkRcKv0fohhtuWPx1GTduXEWeueX99re/Ld3Aeuutt7LvQtmhQ4fyfTbz2ySSJEmSJElSi6rN2D1t2rTSpPXqq6/GPM/48eNbtWpVeqrrr79+ZZftueeexQsuv/zymNeqaosWLTrwwAMLn3yA9RryDfpuvfXW8rJ56qmn1vt2VlpVv7L7xhtvfOutt8IfefDBBys+dvfo0ePQQw8tBLVu3fqkk0568803K/L8Lan0nywU+9rXvraya8JPMvnNb35Ts3uTJEmSJElSntVm7O7Xr19p0po4ceIqP8nSpUvLH4Wx/vrrN/O5H8cee2xh5d/BsiJNmjSp+W8muWzZsqlTp67sY7hPPfXU4h3uvPPOH3744XIPjR49esCAARW70dWmSy65pLxsXnTRRZ96feQ7vMpV+zO7l6saY3ep4t9FxZ9L+FHphU8+/OeJJ56o9jcIbWhoKL/i2WefvbLL+vbtW76sffv2Vb0lSZIkSZIk5V9txu5HHnmkUCistdZaq/wMAwYMOOyww0q7WKtWrR599NFmLj7nnHOKlx166KGr/HIra968eV26dNlggw1Kt3H66ac3/azh4o9ceumlG220Uelum36ayj333FP6fIlRo0Yt99CiRYt22mmngw8+uOJ3XvfCz6x44YUXVnZZRd7hmLIZu0tNnTr1iiuu2GqrrcLJe+edd+7evXvxra74y5V66KGHyq/VzH+BMWvWrPJlm266aZVuRpIkSZIkSWtKtRm7Sx9h0fI9a/78+U899dQ999xz9dVXn3322bvsskt5FGvXrt0jjzzS/F9+8cUXF6/cY489Im97uebMmdO+ffvC/991110XXrN06dLvfve74QUjR44ML5gwYULp+/Idd9xxdwTdfvvt119//cEHH1x86Nhjj63snde9hQsXbrzxxqU3ZNttt13ZVxZX5B2OLLOxu9TixYsfeuihfffdN3zfNtpoowsuuKAa38e1a9eu5Vd54IEHmrly/fXXL185Y8aMit+JJEmSJEmS1qBqM3Zfd911hUJhu+22a+H1P/zhDwtN2nbbbX//+9838+kl5a6++uri9TvuuGPUTTfpyCOPLD5t165de/ToUd7fl3uVn//85+E9N933zzzzzKY/teU65ZRTKnvnde/mm29uyaRbkXc4sizH7nJ9+/bt0KFDmzZtyi9a/OOTTz55uU8Sj6xjx47l53/uueeauXKnnXYqXzlw4MAK3oMkSZIkSZLWuGozdl966aWFQmG33XZr4fUnn3zyClfg/fbb79prr23+o5yL3XTTTcWLN99888jbDrvzzjsLwTe9fPLJJ8t3NXz48NIP3nvvvaX18NZbb504ceKuu+76gx/8YLnnWe4zlFfYeeedV8E7r3vTp0/fbLPNSj+1I488cmWXVeodjizvsbtU8a3r2rVr8R+Q8O+6Qw45pEePHhX5OO9vfvOb5ad95ZVXmrnyK1/5SvnKN954I/6lJUmSJEmStOZWm7H78ssv/0xj94wZM7p37961a9fOnTufeeaZRxxxxBZbbFEexXbccceXXnqpmb/8xhtvLF72+c9/PvK2wxYtWnTTTTeVPz96wYIF6667bul+7r333uKPDBs2rG3btsU/ffDBByv4uhl03HHHld6oL37xizNnzlzZZavJO7wmjN2lFi5cWHzFvfbaK5y8d9lll5tvvnn+/Pkxzxx+Xkrfvn2bufKggw4qX/niiy/GvKgkSZIkSZLW9Gozdv/xj38sfJaPMWnasmXLevbsueOOO5Z2sXXWWaeZvbtbt26FT74L3yq/XEsqf8PMzp07L1y48N/+7d+Kf3zVVVdV9UWT6w9/+EPpXdp4441HjBjxmf7aurzDa87YXe7ll18+/vjjW7VqVb6TTTbZ5MILL5w4ceKqPeGXv/zl8lP179+/mSvLv8TFnn766VV7OUmSJEmSJOn/VZux+4477ihU4uOVp0yZsvPOO5emsa222mrevHkrvKz0/fH22muvyJdrvksuuaR0J0ccccQvfvGL4h907Nixqq/YfNddd93vK9QzzzxTkVt6/vnnW7duXXxn1l133d69e3/Wv7wa7/CnvkvlD9bo0KFDDd6l1WHsLtXQ0HD++edvtNFG5ftZa621unXrtgpPFY7dzX84yde//nVf2S1JkiRJkqTKVJuxu2fPnqU9a9GiRZFP9cwzz5TXseuvv36F1/z0pz8tPvqtb30r8rWa78UXXyzdRmnP3XvvvRcsWFDVV2y+5T6COaZOnTrF38/AgQM32GCDwicfsb1qXyVdjXd4dXuXVp+xu9S8efNuueWWHXbYoXRL3//+91fhSQ488MDyT6r53+QIP8bEZ3ZLkiRJkiQpqtqM3e+9915pz2poaIi/5/KHmXzta19b4QVHHHFE8dGf/OQn8a/VTLNmzSrvdJtvvvn48eOr+nKf2mo1444bN26rrbYqPdv999+/ak9SjXd4tXqX/rX6jd39+/f/wQ9+sNZaa5VuadXG7vAbVL7wwgvNXBl+uvegQYNW9a4lSZIkSZKkWo3d8+bNK+1ZzX9jyRZ2/PHHl55tyy23XOEFu+66a/HRq6++Ov61mm+XXXYp3cmvfvWrar/Wp/b666/3rlCjRo2KuZMZM2bstttupXeme/fuMU9V8Xf4U9+l0u+UFLvyyiur+i6VWk3G7iVLlvz1r39t3759uOYX3/zHH398FZ7tu9/9bvlJHn744Wau/NKXvlS+cvr06at6+5IkSZIkSVKtxu5ipQ9GWNkHj3ymOnXqVFrH1l577aaPLlmypPjjxUefffbZ+Ndqvu985zulOznqqKOq/VqptGjRooMPPrj0tlx00UWRz1b7d3hN+waV06ZN69at2zbbbBPO3Icddth///d/L1u2bNWes3PnzuWnuuGGG5q5crPNNitdFv+B/pIkSZIkSVrTq9nY/Z//+Z+FQuGUU05Z4aPz5s2bOnVqC5/qpJNOKg1kW221VdNH33777dp8oWiPHj3Ki167du2q+loJVfwlLr0np59+euRT1eUdXnPG7vfee++MM85Yd911yzfQpk2bjh07Fv8Jinzm22+/vfyczXxJ/pIlS8qXtW/fPvJFJUmSJEmStKZXs7H7hhtuKBQKu+66a9OH+vXrt8EGG6y99tqPPvpoS55q6623Lg1k++23X9NHu3fvXvjkExhi77jZhg0bVrznzTbbrFWrVqWbGTt2bFVfMYluvPHG0rtx6KGHLl68OOap6vUOZz92L1u2rPhTO/zww8Mv5d544427dOkyYcKEirzEq6++Wn7mI488cmWXDR06tCWbuCRJkiRJktSiajZ2Dxw4sLRqNR3ULr744tJD66233qd+VekDDzxQHsguvfTSpheUvu67It88cGXNnDmz9FnSL7300vbbb1+6meKNVe8Vk+jNN98sfWPD7bbbbtq0aSu7bOHChfPnz2/+qer4Dmc8ds+ePfv666/feeedw5m7+Kc33XTTvHnzKvhCixcv3mCDDUrPv/XWW6/ssocffrh8Gy+//HIFb0CSJEmSJElrYjUbu//1Px/bfd999y3343369ClvXltuueXw4cNX9gxvvfXWRhttVLqyTZs2Tb9D4OLFizfZZJNCNT+wu/gS3/jGN4ov8etf/7r4p8ccc0zpfs4666wqvWISLViwoDRPF39d3njjjZVdtmzZstLHQy9atGhl19T3Ha7x2P2Xv/yl/Df/XXfdVaVXGTly5M9//vPPfe5z4cx98MEHP/XUU6v8wdzNd8IJJ5RfaPDgwSu85owzzihd0K5du8j/DkCSJEmSJEmq6dh9zjnnFAqF733ve00fOuuss8rT2HrrrXfVVVdNnjw5vGDGjBlXXHFF+PnCXbt2bfo8L7zwQvGh9ddff+HChRW556aVxtD999+/NM9ddtllpfvZcccdw8teffXVKt3A6tlvf/vb0vtwySWXNHNZadtd4XcWLVffd7jGY/cdd9xR/lv65ptvrvjzF/+JOOqoo8KNu02bNh06dOjXr1/FXyusV69e5Vdc4fcp/fjjj7fYYovSBdddd11Vb0aSJEmSJElrRLUcu1977bXSlt30UyyWLFlS/raTpVq1arXnnnt++9vfPvroo7/85S+3bt06fPSEE074+OOPm75EaTTv2LFjRW641NSpU4sv95e//KV4k2effXbx+TfddNNx48aVHv3HP/5RvquBAweWfvC2224r/umDDz5YwdtYnWtoaFhnnXWKP+UNNtjg0Ucf7dmkp5566oEHHujcuXPxV7942RZbbBH+5avVO1zjsbv0O0ClKvjZO8V/xIpv0e677x7+U7PhhhsWfwnGjx9fqVdpvv3337/8uk0/1qb02frFttlmm0/9WBtJkiRJkiTp06vl2F1sjz32KKzok0yKLV26tEuXLqUPfW6mVq1anXvuuUuWLGn6DAsXLix9hsmLL75YqRsu1rNnz9LXw7Zr1674B61bt+7Vq1f50UWLFq2//vqle/vWt77V0NBw1113FX8W++yzzwrn+Cw77bTTmv9VW67lvn3oavUO13Lsfu6558o/tcInvw9UkY+uvuiiizbeeOPwDd9xxx1vuOGGuXPnxj95yxs5cmT5Q4cOOuigOXPmlB/q06dP27Ztiz++zjrrVPtrzCVJkiRJkrSmVOOx++abby4UCgcccMDKLhgxYsRpp51W/nyDsLZt25566qnvvvvuyv7a++67r3jZbrvtVqm7LXXhhReGt3H77bcvd0HTqXf77bdv+n04c62xsfFTf4tiufbee+/wGVard7iqY/eMGTM6d+58xhlnHHXUUdtuu+0K35yddtrpuOOO69Sp0wUXXDBlypRVeJXNN9+8/Gzt27d//PHHly5dWvGfS0vq3bt36TcwCp98MPe55557zTXXdOjQofQfahTv8/nnn6/LjUmSJEmSJCnDajx2z507d7PNNisUCn369GnmsmXLlr377rtPP/303Xfffccddzz66KPFP13hV3OH7bnnniucSiM77LDDSmvdRhttdO+99za9YMqUKaWvWC91zDHHrDlLd7EnnnjiMy3dxQ4//PDwGVard7iqY/f777//md6oIUOGrMKrbL755q1btz7xxBP79u1b8Z/CZ23y5Mlnn332pptuGv68Ntlkk5/97GcTJ06s991JkiRJkiQpo2o8dhe79tprC4XCoYceWsHnLPbAAw8Un3aHHXao+EdbjBgx4tlnn+3du/e8efNWds2SJUteffXVF154ofxJ02p5q9U7XOPP7K5Gl1566dixY+t9F/9fxX8qhw4d+vdPGj58+JrzCT+SJEmSJEmqXbUfuz/66KMtt9yyUCg88sgjlXrORYsWlT4U4qGHHqrUc2rNrLGxceAnhZ8xLUmSJEmSJGl1r/Zjd7EePXoUCoVOnTpV6gkHDhxY+OS7F1bqCSVJkiRJkiRJKVWXsbvYgAEDPvroowo+4bvvvtvMh2BIkiRJkiRJknKuXmO3JEmSJEmSJEkVy9gtSZIkSZIkSUo+Y7ck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', 324, [`x${P2} − 2x ＋ 1 ＝ 0`, `(x − 1)${P2} ＝ 0`, 'x ＝ 1（重解）'],
+  ay=>({yv:ay, q:0.032, paint:'all', ps:5, dot:'o', ds:5, lab:[[300.4,'1']]}), JA('1以外のすべての実数'), [
+  `⑶ ${M('x² − 2x ＋ 1 ＞ 0')} を 解こう！`,
+  `Step❶ ${M('x² − 2x ＋ 1 ＝ 0')}。`,
+  `${M('(x − 1)² ＝ 0')}`,
+  `${M('x ＝ 1')}（重解）。`,
+  `グラフは x軸と 1 で <b>接する</b>。`,
+  `Step❷ <b>＞ 0</b> → 上を 塗る。　x ＝ 1 の 点だけ y ＝ 0 なので <b>白丸</b>（ふくまない）。`,
+  `Step❸ <b>1 以外の すべての 実数</b>。　<b>完成！</b>`]);
+const s4 = q('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAB6QAAAI/CAIAAABf0vA8AAAACXBIWXMAAA7EAAAOxAGVKw4bAAA/yElEQVR4nOzdB7TV1YH37yMgllFE1Nh7NBk1cTSO2DUTlxpL/GdiRJ1RxxZjbNFobNH/m2iwjcEWRRMdC7aoAbsoxiAWbBGktwtcQHqTLiXvCWe9Z+0BuVzYp7C3z2c9a5Zefpzzuwdw7flyc27h738thJa8u+3fJUmSJEmSJElaYxt377LL9oCTC8ZuSZIkSZIkSVJKGbslSZIkSZIkScln7JYkSZIkSZIkJZ+xW5IkSZIkSZKUfMZuSZIkSZIkSVLyGbslSZIkSZIkScln7JYkSZIkSZIkJZ+xW5IkSZIkSZKUfMZuSZIkSZIkSVLyGbslSZIkSZIkScln7JYkSZIkSZIkJZ+xW5IkSZIkSZKUfMZuSZIkSZIkSVLyGbslSZIkSZIkScln7JYkSZIkSZIkJZ+xW5IkSZIkSZKUfMZuSZIkSZIkSVLyGbslSZIkSZIkScln7JYkSZIkSZIkJZ+xW5IkSZIkSZKUfMZuSZIkSZIkSVLyGbslSZIkSZIkScln7JYkSZIkSZIkJZ+xW5IkSZIkSZKUfHUZu5csWXLPPfcMHz68Ug+4ePHiO+64Y9SoUZV6wJo1Z86cxsbG8ePHL1y4sN73IkmSJEmSJEnJVpex+9Zbby0UCuecc06lHvCTTz4pPuCuu+46f/78Sj1m9ZoxY8aDDz54wgknbL311oX/19prr33wwQd37dq13ncnSZIkSZIkSQlW+7F77Nix6623XqFQ+PDDDyv1mEuWLNl9992Lj3nzzTdX6jGr1AMPPNC6devSwH3kkUd27tz54YcfPvfcc1u2bFn64BVXXFHve5QkSZIkSZKk1Kr92H322WcXCoX/+I//qOBjFnvttdeKD9uuXbtZs2ZV9pEr2zXXXFMatW+66abw4y+99FL5q7yHDBlSr9uTJEmSJEmSpCSr8dg9duzYli1brrXWWiNGjFjpxUuWLHn77bcbGhqa+eDf/e53C4XCDTfcEHeP1a00drdv3375H9p7771LY/c999xT+xuTJEmSJEmSpISr8dh9+eWXFwqFH/zgB825+Oqrry5e3KpVq/fff78513fr1q14/eabb75o0aK426xijY2N77zzztixY5f/odNOO600dnfs2LH2NyZJkiRJkiRJCVfLsXvhwoWbbrppoVB46aWXVnrx+PHj11lnndL4e//99zfn8RcvXrztttsWr//zn/8cfbN16Pjjjy99vv/zP/9T73tRPevRo8fpp5/+6aef1vtGJEmSJEmSpHSq5dj93HPPFQqFtm3bLly4cKUXX3DBBaXld9111x0/fnwzn+KXv/xl8accccQRcXdahxYtWrTFFlsUb36dddaZMGFCvW9n9VuyZEn//v27dOnym9/85qKLLrr44ouL//DMM88k/UlVquIr80aT9ejR48knn9xmm22KvxN69epV7/utWFOnTn3kkUeuu+664m+JG2+88emnn54zZ069b0qSJEmSJEl5Vcux+z//8z8LhcLpp5++0ivHjh3bunXr0th9ySWXNP8pPvjgg+JPadmy5YwZM1b/RuvRbbfdVvp8f/vb39b7XlazV155pfiLu8kmmxS+rBYtWvzoRz/60vdv+erUoUOHL31xvrR+/frV+34r0MyZM4u/K1q1arXMZ7feeutdfPHF8+fPr/cNSpIkSZIkKZdqNnYvXrx44403LhQKL7744kovPvfcc0uL2Prrrz958uRVeqKtttqq+BOfeOKJ1b3TOvTxxx+X3rPl2GOPrfe9rE6PPfbYTjvtVN4xt9lmm6uuuqr4S/DII49cfvnlm222WfmH2rVrN3DgwHrfb91apbF7zJgx9b7f2BoaGrbbbrvSp3Pqqae+8sorH3300R133FH+G5Hdd9996tSp9b5NSZIkSZIkZVHNxu633nqrsPRrrufOndv0laNHjy5/HeiVV165qk90xhlnFH9ihw4dVvdOa13x891yyy2L97zffvut9MWJ6Y033vj90kaOHFnZRz7mmGPKE+1JJ500b9688EenT5/evn378gV77LHHkiVLKnsDFax6r9LfV3HsnjVrVsVvoJbNnDnzm9/8Zulzuf3228MfGjZsWNu2bUs/dNhhh63J31FWkiRJkiRJyVSzsfv6668vFAp77733Sq8866yzSivYhhtuOG3atNIH+/Xrd9JJJ/385z+fPXt20z/9j3/8Y/HnbrnllvH3XIMmTpy4yy67FG94n332mTlzZlWf6/TTTy+9sM8991xlH7k8drdv337x4sXLXzBy5Mjy+9IUe/XVVyt7AxWseq/S34Ox+4033hiwslb7WY4++uinn376S38hatmFF15Y+mQPOuig5X/03nvvLf9+8B1ZJUmSJEmSVIFqNnYfffTRhULhggsuaPqyhoaGli1bliaw6667rvzx8pcG33rrrU0/woABA0pXrvnvAjFlypTddtut9HcANXiT8RqM3W+//faKrin9Bih12WWXVfYGKlhtxu5x48ZV/MHLld4kZLvttuvUqdPnn39evSdqosbGxvJfb7zwwgvLXzB//vwNN9ywdMFOO+1U92lekiRJkiRJyVezsbs0wD300ENNX1aeGtu2bRt+pfM3vvGN0sd/8YtfrPS51ltvveKVTz/9dOxNV7MZM2b8y7/8S/E+i/93+vTpNXjG6s24d91111lnndX0txItfWl/qZNPPrmyN1DBshm7y//ziOKvy+jRo6v3dF/ar371q9INrLvuuiv6LpThm7o08dckkiRJkiRJUrOqzdg9ZcqU0qTVq1evJi4bOnRoixYtSld27Ngx/KFVGrt333334pXXX3995G1XrwULFuy///6FpW9gXbNv0FfVGXel3XPPPeVl87TTTqv9DTSzDMbubt26HXzwwYWg4h+rH//4x++//371nnSZSv+ThWKHHnroiq4J38lkNd6dX5IkSZIkSfpf1Wbs/uCDD5qz8Z1yyimlyzbddNNl3pt7lcbuY489tnjl6aefHnnbTTR+/Pimv5nkkiVLJk+evKK34T7ttNOKd7jjjjtOmDBhmR8aPnx4nz59KnajQfUdu6+99trysnn11Vev9PrIV3i1y2DsLlX8XVT8XMK3Si+2//77P/vss9X+BqENDQ3lZzzvvPNWdFnv3r3Ll7Vv376qtyRJkiRJkqT8q83Y/dRTTxUKhVatWjVxzaBBg9Zaa63S8nXbbbct86OrNHZfcMEFxSsPPvjgqJv+smbPnn355ZdvsMEGxccv3u0ZZ5yx/HsNFz9y3XXXtWnTpnTDy7+byoMPPlhY+v4Sw4YNW+aHFixYsMMOOxx44IEVv/O/13vsDt+zonv37iu6rCKvcEzZjN2lJk+efMMNN2yxxRbh5L3jjjveeeedK/1er6vd448/Xn6uTp06reiyGTNmlC/beOONq3QzkiRJkiRJ+qpUm7G79BYWTe9ZJ554Ymn22nzzzefNm7fMj67S2H3NNdcUr9xtt92ibnq5Pv/88/L3ySy3zDfMXLx48Q9/+MPwgqFDh4YXjB07tvR9+Y477rj7gjp37typU6cDDzyw+EPHHntsZe+8VB3H7vnz52+00UalZ996661X9JXFFXmFI8ts7C61cOHCxx9/fJ999glftzZt2lx22WXV+D6uV111VflZunTp0sSV66+/fvnKadOmVfxOJEmSJEmS9BWqNmP3rbfeWigUttlmmxVd0L9///Lmdddddy1/wSqN3TfddFPxyu233z7mnpfvqKOOKj7sVVdd1a1bt5133rl0P8s8y/nnnx/uicvv+2eddVZhZZ166qmVvfNSdRy777777vJn98ADD6zosoq8wpFlOXaX6927d/EeWrZsWX4Bi/980kknffTRRxV8lpNPPrn8+K+88koTV+6www7lK/v27VvBe5AkSZIkSdJXrtqM3dddd12hUNh1111XdEH5a3W33nrrBQsWLH/BKo3dd911V/HKTTbZJOqm/3d/+MMfCsE3vfzzn/9cHukGDx5c+uBDDz1UWg/vueeecePG7bLLLqeccsoyj7PMeyh/aRdffHEF77xcvcbuqVOntmvXrvTURx111Iouq9QrHFnNxu5hw4Z17tz5mmuuOeecc84777yOHTu+8MILCxcurPiTLl/x2a+66qriH5Dwd91BBx3UrVu3iryd9/e+973yw7711ltNXLnnnnuWr3zvvffin1qSJEmSJElf3Wozdl9//fVNjN19+vQpD1733Xffl16zSmP3HXfcUbzya1/7WtRN/+8WLFhw1113ld8/et68eeuss07plh566KG/L33P8fXWW6/4r4899lgFn7eC1WvsPu6440rP+/Wvf3369OkrumwNeYVrM3Zvu+22X/r3HO3atfv1r3+9aNGiij/18s2fP/+BBx7YY489whvYeeed77777jlz5sQ8cvh+Kb17927iygMOOKB8ZY8ePWKeVJIkSZIkSV/1ajN2/+53vyus+G1MymPoDjvssKKvbF2lsbtjx46Fpd+FL+qmV9YhhxxSuqVLL710/vz53/rWt4r/fOONN1b1SWOqy9h92223lZ50o402GjJkyCr93Lq8wlV9lbp06VJ6x/Y2bdocdthhJ510UvHpjj322GW273333Xfq1KkVf/YV9eabb/7gBz8of3vYYm3btr3iiitW+71Wvv3tb5cf6sMPP2ziyvIvcbEXX3xx9Z5OkiRJkiRJ+ke1Gbvvu+++wgreXvmjjz4qr12lL+D90lZp7C59f7w99tgj6qZX1rXXXlu6pSOPPPLCCy8s/sPJJ59c1WdsultvvfXXTVZ+y4gOHTo0feVLL71UkVt69dVXW7RoUXzGddZZp2fPnqv606vxCtf9VZo4ceLHH3+8/LuFvP7669tss035z8IRRxxRkXcUaX4NDQ2XXHJJmzZtyvfQqlWrjh07rsZDhWN3029O8t3vftdXdkuSJEmSJKky1Wbsfu6550p71vLvx/3973+/9EO77LJL+S0slm+Vxu6f/vSnxSsPP/zwyNtuuh49epRuqbTn7rXXXvPmzavqMzbdMm/BHNO5554bfz99+/bdYIMNCkvfYnv1vkq6Gq/wmvYqhY0bN27jjTcuP/79999f2cdvTrNnz/7973+/3Xbble7hRz/60Wo8yP7771/+LJr+S47wbUy8Z7ckSZIkSZKiqs3Y3a9fv9Ke1dDQEH78ww8/LE9djz/+eBOPsEpj95FHHlm88pxzzom87aabMWNG+eY32WSTxsbGqj7dSlujZtzRo0dvscUWpUd75JFHVu9BqvEKr1Gv0vLde++95cfffffdK/74K634R/KUU05p1apV6R5Wb+wOv0Fl9+7dm7gyfHfvTz/9dHXvWpIkSZIkSarV2D179uzSnvXGG2+EH//JT35S+niLFi0uuOCCi1dc27ZtS1futdde5Q/+/Oc/X+YBS+2yyy7FK2+66abI215pO++8c+mumjPBV7t33323Z5OV/g6g2G9/+9umrxw2bFjMnUybNm3XXXctPdedd94Z81AVf4XXnFfpSyu+dOWhudj48eMr/hRf2qJFi5588sn27duHa37xxX/mmWdW49F++MMflh/kiSeeaOLKf/7nfy5fWcu3KZckSZIkSVKG1WbsLlZ6Y4ROnTqFHyy/h8lqt8EGGyzz1saLFi1ae+21iz/08ssvx9920x1xxBGl2yh+ItV+rvhq8w0qFyxYcOCBB5ae6Oqrr458tNq/wnX5Np5h5f8RQ2Fl7wFSkaZMmdKxY8etttoq/GN1yCGHPP/886v9puGXXnpp+aFuv/32Jq5s165d6bIvfUN/SZIkSZIkaRWq2dh94oknFgqFU089NfzgCy+8UBqmV7uvfe1ryzzRxx9/XPqhan+haLdu3cq3sdlmm1X1uSpSbWbc4i9x6VnOOOOMyIeqyytc97H70EMPLX/WL774YvWeqF+/fmeeeeY666xTfrqWLVuefPLJxT9BkY/cuXPn8mM28SX5ixYtKl/Wvn37yCeVJEmSJEnSV72ajd233357Yel3oVzm48OGDXvwwQfvWFmbbbZZaRQ77LDDyh+88847Bw4cuMwDFj9YWPoODPH33ESDBg3aYIMN2rVrt9Zaa5VubNSoUVV9xvhqMOMWf1FKT3HwwQcvXLgw5qHq9QrXfez+t3/7t/IE/Oabb1b88ZcsWVL81Ip/jsK/NNpoo40uv/zysWPHVuQpevXqVX7ko446akWXFf/wNmcTlyRJkiRJkppVzcbuvn37llat1RvUmv8NKn/84x8XqvPNA8tNnz699F7Sb7zxxrbbblu6sS5dulTvGStStWfc999/v/R+09tss82UKVNWdNn8+fPnzJnT9EPV8RWu+9i95557lifg0aNHV/CRZ86c2alTpx133DGcuYv/etddd82ePbuCT7Rw4cINNtig9Phbbrnlii574oknqjrrS5IkSZIk6atVzcbuv/+/t+1++OGHV+PnNnPsXrhwYelbWVbvDbuLT1H62ttf/vKXxX895phjSjd29tlnV+kZK1VVZ9x58+aV5umWLVu+9957K7psyZIlpbeHXrBgwYquqe8rXL1X6cYbb7ziiiua/v1f/NzL7yuyzTbbVOqphw4dev755//TP/1TOHMfeOCBXbt2Xe035m66448/vvxE/fv3/9JrzjzzzNIFm222WeT/DkCSJEmSJEmq6dh9wQUXFAqFf//3f1+Nn9vMsbt79+7Fa9Zff/358+ev7m2upNIYuu+++5bmud/85jelG9t+++3Dy3r16lWlG1jtqjp2/+pXvyo9+LXXXtvEZY8++mjxmrXXXruJa+r7ClfvVdp6662LD7vhhht+/vnnK7rm+eefL2/EV111VfyTFv9ELPNtYFu2bNmhQ4cPPvgg/sGb6LXXXis/45d+n9Ivvvhi0003LV1w6623VvVmJEmSJEmS9JWolmP3O++8UygU1l133ZW+i8XyNXPsPvvss4vXnHzyyRG3uWyTJ08+/vjjH3300UWLFp133nnFx994443L7y/xl7/8pTzq9e3bt/TBe++9t/ivjz32WAVvI77qzbgNDQ2tW7cuPvIGG2zwpz/96bnl6tq1a5cuXS699NLir37xsk033TT86WvUK1ztsbvYZZdd9qUXLFy48Nvf/nb5i51jvsNq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', 486, [`x${P2} ＋ 2x ＋ 5 ＝ 0`, 'D ＝ 4 − 20 ＝ −16 ＜ 0', JA('x軸との共有点 なし')],
+  ay=>({yv:ay-14, q:0.026, paint:'all', ps:5}), JA('すべての実数'), [
+  `⑷ ${M('x² ＋ 2x ＋ 5 ＞ 0')} を 解こう！`,
+  `Step❶ ${M('x² ＋ 2x ＋ 5 ＝ 0')}。`,
+  `判別式 ${M('D ＝ 2² − 4×1×5 ＝ −16')}。　<b>マイナス</b>！`,
+  `x軸との 共有点は <b>なし</b>。`,
+  `グラフは x軸と <b>交わらない</b>（いつも 上）。`,
+  `Step❷ <b>＞ 0</b> → 上を 塗る。　グラフ <b>全部</b> が 塗れる。`,
+  `Step❸ <b>すべての 実数</b>。　<b>完成！</b>`]);
+const DECK = {title:'③-3 2次不等式の解法', pages:[
+  {name:'表紙', html:coverF(KK, '<span class="mk">2次不等式</span><br>いろいろ', '接する・交わらない とき', 'グラフを かけば こわくない！', POL, 'すべての実数？')},
+  {name:'⑴', html:s1}, {name:'⑵', html:s2}, {name:'⑶', html:s3}, {name:'⑷', html:s4},
+  {name:'終', html:endF(KK + '　2次不等式', POL)}
+]};
+
+/* ====== 組み立て・操作 ====== */
+const stage = document.getElementById('stage');
+const pages = DECK.pages.map(x=>x.html), names = DECK.pages.map(x=>x.name);
+document.title = DECK.title;
+/* スライドの種類（スマホの縦レイアウトで使う） */
+const kind = h => /pgcard/.test(h)?'pg' : /kcard/.test(h)?'k' : /kfcard/.test(h)?'f' : /qecard/.test(h)?'q' : /ncard/.test(h)?'n' : /class="pcards/.test(h)?'p' : /fxcard/.test(h)?'x' : /class="hrows/.test(h)?'h' : /class="graph"/.test(h)?'g' : /wcard/.test(h)?'w' : /fcard/.test(h)?'b' : 'c';
+stage.innerHTML = pages.map(h=>`<section class="slide t-${kind(h)}">${h}</section>`).join('');
+(function italicVars(){
+  const w=document.createTreeWalker(stage,NodeFilter.SHOW_TEXT);
+  const nodes=[]; while(w.nextNode()) nodes.push(w.currentNode);
+  nodes.forEach(n=>{
+    if(!/[A-Za-z]/.test(n.nodeValue)) return;
+    if(n.parentNode.closest && (n.parentNode.closest('svg')||n.parentNode.closest('i'))) return;
+    const f=document.createDocumentFragment();
+    n.nodeValue.split(/([A-Za-z])/).forEach(t=>{
+      if(/^[A-Za-z]$/.test(t)){const i=document.createElement('i');i.className='v';i.textContent=t;f.appendChild(i);}
+      else if(t) f.appendChild(document.createTextNode(t));
+    });
+    n.parentNode.replaceChild(f,n);
+  });
+})();
+(function backdrop(){
+  const bg=document.getElementById('bg');
+  const items=[['dot',3,12,1.6,'#f5c2cc'],['star',6,80,2.6,'#f8e2a2'],['dot',95,8,1.2,'#bfe5d0'],['star',92,60,2.2,'#d8cdf1'],
+               ['dot',50,4,1,'#c4d8f2'],['star',30,94,1.8,'#f5c2cc'],['dot',70,95,1.4,'#f8e2a2'],['dot',97,90,2,'#f5c2cc'],['star',2,45,1.6,'#c4d8f2']];
+  items.forEach(([k,l,t,z,c],i)=>{
+    const d=document.createElement('div'); d.className='deco '+k;
+    d.style.cssText=`left:${l}%;top:${t}%;width:${z}vmin;height:${z}vmin;--c:${c};--t:${5+(i%3)}s;--d:${-i*.9}s`;
+    bg.appendChild(d);
+  });
+})();
+
+const els = [...stage.querySelectorAll('.slide')];
+const stepAttr = e => [e.dataset.s,e.dataset.o,e.dataset.m,e.dataset.f,e.dataset.a,e.dataset.wa].filter(v=>v!==undefined).map(Number).filter(v=>v<90);
+const maxStep = els.map(el => Math.max(0,...[...el.querySelectorAll('[data-s],[data-o],[data-m],[data-f],[data-a],[data-wa]')].flatMap(stepAttr)));
+
+/* 飛んでくる数：出発点までの距離を測る */
+function pos(el){
+  let x=0,y=0;
+  while(el && !el.classList.contains('slide')){
+    x+=el.offsetLeft; y+=el.offsetTop;
+    const p=el.offsetParent;
+    if(p && !p.classList.contains('slide')){ x+=p.clientLeft; y+=p.clientTop; }
+    el=p;
+  }
+  return [x,y];
+}
+function layoutFly(root){
+  root.querySelectorAll('.fly').forEach(e=>{
+    const src=e.closest('.slide').querySelector(`[data-k="${e.dataset.src}"]`);
+    if(!src) return;
+    const [sx,sy]=pos(src), [tx,ty]=pos(e);
+    e.style.setProperty('--fx',((sx+src.offsetWidth/2)-(tx+e.offsetWidth/2))+'px');
+    e.style.setProperty('--fy',((sy+src.offsetHeight/2)-(ty+e.offsetHeight/2))+'px');
+  });
+}
+/* 分配線：かっこの外の数の上から、かっこの中の2つの上へ アーチを描く */
+function layoutDist(root){
+  root.querySelectorAll('.dist').forEach(svg=>{
+    const sl=svg.closest('.slide'), base=pos(svg.parentElement);
+    const rel=el=>{ const [x,y]=pos(el); return [x-base[0], y-base[1], el.offsetWidth, el.offsetHeight]; };
+    svg.querySelectorAll('.dg').forEach(g=>{
+      const fr=sl.querySelector(`[data-k="${g.dataset.fr}"]`), to=sl.querySelector(`[data-k="${g.dataset.to}"]`);
+      if(!fr||!to) return;
+      const [fx,fy,fw]=rel(fr), [tx,ty,tw]=rel(to), H=+g.dataset.h, dx=+g.dataset.dx;
+      const x1=fx+fw/2+dx, y1=fy-2, x2=tx+tw/2, y2=ty-4;
+      g.querySelector('path').setAttribute('d',`M${x1} ${y1} C${x1} ${y1-H} ${x2} ${y2-H-10} ${x2} ${y2-14}`);
+      g.querySelector('polygon').setAttribute('points',`${x2-8},${y2-15} ${x2+8},${y2-15} ${x2},${y2}`);
+    });
+  });
+}
+const relayout = r => { layoutFly(r); layoutDist(r); if(typeof layoutExtra==='function') layoutExtra(r); };
+if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>relayout(stage));
+const bar = document.getElementById('bar'), ui = document.getElementById('ui');
+const jump = document.getElementById('jump');
+jump.innerHTML='<a class="home" href="目次.html">目次</a><span>ジャンプ</span>'+names.map((n,i)=>`<button data-i="${i}">${n}</button>`).join('');
+jump.addEventListener('click',e=>{
+  e.stopPropagation();
+  const b=e.target.closest('button'); if(!b) return;
+  stopAuto(); si=+b.dataset.i; st=0; render(); b.blur();
+});
+let si = 0, st = 0, timer = null, layoutTimer = null;
+
+function render(){
+  relayout(els[si]);
+  clearTimeout(layoutTimer); layoutTimer=setTimeout(()=>relayout(els[si]),700);
+  els.forEach((el,i)=>{
+    const past=i<si, now=i===si;
+    el.querySelectorAll('[data-f]').forEach(e=>e.classList.toggle('go', past || (now && +e.dataset.f<=st)));
+    el.querySelectorAll('[data-a]').forEach(e=>e.classList.toggle('ul-on', past || (now && +e.dataset.a<=st)));
+    el.querySelectorAll('[data-wa]').forEach(e=>e.classList.toggle('wv-on', now && +e.dataset.wa<=st && st<+e.dataset.wb));
+    el.classList.toggle('active', now);
+    el.classList.toggle('past', past);
+    el.querySelectorAll('[data-s]').forEach(e=>e.classList.toggle('show', past || (now && +e.dataset.s<=st)));
+    el.querySelectorAll('[data-o]').forEach(e=>{ e.classList.toggle('on', past || (now && +e.dataset.o<=st)); e.classList.toggle('cur', now && +e.dataset.o===st); });
+    el.querySelectorAll('[data-m]').forEach(e=>e.classList.toggle('cur', now && +e.dataset.m===st));
+  });
+  const total = maxStep.reduce((a,m)=>a+m+1,0);
+  const done = maxStep.slice(0,si).reduce((a,m)=>a+m+1,0)+st+1;
+  bar.style.width = (done/total*100)+'%';
+  [...jump.querySelectorAll('button')].forEach(b=>b.classList.toggle('on',+b.dataset.i===si));
+  ui.textContent = `${si+1} / ${els.length}　←→ 進む・戻る　P 自動再生　Home 最初から　F 全画面　H 表示を隠す　T 明暗${typeof INK!=='undefined'?'　W 書きこむ':''}`;
+}
+function next(){ if(st<maxStep[si]) st++; else if(si<els.length-1){si++;st=0;} else stopAuto(); render(); }
+function prev(){ if(st>0) st--; else if(si>0){si--;st=maxStep[si];} render(); }
+function stopAuto(){ if(timer){ clearInterval(timer); timer=null; } }
+function toggleAuto(){ if(timer) stopAuto(); else timer=setInterval(next,4000); }
+
+document.addEventListener('keydown',e=>{
+  const k=e.key;
+  if(['ArrowRight','ArrowDown',' ','Enter','PageDown'].includes(k)){e.preventDefault();stopAuto();next();}
+  else if(['ArrowLeft','ArrowUp','Backspace','PageUp'].includes(k)){e.preventDefault();stopAuto();prev();}
+  else if(k==='Home'){stopAuto();si=0;st=0;render();}
+  else if(k==='End'){stopAuto();si=els.length-1;st=maxStep[si];render();}
+  else if(k==='p'||k==='P'){toggleAuto();}
+  else if(k==='f'||k==='F'){ try{ if(document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen(); }catch(_){} }
+  else if(k==='h'||k==='H'){ ui.classList.toggle('hide'); bar.classList.toggle('hide'); jump.classList.toggle('hide'); }
+  else if(k==='t'||k==='T'){
+    const d=document.documentElement;
+    const dark = d.dataset.theme ? d.dataset.theme==='dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+    d.dataset.theme = dark ? 'light' : 'dark';
+  }
+});
+document.addEventListener('click',e=>{ if(e.target.closest('a')) return; stopAuto(); if(e.clientX < document.documentElement.clientWidth/3) prev(); else next(); });
+/* 画面に合わせる：縦長（スマホ）なら 720×1280、横長なら 1280×720 */
+function fit(){
+  const vw = document.documentElement.clientWidth, vh = document.documentElement.clientHeight;   // スマホでは innerWidth がずれることがある
+  const portrait = vh > vw;
+  document.body.classList.toggle('portrait', portrait);
+  const W = portrait?720:1280, H = portrait?1280:720, avail = vh - (portrait?52:0);
+  stage.style.setProperty('--s', Math.min(vw/W, avail/H));
+  jump.style.top = portrait ? (vh-46)+'px' : '';   // スマホでは画面の下にそろえる
+  jump.style.bottom = portrait ? 'auto' : '';
+  relayout(els[si]);
+}
+addEventListener('resize',fit); fit(); render();
+
+/* ====== 手書き（授業中に スライドの上から 書きこむ） ======
+   右上の ✏ ボタン か W キーで 書く／やめる。ペンの 後ろ（消しゴム側）で なぞると 消える。
+   ペン（Surface ペンなど）で 画面に さわると、自動で 書くモードに なる。
+   書いた線は スライドごとに 残る（ページを 開き直すと 消える）。
+   線は 台紙（1280×720 / 720×1280）の 座標で 覚えるので、画面の 大きさが 変わっても ずれない。 */
+var INK = {on:false, color:'#e0465e', tool:'pen', w:3.5, strokes:{}, cur:null};
+(function(){
+  const cv = document.createElement('canvas'); cv.id = 'ink'; document.body.appendChild(cv);
+  const ctx = cv.getContext('2d');
+  const bar = document.createElement('div'); bar.id = 'inkbar';
+  const COLORS = [['#e0465e','赤'],['#1f3f9e','青'],['#f07a12','オレンジ'],['#1f9a4a','緑'],['#33303d','黒']];
+  const SIZES = [[3.5,'細'],[5,'太']];   // 細 が 最初
+  bar.innerHTML = `<button class="ink-tg" title="書きこむ（W）">✏</button>
+    <span class="ink-tools">${COLORS.map(([c,n])=>`<button class="ink-c" data-c="${c}" title="${n}" style="--c:${c}"></button>`).join('')}
+    <span class="ink-sep"></span>${SIZES.map(([w,n])=>`<button class="ink-w" data-w="${w}" title="${n}"><i style="width:${w*2}px;height:${w*2}px"></i></button>`).join('')}<span class="ink-sep"></span>
+    <button class="ink-er" title="消しゴム（E）">消</button><button class="ink-un" title="1つ戻す（Ctrl+Z）">↶</button>
+    <button class="ink-cl" title="このページを 全部 消す">全消</button></span>`;
+  document.body.appendChild(bar);
+  const key = () => si + (document.body.classList.contains('portrait') ? 'p' : 'l');
+  const list = () => (INK.strokes[key()] ||= []);
+  /* 画面の点 ⇔ 台紙の点 */
+  const box = () => stage.getBoundingClientRect();
+  const sz  = () => document.body.classList.contains('portrait') ? [720,1280] : [1280,720];
+  const toStage = (x,y) => { const b=box(), [W,H]=sz(); return [(x-b.left)/b.width*W, (y-b.top)/b.height*H]; };
+  function size(){
+    const r = devicePixelRatio || 1;
+    cv.width = innerWidth * r; cv.height = innerHeight * r;
+    cv.style.width = innerWidth + 'px'; cv.style.height = innerHeight + 'px';
+    draw();
+  }
+  function draw(){
+    const r = devicePixelRatio || 1, b = box(), [W] = sz(), k = b.width / W;
+    ctx.setTransform(r,0,0,r,0,0); ctx.clearRect(0,0,innerWidth,innerHeight);
+    ctx.setTransform(r*k,0,0,r*k,r*b.left,r*b.top);
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    for(const s of list()){
+      ctx.strokeStyle = s.c; ctx.lineWidth = s.w; ctx.beginPath();
+      s.p.forEach(([x,y],i)=> i ? ctx.lineTo(x,y) : ctx.moveTo(x,y));
+      if(s.p.length===1) ctx.lineTo(s.p[0][0]+.1, s.p[0][1]);
+      ctx.stroke();
+    }
+  }
+  function erase(x,y){
+    const L = list(), n = L.length;
+    for(let i=L.length-1;i>=0;i--) if(L[i].p.some(([a,b])=>Math.hypot(a-x,b-y)<16)) L.splice(i,1);
+    if(L.length!==n) draw();
+  }
+  function setOn(v){
+    INK.on = v; document.body.classList.toggle('inking', v);
+    if(!v) INK.cur = null;
+  }
+  function setTool(t,c){
+    INK.tool = t; if(c) INK.color = c;
+    bar.querySelectorAll('.ink-c').forEach(b=>b.classList.toggle('sel', t==='pen' && b.dataset.c===INK.color));
+    bar.querySelector('.ink-er').classList.toggle('sel', t==='er');
+    bar.querySelectorAll('.ink-w').forEach(b=>b.classList.toggle('sel', +b.dataset.w===INK.w));
+  }
+  function start(e){
+    e.preventDefault(); try{ cv.setPointerCapture(e.pointerId); }catch(_){}
+    const p = toStage(e.clientX,e.clientY);
+    /* ペンの 後ろ（消しゴム側）で さわったら 消しゴム。Surface ペンなどは buttons に 32 が 入る */
+    const back = e.pointerType==='pen' && (e.button===5 || (e.buttons & 32));
+    if(INK.tool==='er' || back){ INK.cur = {er:true}; erase(...p); return; }
+    INK.cur = {c:INK.color, w:INK.w, p:[p]}; list().push(INK.cur); draw();
+  }
+  cv.addEventListener('pointerdown', e=>{ if(INK.on) start(e); });
+  /* ペンを 近づけた（さわる前の ホバー）時点で、ブラウザの スクロール・拡大の 判定を 止める。
+     止めないと、ペンで さわって すぐ 書き始めた線が 0.3秒ほどで 打ち切られる（pointercancel） */
+  const penSeen = e => { if(e.pointerType==='pen') document.body.classList.add('pen-dev'); };
+  ['pointerover','pointermove','pointerdown'].forEach(t=>document.addEventListener(t, penSeen, {capture:true, passive:true}));
+  /* ペンで 画面に さわったら、自動で 書くモードに する（ボタンや リンクは ふつうに 押せる） */
+  let skipClick = false;
+  document.addEventListener('pointerdown', e=>{
+    if(INK.on || e.pointerType!=='pen' || e.target.closest('#inkbar,#jump,a,button')) return;
+    setOn(true); if(INK.tool!=='er') setTool('pen'); skipClick = true; start(e);
+  }, true);
+  document.addEventListener('click', e=>{ if(skipClick){ skipClick = false; e.stopPropagation(); e.preventDefault(); } }, true);
+  cv.addEventListener('pointermove', e=>{
+    if(!INK.cur) return;
+    const evs = e.getCoalescedEvents ? e.getCoalescedEvents() : [e];
+    for(const ev of evs){
+      const p = toStage(ev.clientX,ev.clientY);
+      if(INK.cur.er) erase(...p); else INK.cur.p.push(p);
+    }
+    if(!INK.cur.er) draw();
+  });
+  const end = () => { INK.cur = null; };
+  cv.addEventListener('pointerup', end); cv.addEventListener('pointercancel', end);
+  cv.addEventListener('click', e=>e.stopPropagation());
+  bar.addEventListener('click', e=>{
+    e.stopPropagation();
+    const b = e.target.closest('button'); if(!b) return;
+    if(b.classList.contains('ink-tg')){ setOn(!INK.on); if(INK.on) setTool('pen'); }
+    else if(b.classList.contains('ink-c')) setTool('pen', b.dataset.c);
+    else if(b.classList.contains('ink-w')){ INK.w = +b.dataset.w; setTool('pen'); }
+    else if(b.classList.contains('ink-er')) setTool('er');
+    else if(b.classList.contains('ink-un')){ list().pop(); draw(); }
+    else if(b.classList.contains('ink-cl')){ INK.strokes[key()] = []; draw(); }
+    b.blur();
+  });
+  document.addEventListener('keydown', e=>{
+    const k = e.key;
+    if(k==='w'||k==='W'){ setOn(!INK.on); if(INK.on) setTool('pen'); }
+    else if(INK.on && (k==='e'||k==='E')) setTool(INK.tool==='er' ? 'pen' : 'er');
+    else if(INK.on && k==='Escape') setOn(false);
+    else if(k==='h'||k==='H') bar.classList.toggle('hide');
+    else if((e.ctrlKey||e.metaKey) && (k==='z'||k==='Z')){ e.preventDefault(); list().pop(); draw(); }
+  });
+  /* ページを めくったら、そのページの 線を かく */
+  const r0 = render; render = function(){ r0(); draw(); };
+  addEventListener('resize', size);
+  setTool('pen'); size();
+})();
+
+</script>
+</body>
+</html>

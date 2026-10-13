@@ -599,6 +599,25 @@ body{overflow:hidden;height:100%;width:100%}
 .kjyu{font-family:"Kiwi Maru",serif;font-size:26px;color:var(--r-ink)}
 .kjp{font-family:"Zen Maru Gothic",sans-serif;font-weight:900;font-size:28px;color:var(--accent)}
 
+/* ===== プリントの 画像を 背景に した スライド ===== */
+.pgcard{left:48px;top:30px;width:1184px;height:490px;background:#fff}
+.pgimg{position:absolute;display:block;user-select:none;pointer-events:none}
+.pgsv{position:absolute;overflow:hidden;pointer-events:none}
+.pgdone{left:1120px;top:548px;transform:scale(.8);z-index:6}
+.pgc{stroke:#d4677f;stroke-width:1.4}
+.pgp{fill:none;stroke:#f08a2a;stroke-width:3.6;stroke-linecap:round;opacity:.6}
+.pgd{fill:#e0465e;stroke:#e0465e;stroke-width:.9}
+.pgd.op{fill:#fff}
+.pgt{font-family:"STIX Two Text",serif;font-size:7.5px;fill:#333}
+.pga{position:absolute;display:flex;align-items:center;justify-content:center;color:#c0304e;font-family:"STIX Two Text","Zen Maru Gothic",serif;font-weight:500;white-space:nowrap}
+.pga.al{justify-content:flex-start;padding-left:6px}
+.pga .kfr{font-size:.85em}
+.pga .ja{font-family:"Zen Maru Gothic",sans-serif;font-weight:900}
+.pgm{position:absolute;border:3px solid #e0465e;border-radius:10px;background:rgba(255,214,90,.18);opacity:0;transition:opacity .35s;pointer-events:none;margin:-4px;padding:4px;box-sizing:content-box}
+.pgm.wv-on{opacity:1}
+.pgcard .ov{border-top-color:currentColor}
+.portrait .t-pg .pgcard{left:20px;top:150px;transform-origin:top left;transform:scale(.574)}
+
 /* ===== 手書き ===== */
 #ink{position:fixed;left:0;top:0;z-index:15;pointer-events:none;touch-action:none}
 body.inking #ink{pointer-events:auto;cursor:crosshair}
@@ -1253,6 +1272,53 @@ const KF = (n,dn) => `<span class="kfr"><span>${n}</span><span>${dn}</span></spa
 /* 枠の中を 上下に 分けて 書く（プリントに 分数の線が 印刷されている 枠） */
 const KH = (n,dn) => `<div class="khf"><span>${n}</span><span>${dn}</span></div>`;
 
+/* ====== プリントの 画像を 背景に 置き、空らんに 答えを 出す（①-6〜③-4） ======
+   P = {img, clip:[x1,y1,x2,y2]（PDF の pt）, items:[…], svg:[…], cm, done}
+   items：{s:番, r:[x1,y1,x2,y2], h:'中身', fs:文字の大きさ(pt), al:'l'|'c'}　空らんの 答え
+          {m:番, e:消える番, r:[…]}　マーカー（強調の わく）
+   svg  ：PB(…) などの 文字列（座標は PDF の pt のまま） */
+function pgSlide(P){
+  const [cx1,cy1,cx2,cy2] = P.clip, w = cx2-cx1, h = cy2-cy1;
+  const s = Math.min(1150/w, 466/h, P.max||2.6);
+  const W = w*s, H = h*s, L = (1184-W)/2, T = (490-H)/2;
+  const X = x => (L+(x-cx1)*s).toFixed(1), Y = y => (T+(y-cy1)*s).toFixed(1);
+  const R = r => `left:${X(r[0])}px;top:${Y(r[1])}px;width:${((r[2]-r[0])*s).toFixed(1)}px;height:${((r[3]-r[1])*s).toFixed(1)}px`;
+  const it = P.items.map(o => o.m!==undefined
+    ? `<div class="pgm"${o.e?` data-wa="${o.m}" data-wb="${o.e}"`:` data-wa="${o.m}" data-wb="99"`} style="${R(o.r)}"></div>`
+    : `<div class="pga ${o.al==='l'?'al':''} lh" data-s="${o.s}" style="${R(o.r)};font-size:${((o.fs||11)*s).toFixed(1)}px"><span class="kwr">${o.h}</span></div>`).join('');
+  return `
+  <div class="card abs pgcard">
+    <img class="pgimg" src="${P.img}" style="left:${L.toFixed(1)}px;top:${T.toFixed(1)}px;width:${W.toFixed(1)}px;height:${H.toFixed(1)}px" alt="">
+    <svg class="pgsv" style="left:${L.toFixed(1)}px;top:${T.toFixed(1)}px" width="${W.toFixed(1)}" height="${H.toFixed(1)}" viewBox="${cx1} ${cy1} ${w} ${h}">${(P.svg||[]).join('')}</svg>
+    ${it}
+  </div>
+  ${P.done ? `<div class="abs r done pgdone" data-s="${P.done}"><div class="seal">完成！</div></div>` : ''}
+  ${cbar(P.cm)}`;
+}
+/* 放物線（PDF の pt で）：y ＝ yv − q (x − xv)²（下に凸。画面では 上に 開く）
+   o = {xv, yv, q, ay:x軸の y, top:かき始める y, s:かく番, lab:[[x,'文字'],…], dot:'o'|'f'|null, ds:点の番,
+        paint:'up'|'down'|'all'|'up0'|null, ps:塗る番, draw:false（すでに 印刷されている 線に 塗るだけ）} */
+function PB(o){
+  const xh = Math.sqrt(Math.max(0,(o.yv-o.top)/o.q));
+  const f = x => o.yv - o.q*(x-o.xv)**2;
+  const path = (a,b) => { let d=''; const n=60; for(let i=0;i<=n;i++){ const x=a+(b-a)*i/n; d+=(i?'L':'M')+x.toFixed(2)+' '+f(x).toFixed(2)+' '; } return d; };
+  const x1 = o.xv-xh, x2 = o.xv+xh;
+  const rr = o.yv>o.ay+0.01 ? Math.sqrt((o.yv-o.ay)/o.q) : (Math.abs(o.yv-o.ay)<0.01 ? 0 : null);
+  const roots = rr===null ? [] : rr===0 ? [o.xv] : [o.xv-rr, o.xv+rr];
+  let s = '';
+  if(o.draw!==false) s += `<path class="curve pgc" data-s="${o.s}" pathLength="1" d="${path(x1,x2)}"/>`;
+  if(o.paint){
+    let seg = [];
+    if(o.paint==='all' || o.paint==='up0' || (o.paint==='up' && roots.length<2)) seg = [[x1,x2]];
+    else if(o.paint==='up') seg = [[x1,roots[0]],[roots[1],x2]];
+    else if(o.paint==='down' && roots.length===2) seg = [[roots[0],roots[1]]];
+    s += `<g class="gs" data-s="${o.ps}">${seg.map(([a,b])=>`<path class="pgp" d="${path(a,b)}"/>`).join('')}</g>`;
+  }
+  if(o.dot) s += `<g class="gs" data-s="${o.ds??o.s}">${roots.map(x=>`<circle class="pgd ${o.dot==='o'?'op':''}" cx="${x.toFixed(2)}" cy="${o.ay}" r="2.6"/>`).join('')}</g>`;
+  if(o.lab) s += `<g class="gs" data-s="${o.ls??o.s}">${o.lab.map(([x,t])=>`<text class="pgt" x="${x}" y="${o.ay+9}" text-anchor="middle">${t}</text>`).join('')}</g>`;
+  return s;
+}
+
 /* ====== このプリントのスライド ====== */
 
 const KK = KIMATSU + '　①-2';
@@ -1339,7 +1405,7 @@ const stage = document.getElementById('stage');
 const pages = DECK.pages.map(x=>x.html), names = DECK.pages.map(x=>x.name);
 document.title = DECK.title;
 /* スライドの種類（スマホの縦レイアウトで使う） */
-const kind = h => /kcard/.test(h)?'k' : /kfcard/.test(h)?'f' : /qecard/.test(h)?'q' : /ncard/.test(h)?'n' : /class="pcards/.test(h)?'p' : /fxcard/.test(h)?'x' : /class="hrows/.test(h)?'h' : /class="graph"/.test(h)?'g' : /wcard/.test(h)?'w' : /fcard/.test(h)?'b' : 'c';
+const kind = h => /pgcard/.test(h)?'pg' : /kcard/.test(h)?'k' : /kfcard/.test(h)?'f' : /qecard/.test(h)?'q' : /ncard/.test(h)?'n' : /class="pcards/.test(h)?'p' : /fxcard/.test(h)?'x' : /class="hrows/.test(h)?'h' : /class="graph"/.test(h)?'g' : /wcard/.test(h)?'w' : /fcard/.test(h)?'b' : 'c';
 stage.innerHTML = pages.map(h=>`<section class="slide t-${kind(h)}">${h}</section>`).join('');
 (function italicVars(){
   const w=document.createTreeWalker(stage,NodeFilter.SHOW_TEXT);
