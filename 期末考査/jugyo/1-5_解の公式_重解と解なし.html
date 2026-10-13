@@ -1256,7 +1256,7 @@ const KH = (n,dn) => `<div class="khf"><span>${n}</span><span>${dn}</span></div>
 /* ====== このプリントのスライド ====== */
 
 const KK = KIMATSU + '　①-5';
-const POL = `<div class="fpol"><div class="fa math">${SQ('0')} → 重解</div><div class="fv">ルートの 中を 見る</div><div class="fb math" style="font-size:24px">${SQ('−11')} → 実数解なし</div></div>`;
+const POL = `<div class="fpol"><div class="fa math">${SQ('0')} → 重解</div><div class="fv">ルートの 中を 見る</div><div class="fb math" style="font-size:24px">${SQ('−11')} → 解なし</div></div>`;
 const ABC = (a,b,c) => `${KA(`a ＝ ${a}`)}${KB(`b ＝ ${b}`)}${KC(`c ＝ ${c}`)}`;
 const fl = (k,t) => `<span class="fly" data-f="6" data-src="${k}">${t}</span>`;
 
@@ -1289,7 +1289,7 @@ const q2 = kfSlide({num:'⑵', y0:282.2, eq:`x${P2} ＋ 3x ＋ 5 ＝ 0`, abc:[1,
   lines:[[114.5,403.8,203.4],[231.5,403.8,320.5]],
   row2:[{t:'＝', r:[91.8,392.7,110.6,412.6]}, {c:'kpb', r:[112.9,376.8,206.1,431.9], v:[7,KH(`−3 ± ${SQ('9 − 20')}`,'2')]},
         {t:'＝', r:[208.8,392.7,227.7,412.6]}, {c:'kpb', r:[230.0,376.8,323.2,431.9], v:[8,KH(`−3 ± ${SQ('−11')}`,'2')]},
-        {t:'⇒', r:[326.3,395.5,349.7,413.5]}, {c:'kpl', r:[348.5,385.9,485.0,422.8], v:[9,'<span class="kjp">実数解 なし</span>']}],
+        {t:'⇒', r:[326.3,395.5,349.7,413.5]}, {c:'kpl', r:[348.5,385.9,485.0,422.8], v:[9,'<span class="kjp">解なし</span>']}],
   done:9,
   cm:[
     `⑵ ${M('x² ＋ 3x ＋ 5 ＝ 0')} を <b>解の公式</b> で 解こう！`,
@@ -1301,7 +1301,7 @@ const q2 = kfSlide({num:'⑵', y0:282.2, eq:`x${P2} ＋ 3x ＋ 5 ＝ 0`, abc:[1,
     `計算した −20 を ルートの中へ。`,
     `ルートの中を そのまま 書くと ${M('9 − 20')}。`,
     `${M('9 − 20 ＝ −11')}。　<b>ルートの中が マイナス</b> に なった！`,
-    `2乗して マイナスに なる 数は ない。　だから <b>実数解 なし</b>。　ルートの中が <b>マイナス</b> → 実数解なし！　<b>完成！</b>`
+    `2乗して マイナスに なる 数は ない。　だから <b>解なし</b>。　ルートの中が <b>マイナス</b> → 解なし！　<b>完成！</b>`
   ]});
 
 const DECK = {title:'①-5 2次方程式の解', pages:[
