@@ -489,3 +489,9 @@ i.nv{font-style:normal;font-family:inherit}
 .icap.on{opacity:0;transition:opacity .2s}
 .igb .iride{offset-anchor:50% 150%}
 .ver{position:absolute;left:60px;bottom:18px;font-size:16px;font-weight:700;color:var(--muted);letter-spacing:.04em}
+.iride,.iwait{width:64px;height:48px}
+.iride{offset-anchor:50% 100%}
+.igb .iride{offset-anchor:50% 100%}
+.iov{position:absolute;left:0;top:0;z-index:4;pointer-events:none}
+.ifish svg{width:110px;height:82px}
+.iicon{width:44px;height:33px} .iicon svg{width:44px;height:33px}
