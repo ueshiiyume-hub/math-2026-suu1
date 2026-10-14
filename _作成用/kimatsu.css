@@ -495,3 +495,12 @@ i.nv{font-style:normal;font-family:inherit}
 .iov{position:absolute;left:0;top:0;z-index:4;pointer-events:none}
 .ifish svg{width:110px;height:82px}
 .iicon{width:44px;height:33px} .iicon svg{width:44px;height:33px}
+.ixln{stroke:var(--accent);stroke-width:3;stroke-dasharray:6 5}
+.ixdot{fill:var(--accent)}
+.ilt{fill:none;stroke:#e0465e;stroke-width:6;stroke-linecap:round;stroke-linejoin:round}
+.iell{fill:none;stroke:#e0465e;stroke-width:3.5}
+.iarw{fill:none;stroke:#e0465e;stroke-width:3.5}
+.iarh{fill:#e0465e}
+.iwr{font-family:"STIX Two Text",serif;font-size:40px;font-weight:700;fill:#e0465e}
+.ipn3{position:absolute;left:730px;top:150px;width:420px;display:flex;flex-direction:column;gap:18px}
+.itip2{font-size:26px;font-weight:900;color:var(--muted);text-align:center}
