@@ -488,3 +488,4 @@ i.nv{font-style:normal;font-family:inherit}
 .icap b{color:var(--accent)}
 .icap.on{opacity:0;transition:opacity .2s}
 .igb .iride{offset-anchor:50% 150%}
+.ver{position:absolute;left:60px;bottom:18px;font-size:16px;font-weight:700;color:var(--muted);letter-spacing:.04em}

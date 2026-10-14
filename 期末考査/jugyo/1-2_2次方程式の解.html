@@ -890,6 +890,7 @@ i.nv{font-style:normal;font-family:inherit}
 .icap b{color:var(--accent)}
 .icap.on{opacity:0;transition:opacity .2s}
 .igb .iride{offset-anchor:50% 150%}
+.ver{position:absolute;left:60px;bottom:18px;font-size:16px;font-weight:700;color:var(--muted);letter-spacing:.04em}
 
 /* ===== 手書き ===== */
 #ink{position:fixed;left:0;top:0;z-index:15;pointer-events:none;touch-action:none}
@@ -1355,6 +1356,7 @@ const coverF = (kicker,title,sub,sub2,pol,cap) => `
   <h1>${title}</h1>
   <div class="r" data-s="1"><div class="sub">${sub}</div></div>
   <div class="r" data-s="2"><div class="sub2">${sub2}</div></div>
+  ${typeof VER!=='undefined' ? `<div class="ver">${VER}</div>` : ''}
 </div>
 <div class="card abs polaroid">${TP('yellow','left:92px;top:-14px;transform:rotate(-3deg)')}${pol}<div class="cap">${cap}</div></div>`;
 const endF = (kicker,pol,cap='よくできました') => `
@@ -1618,6 +1620,7 @@ const GARW = (x1,y1,x2,y2,s) => { const ym=(y1+y2)/2, hh=(y2-y1)*.28, hx=x2-(y2-
   return `<g class="gs" data-s="${s}"><polygon points="${x1},${ym-hh} ${hx},${ym-hh} ${hx},${y1} ${x2},${ym} ${hx},${y2} ${hx},${ym+hh} ${x1},${ym+hh}" fill="#c9dca6"/></g>`; };
 
 /* ====== このプリントのスライド ====== */
+const VER = '<i class="nv">ver</i> 1.0　2026-10-14';
 
 const KK = KIMATSU + '　①-2';
 const POL = fpol(`(x ＋ 5)(x − 3) ＝ 0`, `x ＝ −5, 3`, 'どちらかが 0');

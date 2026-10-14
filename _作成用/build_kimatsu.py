@@ -405,7 +405,12 @@ const DECK = {title:'①-5 2次方程式の解', pages:[
 # ①-6〜③-4（プリントの 画像を 背景に した スライド）
 sys.path.insert(0, B); import decks_kimatsu2; decks_kimatsu2.add(decks)
 
+# バージョンと 日付（versions.json）。直したら v と date を 書きかえる。表紙の 右下に 出る
+import json
+VERS = json.load(open(os.path.join(B, 'versions.json'), encoding='utf-8'))
 os.makedirs(OUT, exist_ok=True)
 for fn, (title, js) in decks.items():
+    vv = VERS.get(fn, {'v': '1.0', 'date': ''})
+    js = "const VER = '<i class=\"nv\">ver</i> " + vv['v'] + "　" + vv['date'] + "';\n" + js
     open(os.path.join(OUT, fn + '.html'), 'w', encoding='utf-8').write(page(title, js))
 print('ok', len(decks), 'files')

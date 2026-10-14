@@ -8,6 +8,7 @@ const coverF = (kicker,title,sub,sub2,pol,cap) => `
   <h1>${title}</h1>
   <div class="r" data-s="1"><div class="sub">${sub}</div></div>
   <div class="r" data-s="2"><div class="sub2">${sub2}</div></div>
+  ${typeof VER!=='undefined' ? `<div class="ver">${VER}</div>` : ''}
 </div>
 <div class="card abs polaroid">${TP('yellow','left:92px;top:-14px;transform:rotate(-3deg)')}${pol}<div class="cap">${cap}</div></div>`;
 const endF = (kicker,pol,cap='よくできました') => `

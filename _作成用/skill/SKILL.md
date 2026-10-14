@@ -20,6 +20,7 @@ description: 数学の授業プリント（docx）を、クリックで1段ず�
 | engine.js | 組み立てと操作。`data-s`（その番で出る）`data-o`（その番で色）`data-f`（その番で飛ぶ）`data-m`（説明の番）から段数を自動で数える。`layoutExtra(root)` があれば位置合わせで呼ぶ |
 | kimatsu.js / kimatsu.css | 期末用の部品：`coverF` `endF`（表紙・おわり）、`patOverview`（パターン一覧）、`fxSlide`（因数分解：左に式、右に大きな考え方カード）、`tstep([問いの番,答えの番],…)`、`eqSlide`（2次方程式：青と橙の ( ) → ＝0 → 移項の矢印 → x＝） |
 | build_kimatsu.py | 各プリントの「デッキ」（スライドの中身）を書くところ。`decks['ファイル名'] = (題, JS)` |
+| versions.json | スライドごとの バージョン・日付・メモ。build が 表紙の 左下に 出す。直したら 毎回 上げる |
 | menus.py / menu.html | 目次ページ（カードの一覧）を作る |
 | build.py / words.js | 中間考査のときのデッキ（参考） |
 | ink.js | 手書き（授業中に上から書きこむ）。右上の ✏ か W キー。赤・青・黒、消しゴム(E)、1つ戻す(Ctrl+Z)、全消し。線はスライドごとに台紙座標で保存。build_kimatsu.py が engine.js の後ろにつなげる |
