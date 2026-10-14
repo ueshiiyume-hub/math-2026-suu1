@@ -465,7 +465,7 @@ const POL = `<div class="fpol"><div class="fa math">x${P2} − 2x − 3 ＞ 0</d
 
 /* ===== 大きい グラフ（px）。y ＝ k(x − r1)(x − r2) を 下に凸で かく。x軸 ＝ 水面 ===== */
 function IG(o){
-  const W = 660, H = 410, ay = o.ay;
+  const W = o.W||660, H = o.H||410, ay = o.ay;
   const X = x => W/2 + (x-o.cx)*o.sc, Y = x => ay - o.k*(x-o.r[0])*(x-o.r[1]);
   const m = (o.r[0]+o.r[1])/2, c0 = (m-o.r[0])*(m-o.r[1]);
   const hw = Math.sqrt((ay-o.top)/o.k - c0), xa = m-hw, xb = m+hw;
@@ -681,6 +681,44 @@ const s7 = `
     `−1 で また 水面 → 塗れる → <b>黒丸</b>。`,
     `−1 より 右は 空 → くるしい。　塗れたのは 真ん中の 1か所 だけ。`])}`;
 
+
+/* ===== ⑵ 2枚に 分けた 版：A「どこを 塗る？」（理屈だけ）・B「左から 塗る」（作業だけ） ===== */
+const GA2 = IG({ay:150, cx:-1.5, sc:200, k:300, r:[-2,-1], top:14, W:900, H:300, water:true});
+const s7a = `
+  <div class="card abs dcard">${EQTAPE}
+    <div class="ieq math"><span class="iex" data-o="1">x${P2} ＋ 3x ＋ 2</span><span class="iey" data-o="1">y</span><span class="ile"> ≦ 0</span></div>
+    <div class="iarr gs" data-s="2"><svg width="60" height="230" viewBox="0 0 60 230"><path d="M30 4 L30 200" stroke="#e0465e" stroke-width="8" stroke-linecap="round"/><polygon points="10,190 50,190 30,226" fill="#e0465e"/></svg></div>
+    <div class="iga">${GA2.svg(GA2.base,
+      `<g class="gs" data-s="2"><rect x="14" y="0" width="${GA2.W-28}" height="${GA2.ay}" fill="var(--paper)" opacity=".72"/><rect class="ifocus" x="16" y="${GA2.ay+4}" width="${GA2.W-32}" height="${GA2.H-GA2.ay-12}" rx="10"/></g>`)}
+      <div class="ifish lh" data-s="3">${RIDER('fish',false)}<span>ここなら 息が できる！</span></div></div>
+  </div>
+  ${cbar([
+    `⑵ ${M('x² ＋ 3x ＋ 2 ≦ 0')}。　グラフの <b>どこ</b> を 塗れば いい？`,
+    `Step❶ で ${M('y ＝ x² ＋ 3x ＋ 2')} と おいた。　だから 左の 式は <b>y</b>。　この 不等式は <b>y ≦ 0</b>。`,
+    `y は グラフの 点の 高さ。　y ≦ 0 は 高さが 0 以下 → x軸（水面）より <b>下</b>、つまり <b>水の 中</b>。`,
+    `水の 中が すきな <b>魚号</b> の 出番！　魚が 息が できる ところを 塗ろう。`])}`;
+
+const GB2 = IG({ay:190, cx:-1.5, sc:260, k:300, r:[-2,-1], top:12, W:1100, H:400, water:true});
+const CAP = (s,e,h) => `<div class="icap lh" data-s="${s}" data-o="${e}">${h}</div>`;
+const HL = (g,a,b,s,e) => `<path class="ihl2 gs" data-s="${s}" data-o="${e}" d="${g.path(a,b)}"/>`;
+const s7b = `
+  <div class="card abs dcard">${EQTAPE}
+    <div class="ititle math">⑵　${EQ2}</div>
+    ${CAP(0,1,'左から 魚号が 進む')}${CAP(1,2,'空 → くるしい…')}${CAP(2,3,'−2 は 水面 → ● 塗れる')}${CAP(3,4,'水の 中 → <b>塗る！</b>')}${CAP(4,5,'−1 も 水面 → ● 塗れる')}${CAP(5,6,'空 → くるしい…')}${CAP(6,99,'塗れたのは <b>ここ</b>！')}
+    <div class="igb">${GB2.svg(GB2.base.replace('class="icv"','class="icv ifaint"'),
+        HL(GB2,GB2.xa,-2,1,2), HL(GB2,-2,-1,3,4), HL(GB2,-1,GB2.xb,5,6),
+        GB2.seg(-2,-1,3), GB2.dot(-2,2,false), GB2.dot(-1,4,false))}
+      ${GB2.wait('fish',0,1)}${GB2.ride(GB2.xa,-2,1,3,'fish',true)}${GB2.ride(-2,-1,3,5,'fish')}${GB2.ride(-1,-1+(GB2.xb+1)*0.75,5,99,'fish',true)}</div>
+  </div>
+  ${cbar([
+    `左から 順に 見て いく。　魚号は 水の 中なら 息が できる。`,
+    `はじめは 空（水の 上）。　魚は 息が できない → 塗らない。`,
+    `−2 で ちょうど 水面（y ＝ 0）。　「0 ≦ 0」は 正しい → 塗れる → 中まで 塗った <b>黒丸</b>。`,
+    `−2 から −1 の 間は 水の 中 → 息が できる → <b>塗る</b>。`,
+    `−1 で また 水面。　「0 ≦ 0」は 正しい → <b>黒丸</b>。`,
+    `−1 より 右は 空 → くるしい → 塗らない。`,
+    `塗れたのは −2 から −1 の 1か所 だけ。`])}`;
+
 /* ⑵ Step❸ */
 const b2 = IG({...G2});
 const s8 = `
@@ -734,7 +772,7 @@ const DECK = {title:'③-1 2次不等式の解法', pages:[
   {name:'表紙', html:coverF(KK, '<span class="mk">2次不等式</span><br>の 解き方', 'グラフを かいて 塗る', '塗れた 場所を x の 範囲で 答える', POL, '3つの Step')},
   {name:'考え方', html:s0}, {name:'解き方', html:s1},
   {name:'⑴ Step❶', html:s2}, {name:'⑴ 塗る', html:s3}, {name:'⑴ 答える', html:s4}, {name:'⑴ 書きこみ', html:s5},
-  {name:'⑵ Step❶', html:s6}, {name:'⑵ 塗る', html:s7}, {name:'⑵ 答える', html:s8}, {name:'⑵ 書きこみ', html:s9},
+  {name:'⑵ Step❶', html:s6}, {name:'⑵ どこ？', html:s7a}, {name:'⑵ 塗る', html:s7b}, {name:'⑵ 答える', html:s8}, {name:'⑵ 書きこみ', html:s9},
   {name:'まとめ', html:s10},
   {name:'終', html:endF(KK + '　2次不等式の解法', POL)}
 ]};
