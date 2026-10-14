@@ -830,6 +830,18 @@ body{overflow:hidden;height:100%;width:100%}
 .isr{font-size:26px;font-weight:900} .isr b{color:var(--accent)}
 .isc .dsc-n{font-size:40px;color:var(--accent)}
 i.nv{font-style:normal;font-family:inherit}
+.iwater{fill:#d8ecfa}
+.iwave{fill:none;stroke:#7bb6e0;stroke-width:3}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .iwater{fill:#23405a} }
+:root[data-theme="dark"] .iwater{fill:#23405a}
+.iwl{font-family:"Zen Maru Gothic",sans-serif;font-size:22px;font-weight:900;fill:var(--muted)} .iwl.in{fill:#3f86c4}
+.itag{font-family:"Zen Maru Gothic",sans-serif;font-size:30px;font-weight:900} .itag.ok{fill:#f08a2a} .itag.ng{fill:#3f86c4}
+.ixb{fill:var(--accent)} .ixt{font-family:"STIX Two Text",serif;font-style:italic;font-size:34px;font-weight:700;fill:#fff}
+.ig{width:660px;height:410px}
+.iride{position:absolute;left:0;top:0;width:54px;height:36px;offset-anchor:50% 100%;offset-rotate:auto;offset-distance:0%;opacity:0;pointer-events:none;z-index:3}
+.iride.wv-on{opacity:1;animation:iride 1.8s ease-in-out forwards}
+@keyframes iride{from{offset-distance:0%}to{offset-distance:100%}}
+.ipaint.show path{transition:stroke-dashoffset 1.8s ease-in-out}
 
 /* ===== 手書き ===== */
 #ink{position:fixed;left:0;top:0;z-index:15;pointer-events:none;touch-action:none}
@@ -1586,7 +1598,7 @@ const WB = r => `<rect x="${r[0]}" y="${r[1]}" width="${(r[2]-r[0]).toFixed(1)}"
 const KK = KIMATSU + '　③-1';
 const POL = `<div class="fpol"><div class="fa math">x${P2} − 2x − 3 ＞ 0</div><div class="fv">グラフを 塗る</div><div class="fb math">x ＜ −1, 3 ＜ x</div></div>`;
 
-/* ===== 大きい グラフ（px）。y ＝ k(x − r1)(x − r2) を 下に凸で かく ===== */
+/* ===== 大きい グラフ（px）。y ＝ k(x − r1)(x − r2) を 下に凸で かく。x軸 ＝ 水面 ===== */
 function IG(o){
   const W = 660, H = 410, ay = o.ay;
   const X = x => W/2 + (x-o.cx)*o.sc, Y = x => ay - o.k*(x-o.r[0])*(x-o.r[1]);
@@ -1594,39 +1606,36 @@ function IG(o){
   const hw = Math.sqrt((ay-o.top)/o.k - c0), xa = m-hw, xb = m+hw;
   const path = (a,b) => { let d=''; for(let i=0;i<=60;i++){ const x=a+(b-a)*i/60; d+=(i?'L':'M')+X(x).toFixed(1)+' '+Y(x).toFixed(1)+' '; } return d; };
   const f = n => n.toFixed(1);
-  const g = {X, Y, ay, W, H, xa, xb};
-  g.base = `<rect class="itint" data-s="${o.tint??99}" x="14" y="${o.tintUp?10:ay}" width="${W-28}" height="${o.tintUp?ay-10:H-ay-10}"/>
+  const g = {X, Y, ay, W, H, xa, xb, r:o.r, path};
+  let wave=''; for(let x=14;x<=W-28;x+=4) wave+=(x===14?'M':'L')+x+' '+(ay+3*Math.sin(x/9)).toFixed(1)+' ';
+  g.base = (o.water ? `<rect class="iwater" x="14" y="${ay}" width="${W-28}" height="${H-ay-6}"/><path class="iwave" d="${wave}"/>
+      <text class="iwl" x="22" y="34">水の 上（<tspan font-style="italic">y</tspan> ＞ 0）</text><text class="iwl in" x="22" y="${H-16}">水の 中（<tspan font-style="italic">y</tspan> ＜ 0）</text>` : '')
+    + `<rect class="itint" data-s="${o.tint??99}" x="14" y="10" width="${W-28}" height="${ay-10}"/>
     <line class="iax" x1="10" y1="${ay}" x2="${W-16}" y2="${ay}"/><polygon class="iah" points="${W-2},${ay} ${W-20},${ay-9} ${W-20},${ay+9}"/>
     <text class="ixl" x="${W-24}" y="${ay+38}">x</text>
     ${o.r.map(x=>`<text class="inum" x="${f(X(x))}" y="${ay+44}" text-anchor="middle">${x<0?'−'+(-x):x}</text>`).join('')}
     <path class="icv${o.cs!==undefined?' gs':''}"${o.cs!==undefined?` data-s="${o.cs}"`:''} d="${path(xa,xb)}"/>`;
-  /* 確かめの 点：x、番、○か× */
-  g.pt = (x,s,ok,lab) => `<g class="gs" data-s="${s}"><line class="ipl" x1="${f(X(x))}" y1="${ay}" x2="${f(X(x))}" y2="${f(Y(x))}"/><circle class="ipc" cx="${f(X(x))}" cy="${f(Y(x))}" r="9"/>
-    <text class="ipm ${ok?'ok':'ng'}" x="${f(X(x)+18)}" y="${f(Y(x)+(Y(x)<ay?-6:30))}">${ok?'○':'×'}</text><text class="ipx" x="${f(X(x))}" y="${ay+(Y(x)<ay?40:-14)}" text-anchor="middle">${lab}</text></g>`;
-  /* 塗る（外側 2本 か 内側 1本） */
-  g.paint = (s, out) => `<g class="ipaint" data-s="${s}">${out ? `<path pathLength="1" d="${path(xa,o.r[0])}"/><path pathLength="1" d="${path(o.r[1],xb)}"/>` : `<path pathLength="1" d="${path(o.r[0],o.r[1])}"/>`}</g>`;
-  /* 端の 点：open＝白丸、さもなくば 黒丸 */
-  g.ends = (s, open) => `<g class="gs" data-s="${s}">${o.r.map(x=>`<circle class="iend ${open?'op':''}" cx="${f(X(x))}" cy="${ay}" r="11"/>`).join('')}</g>`;
-  /* x軸に 影を 落とす：矢印 と 帯 */
-  g.shadow = (s, out) => {
-    const xs = out ? [xa+0.25*(o.r[0]-xa), xa+0.65*(o.r[0]-xa), o.r[1]+0.35*(xb-o.r[1]), o.r[1]+0.75*(xb-o.r[1])] : [o.r[0]+(o.r[1]-o.r[0])*0.3, o.r[0]+(o.r[1]-o.r[0])*0.7];
-    const arr = xs.map(x=>{ const y1=Y(x)+(out?16:-16), y2=ay+(out?-14:14); return `<line class="idrop" x1="${f(X(x))}" y1="${f(y1)}" x2="${f(X(x))}" y2="${f(y2)}"/><polygon class="idrh" points="${f(X(x)-7)},${f(y2+(out?-10:10))} ${f(X(x)+7)},${f(y2+(out?-10:10))} ${f(X(x))},${f(y2)}"/>`; }).join('');
-    const band = out
-      ? `<line class="iband" x1="18" y1="${ay}" x2="${f(X(o.r[0])-12)}" y2="${ay}"/><polygon class="ibh" points="6,${ay} 24,${ay-10} 24,${ay+10}"/>
-         <line class="iband" x1="${f(X(o.r[1])+12)}" y1="${ay}" x2="${W-34}" y2="${ay}"/><polygon class="ibh" points="${W-22},${ay} ${W-40},${ay-10} ${W-40},${ay+10}"/>`
-      : `<line class="iband" x1="${f(X(o.r[0])+12)}" y1="${ay}" x2="${f(X(o.r[1])-12)}" y2="${ay}"/>`;
-    return `<g class="gs" data-s="${s}">${arr}${band}</g>`;
-  };
+  /* 塗る：a から b まで（コースターと 同じ 速さで のびる） */
+  g.seg = (a,b,s) => `<g class="ipaint" data-s="${s}"><path pathLength="1" d="${path(a,b)}"/></g>`;
+  /* 水面の 点：open＝白丸、さもなくば 黒丸 */
+  g.dot = (x,s,open) => `<g class="gs" data-s="${s}"><circle class="iend ${open?'op':''}" cx="${f(X(x))}" cy="${ay}" r="12"/></g>`;
+  /* OK・ダメ の 札（グラフの 上に） */
+  g.tag = (x,s,ok,txt) => `<g class="gs" data-s="${s}"><text class="itag ${ok?'ok':'ng'}" x="${f(X(x))}" y="${f(Y(x)+(Y(x)<ay?-26:44))}" text-anchor="middle">${txt}</text></g>`;
+  /* 塗れた 部分に 置く x の 札 */
+  g.xmark = (x,s) => `<g class="gs" data-s="${s}"><circle class="ixb" cx="${f(X(x)+(x<m?-34:34))}" cy="${f(Y(x))}" r="24"/><text class="ixt" x="${f(X(x)+(x<m?-34:34))}" y="${f(Y(x)+10)}" text-anchor="middle">x</text></g>`;
   g.svg = (...parts) => `<svg class="isv" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">${parts.join('')}</svg>`;
+  /* コースター（レール＝放物線 に そって 走る）。wa 番で 走り、wb 番で 消える */
+  g.ride = (a,b,wa,wb) => `<div class="iride" data-wa="${wa}" data-wb="${wb}" style="offset-path:path('${path(a,b)}')"><svg width="54" height="36" viewBox="0 0 54 36"><rect x="4" y="4" width="46" height="20" rx="7" fill="#e0465e"/><rect x="10" y="8" width="13" height="9" rx="2" fill="#fff" opacity=".85"/><rect x="29" y="8" width="13" height="9" rx="2" fill="#fff" opacity=".85"/><circle cx="14" cy="28" r="6" fill="#4a4560"/><circle cx="40" cy="28" r="6" fill="#4a4560"/></svg></div>`;
   return g;
 }
 const IP = (s,h,cls='') => `<div class="ipr lh ${cls}" data-s="${s}">${h}</div>`;
 const EQ1 = `x${P2} − 2x − 3 ＞ 0`, EQ2 = `x${P2} ＋ 3x ＋ 2 ≦ 0`;
-const g1 = () => IG({ay:250, cx:1, sc:78, k:20, r:[-1,3], top:40, tintUp:true});
-const g2 = () => IG({ay:250, cx:-1.5, sc:150, k:250, r:[-2,-1], top:40, tintUp:false});
+/* ②-1 と 同じ くらい しゅっと した 放物線 */
+const G1 = {ay:220, cx:1, sc:80, k:42, r:[-1,3], top:22};
+const G2 = {ay:220, cx:-1.5, sc:160, k:330, r:[-2,-1], top:22};
 
 /* ===== 2枚目：考え方 ===== */
-const gk = IG({ay:250, cx:1, sc:78, k:20, r:[-1,3], top:40, tintUp:true, tint:3, cs:1});
+const gk = IG({...G1, tint:3, cs:1});
 const s0 = `
   <div class="card abs dcard">${EQTAPE}
     <div class="ig">${gk.svg(gk.base)}</div>
@@ -1710,51 +1719,54 @@ const STEP1CM = (P,fac,why) => [
 
 /* ===== 例⑴ ===== */
 const s2 = PR({...P1, phase:1, cm:STEP1CM(P1,'(x ＋ 1)(x − 3) ＝ 0','たして −2、かけて −3')});
-const a1 = g1();
+/* ⑴ Step❷：左から コースターで レールを 走り、水の 上（y ＞ 0）だけ 塗る */
+const a1 = IG({...G1, water:true});
 const s3 = `
   <div class="card abs dcard">${EQTAPE}
     <div class="ititle math">⑴　${EQ1}　<span class="istep"><i class="nv">Step</i>❷ 塗る</span></div>
-    <div class="ig">${a1.svg(a1.base.replace('data-s="99"','data-s="1"'), a1.pt(-2,2,true,'−2'), a1.pt(1,3,false,'1'), a1.pt(4,4,true,'4'), a1.paint(5,true), a1.ends(6,true))}</div>
+    <div class="ig">${a1.svg(a1.base, a1.seg(a1.xa,-1,1), a1.tag(-1.6,1,true,'OK'), a1.dot(-1,2,true), a1.tag(1,3,false,'ダメ'), a1.seg(3,a1.xb,5), a1.dot(3,4,true), a1.tag(3.6,5,true,'OK'))}
+      ${a1.ride(a1.xa,-1,1,2)}${a1.ride(-1,3,3,4)}${a1.ride(3,a1.xb,5,99)}</div>
     <div class="ipn">
-      ${IP(1,`「＞ 0」→ <b class="math">y ＞ 0</b><br>→ x軸より <b>上</b>`)}
-      ${IP(2,`x ＝ −2 の 点：<b>上</b> ○`,'isub')}
-      ${IP(3,`x ＝ 1 の 点：<b>下</b> ×`,'isub')}
-      ${IP(4,`x ＝ 4 の 点：<b>上</b> ○`,'isub')}
-      ${IP(5,`x軸より 上の 部分を <b>塗る</b>`,'ikey')}
-      ${IP(6,`端 −1、3 は y ＝ 0<br>0 ＞ 0 は ×（成り立たない）<br>→ 含まない → <b>白丸 ○</b>`)}
+      <div class="ipr">「＞ 0」→ <b class="math">y ＞ 0</b><br>→ <b>水の 上</b> が <i class="nv">OK</i></div>
+      ${IP(1,`水の 上を 走る → <i class="nv">OK</i> → <b>塗る</b>`,'isub')}
+      ${IP(2,`−1 は ちょうど 水面（y ＝ 0）<br>0 ＞ 0 は × → 塗れない → <b>白丸</b>`,'isub')}
+      ${IP(3,`−1 〜 3 は <b>水の 中</b> → ダメ`,'isub')}
+      ${IP(4,`3 も 水面 → <b>白丸</b>`,'isub')}
+      ${IP(5,`3 より 少しでも 右 → 水の 上<br>→ 白丸の 先を <b>塗る</b>`,'ikey')}
     </div>
   </div>
   ${cbar([
-    `<b><i class="nv">Step</i>❷ 塗る</b>。　<i class="nv">Step</i>❶ の グラフを 大きく して 考えよう。`,
-    `${M('x² − 2x − 3 ＞ 0')} は y ＞ 0 → グラフが <b>x軸より 上</b> の ところ。`,
-    `たしかめ：x ＝ −2 の とき、グラフは x軸より 上。　y ＞ 0 に なって いる → ○。`,
-    `x ＝ 1 の とき、グラフは x軸より 下（y ＜ 0）→ ×。`,
-    `x ＝ 4 の とき、グラフは 上 → ○。　−1 より 左 と 3 より 右 で 上に ある。`,
-    `x軸より 上に ある 部分（左と 右の 2本）を <b>塗る</b>。`,
-    `端の −1 と 3 は、ちょうど y ＝ 0。　「0 ＞ 0」は まちがい → 含まないので <b>白丸</b>。`])}`;
+    `<b><i class="nv">Step</i>❷ 塗る</b>。　x軸を <b>水面</b> と 思おう。　y ＞ 0 は「水の 上」に ある ところ。`,
+    `左（マイナスの 方）から コースターが レールを 走る。　水の 上 → <i class="nv">OK</i> なので <b>塗る</b>。`,
+    `−1 で ちょうど 水面（y ＝ 0）。　「0 ＞ 0」は まちがい → ここは 塗れない → 中が 空っぽの <b>白丸</b>。`,
+    `−1 から 3 の 間は <b>水の 中</b>（y ＜ 0）。　ダメ なので 塗らない。`,
+    `3 で また 水面。　ここも 塗れない → <b>白丸</b>。`,
+    `3 より 少しでも 右に 行けば 水の 上 → <i class="nv">OK</i>。　白丸の 先を <b>塗る</b>。`])}`;
 
-const b1 = g1();
+/* ⑴ Step❸：塗れた 部分に x を 置いて、−1・3 と 比べる */
+const b1 = IG({...G1});
 const s4 = `
   <div class="card abs dcard">${EQTAPE}
     <div class="ititle math">⑴　${EQ1}　<span class="istep"><i class="nv">Step</i>❸ 答える</span></div>
-    <div class="ig">${b1.svg(b1.base, b1.paint(0,true).replace('class="ipaint"','class="ipaint show"'), b1.ends(0,true), b1.shadow(1,true),
-      `<g class="gs" data-s="2"><text class="iblab" x="${(b1.X(-1)/2).toFixed(1)}" y="${b1.ay+92}" text-anchor="middle">x ＜ −1</text></g>`,
-      `<g class="gs" data-s="3"><text class="iblab" x="${((b1.X(3)+b1.W)/2).toFixed(1)}" y="${b1.ay+92}" text-anchor="middle">3 ＜ x</text></g>`)}</div>
+    <div class="ig">${b1.svg(b1.base, b1.seg(b1.xa,-1,0), b1.seg(3,b1.xb,0), b1.dot(-1,0,true), b1.dot(3,0,true), b1.xmark(-1.7,1), b1.xmark(3.7,1),
+      `<g class="gs" data-s="2"><text class="iblab" x="${b1.X(-1.7)-34}" y="${b1.Y(-1.7)+66}" text-anchor="middle">x ＜ −1</text></g>`,
+      `<g class="gs" data-s="3"><text class="iblab" x="${b1.X(3.7)+34}" y="${b1.Y(3.7)+66}" text-anchor="middle">3 ＜ x</text></g>`)}</div>
     <div class="ipn">
-      ${IP(1,`塗れた 場所の 真下（x軸）に<br><b>影</b> を 落とす`)}
-      ${IP(2,`左の 影：−1 より <b>左</b><br>→ <span class="math">x ＜ −1</span>`,'isub')}
-      ${IP(3,`右の 影：3 より <b>右</b><br>→ <span class="math">3 ＜ x</span>`,'isub')}
+      <div class="ipr">塗れた ところ の x は？</div>
+      ${IP(1,`塗れた 2か所に <b class="math">x</b> を 置く`,'isub')}
+      ${IP(2,`左の x は −1 より <b>小さい</b><br>→ <span class="math">x ＜ −1</span>`,'isub')}
+      ${IP(3,`右の x は 3 より <b>大きい</b>（右）<br>→ <span class="math">3 ＜ x</span>`,'isub')}
       <div class="ians lh" data-s="4"><span class="math">x ＜ −1, 3 ＜ x</span></div>
-      ${IP(5,`数直線と 同じ <b>左 → 右</b> の 並びで 書く<br>白丸 → <b class="math">＜</b>（＝ なし）`,'itip')}
+      ${IP(5,`白丸 → <b class="math">＜</b>（＝ なし）　黒丸 → <b class="math">≦</b>`,'itip')}
     </div>
   </div>
   ${cbar([
-    `<b><i class="nv">Step</i>❸ 答える</b>。　塗れた 場所を <b>x軸 方向</b> で 答える ＝ x の 範囲で 答える。`,
-    `塗った グラフの 真下、x軸に <b>影</b> を 落とす。　x軸の 上に 帯が 2本 できる。`,
-    `左の 帯は −1 より 左。　x は −1 より 小さい → ${M('x ＜ −1')}。`,
-    `右の 帯は 3 より 右。　x は 3 より 大きい → ${M('3 ＜ x')}。`,
+    `<b><i class="nv">Step</i>❸ 答える</b>。　塗れた ところは どこ？　グラフの 塗れた 部分 だけ を 見る。`,
+    `塗れた 部分の 点の 横の 位置が <b>x</b>。　左と 右の 2か所に x を 置く。`,
+    `左の x は −1 より 左 ＝ −1 より <b>小さい</b>。　−1 は 白丸 なので ${M('x ＜ −1')}。`,
+    `右の x は 3 より 右 ＝ 3 より <b>大きい</b>。　3 も 白丸 なので ${M('3 ＜ x')}。`,
     `2つを 「,」で 並べて ${M('x ＜ −1, 3 ＜ x')}。`,
-    `書き方の コツ：数直線と 同じ 並び（左 → 右）。　白丸 なので ＝ の ない <b>＜</b>。　<b>完成！</b>`])}`;
+    `白丸（塗れない 点）なら <b>＜</b>、黒丸（塗れる 点）なら <b>≦</b>。　<b>完成！</b>`])}`;
 
 const s5 = PR({...P1, phase:2, cm:[
   `プリントに 書きこもう。　<i class="nv">Step</i>❷ の グラフ。`,
@@ -1764,48 +1776,55 @@ const s5 = PR({...P1, phase:2, cm:[
 
 /* ===== 例⑵ ===== */
 const s6 = PR({...P2_, phase:1, cm:STEP1CM(P2_,'(x ＋ 2)(x ＋ 1) ＝ 0','たして ＋3、かけて ＋2')});
-const a2 = g2();
+/* ⑵ Step❷：今度は 水の 中（y ≦ 0）が <i class="nv">OK</i> */
+const a2 = IG({...G2, water:true});
 const s7 = `
   <div class="card abs dcard">${EQTAPE}
     <div class="ititle math">⑵　${EQ2}　<span class="istep"><i class="nv">Step</i>❷ 塗る</span></div>
-    <div class="ig">${a2.svg(a2.base.replace('data-s="99"','data-s="1"'), a2.pt(-2.5,2,false,'−2.5'), a2.pt(-1.5,3,true,'−1.5'), a2.pt(-0.5,4,false,'−0.5'), a2.paint(5,false), a2.ends(6,false))}</div>
+    <div class="ig">${a2.svg(a2.base, a2.tag(-2.3,1,false,'ダメ'), a2.seg(-2,-1,3), a2.dot(-2,2,false), a2.tag(-1.5,3,true,'OK'), a2.dot(-1,4,false), a2.tag(-0.7,5,false,'ダメ'))}
+      ${a2.ride(a2.xa,-2,1,2)}${a2.ride(-2,-1,3,4)}${a2.ride(-1,a2.xb,5,99)}</div>
     <div class="ipn">
-      ${IP(1,`「≦ 0」→ <b class="math">y ≦ 0</b><br>→ x軸より <b>下</b>（と x軸の 上）`)}
-      ${IP(2,`x ＝ −2.5 の 点：<b>上</b> ×`,'isub')}
-      ${IP(3,`x ＝ −1.5 の 点：<b>下</b> ○`,'isub')}
-      ${IP(4,`x ＝ −0.5 の 点：<b>上</b> ×`,'isub')}
-      ${IP(5,`x軸より 下の 部分を <b>塗る</b>`,'ikey')}
-      ${IP(6,`端 −2、−1 は y ＝ 0<br>0 ≦ 0 は ○（成り立つ）<br>→ 含む → <b>黒丸 ●</b>`)}
+      <div class="ipr">「≦ 0」→ <b class="math">y ≦ 0</b><br>→ <b>水の 中</b>（と 水面）が <i class="nv">OK</i></div>
+      ${IP(1,`水の 上を 走る → ダメ`,'isub')}
+      ${IP(2,`−2 は 水面（y ＝ 0）<br>0 ≦ 0 は ○ → 塗れる → <b>黒丸</b>`,'isub')}
+      ${IP(3,`−2 〜 −1 は 水の 中 → <i class="nv">OK</i> → <b>塗る</b>`,'isub')}
+      ${IP(4,`−1 も 水面 → 塗れる → <b>黒丸</b>`,'isub')}
+      ${IP(5,`−1 より 右は 水の 上 → ダメ`,'isub')}
     </div>
   </div>
   ${cbar([
-    `⑵ の <b><i class="nv">Step</i>❷ 塗る</b>。　今度は <b>≦</b>。`,
-    `${M('x² ＋ 3x ＋ 2 ≦ 0')} は y ≦ 0 → グラフが <b>x軸より 下</b>（または x軸の 上）の ところ。`,
-    `たしかめ：x ＝ −2.5 の とき、グラフは x軸より 上 → ×。`,
-    `x ＝ −1.5 の とき、グラフは 下 → ○。`,
-    `x ＝ −0.5 の とき、上 → ×。　−2 と −1 の <b>間</b> だけ 下に ある。`,
-    `x軸より 下に ある 部分（真ん中の 1本）を <b>塗る</b>。`,
-    `端の −2、−1 は y ＝ 0。　「0 ≦ 0」は 正しい → 含むので <b>黒丸</b>。`])}`;
+    `⑵ の <b><i class="nv">Step</i>❷ 塗る</b>。　今度は ≦ 0 → y ≦ 0 → <b>水の 中</b>（と ちょうど 水面）が <i class="nv">OK</i>。`,
+    `左から コースターが 走る。　はじめは 水の 上 → ダメ なので 塗らない。`,
+    `−2 で ちょうど 水面（y ＝ 0）。　「0 ≦ 0」は 正しい → 塗れる → 中まで 塗った <b>黒丸</b>。`,
+    `−2 から −1 の 間は <b>水の 中</b> → <i class="nv">OK</i> なので <b>塗る</b>。`,
+    `−1 で また 水面。　ここも 塗れる → <b>黒丸</b>。`,
+    `−1 より 右は 水の 上 → ダメ。　塗れたのは 真ん中の 1か所 だけ。`])}`;
 
-const b2 = g2();
+/* ⑵ Step❸ */
+const b2 = IG({...G2});
 const s8 = `
   <div class="card abs dcard">${EQTAPE}
     <div class="ititle math">⑵　${EQ2}　<span class="istep"><i class="nv">Step</i>❸ 答える</span></div>
-    <div class="ig">${b2.svg(b2.base, b2.paint(0,false).replace('class="ipaint"','class="ipaint show"'), b2.ends(0,false), b2.shadow(1,false),
-      `<g class="gs" data-s="2"><text class="iblab" x="${((b2.X(-2)+b2.X(-1))/2).toFixed(1)}" y="${b2.ay+130}" text-anchor="middle">−2 ≦ x ≦ −1</text></g>`)}</div>
+    <div class="ig">${b2.svg(b2.base, b2.seg(-2,-1,0), b2.dot(-2,0,false), b2.dot(-1,0,false),
+      `<g class="gs" data-s="1"><circle class="ixb" cx="${b2.X(-1.5)}" cy="${b2.Y(-1.5)+46}" r="24"/><text class="ixt" x="${b2.X(-1.5)}" y="${b2.Y(-1.5)+56}" text-anchor="middle">x</text></g>`,
+      `<g class="gs" data-s="2"><text class="iblab" x="${b2.X(-2)-40}" y="${b2.Y(-1.5)+56}" text-anchor="middle">−2 ≦</text></g>`,
+      `<g class="gs" data-s="3"><text class="iblab" x="${b2.X(-1)+40}" y="${b2.Y(-1.5)+56}" text-anchor="middle">≦ −1</text></g>`)}</div>
     <div class="ipn">
-      ${IP(1,`塗れた 場所の 真上（x軸）に<br><b>影</b> を 落とす`)}
-      ${IP(2,`影は −2 と −1 の <b>間</b><br>→ x は 2つに <b>はさまれる</b>`,'isub')}
-      <div class="ians lh" data-s="3"><span class="math">−2 ≦ x ≦ −1</span></div>
-      ${IP(4,`数直線と 同じ 並び（−2, x, −1）<br>黒丸 → <b class="math">≦</b>（＝ あり）`,'itip')}
+      <div class="ipr">塗れた ところ の x は？</div>
+      ${IP(1,`塗れた 1か所に <b class="math">x</b> を 置く`,'isub')}
+      ${IP(2,`x は −2 より <b>大きい</b>（右）<br>−2 は 黒丸 → <span class="math">−2 ≦ x</span>`,'isub')}
+      ${IP(3,`x は −1 より <b>小さい</b>（左）<br>−1 も 黒丸 → <span class="math">x ≦ −1</span>`,'isub')}
+      <div class="ians lh" data-s="4"><span class="math">−2 ≦ x ≦ −1</span></div>
+      ${IP(5,`x が 2つに <b>はさまれる</b> 形`,'itip')}
     </div>
   </div>
   ${cbar([
-    `⑵ の <b><i class="nv">Step</i>❸ 答える</b>。　塗れた 場所を x軸 方向で。`,
-    `塗った グラフの 真上、x軸に <b>影</b> を 落とす。　帯は −2 と −1 の 間に 1本。`,
-    `x は −2 より 大きく、−1 より 小さい → 2つに <b>はさまれる</b>。`,
-    `${M('−2 ≦ x ≦ −1')}。`,
-    `左から −2, x, −1 の 並び。　黒丸 なので ＝ の ついた <b>≦</b>。　<b>完成！</b>`])}`;
+    `⑵ の <b><i class="nv">Step</i>❸ 答える</b>。　塗れた ところは 真ん中の 1か所。`,
+    `塗れた 部分に <b>x</b> を 置く。`,
+    `x は −2 より 右 ＝ <b>大きい</b>。　−2 は 黒丸（塗れる）なので ${M('−2 ≦ x')}。`,
+    `x は −1 より 左 ＝ <b>小さい</b>。　−1 も 黒丸 なので ${M('x ≦ −1')}。`,
+    `まとめて ${M('−2 ≦ x ≦ −1')}。`,
+    `x が −2 と −1 に <b>はさまれる</b> 形。　黒丸 なので ≦。　<b>完成！</b>`])}`;
 
 const s9 = PR({...P2_, phase:2, cm:[
   `プリントに 書きこもう。　<i class="nv">Step</i>❷ の グラフ。`,

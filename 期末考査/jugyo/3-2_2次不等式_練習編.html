@@ -830,6 +830,18 @@ body{overflow:hidden;height:100%;width:100%}
 .isr{font-size:26px;font-weight:900} .isr b{color:var(--accent)}
 .isc .dsc-n{font-size:40px;color:var(--accent)}
 i.nv{font-style:normal;font-family:inherit}
+.iwater{fill:#d8ecfa}
+.iwave{fill:none;stroke:#7bb6e0;stroke-width:3}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .iwater{fill:#23405a} }
+:root[data-theme="dark"] .iwater{fill:#23405a}
+.iwl{font-family:"Zen Maru Gothic",sans-serif;font-size:22px;font-weight:900;fill:var(--muted)} .iwl.in{fill:#3f86c4}
+.itag{font-family:"Zen Maru Gothic",sans-serif;font-size:30px;font-weight:900} .itag.ok{fill:#f08a2a} .itag.ng{fill:#3f86c4}
+.ixb{fill:var(--accent)} .ixt{font-family:"STIX Two Text",serif;font-style:italic;font-size:34px;font-weight:700;fill:#fff}
+.ig{width:660px;height:410px}
+.iride{position:absolute;left:0;top:0;width:54px;height:36px;offset-anchor:50% 100%;offset-rotate:auto;offset-distance:0%;opacity:0;pointer-events:none;z-index:3}
+.iride.wv-on{opacity:1;animation:iride 1.8s ease-in-out forwards}
+@keyframes iride{from{offset-distance:0%}to{offset-distance:100%}}
+.ipaint.show path{transition:stroke-dashoffset 1.8s ease-in-out}
 
 /* ===== 手書き ===== */
 #ink{position:fixed;left:0;top:0;z-index:15;pointer-events:none;touch-action:none}
