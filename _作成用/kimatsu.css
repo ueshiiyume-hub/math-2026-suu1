@@ -440,3 +440,12 @@ i.nv{font-style:normal;font-family:inherit}
 .iride.wv-on{opacity:1;animation:iride 1.8s ease-in-out forwards}
 @keyframes iride{from{offset-distance:0%}to{offset-distance:100%}}
 .ipaint.show path{transition:stroke-dashoffset 1.8s ease-in-out}
+.iride{width:64px;height:40px;offset-rotate:0deg;offset-anchor:50% 80%}
+.iride svg{display:block}
+.ibub{position:absolute;left:46px;top:-30px;white-space:nowrap;padding:2px 10px;border-radius:12px;background:#fff;border:2px solid #3f86c4;color:#3f86c4;font-size:18px;font-weight:900}
+.iride.ng svg{animation:ishake .25s ease-in-out infinite alternate}
+@keyframes ishake{from{transform:translateX(-2px)}to{transform:translateX(2px)}}
+.iicon{display:inline-block;vertical-align:middle;width:44px;height:28px}
+.iicon svg{width:44px;height:28px}
+.ipr.iq{font-size:28px;color:var(--accent)}
+.itag{font-size:24px}

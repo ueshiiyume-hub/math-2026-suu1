@@ -485,14 +485,24 @@ function IG(o){
   /* 水面の 点：open＝白丸、さもなくば 黒丸 */
   g.dot = (x,s,open) => `<g class="gs" data-s="${s}"><circle class="iend ${open?'op':''}" cx="${f(X(x))}" cy="${ay}" r="12"/></g>`;
   /* OK・ダメ の 札（グラフの 上に） */
-  g.tag = (x,s,ok,txt) => `<g class="gs" data-s="${s}"><text class="itag ${ok?'ok':'ng'}" x="${f(X(x))}" y="${f(Y(x)+(Y(x)<ay?-26:44))}" text-anchor="middle">${txt}</text></g>`;
+  g.tag = (x,s,ok,txt,dx=0) => `<g class="gs" data-s="${s}"><text class="itag ${ok?'ok':'ng'}" x="${f(X(x)+dx)}" y="${f(Y(x)+(Y(x)<ay?-26:44))}" text-anchor="middle">${txt}</text></g>`;
   /* 塗れた 部分に 置く x の 札 */
   g.xmark = (x,s) => `<g class="gs" data-s="${s}"><circle class="ixb" cx="${f(X(x)+(x<m?-34:34))}" cy="${f(Y(x))}" r="24"/><text class="ixt" x="${f(X(x)+(x<m?-34:34))}" y="${f(Y(x)+10)}" text-anchor="middle">x</text></g>`;
   g.svg = (...parts) => `<svg class="isv" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">${parts.join('')}</svg>`;
   /* コースター（レール＝放物線 に そって 走る）。wa 番で 走り、wb 番で 消える */
-  g.ride = (a,b,wa,wb) => `<div class="iride" data-wa="${wa}" data-wb="${wb}" style="offset-path:path('${path(a,b)}')"><svg width="54" height="36" viewBox="0 0 54 36"><rect x="4" y="4" width="46" height="20" rx="7" fill="#e0465e"/><rect x="10" y="8" width="13" height="9" rx="2" fill="#fff" opacity=".85"/><rect x="29" y="8" width="13" height="9" rx="2" fill="#fff" opacity=".85"/><circle cx="14" cy="28" r="6" fill="#4a4560"/><circle cx="40" cy="28" r="6" fill="#4a4560"/></svg></div>`;
+  /* 乗り物（鳥号・魚号）が レール（放物線）に そって 進む。wa 番で 走り、wb 番で 消える。ng＝息が できない（くるしい 顔） */
+  g.ride = (a,b,wa,wb,kind,ng) => `<div class="iride${ng?' ng':''}" data-wa="${wa}" data-wb="${wb}" style="offset-path:path('${path(a,b)}')">${RIDER(kind,ng)}${ng?'<span class="ibub">くるしい…</span>':''}</div>`;
   return g;
 }
+
+/* 鳥号・魚号の 絵（ng＝くるしい 顔） */
+const RIDER = (kind, ng) => {
+  const eye = ng ? `<path d="M33 13 l5 4 M38 13 l-5 4" stroke="#333" stroke-width="2" stroke-linecap="round"/>` : `<circle cx="36" cy="15" r="3" fill="#333"/><circle cx="37" cy="14" r="1" fill="#fff"/>`;
+  const mouth = ng ? `<path d="M40 24 q3 -3 6 0" fill="none" stroke="#333" stroke-width="1.8" stroke-linecap="round"/>` : '';
+  if(kind==='fish') return `<svg width="64" height="40" viewBox="0 0 64 40"><path d="M6 20 L0 8 L0 32 Z" fill="#f08a2a"/><ellipse cx="30" cy="20" rx="24" ry="14" fill="#5aa9e6"/><path d="M22 8 q6 -8 14 0" fill="#3f86c4"/><path d="M20 20 q6 4 12 0" fill="none" stroke="#3f86c4" stroke-width="2"/>${eye}${mouth||'<path d="M48 22 q2 2 4 0" fill="none" stroke="#333" stroke-width="1.8"/>'}</svg>`;
+  return `<svg width="64" height="40" viewBox="0 0 64 40"><ellipse cx="30" cy="22" rx="20" ry="15" fill="#ffd34d"/><path d="M12 22 q8 -14 20 -2 q-8 10 -20 2 Z" fill="#f5b400"/><path d="M48 18 l12 4 l-12 4 Z" fill="#f08a2a"/>${eye}${mouth}</svg>`; };
+/* 説明の 中の 小さな アイコン */
+const ICON = kind => `<span class="iicon">${RIDER(kind,false)}</span>`;
 const IP = (s,h,cls='') => `<div class="ipr lh ${cls}" data-s="${s}">${h}</div>`;
 const EQ1 = `x${P2} − 2x − 3 ＞ 0`, EQ2 = `x${P2} ＋ 3x ＋ 2 ≦ 0`;
 /* ②-1 と 同じ くらい しゅっと した 放物線 */
@@ -584,29 +594,30 @@ const STEP1CM = (P,fac,why) => [
 
 /* ===== 例⑴ ===== */
 const s2 = PR({...P1, phase:1, cm:STEP1CM(P1,'(x ＋ 1)(x − 3) ＝ 0','たして −2、かけて −3')});
-/* ⑴ Step❷：左から コースターで レールを 走り、水の 上（y ＞ 0）だけ 塗る */
+/* ⑴ Step❷：＞ 0 → 上が すき → 鳥号。息が できる（水の 上）ところを 左から 塗る */
 const a1 = IG({...G1, water:true});
 const s3 = `
   <div class="card abs dcard">${EQTAPE}
     <div class="ititle math">⑴　${EQ1}　<span class="istep"><i class="nv">Step</i>❷ 塗る</span></div>
-    <div class="ig">${a1.svg(a1.base, a1.seg(a1.xa,-1,1), a1.tag(-1.6,1,true,'OK'), a1.dot(-1,2,true), a1.tag(1,3,false,'ダメ'), a1.seg(3,a1.xb,5), a1.dot(3,4,true), a1.tag(3.6,5,true,'OK'))}
-      ${a1.ride(a1.xa,-1,1,2)}${a1.ride(-1,3,3,4)}${a1.ride(3,a1.xb,5,99)}</div>
+    <div class="ig">${a1.svg(a1.base, a1.seg(a1.xa,-1,1), a1.tag(-1.3,1,true,'息できる！',-95), a1.tag(1,3,false,'くるしい…'), a1.seg(3,a1.xb,5), a1.dot(-1,2,true), a1.dot(3,4,true), a1.tag(3.3,5,true,'息できる！',95))}
+      ${a1.ride(a1.xa,-1,1,2,'bird')}${a1.ride(-1,3,3,4,'bird',true)}${a1.ride(3,3+(a1.xb-3)*0.8,5,99,'bird')}</div>
     <div class="ipn">
-      <div class="ipr">「＞ 0」→ <b class="math">y ＞ 0</b><br>→ <b>水の 上</b> が <i class="nv">OK</i></div>
-      ${IP(1,`水の 上を 走る → <i class="nv">OK</i> → <b>塗る</b>`,'isub')}
+      <div class="ipr iq">息が できるのは どこ？</div>
+      <div class="ipr">「＞ 0」→ <b class="math">y ＞ 0</b> → 上が すき<br>→ <b>鳥号</b> ${ICON('bird')}　空なら 息が できる</div>
+      ${IP(1,`空（水の 上）→ 息が できる → <b>塗る</b>`,'isub')}
       ${IP(2,`−1 は ちょうど 水面（y ＝ 0）<br>0 ＞ 0 は × → 塗れない → <b>白丸</b>`,'isub')}
-      ${IP(3,`−1 〜 3 は <b>水の 中</b> → ダメ`,'isub')}
+      ${IP(3,`−1 〜 3 は 水の 中 → <b>くるしい</b>`,'isub')}
       ${IP(4,`3 も 水面 → <b>白丸</b>`,'isub')}
-      ${IP(5,`3 より 少しでも 右 → 水の 上<br>→ 白丸の 先を <b>塗る</b>`,'ikey')}
+      ${IP(5,`3 より 少しでも 右 → 空<br>→ 白丸の 先を <b>塗る</b>`,'ikey')}
     </div>
   </div>
   ${cbar([
-    `<b><i class="nv">Step</i>❷ 塗る</b>。　x軸を <b>水面</b> と 思おう。　y ＞ 0 は「水の 上」に ある ところ。`,
-    `左（マイナスの 方）から コースターが レールを 走る。　水の 上 → <i class="nv">OK</i> なので <b>塗る</b>。`,
+    `<b><i class="nv">Step</i>❷ 塗る</b>。　x軸を <b>水面</b> と 思おう。　「＞ 0」は y ＞ 0 → 上が すきな <b>鳥号</b> の 出番。　鳥が 息が できるのは どこ？`,
+    `左（マイナスの 方）から 鳥号が レールを 進む。　空に いる 間は 息が できる → <b>塗る</b>。`,
     `−1 で ちょうど 水面（y ＝ 0）。　「0 ＞ 0」は まちがい → ここは 塗れない → 中が 空っぽの <b>白丸</b>。`,
-    `−1 から 3 の 間は <b>水の 中</b>（y ＜ 0）。　ダメ なので 塗らない。`,
+    `−1 から 3 の 間は <b>水の 中</b>。　鳥は 息が できない → 塗らない。`,
     `3 で また 水面。　ここも 塗れない → <b>白丸</b>。`,
-    `3 より 少しでも 右に 行けば 水の 上 → <i class="nv">OK</i>。　白丸の 先を <b>塗る</b>。`])}`;
+    `3 より 少しでも 右に 行けば 空 → また 息が できる。　白丸の 先を <b>塗る</b>。`])}`;
 
 /* ⑴ Step❸：塗れた 部分に x を 置いて、−1・3 と 比べる */
 const b1 = IG({...G1});
@@ -641,29 +652,30 @@ const s5 = PR({...P1, phase:2, cm:[
 
 /* ===== 例⑵ ===== */
 const s6 = PR({...P2_, phase:1, cm:STEP1CM(P2_,'(x ＋ 2)(x ＋ 1) ＝ 0','たして ＋3、かけて ＋2')});
-/* ⑵ Step❷：今度は 水の 中（y ≦ 0）が <i class="nv">OK</i> */
+/* ⑵ Step❷：≦ 0 → 下が すき → 魚号。息が できる（水の 中）ところを 塗る */
 const a2 = IG({...G2, water:true});
 const s7 = `
   <div class="card abs dcard">${EQTAPE}
     <div class="ititle math">⑵　${EQ2}　<span class="istep"><i class="nv">Step</i>❷ 塗る</span></div>
-    <div class="ig">${a2.svg(a2.base, a2.tag(-2.3,1,false,'ダメ'), a2.seg(-2,-1,3), a2.dot(-2,2,false), a2.tag(-1.5,3,true,'OK'), a2.dot(-1,4,false), a2.tag(-0.7,5,false,'ダメ'))}
-      ${a2.ride(a2.xa,-2,1,2)}${a2.ride(-2,-1,3,4)}${a2.ride(-1,a2.xb,5,99)}</div>
+    <div class="ig">${a2.svg(a2.base, a2.tag(-2.15,1,false,'くるしい…',-95), a2.seg(-2,-1,3), a2.dot(-2,2,false), a2.tag(-1.5,3,true,'息できる！'), a2.dot(-1,4,false), a2.tag(-0.85,5,false,'くるしい…',95))}
+      ${a2.ride(a2.xa,-2,1,2,'fish',true)}${a2.ride(-2,-1,3,4,'fish')}${a2.ride(-1,-1+(a2.xb+1)*0.7,5,99,'fish',true)}</div>
     <div class="ipn">
-      <div class="ipr">「≦ 0」→ <b class="math">y ≦ 0</b><br>→ <b>水の 中</b>（と 水面）が <i class="nv">OK</i></div>
-      ${IP(1,`水の 上を 走る → ダメ`,'isub')}
+      <div class="ipr iq">息が できるのは どこ？</div>
+      <div class="ipr">「≦ 0」→ <b class="math">y ≦ 0</b> → 下が すき<br>→ <b>魚号</b> ${ICON('fish')}　水の 中なら 息が できる</div>
+      ${IP(1,`空（水の 上）→ <b>くるしい</b> → 塗らない`,'isub')}
       ${IP(2,`−2 は 水面（y ＝ 0）<br>0 ≦ 0 は ○ → 塗れる → <b>黒丸</b>`,'isub')}
-      ${IP(3,`−2 〜 −1 は 水の 中 → <i class="nv">OK</i> → <b>塗る</b>`,'isub')}
+      ${IP(3,`−2 〜 −1 は 水の 中 → <b>塗る</b>`,'isub')}
       ${IP(4,`−1 も 水面 → 塗れる → <b>黒丸</b>`,'isub')}
-      ${IP(5,`−1 より 右は 水の 上 → ダメ`,'isub')}
+      ${IP(5,`−1 より 右は 空 → <b>くるしい</b>`,'isub')}
     </div>
   </div>
   ${cbar([
-    `⑵ の <b><i class="nv">Step</i>❷ 塗る</b>。　今度は ≦ 0 → y ≦ 0 → <b>水の 中</b>（と ちょうど 水面）が <i class="nv">OK</i>。`,
-    `左から コースターが 走る。　はじめは 水の 上 → ダメ なので 塗らない。`,
+    `⑵ の <b><i class="nv">Step</i>❷ 塗る</b>。　「≦ 0」は y ≦ 0 → 下が すきな <b>魚号</b> の 出番。　魚が 息が できるのは どこ？`,
+    `左から 魚号が 進む。　はじめは 空 → 魚は 息が できない → 塗らない。`,
     `−2 で ちょうど 水面（y ＝ 0）。　「0 ≦ 0」は 正しい → 塗れる → 中まで 塗った <b>黒丸</b>。`,
-    `−2 から −1 の 間は <b>水の 中</b> → <i class="nv">OK</i> なので <b>塗る</b>。`,
+    `−2 から −1 の 間は <b>水の 中</b> → 息が できる → <b>塗る</b>。`,
     `−1 で また 水面。　ここも 塗れる → <b>黒丸</b>。`,
-    `−1 より 右は 水の 上 → ダメ。　塗れたのは 真ん中の 1か所 だけ。`])}`;
+    `−1 より 右は 空 → くるしい。　塗れたのは 真ん中の 1か所 だけ。`])}`;
 
 /* ⑵ Step❸ */
 const b2 = IG({...G2});
@@ -709,8 +721,8 @@ const MG2 = (out) => {
 const s10 = `
   <div class="end-h"><h2>2次不等式の 答え方</h2></div>
   <div class="dsum">
-    <div class="card dsc isc c1">${MG2(true)}<div class="dsc-s math">${EQ1}</div><div class="isr">上を 塗る → <b>外側</b> 2本</div><div class="dsc-n math">x ＜ −1, 3 ＜ x</div></div>
-    <div class="card dsc isc c2">${MG2(false)}<div class="dsc-s math">${EQ2}</div><div class="isr">下を 塗る → <b>内側</b> 1本</div><div class="dsc-n math">−2 ≦ x ≦ −1</div></div>
+    <div class="card dsc isc c1">${MG2(true)}<div class="dsc-s math">${EQ1}</div><div class="isr">＞ → <b>鳥号</b> ${ICON('bird')} 上を 塗る → <b>外側</b> 2本</div><div class="dsc-n math">x ＜ −1, 3 ＜ x</div></div>
+    <div class="card dsc isc c2">${MG2(false)}<div class="dsc-s math">${EQ2}</div><div class="isr">≦ → <b>魚号</b> ${ICON('fish')} 下を 塗る → <b>内側</b> 1本</div><div class="dsc-n math">−2 ≦ x ≦ −1</div></div>
   </div>
   ${cbar([`＝ が ない（＞、＜）→ <b>白丸</b>・答えも <b>＜</b>。　＝ が ある（≧、≦）→ <b>黒丸</b>・答えも <b>≦</b>。　並びは 数直線と 同じ 左 → 右。`])}`;
 
