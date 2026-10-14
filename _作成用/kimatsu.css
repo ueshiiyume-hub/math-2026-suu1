@@ -504,3 +504,6 @@ i.nv{font-style:normal;font-family:inherit}
 .iwr{font-family:"STIX Two Text",serif;font-size:40px;font-weight:700;fill:#e0465e}
 .ipn3{position:absolute;left:730px;top:150px;width:420px;display:flex;flex-direction:column;gap:18px}
 .itip2{font-size:26px;font-weight:900;color:var(--muted);text-align:center}
+.iband2{fill:#fde3e8;opacity:.95}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .iband2{fill:#5a3a48} }
+:root[data-theme="dark"] .iband2{fill:#5a3a48}
