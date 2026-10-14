@@ -206,6 +206,7 @@ function GR(o){
       <text class="gxl" x="${o.w-24}" y="${o.ay+30}">x</text>
       ${o.sc2!==undefined?`<path class="curve gcv" data-s="${o.sc2}" pathLength="1" d="${d}"/>`:''}
       <g class="gs" data-s="${o.sd}">${dots}</g>
+      ${o.yax!==undefined?`<g class="gya" data-o="${o.yax}"><line x1="${X(0).toFixed(1)}" y1="${o.h-8}" x2="${X(0).toFixed(1)}" y2="14"/><polygon points="${X(0).toFixed(1)},2 ${(X(0)-7).toFixed(1)},18 ${(X(0)+7).toFixed(1)},18"/><text x="${(X(0)+12).toFixed(1)}" y="22">y</text><text class="go" x="${(X(0)-24).toFixed(1)}" y="${o.ay+26}">O</text></g>`:''}
     </svg>${labs}</div>`;
 }
 /* プリントの 緑の 矢印（式 → 答え） */
@@ -218,15 +219,17 @@ const XR = (xs, xh, ns, nh, tall) => `<div class="xrp">
   </div>`;
 const YT = s => `<span class="ytag lh" data-s="${s}">y ＝ 0 と する</span>`;
 
-/* 2枚目：考え方（プリントの 上の 帯） */
+/* 2枚目：考え方（プリントの 上の 帯）。y軸を かいてから「今回は いらない」と 言って 消す */
 const s0 = `
   <div class="card abs dcard">${EQTAPE}
-    <div class="xband"><span class="xkw">x軸の 共有点</span> に ついて 問われたら、<span class="xblank"><span class="lh math" data-s="3">y ＝ 0</span></span> と して 考える。</div>
-    <div class="xg0">${GR({w:560,h:300,ay:150,cx:1,sc:62,k:22,r:[-1,3],top:30,sd:1,sc2:0,lo:30,lab:[`(−1, ${tm('r','0',2)})`,`(3, ${tm('r','0',2)})`]})}</div>
-    <div class="xbub lh" data-s="2">x軸の 上の 点は<br><i class="math">y</i>座標が いつも <b>0</b></div>
+    <div class="xband"><span class="xkw">x軸の 共有点</span> に ついて 問われたら、<span class="xblank"><span class="lh math" data-s="4">y ＝ 0</span></span> と して 考える。</div>
+    <div class="xg0">${GR({w:560,h:300,ay:150,cx:1,sc:62,k:22,r:[-1,3],top:30,sd:2,sc2:0,lo:30,yax:1,lab:[`(−1, ${tm('r','0',3)})`,`(3, ${tm('r','0',3)})`]})}</div>
+    <div class="xyn lh" data-s="1" data-o="2">今回は <b><i class="math">y</i>軸</b> を 使わない<br>→ かかない</div>
+    <div class="xbub lh" data-s="3">x軸の 上の 点は<br><i class="math">y</i>座標が いつも <b>0</b></div>
   </div>
   ${cbar([
     `<b>x軸との 共有点</b> とは、グラフが x軸と 交わったり 接したり する 点。`,
+    `今回 見るのは <b>x軸との 共有点</b> だけ。　<i class="math">y</i>軸は 使わないので <b>かかない</b>。`,
     `この 放物線と x軸との 共有点は (−1, 0) と (3, 0)。`,
     `x軸の 上の 点は、<i class="math">y</i>座標が いつも <b>0</b>。`,
     `だから x軸との 共有点を 求める ときは「<b>y ＝ 0</b> と して 考える」！`])}`;

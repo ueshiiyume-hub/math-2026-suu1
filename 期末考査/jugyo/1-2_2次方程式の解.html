@@ -760,6 +760,14 @@ body{overflow:hidden;height:100%;width:100%}
 .pte.xgl{color:#333}
 .pte.xan{color:var(--accent)}
 .xsp{display:inline-block;width:.4em}
+.gya line{stroke:var(--ink);stroke-width:2.5} .gya polygon{fill:var(--ink)}
+.gya text{font-family:"STIX Two Text",serif;font-style:italic;font-size:26px;fill:var(--ink)} .gya text.go{font-style:normal}
+.gya{transition:opacity .8s .9s}
+.gya.on{opacity:0}
+.gya.on line{stroke:#e0465e;stroke-dasharray:10 8;transition:stroke .3s}
+.gya.on polygon,.gya.on text{fill:#e0465e;transition:fill .3s}
+.xyn{position:absolute;left:700px;top:200px;width:380px;padding:18px 20px;border-radius:20px;border:3px dashed #e0465e;color:#e0465e;font-size:30px;font-weight:900;text-align:center;line-height:1.5}
+.xyn.show.on{opacity:0;transition:opacity .3s}
 
 /* ===== 手書き ===== */
 #ink{position:fixed;left:0;top:0;z-index:15;pointer-events:none;touch-action:none}
