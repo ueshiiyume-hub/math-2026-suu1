@@ -768,6 +768,17 @@ body{overflow:hidden;height:100%;width:100%}
 .gya.on polygon,.gya.on text{fill:#e0465e;transition:fill .3s}
 .xyn{position:absolute;left:700px;top:200px;width:380px;padding:18px 20px;border-radius:20px;border:3px dashed #e0465e;color:#e0465e;font-size:30px;font-weight:900;text-align:center;line-height:1.5}
 .xyn.show.on{opacity:0;transition:opacity .3s}
+.xpk{fill:#f2dcdb}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .xpk{fill:#5a3a3a} }
+:root[data-theme="dark"] .xpk{fill:#5a3a3a}
+.pte.xja{font-family:"Zen Maru Gothic",sans-serif;font-weight:900}
+.pte.xred{color:#e0465e}
+.xmc{gap:10px}
+.xmg line{stroke:var(--ink);stroke-width:2.5} .xmg polygon{fill:var(--ink)}
+.xmg path{fill:none;stroke:var(--b-ink);stroke-width:4;stroke-linecap:round}
+.xmg circle{fill:#e0465e}
+.xms{font-size:28px;font-weight:900} .xms b{color:var(--accent)}
+.xmr{font-size:30px;font-weight:900;color:var(--b-ink)}
 
 /* ===== 手書き ===== */
 #ink{position:fixed;left:0;top:0;z-index:15;pointer-events:none;touch-action:none}
@@ -1503,6 +1514,23 @@ const MK = (m,r,e) => ({m,r,e});
 const JA = t => `<span class="ja">${t}</span>`;
 const FX = (n,d) => KF(n,d);
 
+/* x軸との 共有点（②-1・②-2）の 部品（プリントの 配置どおり。座標は PDF の pt。生徒が 書きこむので 枠の 位置は 変えない）
+   2行目と 3行目の ＝ は 同じ x に そろえる */
+const T  = (r,h,fs=10.5,cls='') => ({r,h,fs,cls});
+const BG = (r,cls) => `<rect class="${cls}" x="${r[0]}" y="${r[1]}" width="${(r[2]-r[0]).toFixed(1)}" height="${(r[3]-r[1]).toFixed(1)}"/>`;
+const XA = (s,r,h,fs=12,cls='xan') => ({s,r,h,fs,cls,al:'c'});
+const LBL = (y) => [
+  T([314.6,y,430,y+11],`<span class="ja"><i class="math">x</i>軸との共有点の<i class="math">x</i>座標</span>`),
+  T([314.6,y+31.5,430,y+42.5],`<span class="ja"><i class="math">x</i>軸との共有点の個数</span>`),
+  T([314.6,y+61.5,430,y+72.5],`<span class="ja">グラフの概形</span>`)];
+/* { と 緑の 矢印（プリントの 色） */
+const BRC = (y0,y1,s) => { const m=(y0+y1)/2;
+  return `<path d="M311 ${y0} Q303 ${y0} 303 ${y0+10} L303 ${m-6.5} Q303 ${m} 299.8 ${m} Q303 ${m} 303 ${m+6.5} L303 ${y1-10} Q303 ${y1} 311 ${y1}" fill="none" stroke="#d7e4bd" stroke-width="2.25" stroke-linecap="round"/>`
+       + `<g class="gs" data-s="${s}"><path d="M234 ${y1-18} L253 ${y0+33} L280 ${y0+33}" fill="none" stroke="#d7e4bd" stroke-width="6" stroke-linejoin="round"/><polygon points="278,${y0+25} 289,${y0+33} 278,${y0+41}" fill="#d7e4bd"/></g>`; };
+/* グラフの 枠の x軸 */
+const AX = (ay) => `<line x1="410" y1="${ay}" x2="499" y2="${ay}" stroke="#555" stroke-width=".8"/><polygon points="501,${ay} 497,${ay-1.6} 497,${ay+1.6}" fill="#555"/><text class="pgt" x="497" y="${ay-3}" font-style="italic">x</text>`;
+
+
 const KK = KIMATSU + '　②-1';
 const POL = `<div class="fpol"><div class="fa math">y ＝ x${P2} − 2x − 3</div><div class="fv">y ＝ 0 と する</div><div class="fb math">x ＝ −1, 3</div></div>`;
 const L  = (s,h,cls='') => `<div class="dl lh ${cls}" data-s="${s}"><span>${h}</span></div>`;
@@ -1550,22 +1578,7 @@ const s0 = `
     `x軸の 上の 点は、<i class="math">y</i>座標が いつも <b>0</b>。`,
     `だから x軸との 共有点を 求める ときは「<b>y ＝ 0</b> と して 考える」！`])}`;
 
-/* 3・4枚目：例⑴⑵（プリントの 配置どおり。座標は PDF の pt。生徒が 書きこむので 枠の 位置は 変えない）
-   2行目と 3行目の ＝ は 同じ x に そろえる */
-const T  = (r,h,fs=10.5,cls='') => ({r,h,fs,cls});
-const BG = (r,cls) => `<rect class="${cls}" x="${r[0]}" y="${r[1]}" width="${(r[2]-r[0]).toFixed(1)}" height="${(r[3]-r[1]).toFixed(1)}"/>`;
-const XA = (s,r,h,fs=12,cls='xan') => ({s,r,h,fs,cls,al:'c'});
-const LBL = (y) => [
-  T([314.6,y,430,y+11],`<span class="ja"><i class="math">x</i>軸との共有点の<i class="math">x</i>座標</span>`),
-  T([314.6,y+31.5,430,y+42.5],`<span class="ja"><i class="math">x</i>軸との共有点の個数</span>`),
-  T([314.6,y+61.5,430,y+72.5],`<span class="ja">グラフの概形</span>`)];
-/* { と 緑の 矢印（プリントの 色） */
-const BRC = (y0,y1,s) => { const m=(y0+y1)/2;
-  return `<path d="M311 ${y0} Q303 ${y0} 303 ${y0+10} L303 ${m-6.5} Q303 ${m} 299.8 ${m} Q303 ${m} 303 ${m+6.5} L303 ${y1-10} Q303 ${y1} 311 ${y1}" fill="none" stroke="#d7e4bd" stroke-width="2.25" stroke-linecap="round"/>`
-       + `<g class="gs" data-s="${s}"><path d="M234 ${y1-18} L253 ${y0+33} L280 ${y0+33}" fill="none" stroke="#d7e4bd" stroke-width="6" stroke-linejoin="round"/><polygon points="278,${y0+25} 289,${y0+33} 278,${y0+41}" fill="#d7e4bd"/></g>`; };
-/* グラフの 枠の x軸 */
-const AX = (ay) => `<line x1="410" y1="${ay}" x2="499" y2="${ay}" stroke="#555" stroke-width=".8"/><polygon points="501,${ay} 497,${ay-1.6} 497,${ay+1.6}" fill="#555"/><text class="pgt" x="497" y="${ay-3}" font-style="italic">x</text>`;
-
+/* 3・4枚目：例⑴⑵（部品は XCOMMON） */
 const s1 = ptSlide({clip:[56,165,510,335],
   svg:[BG([154.8,179.1,197.1,204.6],'xpb'), BG([73.2,207.1,197.1,232.6],'xpb'), BG([128.3,235.3,227.2,260.9],'xpb'),
     BG([435.7,169,505.7,197.8],'xpr'), BG([435.7,202.8,505.7,231.6],'xpr'), BG([404.9,237.3,505.6,328.6],'xpr'),
