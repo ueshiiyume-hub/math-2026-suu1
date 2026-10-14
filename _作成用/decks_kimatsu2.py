@@ -473,8 +473,8 @@ function IG(o){
   const f = n => n.toFixed(1);
   const g = {X, Y, ay, W, H, xa, xb, r:o.r, path};
   let wave=''; for(let x=14;x<=W-28;x+=4) wave+=(x===14?'M':'L')+x+' '+(ay+3*Math.sin(x/9)).toFixed(1)+' ';
-  g.base = (o.water ? `<rect class="iwater" x="14" y="${ay}" width="${W-28}" height="${H-ay-6}"/><path class="iwave" d="${wave}"/>
-      <text class="iwl" x="22" y="34">水の 上（<tspan font-style="italic">y</tspan> ＞ 0）</text><text class="iwl in" x="22" y="${H-16}">水の 中（<tspan font-style="italic">y</tspan> ＜ 0）</text>` : '')
+  g.base = (o.water ? `<g class="${o.ws!==undefined?'gs':''}"${o.ws!==undefined?` data-s="${o.ws}"`:''}><rect class="iwater" x="14" y="${ay}" width="${W-28}" height="${H-ay-6}"/><path class="iwave" d="${wave}"/>
+      <text class="iwl" x="22" y="34">水の 上（<tspan font-style="italic">y</tspan> ＞ 0）</text><text class="iwl in" x="22" y="${H-16}">水の 中（<tspan font-style="italic">y</tspan> ＜ 0）</text></g>` : '')
     + `<rect class="itint" data-s="${o.tint??99}" x="14" y="10" width="${W-28}" height="${ay-10}"/>
     <line class="iax" x1="10" y1="${ay}" x2="${W-16}" y2="${ay}"/><polygon class="iah" points="${W-2},${ay} ${W-20},${ay-9} ${W-20},${ay+9}"/>
     <text class="ixl" x="${W-24}" y="${ay+38}">x</text>
@@ -488,6 +488,10 @@ function IG(o){
   g.tag = (x,s,ok,txt,dx=0) => `<g class="gs" data-s="${s}"><text class="itag ${ok?'ok':'ng'}" x="${f(X(x)+dx)}" y="${f(Y(x)+(Y(x)<ay?-26:44))}" text-anchor="middle">${txt}</text></g>`;
   /* 塗れた 部分に 置く x の 札 */
   g.xmark = (x,s) => `<g class="gs" data-s="${s}"><circle class="ixb" cx="${f(X(x)+(x<m?-34:34))}" cy="${f(Y(x))}" r="24"/><text class="ixt" x="${f(X(x)+(x<m?-34:34))}" y="${f(Y(x)+10)}" text-anchor="middle">x</text></g>`;
+  /* 高さ y の 矢印（x軸 から グラフの 点まで） */
+  g.hgt = (x,s,lab,e=99,left=false) => { const up = Y(x)<ay; return `<g class="gs ihg" data-s="${s}" data-o="${e}"><line class="ihl ${up?'up':'dn'}" x1="${f(X(x))}" y1="${ay}" x2="${f(X(x))}" y2="${f(Y(x)+(up?10:-10))}"/><polygon class="ihh ${up?'up':'dn'}" points="${f(X(x)-8)},${f(Y(x)+(up?14:-14))} ${f(X(x)+8)},${f(Y(x)+(up?14:-14))} ${f(X(x))},${f(Y(x))}"/><circle class="ipc" cx="${f(X(x))}" cy="${f(Y(x))}" r="8"/><text class="ihtx ${up?'up':'dn'}" text-anchor="${left?'end':'start'}" x="${f(X(x)+(left?-14:14))}" y="${f(up?(ay+Y(x))/2+8:Y(x)+34)}">${lab}</text></g>`; };
+  /* スタート地点で 待つ 乗り物（s 番で 出て、e 番で 消える） */
+  g.wait = (kind,s,e) => `<div class="iwait lh" data-s="${s}" data-o="${e}" style="left:${f(X(xa)-32)}px;top:${f(Y(xa)-30)}px">${RIDER(kind,false)}</div>`;
   g.svg = (...parts) => `<svg class="isv" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">${parts.join('')}</svg>`;
   /* コースター（レール＝放物線 に そって 走る）。wa 番で 走り、wb 番で 消える */
   /* 乗り物（鳥号・魚号）が レール（放物線）に そって 進む。wa 番で 走り、wb 番で 消える。ng＝息が できない（くるしい 顔） */
@@ -594,30 +598,30 @@ const STEP1CM = (P,fac,why) => [
 
 /* ===== 例⑴ ===== */
 const s2 = PR({...P1, phase:1, cm:STEP1CM(P1,'(x ＋ 1)(x − 3) ＝ 0','たして −2、かけて −3')});
-/* ⑴ Step❷：＞ 0 → 上が すき → 鳥号。息が できる（水の 上）ところを 左から 塗る */
-const a1 = IG({...G1, water:true});
+/* ⑴ Step❷：まず「y ＞ 0 は どこ？」を ていねいに → 上が すき → 鳥号 → 左から 塗る */
+const a1 = IG({...G1, water:true, ws:2});
 const s3 = `
   <div class="card abs dcard">${EQTAPE}
     <div class="ititle math">⑴　${EQ1}　<span class="istep"><i class="nv">Step</i>❷ 塗る</span></div>
-    <div class="ig">${a1.svg(a1.base, a1.seg(a1.xa,-1,1), a1.tag(-1.3,1,true,'息できる！',-95), a1.tag(1,3,false,'くるしい…'), a1.seg(3,a1.xb,5), a1.dot(-1,2,true), a1.dot(3,4,true), a1.tag(3.3,5,true,'息できる！',95))}
-      ${a1.ride(a1.xa,-1,1,2,'bird')}${a1.ride(-1,3,3,4,'bird',true)}${a1.ride(3,3+(a1.xb-3)*0.8,5,99,'bird')}</div>
-    <div class="ipn">
-      <div class="ipr iq">息が できるのは どこ？</div>
-      <div class="ipr">「＞ 0」→ <b class="math">y ＞ 0</b> → 上が すき<br>→ <b>鳥号</b> ${ICON('bird')}　空なら 息が できる</div>
-      ${IP(1,`空（水の 上）→ 息が できる → <b>塗る</b>`,'isub')}
-      ${IP(2,`−1 は ちょうど 水面（y ＝ 0）<br>0 ＞ 0 は × → 塗れない → <b>白丸</b>`,'isub')}
-      ${IP(3,`−1 〜 3 は 水の 中 → <b>くるしい</b>`,'isub')}
-      ${IP(4,`3 も 水面 → <b>白丸</b>`,'isub')}
-      ${IP(5,`3 より 少しでも 右 → 空<br>→ 白丸の 先を <b>塗る</b>`,'ikey')}
+    <div class="ig">${a1.svg(a1.base, a1.hgt(-1.7,2,'y ＞ 0',4), a1.hgt(2,2,'y ＜ 0',4),
+        a1.seg(a1.xa,-1,4), a1.tag(-1.3,4,true,'息できる！',-95), a1.tag(1,6,false,'くるしい…'), a1.seg(3,3+(a1.xb-3),8), a1.dot(-1,5,true), a1.dot(3,7,true), a1.tag(3.3,8,true,'息できる！',95))}
+      ${a1.wait('bird',3,4)}${a1.ride(a1.xa,-1,4,5,'bird')}${a1.ride(-1,3,6,7,'bird',true)}${a1.ride(3,3+(a1.xb-3)*0.8,8,99,'bird')}</div>
+    <div class="ipn2">
+      <div class="iq2 lh" data-s="1"><span class="inum2">1</span><div><span class="math">x${P2} − 2x − 3</span> は <b class="math">y</b> の こと<br>だから <span class="ibx math">y ＞ 0</span></div></div>
+      <div class="iq2 lh" data-s="2"><span class="inum2">2</span><div><b class="math">y</b> は グラフの 点の <b>高さ</b><br>y ＞ 0 → x軸（水面）より <b>上</b></div></div>
+      <div class="iq2 lh" data-s="3"><span class="inum2">3</span><div>上が すき → <b>鳥号</b> ${ICON('bird')}<br><span class="isub2">空なら 息が できる → 塗る</span></div></div>
     </div>
   </div>
   ${cbar([
-    `<b><i class="nv">Step</i>❷ 塗る</b>。　x軸を <b>水面</b> と 思おう。　「＞ 0」は y ＞ 0 → 上が すきな <b>鳥号</b> の 出番。　鳥が 息が できるのは どこ？`,
-    `左（マイナスの 方）から 鳥号が レールを 進む。　空に いる 間は 息が できる → <b>塗る</b>。`,
-    `−1 で ちょうど 水面（y ＝ 0）。　「0 ＞ 0」は まちがい → ここは 塗れない → 中が 空っぽの <b>白丸</b>。`,
+    `<b><i class="nv">Step</i>❷ 塗る</b>。　まず「${M('x² − 2x − 3 ＞ 0')}」が グラフの <b>どこ</b> の ことか 考えよう。`,
+    `Step❶ で ${M('y ＝ x² − 2x − 3')} と おいた。　だから 左の ${M('x² − 2x − 3')} は <b>y</b> の こと。　この 不等式は <b>y ＞ 0</b>。`,
+    `y は グラフの 点の <b>高さ</b>。　x軸より 上の 点は y ＞ 0、下の 点は y ＜ 0。　x軸を <b>水面</b> と 思うと、y ＞ 0 は <b>水の 上</b>。`,
+    `水の 上（空）が すきなのは <b>鳥号</b>。　鳥が 息を できる ところを、左から 順に 塗って いこう。`,
+    `空を 進む → 息が できる → <b>塗る</b>。`,
+    `−1 で ちょうど 水面（y ＝ 0）。　「0 ＞ 0」は まちがい → 塗れない → 中が 空っぽの <b>白丸</b>。`,
     `−1 から 3 の 間は <b>水の 中</b>。　鳥は 息が できない → 塗らない。`,
-    `3 で また 水面。　ここも 塗れない → <b>白丸</b>。`,
-    `3 より 少しでも 右に 行けば 空 → また 息が できる。　白丸の 先を <b>塗る</b>。`])}`;
+    `3 で また 水面 → <b>白丸</b>。`,
+    `3 より 少しでも 右なら また 空 → 白丸の 先を <b>塗る</b>。`])}`;
 
 /* ⑴ Step❸：塗れた 部分に x を 置いて、−1・3 と 比べる */
 const b1 = IG({...G1});
@@ -652,29 +656,29 @@ const s5 = PR({...P1, phase:2, cm:[
 
 /* ===== 例⑵ ===== */
 const s6 = PR({...P2_, phase:1, cm:STEP1CM(P2_,'(x ＋ 2)(x ＋ 1) ＝ 0','たして ＋3、かけて ＋2')});
-/* ⑵ Step❷：≦ 0 → 下が すき → 魚号。息が できる（水の 中）ところを 塗る */
-const a2 = IG({...G2, water:true});
+/* ⑵ Step❷：y ≦ 0 は どこ？ → 下が すき → 魚号 */
+const a2 = IG({...G2, water:true, ws:2});
 const s7 = `
   <div class="card abs dcard">${EQTAPE}
     <div class="ititle math">⑵　${EQ2}　<span class="istep"><i class="nv">Step</i>❷ 塗る</span></div>
-    <div class="ig">${a2.svg(a2.base, a2.tag(-2.15,1,false,'くるしい…',-95), a2.seg(-2,-1,3), a2.dot(-2,2,false), a2.tag(-1.5,3,true,'息できる！'), a2.dot(-1,4,false), a2.tag(-0.85,5,false,'くるしい…',95))}
-      ${a2.ride(a2.xa,-2,1,2,'fish',true)}${a2.ride(-2,-1,3,4,'fish')}${a2.ride(-1,-1+(a2.xb+1)*0.7,5,99,'fish',true)}</div>
-    <div class="ipn">
-      <div class="ipr iq">息が できるのは どこ？</div>
-      <div class="ipr">「≦ 0」→ <b class="math">y ≦ 0</b> → 下が すき<br>→ <b>魚号</b> ${ICON('fish')}　水の 中なら 息が できる</div>
-      ${IP(1,`空（水の 上）→ <b>くるしい</b> → 塗らない`,'isub')}
-      ${IP(2,`−2 は 水面（y ＝ 0）<br>0 ≦ 0 は ○ → 塗れる → <b>黒丸</b>`,'isub')}
-      ${IP(3,`−2 〜 −1 は 水の 中 → <b>塗る</b>`,'isub')}
-      ${IP(4,`−1 も 水面 → 塗れる → <b>黒丸</b>`,'isub')}
-      ${IP(5,`−1 より 右は 空 → <b>くるしい</b>`,'isub')}
+    <div class="ig">${a2.svg(a2.base, a2.hgt(-2.35,2,'y ＞ 0',4,true), a2.hgt(-1.5,2,'y ＜ 0',4),
+        a2.tag(-2.15,4,false,'くるしい…',-95), a2.seg(-2,-1,6), a2.dot(-2,5,false), a2.tag(-1.5,6,true,'息できる！'), a2.dot(-1,7,false), a2.tag(-0.85,8,false,'くるしい…',95))}
+      ${a2.wait('fish',3,4)}${a2.ride(a2.xa,-2,4,5,'fish',true)}${a2.ride(-2,-1,6,7,'fish')}${a2.ride(-1,-1+(a2.xb+1)*0.7,8,99,'fish',true)}</div>
+    <div class="ipn2">
+      <div class="iq2 lh" data-s="1"><span class="inum2">1</span><div><span class="math">x${P2} ＋ 3x ＋ 2</span> は <b class="math">y</b> の こと<br>だから <span class="ibx math">y ≦ 0</span></div></div>
+      <div class="iq2 lh" data-s="2"><span class="inum2">2</span><div><b class="math">y</b> は グラフの 点の <b>高さ</b><br>y ≦ 0 → x軸（水面）より <b>下</b>（と 水面）</div></div>
+      <div class="iq2 lh" data-s="3"><span class="inum2">3</span><div>下が すき → <b>魚号</b> ${ICON('fish')}<br><span class="isub2">水の 中なら 息が できる → 塗る</span></div></div>
     </div>
   </div>
   ${cbar([
-    `⑵ の <b><i class="nv">Step</i>❷ 塗る</b>。　「≦ 0」は y ≦ 0 → 下が すきな <b>魚号</b> の 出番。　魚が 息が できるのは どこ？`,
-    `左から 魚号が 進む。　はじめは 空 → 魚は 息が できない → 塗らない。`,
+    `⑵ の <b><i class="nv">Step</i>❷ 塗る</b>。　「${M('x² ＋ 3x ＋ 2 ≦ 0')}」は グラフの どこ？`,
+    `${M('y ＝ x² ＋ 3x ＋ 2')} と おいたので、左の 式は <b>y</b>。　この 不等式は <b>y ≦ 0</b>。`,
+    `y は 点の <b>高さ</b>。　y ≦ 0 は 高さが 0 以下 → x軸（水面）より <b>下</b>（水の 中）と、ちょうど 水面。`,
+    `水の 中が すきなのは <b>魚号</b>。　魚が 息を できる ところを、左から 順に 塗ろう。`,
+    `はじめは 空 → 魚は 息が できない → 塗らない。`,
     `−2 で ちょうど 水面（y ＝ 0）。　「0 ≦ 0」は 正しい → 塗れる → 中まで 塗った <b>黒丸</b>。`,
     `−2 から −1 の 間は <b>水の 中</b> → 息が できる → <b>塗る</b>。`,
-    `−1 で また 水面。　ここも 塗れる → <b>黒丸</b>。`,
+    `−1 で また 水面 → 塗れる → <b>黒丸</b>。`,
     `−1 より 右は 空 → くるしい。　塗れたのは 真ん中の 1か所 だけ。`])}`;
 
 /* ⑵ Step❸ */
