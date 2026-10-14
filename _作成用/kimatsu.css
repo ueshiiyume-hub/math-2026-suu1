@@ -377,3 +377,54 @@
 .xmg circle{fill:#e0465e}
 .xms{font-size:28px;font-weight:900} .xms b{color:var(--accent)}
 .xmr{font-size:30px;font-weight:900;color:var(--b-ink)}
+
+/* ===== ③-1：2次不等式（大きい グラフで 塗る・答える） ===== */
+.ig{position:absolute;left:24px;top:62px}
+.isv{overflow:visible}
+.itint{fill:#fde3e8;opacity:0;transition:opacity .5s}
+.itint.show{opacity:.85}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .itint{fill:#5a3a48} }
+:root[data-theme="dark"] .itint{fill:#5a3a48}
+.iax{stroke:var(--ink);stroke-width:3} .iah{fill:var(--ink)}
+.ixl{font-family:"STIX Two Text",serif;font-style:italic;font-size:30px;fill:var(--ink)}
+.inum{font-family:"STIX Two Text",serif;font-size:30px;font-weight:700;fill:var(--ink)}
+.icv{fill:none;stroke:var(--b-ink);stroke-width:4.5;stroke-linecap:round}
+.ipl{stroke:var(--muted);stroke-width:2.5;stroke-dasharray:7 6}
+.ipc{fill:var(--paper);stroke:var(--ink);stroke-width:3}
+.ipm{font-family:"Zen Maru Gothic",sans-serif;font-size:34px;font-weight:900}
+.ipm.ok{fill:#2f9e6a} .ipm.ng{fill:#e0465e}
+.ipx{font-family:"STIX Two Text",serif;font-size:22px;fill:var(--muted)}
+.ipaint path{fill:none;stroke:#f08a2a;stroke-width:14;stroke-linecap:round;opacity:.6;stroke-dasharray:1;stroke-dashoffset:1}
+.ipaint.show path{stroke-dashoffset:0;transition:stroke-dashoffset 1.2s ease-in-out}
+.iend{fill:var(--ink);stroke:var(--ink);stroke-width:3.5}
+.iend.op{fill:var(--paper)}
+.idrop{stroke:#f08a2a;stroke-width:3;stroke-dasharray:6 6}
+.idrh{fill:#f08a2a}
+.iband{stroke:#f08a2a;stroke-width:12;stroke-linecap:round;opacity:.85}
+.ibh{fill:#f08a2a}
+.iblab{font-family:"STIX Two Text",serif;font-size:32px;font-weight:700;fill:var(--accent)}
+.ititle{position:absolute;left:56px;top:22px;font-size:34px;white-space:nowrap}
+.istep{margin-left:20px;padding:2px 16px;border-radius:8px;background:#dce6f2;color:#4f81bd;font-family:"Zen Maru Gothic",sans-serif;font-weight:900;font-size:28px}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .istep{background:#33405a;color:#9cc0ff} }
+:root[data-theme="dark"] .istep{background:#33405a;color:#9cc0ff}
+.ipn{position:absolute;left:720px;top:72px;width:440px;display:flex;flex-direction:column;gap:8px}
+.ipr{font-size:24px;font-weight:900;line-height:1.4}
+.ipr b{color:var(--accent)}
+.ipr.isub{font-size:22px;padding-left:14px;border-left:5px solid var(--gline)}
+.ipr.ikey{padding:8px 14px;border-radius:12px;background:var(--r-bg);color:var(--r-ink)}
+.ipr.itip{font-size:22px;padding:8px 14px;border:3px dashed var(--accent);border-radius:14px;color:var(--accent)}
+.ipr.ibig{font-size:40px;font-weight:500}
+.ipr.ja0{font-size:26px;color:var(--muted)}
+.ians{display:flex;align-items:center;justify-content:center;height:72px;background:#dbeef4;border-radius:6px;font-size:40px;color:var(--accent)}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .ians{background:#2c4252} }
+:root[data-theme="dark"] .ians{background:#2c4252}
+.imsv line{stroke:var(--ink);stroke-width:2.5} .imsv polygon{fill:var(--ink)}
+.imsv .mc{fill:none;stroke:var(--b-ink);stroke-width:3.5}
+.imsv .mp{fill:none;stroke:#f08a2a;stroke-width:10;stroke-linecap:round;opacity:.6}
+.imsv circle{fill:var(--ink);stroke:var(--ink);stroke-width:3} .imsv circle.op{fill:var(--paper)}
+.imsv text{font-family:"STIX Two Text",serif;font-size:20px;font-weight:700;fill:var(--ink)}
+.isc{width:460px;gap:12px}
+.isc .dsc-s{font-size:30px;color:var(--ink)}
+.isr{font-size:26px;font-weight:900} .isr b{color:var(--accent)}
+.isc .dsc-n{font-size:40px;color:var(--accent)}
+i.nv{font-style:normal;font-family:inherit}

@@ -458,58 +458,262 @@ const DECK = {title:'②-3 x軸との位置関係', pages:[
 """)
 
     # ------------------------------------------------------------ ③-1 2次不等式の解法
-    decks['3-1_2次不等式の解法'] = ('③-1 2次不等式の解法', COMMON + r'''
+    decks['3-1_2次不等式の解法'] = ('③-1 2次不等式の解法', COMMON + XCOMMON + r'''
+const WB = r => `<rect x="${r[0]}" y="${r[1]}" width="${(r[2]-r[0]).toFixed(1)}" height="${(r[3]-r[1]).toFixed(1)}" fill="#fff"/>`;
 const KK = KIMATSU + '　③-1';
 const POL = `<div class="fpol"><div class="fa math">x${P2} − 2x − 3 ＞ 0</div><div class="fv">グラフを 塗る</div><div class="fb math">x ＜ −1, 3 ＜ x</div></div>`;
 
-const s0 = pgSlide({img:'@@IMG:10:56,80,540,255@@', clip:[56,80,540,255],
-  items:[A(1,[182.9,109.7,302.7,138],JA('x軸との共有点'),11), A(2,[163.5,146.1,266.2,174.5],'y ＝ 0',12),
-         A(3,[244.9,182.1,282.6,210.4],JA('上'),12), A(4,[370.7,182.1,408.4,210.4],JA('下'),12), A(5,[192,218.1,229.8,246.4],JA('x軸'),11)],
-  cm:[
-    `<b>2次不等式</b> の 解き方。　3つの Step で 解くよ。`,
-    `Step❶ 2次関数の <b>x軸との 共有点</b> の 問題として 解く。`,
-    `つまり <b>y ＝ 0</b> を 解き、グラフを かく。`,
-    `Step❷ グラフを 塗る。　y ＞ 0 の とき（x軸より）<b>上</b> を 塗る。`,
-    `y ＜ 0 の とき（x軸より）<b>下</b> を 塗る。`,
-    `Step❸ 塗れた 場所を <b>x軸</b> 方向で 答える。`
-  ]});
+/* ===== 大きい グラフ（px）。y ＝ k(x − r1)(x − r2) を 下に凸で かく ===== */
+function IG(o){
+  const W = 660, H = 410, ay = o.ay;
+  const X = x => W/2 + (x-o.cx)*o.sc, Y = x => ay - o.k*(x-o.r[0])*(x-o.r[1]);
+  const m = (o.r[0]+o.r[1])/2, c0 = (m-o.r[0])*(m-o.r[1]);
+  const hw = Math.sqrt((ay-o.top)/o.k - c0), xa = m-hw, xb = m+hw;
+  const path = (a,b) => { let d=''; for(let i=0;i<=60;i++){ const x=a+(b-a)*i/60; d+=(i?'L':'M')+X(x).toFixed(1)+' '+Y(x).toFixed(1)+' '; } return d; };
+  const f = n => n.toFixed(1);
+  const g = {X, Y, ay, W, H, xa, xb};
+  g.base = `<rect class="itint" data-s="${o.tint??99}" x="14" y="${o.tintUp?10:ay}" width="${W-28}" height="${o.tintUp?ay-10:H-ay-10}"/>
+    <line class="iax" x1="10" y1="${ay}" x2="${W-16}" y2="${ay}"/><polygon class="iah" points="${W-2},${ay} ${W-20},${ay-9} ${W-20},${ay+9}"/>
+    <text class="ixl" x="${W-24}" y="${ay+38}">x</text>
+    ${o.r.map(x=>`<text class="inum" x="${f(X(x))}" y="${ay+44}" text-anchor="middle">${x<0?'−'+(-x):x}</text>`).join('')}
+    <path class="icv${o.cs!==undefined?' gs':''}"${o.cs!==undefined?` data-s="${o.cs}"`:''} d="${path(xa,xb)}"/>`;
+  /* 確かめの 点：x、番、○か× */
+  g.pt = (x,s,ok,lab) => `<g class="gs" data-s="${s}"><line class="ipl" x1="${f(X(x))}" y1="${ay}" x2="${f(X(x))}" y2="${f(Y(x))}"/><circle class="ipc" cx="${f(X(x))}" cy="${f(Y(x))}" r="9"/>
+    <text class="ipm ${ok?'ok':'ng'}" x="${f(X(x)+18)}" y="${f(Y(x)+(Y(x)<ay?-6:30))}">${ok?'○':'×'}</text><text class="ipx" x="${f(X(x))}" y="${ay+(Y(x)<ay?40:-14)}" text-anchor="middle">${lab}</text></g>`;
+  /* 塗る（外側 2本 か 内側 1本） */
+  g.paint = (s, out) => `<g class="ipaint" data-s="${s}">${out ? `<path pathLength="1" d="${path(xa,o.r[0])}"/><path pathLength="1" d="${path(o.r[1],xb)}"/>` : `<path pathLength="1" d="${path(o.r[0],o.r[1])}"/>`}</g>`;
+  /* 端の 点：open＝白丸、さもなくば 黒丸 */
+  g.ends = (s, open) => `<g class="gs" data-s="${s}">${o.r.map(x=>`<circle class="iend ${open?'op':''}" cx="${f(X(x))}" cy="${ay}" r="11"/>`).join('')}</g>`;
+  /* x軸に 影を 落とす：矢印 と 帯 */
+  g.shadow = (s, out) => {
+    const xs = out ? [xa+0.25*(o.r[0]-xa), xa+0.65*(o.r[0]-xa), o.r[1]+0.35*(xb-o.r[1]), o.r[1]+0.75*(xb-o.r[1])] : [o.r[0]+(o.r[1]-o.r[0])*0.3, o.r[0]+(o.r[1]-o.r[0])*0.7];
+    const arr = xs.map(x=>{ const y1=Y(x)+(out?16:-16), y2=ay+(out?-14:14); return `<line class="idrop" x1="${f(X(x))}" y1="${f(y1)}" x2="${f(X(x))}" y2="${f(y2)}"/><polygon class="idrh" points="${f(X(x)-7)},${f(y2+(out?-10:10))} ${f(X(x)+7)},${f(y2+(out?-10:10))} ${f(X(x))},${f(y2)}"/>`; }).join('');
+    const band = out
+      ? `<line class="iband" x1="18" y1="${ay}" x2="${f(X(o.r[0])-12)}" y2="${ay}"/><polygon class="ibh" points="6,${ay} 24,${ay-10} 24,${ay+10}"/>
+         <line class="iband" x1="${f(X(o.r[1])+12)}" y1="${ay}" x2="${W-34}" y2="${ay}"/><polygon class="ibh" points="${W-22},${ay} ${W-40},${ay-10} ${W-40},${ay+10}"/>`
+      : `<line class="iband" x1="${f(X(o.r[0])+12)}" y1="${ay}" x2="${f(X(o.r[1])-12)}" y2="${ay}"/>`;
+    return `<g class="gs" data-s="${s}">${arr}${band}</g>`;
+  };
+  g.svg = (...parts) => `<svg class="isv" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">${parts.join('')}</svg>`;
+  return g;
+}
+const IP = (s,h,cls='') => `<div class="ipr lh ${cls}" data-s="${s}">${h}</div>`;
+const EQ1 = `x${P2} − 2x − 3 ＞ 0`, EQ2 = `x${P2} ＋ 3x ＋ 2 ≦ 0`;
+const g1 = () => IG({ay:250, cx:1, sc:78, k:20, r:[-1,3], top:40, tintUp:true});
+const g2 = () => IG({ay:250, cx:-1.5, sc:150, k:250, r:[-2,-1], top:40, tintUp:false});
 
-/* Step❶ の グラフ（自分で かく）と、Step❷ の 印刷された グラフに 塗る */
-const mk = (dy, img, lines, gl, pr, ans, cms) => {
-  const g = PB({xv:422.5, yv:407.3+dy, q:0.033, ay:382.3+dy, top:311+dy, s:4, dot:'f', lab:gl});
-  const p = PB({xv:200.4, yv:521.6+dy, q:0.0668, ay:486.6+dy, top:441+dy, draw:false, paint:pr.paint, ps:5, dot:pr.dot, ds:5});
-  /* ページ右下の QR コードが 少し 写るので 白で かくす */
-  const qr = `<rect x="510" y="${508+dy}" width="36" height="22" fill="#fff"/>`;
-  return pgSlide({img, clip:[56,278+dy,540,525+dy], svg:[g,p,qr],
-    items:[...lines.map((t,i)=>A(i+1,[150,312+dy+i*33,322,342+dy+i*33],t,11,'l')), A(6,[323.2,467.2+dy,507.3,498.3+dy],ans,12)],
-    done:6, cm:cms});
-};
-const s1 = mk(0, '@@IMG:10:56,278,540,525@@', [`x${P2} − 2x − 3 ＝ 0`, '(x ＋ 1)(x − 3) ＝ 0', 'x ＝ −1, 3'], [[395,'−1'],[450,'3']], {paint:'up', dot:'o'},
-  'x ＜ −1, 3 ＜ x', [
-    `⑴ ${M('x² − 2x − 3 ＞ 0')} を 解こう！`,
-    `Step❶ ${M('y ＝ 0')} と して ${M('x² − 2x − 3 ＝ 0')}。`,
-    `因数分解。　${M('(x ＋ 1)(x − 3) ＝ 0')}`,
-    `${M('x ＝ −1, 3')}`,
-    `グラフを かく。　x軸と −1、3 で 交わる。`,
-    `Step❷ <b>＞ 0</b> なので x軸より <b>上</b> を 塗る。　＝ が ないので 点は <b>白丸</b>。`,
-    `Step❸ 塗れた 場所を x軸 方向で 読む。　<b>${M('x ＜ −1, 3 ＜ x')}</b>　<b>完成！</b>`
-  ]);
-/* ⑵ は 252pt 下 */
-const s2 = mk(252, '@@IMG:10:56,530,540,777@@', [`x${P2} ＋ 3x ＋ 2 ＝ 0`, '(x ＋ 2)(x ＋ 1) ＝ 0', 'x ＝ −2, −1'], [[395,'−2'],[450,'−1']], {paint:'down', dot:'f'},
-  '−2 ≦ x ≦ −1', [
-    `⑵ ${M('x² ＋ 3x ＋ 2 ≦ 0')} を 解こう！`,
-    `Step❶ ${M('x² ＋ 3x ＋ 2 ＝ 0')}。`,
-    `因数分解。　${M('(x ＋ 2)(x ＋ 1) ＝ 0')}`,
-    `${M('x ＝ −2, −1')}`,
-    `グラフを かく。　x軸と −2、−1 で 交わる。`,
-    `Step❷ <b>≦ 0</b> なので x軸より <b>下</b> を 塗る。　＝ が あるので 点は <b>黒丸</b>（ふくむ）。`,
-    `Step❸ <b>${M('−2 ≦ x ≦ −1')}</b>　<b>完成！</b>`
-  ]);
+/* ===== 2枚目：考え方 ===== */
+const gk = IG({ay:250, cx:1, sc:78, k:20, r:[-1,3], top:40, tintUp:true, tint:3, cs:1});
+const s0 = `
+  <div class="card abs dcard">${EQTAPE}
+    <div class="ig">${gk.svg(gk.base)}</div>
+    <div class="ipn">
+      <div class="ipr ibig math">${EQ1}</div>
+      <div class="ipr ja0">って どういう こと？</div>
+      ${IP(1,`x${P2} − 2x − 3 を <b class="math">y</b> と おく<br><span class="math">y ＝ x${P2} − 2x − 3</span>`)}
+      ${IP(2,`「＞ 0」は <b class="math">y ＞ 0</b>`)}
+      ${IP(3,`y ＞ 0 ＝ グラフが <b>x軸より 上</b>`)}
+      ${IP(4,`グラフが x軸より 上に なる <b>x</b> を 探す 問題！`,'ikey')}
+    </div>
+  </div>
+  ${cbar([
+    `初めての <b>2次不等式</b>。　${M('x² − 2x − 3 ＞ 0')} って、どういう 意味だろう？`,
+    `左の 式 ${M('x² − 2x − 3')} を <b>y</b> と おく。　すると、おなじみの 2次関数の グラフが かける。`,
+    `「${M('x² − 2x − 3')} が 0 より 大きい」は「<b>y が 0 より 大きい</b>」と 同じ。`,
+    `y ＞ 0 は、グラフの 点が <b>x軸より 上</b> に ある ところ。`,
+    `つまり 2次不等式は、グラフが x軸より 上（または 下）に なる <b>x の 範囲</b> を 探す 問題！`])}`;
+
+/* ===== 3枚目：2次不等式の 解き方（プリントの 枠どおり） ===== */
+const s1 = ptSlide({clip:[60,84,535,252],
+  svg:[`<rect class="xpb" x="62.1" y="85" width="470.9" height="165.9"/>`,
+       WB([182.9,109.7,302.7,138]), WB([163.5,146.1,266.2,174.5]), WB([244.9,182.1,282.6,210.4]), WB([370.7,182.1,408.4,210.4]), WB([192,218.1,229.8,246.4])],
+  items:[
+    T([71.9,94.5,250,109],'<span class="ja" style="font-weight:900">2次不等式の解き方</span>',12),
+    T([80.6,116.5,128,130],'<span class="ja"><i class="nv">Step</i>❶</span>'), T([80.6,188.8,128,202.3],'<span class="ja"><i class="nv">Step</i>❷</span>'), T([80.6,224.8,128,238.3],'<span class="ja"><i class="nv">Step</i>❸</span>'),
+    T([129.3,116.5,182.9,130],'<span class="ja">2次関数の</span>',9.2), T([304.5,116.5,420,130],'<span class="ja">の問題として解く。</span>',9.2),
+    T([129.3,152.5,163.5,166],'<span class="ja">つまり、</span>',8.7), T([268,152.5,380,166],'<span class="ja">を解き、グラフを書く。</span>',9.2),
+    T([129.3,188.8,244.9,202.3],`<span class="ja">グラフを塗る。<i class="math">y</i> ＞ 0の時、</span>`,8.7), T([284.4,188.8,370.7,202.3],`<span class="ja">を塗る。<i class="math">y</i> ＜ 0の時、</span>`,8.7), T([410.2,188.8,460,202.3],'<span class="ja">を塗る。</span>',9.2),
+    T([129.3,224.8,192,238.3],'<span class="ja">塗れた場所を</span>',9.2), T([231.6,224.8,320,238.3],'<span class="ja">方向で答える。</span>',9.2),
+    XA(1,[182.9,109.7,302.7,138],'x軸との共有点',11,'xja xan'), XA(2,[163.5,146.1,266.2,174.5],'y ＝ 0（2次方程式）',9.5,'xja xan'),
+    XA(3,[244.9,182.1,282.6,210.4],'上',13,'xja xan'), XA(4,[370.7,182.1,408.4,210.4],'下',13,'xja xan'), XA(5,[192,218.1,229.8,246.4],'x軸',12,'xja xan')],
+  cm:[
+    `2次不等式の 解き方は 3つの <i class="nv">Step</i>。　空らんを うめよう。`,
+    `<i class="nv">Step</i>❶：グラフと x軸の 関係を 見る → 2次関数の <b>x軸との 共有点</b> の 問題。`,
+    `x軸との 共有点 → <b>y ＝ 0</b>（2次方程式）を 解いて、グラフを かく。　②-1 と 同じ！`,
+    `<i class="nv">Step</i>❷：y ＞ 0 は x軸より <b>上</b> → 上を 塗る。`,
+    `y ＜ 0 は x軸より <b>下</b> → 下を 塗る。`,
+    `<i class="nv">Step</i>❸：塗れた 場所を <b>x軸</b> 方向で 答える（x の 範囲で 答える）。`]});
+
+/* ===== 例の プリントの 配置（⑴ dy＝0、⑵ dy＝252）。phase 1：<i class="nv">Step</i>❶ ／ 2：<i class="nv">Step</i>❷・❸ ===== */
+function PR(o){
+  const dy = o.dy, Yd = y => y+dy, R = r => [r[0],r[1]+dy,r[2],r[3]+dy];
+  const ph1 = o.phase===1, sx = n => ph1 ? n : undefined;
+  const pv = o.pv;      // 印刷された グラフ：xv, yv, q
+  const top = Yd(440), ay = Yd(492);
+  const hw = Math.sqrt((pv.yv+dy-top)/pv.q); let d='';
+  for(let i=0;i<=50;i++){ const x=pv.xv-hw+2*hw*i/50; d+=(i?'L':'M')+x.toFixed(2)+' '+((pv.yv+dy)-pv.q*(x-pv.xv)**2).toFixed(2)+' '; }
+  const L = (s,r,h,fs=11) => s===undefined ? T(R(r),h,fs,'xan') : XA(s,R(r),h,fs,'xan xl');
+  const items = [
+    T(R([62.3,281.5,200,297.5]),`${o.no}<span class="xsp"></span>${o.eq}`,11),
+    T(R([73.5,304.5,119,323]),'<span class="ja"><i class="nv">Step</i>❶</span>',10.5,'ac'), T(R([73.5,428.9,119,447.4]),'<span class="ja"><i class="nv">Step</i>❷</span>',10.5,'ac'), T(R([286.7,428.9,332.3,447.4]),'<span class="ja"><i class="nv">Step</i>❸</span>',10.5,'ac'),
+    T(R([160,485.5,180,497.5]),`<span style="font-size:.8em">${o.lab[0]}</span>`,8.5), T(R([221,485.5,240,497.5]),`<span style="font-size:.8em">${o.lab[1]}</span>`,8.5),
+    L(sx(1),[148,309,326,331],o.c[0]), {s:sx(2), r:R([262,310,326,330]), h:`<span class="ytag">y ＝ 0 と する</span>`, fs:7.8, cls:'xyt'},
+    L(sx(2),[148,335,326,357],o.c[1]), L(sx(3),[148,361,326,383],o.c[2]), L(sx(4),[148,387,326,409],o.c[3]),
+    ...(ph1 ? [] : [XA(3,R([323.2,467.2,507.3,498.3]),o.ans,13)])];
+  const svg = [
+    `<rect class="xpb" x="73.5" y="${Yd(304.5)}" width="45.5" height="18.5"/><rect class="xpb" x="73.5" y="${Yd(428.9)}" width="45.5" height="18.5"/><rect class="xpb" x="286.7" y="${Yd(428.9)}" width="45.6" height="18.5"/>`,
+    `<rect class="xpb" x="142.8" y="${Yd(305.4)}" width="184" height="109.8"/><rect class="xpb" x="354.2" y="${Yd(305.4)}" width="137.2" height="109.8"/><rect class="xpr" x="323.2" y="${Yd(467.2)}" width="184.1" height="31.1"/>`,
+    `<line x1="373.5" y1="${Yd(384.5)}" x2="467" y2="${Yd(384.5)}" stroke="#555" stroke-width=".7"/><polygon points="469,${Yd(384.5)} 465.5,${Yd(383)} 465.5,${Yd(386)}" fill="#555"/><text class="pgt" x="465" y="${Yd(392)}" font-style="italic">x</text>`,
+    `<line x1="140" y1="${ay}" x2="268" y2="${ay}" stroke="#333" stroke-width=".8"/><polygon points="271,${ay} 266.5,${ay-1.8} 266.5,${ay+1.8}" fill="#333"/><text class="pgt" x="265" y="${ay+11}" font-style="italic" style="font-size:9px">x</text>`,
+    `<path d="${d}" fill="none" stroke="#111" stroke-width="1.6"/>`,
+    ph1 ? PB({xv:o.gx, yv:Yd(404.5), q:0.05, ay:Yd(384.5), top:Yd(312), s:6, dot:'f', ds:5, ls:7, lab:[[o.gx-20,o.lab[0]],[o.gx+20,o.lab[1]]]})
+        : PB({xv:pv.xv, yv:pv.yv+dy, q:pv.q, ay, top, draw:false, paint:o.paint, ps:1, dot:o.dot, ds:2})];
+  if(!ph1) svg.push(PB({xv:o.gx, yv:Yd(404.5), q:0.05, ay:Yd(384.5), top:Yd(312), dot:'f', lab:[[o.gx-20,o.lab[0]],[o.gx+20,o.lab[1]]]}).replace(/class="curve pgc" data-s="undefined"/,'class="curve pgc show"').replace(/class="gs" data-s="undefined"/g,'class="gs show"'));
+  return ptSlide({clip:[60,278+dy,535,526+dy], svg, items, done: ph1 ? 7 : 3, cm:o.cm});
+}
+const P1 = {dy:0, no:'⑴', eq:EQ1, gx:420, lab:['−1','3'], pv:{xv:201.9, yv:520, q:0.0581},
+  c:[`y ＝ x${P2} − 2x − 3`, `x${P2} − 2x − 3 ＝ 0`, '(x ＋ 1)(x − 3) ＝ 0', 'x ＝ −1, 3'], ans:'x ＜ −1, 3 ＜ x', paint:'up', dot:'o'};
+const P2_ = {dy:252, no:'⑵', eq:EQ2, gx:420, lab:['−2','−1'], pv:{xv:201.9, yv:520, q:0.0581},
+  c:[`y ＝ x${P2} ＋ 3x ＋ 2`, `x${P2} ＋ 3x ＋ 2 ＝ 0`, '(x ＋ 2)(x ＋ 1) ＝ 0', 'x ＝ −2, −1'], ans:'−2 ≦ x ≦ −1', paint:'down', dot:'f'};
+const STEP1CM = (P,fac,why) => [
+  `${P.no} ${M(P.eq.replace(/<sup>2<\/sup>/,'²'))}。　<b><i class="nv">Step</i>❶</b>：2次関数の x軸との 共有点の 問題として 解く。`,
+  `左の 式を y と おく。　${M(P.c[0].replace(/<sup>2<\/sup>/,'²'))}。`,
+  `x軸との 共有点 → <b>y ＝ 0</b> と する。　${M(P.c[1].replace(/<sup>2<\/sup>/,'²'))}。`,
+  `${why} → <b>因数分解</b>。　${M(fac)}。`,
+  `${M(P.c[3])}。　これが グラフと x軸の 共有点。`,
+  `右の グラフ。　x軸に 共有点を 2つ 打つ。`,
+  `下に凸の 放物線を、2つの 点を 通るように かく。`,
+  `点の 下に x座標を 書く。　<i class="nv">Step</i>❶ <b>完成！</b>`];
+
+/* ===== 例⑴ ===== */
+const s2 = PR({...P1, phase:1, cm:STEP1CM(P1,'(x ＋ 1)(x − 3) ＝ 0','たして −2、かけて −3')});
+const a1 = g1();
+const s3 = `
+  <div class="card abs dcard">${EQTAPE}
+    <div class="ititle math">⑴　${EQ1}　<span class="istep"><i class="nv">Step</i>❷ 塗る</span></div>
+    <div class="ig">${a1.svg(a1.base.replace('data-s="99"','data-s="1"'), a1.pt(-2,2,true,'−2'), a1.pt(1,3,false,'1'), a1.pt(4,4,true,'4'), a1.paint(5,true), a1.ends(6,true))}</div>
+    <div class="ipn">
+      ${IP(1,`「＞ 0」→ <b class="math">y ＞ 0</b><br>→ x軸より <b>上</b>`)}
+      ${IP(2,`x ＝ −2 の 点：<b>上</b> ○`,'isub')}
+      ${IP(3,`x ＝ 1 の 点：<b>下</b> ×`,'isub')}
+      ${IP(4,`x ＝ 4 の 点：<b>上</b> ○`,'isub')}
+      ${IP(5,`x軸より 上の 部分を <b>塗る</b>`,'ikey')}
+      ${IP(6,`端 −1、3 は y ＝ 0<br>0 ＞ 0 は ×（成り立たない）<br>→ 含まない → <b>白丸 ○</b>`)}
+    </div>
+  </div>
+  ${cbar([
+    `<b><i class="nv">Step</i>❷ 塗る</b>。　<i class="nv">Step</i>❶ の グラフを 大きく して 考えよう。`,
+    `${M('x² − 2x − 3 ＞ 0')} は y ＞ 0 → グラフが <b>x軸より 上</b> の ところ。`,
+    `たしかめ：x ＝ −2 の とき、グラフは x軸より 上。　y ＞ 0 に なって いる → ○。`,
+    `x ＝ 1 の とき、グラフは x軸より 下（y ＜ 0）→ ×。`,
+    `x ＝ 4 の とき、グラフは 上 → ○。　−1 より 左 と 3 より 右 で 上に ある。`,
+    `x軸より 上に ある 部分（左と 右の 2本）を <b>塗る</b>。`,
+    `端の −1 と 3 は、ちょうど y ＝ 0。　「0 ＞ 0」は まちがい → 含まないので <b>白丸</b>。`])}`;
+
+const b1 = g1();
+const s4 = `
+  <div class="card abs dcard">${EQTAPE}
+    <div class="ititle math">⑴　${EQ1}　<span class="istep"><i class="nv">Step</i>❸ 答える</span></div>
+    <div class="ig">${b1.svg(b1.base, b1.paint(0,true).replace('class="ipaint"','class="ipaint show"'), b1.ends(0,true), b1.shadow(1,true),
+      `<g class="gs" data-s="2"><text class="iblab" x="${(b1.X(-1)/2).toFixed(1)}" y="${b1.ay+92}" text-anchor="middle">x ＜ −1</text></g>`,
+      `<g class="gs" data-s="3"><text class="iblab" x="${((b1.X(3)+b1.W)/2).toFixed(1)}" y="${b1.ay+92}" text-anchor="middle">3 ＜ x</text></g>`)}</div>
+    <div class="ipn">
+      ${IP(1,`塗れた 場所の 真下（x軸）に<br><b>影</b> を 落とす`)}
+      ${IP(2,`左の 影：−1 より <b>左</b><br>→ <span class="math">x ＜ −1</span>`,'isub')}
+      ${IP(3,`右の 影：3 より <b>右</b><br>→ <span class="math">3 ＜ x</span>`,'isub')}
+      <div class="ians lh" data-s="4"><span class="math">x ＜ −1, 3 ＜ x</span></div>
+      ${IP(5,`数直線と 同じ <b>左 → 右</b> の 並びで 書く<br>白丸 → <b class="math">＜</b>（＝ なし）`,'itip')}
+    </div>
+  </div>
+  ${cbar([
+    `<b><i class="nv">Step</i>❸ 答える</b>。　塗れた 場所を <b>x軸 方向</b> で 答える ＝ x の 範囲で 答える。`,
+    `塗った グラフの 真下、x軸に <b>影</b> を 落とす。　x軸の 上に 帯が 2本 できる。`,
+    `左の 帯は −1 より 左。　x は −1 より 小さい → ${M('x ＜ −1')}。`,
+    `右の 帯は 3 より 右。　x は 3 より 大きい → ${M('3 ＜ x')}。`,
+    `2つを 「,」で 並べて ${M('x ＜ −1, 3 ＜ x')}。`,
+    `書き方の コツ：数直線と 同じ 並び（左 → 右）。　白丸 なので ＝ の ない <b>＜</b>。　<b>完成！</b>`])}`;
+
+const s5 = PR({...P1, phase:2, cm:[
+  `プリントに 書きこもう。　<i class="nv">Step</i>❷ の グラフ。`,
+  `x軸より 上の 部分（外側の 2本）を 塗る。`,
+  `端の −1、3 は 白丸（含まない）。`,
+  `<i class="nv">Step</i>❸ に ${M('x ＜ −1, 3 ＜ x')}。　<b>完成！</b>`]});
+
+/* ===== 例⑵ ===== */
+const s6 = PR({...P2_, phase:1, cm:STEP1CM(P2_,'(x ＋ 2)(x ＋ 1) ＝ 0','たして ＋3、かけて ＋2')});
+const a2 = g2();
+const s7 = `
+  <div class="card abs dcard">${EQTAPE}
+    <div class="ititle math">⑵　${EQ2}　<span class="istep"><i class="nv">Step</i>❷ 塗る</span></div>
+    <div class="ig">${a2.svg(a2.base.replace('data-s="99"','data-s="1"'), a2.pt(-2.5,2,false,'−2.5'), a2.pt(-1.5,3,true,'−1.5'), a2.pt(-0.5,4,false,'−0.5'), a2.paint(5,false), a2.ends(6,false))}</div>
+    <div class="ipn">
+      ${IP(1,`「≦ 0」→ <b class="math">y ≦ 0</b><br>→ x軸より <b>下</b>（と x軸の 上）`)}
+      ${IP(2,`x ＝ −2.5 の 点：<b>上</b> ×`,'isub')}
+      ${IP(3,`x ＝ −1.5 の 点：<b>下</b> ○`,'isub')}
+      ${IP(4,`x ＝ −0.5 の 点：<b>上</b> ×`,'isub')}
+      ${IP(5,`x軸より 下の 部分を <b>塗る</b>`,'ikey')}
+      ${IP(6,`端 −2、−1 は y ＝ 0<br>0 ≦ 0 は ○（成り立つ）<br>→ 含む → <b>黒丸 ●</b>`)}
+    </div>
+  </div>
+  ${cbar([
+    `⑵ の <b><i class="nv">Step</i>❷ 塗る</b>。　今度は <b>≦</b>。`,
+    `${M('x² ＋ 3x ＋ 2 ≦ 0')} は y ≦ 0 → グラフが <b>x軸より 下</b>（または x軸の 上）の ところ。`,
+    `たしかめ：x ＝ −2.5 の とき、グラフは x軸より 上 → ×。`,
+    `x ＝ −1.5 の とき、グラフは 下 → ○。`,
+    `x ＝ −0.5 の とき、上 → ×。　−2 と −1 の <b>間</b> だけ 下に ある。`,
+    `x軸より 下に ある 部分（真ん中の 1本）を <b>塗る</b>。`,
+    `端の −2、−1 は y ＝ 0。　「0 ≦ 0」は 正しい → 含むので <b>黒丸</b>。`])}`;
+
+const b2 = g2();
+const s8 = `
+  <div class="card abs dcard">${EQTAPE}
+    <div class="ititle math">⑵　${EQ2}　<span class="istep"><i class="nv">Step</i>❸ 答える</span></div>
+    <div class="ig">${b2.svg(b2.base, b2.paint(0,false).replace('class="ipaint"','class="ipaint show"'), b2.ends(0,false), b2.shadow(1,false),
+      `<g class="gs" data-s="2"><text class="iblab" x="${((b2.X(-2)+b2.X(-1))/2).toFixed(1)}" y="${b2.ay+130}" text-anchor="middle">−2 ≦ x ≦ −1</text></g>`)}</div>
+    <div class="ipn">
+      ${IP(1,`塗れた 場所の 真上（x軸）に<br><b>影</b> を 落とす`)}
+      ${IP(2,`影は −2 と −1 の <b>間</b><br>→ x は 2つに <b>はさまれる</b>`,'isub')}
+      <div class="ians lh" data-s="3"><span class="math">−2 ≦ x ≦ −1</span></div>
+      ${IP(4,`数直線と 同じ 並び（−2, x, −1）<br>黒丸 → <b class="math">≦</b>（＝ あり）`,'itip')}
+    </div>
+  </div>
+  ${cbar([
+    `⑵ の <b><i class="nv">Step</i>❸ 答える</b>。　塗れた 場所を x軸 方向で。`,
+    `塗った グラフの 真上、x軸に <b>影</b> を 落とす。　帯は −2 と −1 の 間に 1本。`,
+    `x は −2 より 大きく、−1 より 小さい → 2つに <b>はさまれる</b>。`,
+    `${M('−2 ≦ x ≦ −1')}。`,
+    `左から −2, x, −1 の 並び。　黒丸 なので ＝ の ついた <b>≦</b>。　<b>完成！</b>`])}`;
+
+const s9 = PR({...P2_, phase:2, cm:[
+  `プリントに 書きこもう。　<i class="nv">Step</i>❷ の グラフ。`,
+  `x軸より 下の 部分（真ん中の 1本）を 塗る。`,
+  `端の −2、−1 は 黒丸（含む）。`,
+  `<i class="nv">Step</i>❸ に ${M('−2 ≦ x ≦ −1')}。　<b>完成！</b>`]});
+
+/* ===== まとめ（アニメーションなし） ===== */
+const MG2 = (out) => {
+  const W=320, H=150, ay=out?95:60, r1=out?120:130, r2=out?200:190, m=(r1+r2)/2, k=out?0.022:0.05;
+  const Y = x => ay - k*(x-r1)*(x-r2), top=8, c0=(m-r1)*(m-r2), hw=Math.sqrt((ay-top)/k - c0);
+  const P = (a,b) => { let d=''; for(let i=0;i<=40;i++){ const x=a+(b-a)*i/40; d+=(i?'L':'M')+x.toFixed(1)+' '+Y(x).toFixed(1)+' '; } return d; };
+  const seg = out ? P(m-hw,r1)+P(r2,m+hw) : P(r1,r2);
+  return `<svg class="imsv" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}"><line x1="16" y1="${ay}" x2="${W-18}" y2="${ay}"/><polygon points="${W-6},${ay} ${W-20},${ay-7} ${W-20},${ay+7}"/>
+    <path class="mc" d="${P(m-hw,m+hw)}"/><path class="mp" d="${seg}"/>${[r1,r2].map(x=>`<circle class="${out?'op':''}" cx="${x}" cy="${ay}" r="8"/>`).join('')}
+    <text x="${r1}" y="${ay+30}" text-anchor="middle">${out?'−1':'−2'}</text><text x="${r2}" y="${ay+30}" text-anchor="middle">${out?'3':'−1'}</text></svg>`; };
+const s10 = `
+  <div class="end-h"><h2>2次不等式の 答え方</h2></div>
+  <div class="dsum">
+    <div class="card dsc isc c1">${MG2(true)}<div class="dsc-s math">${EQ1}</div><div class="isr">上を 塗る → <b>外側</b> 2本</div><div class="dsc-n math">x ＜ −1, 3 ＜ x</div></div>
+    <div class="card dsc isc c2">${MG2(false)}<div class="dsc-s math">${EQ2}</div><div class="isr">下を 塗る → <b>内側</b> 1本</div><div class="dsc-n math">−2 ≦ x ≦ −1</div></div>
+  </div>
+  ${cbar([`＝ が ない（＞、＜）→ <b>白丸</b>・答えも <b>＜</b>。　＝ が ある（≧、≦）→ <b>黒丸</b>・答えも <b>≦</b>。　並びは 数直線と 同じ 左 → 右。`])}`;
 
 const DECK = {title:'③-1 2次不等式の解法', pages:[
-  {name:'表紙', html:coverF(KK, '<span class="mk">2次不等式</span>の<br>解き方', 'グラフを かいて 塗る', '3つの Step で 解こう！', POL, 'グラフを 塗る')},
-  {name:'解き方', html:s0}, {name:'⑴', html:s1}, {name:'⑵', html:s2},
-  {name:'終', html:endF(KK + '　2次不等式', POL)}
+  {name:'表紙', html:coverF(KK, '<span class="mk">2次不等式</span><br>の 解き方', 'グラフを かいて 塗る', '塗れた 場所を x の 範囲で 答える', POL, '3つの Step')},
+  {name:'考え方', html:s0}, {name:'解き方', html:s1},
+  {name:'⑴ Step❶', html:s2}, {name:'⑴ 塗る', html:s3}, {name:'⑴ 答える', html:s4}, {name:'⑴ 書きこみ', html:s5},
+  {name:'⑵ Step❶', html:s6}, {name:'⑵ 塗る', html:s7}, {name:'⑵ 答える', html:s8}, {name:'⑵ 書きこみ', html:s9},
+  {name:'まとめ', html:s10},
+  {name:'終', html:endF(KK + '　2次不等式の解法', POL)}
 ]};
 ''')
 
