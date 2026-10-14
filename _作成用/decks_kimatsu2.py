@@ -564,15 +564,17 @@ function PR(o){
   const pv = o.pv;      // 印刷された グラフ：xv, yv, q
   const top = Yd(440), ay = Yd(492);
   const hw = Math.sqrt((pv.yv+dy-top)/pv.q); let d='';
+  const rr = Math.sqrt((pv.yv+dy-ay)/pv.q), r1 = pv.xv-rr, r2 = pv.xv+rr, Yc = x => (pv.yv+dy)-pv.q*(x-pv.xv)**2;
   for(let i=0;i<=50;i++){ const x=pv.xv-hw+2*hw*i/50; d+=(i?'L':'M')+x.toFixed(2)+' '+((pv.yv+dy)-pv.q*(x-pv.xv)**2).toFixed(2)+' '; }
   const L = (s,r,h,fs=11) => s===undefined ? T(R(r),h,fs,'xan') : XA(s,R(r),h,fs,'xan xl');
   const items = [
     T(R([62.3,281.5,200,297.5]),`${o.no}<span class="xsp"></span>${o.eq}`,11),
     T(R([73.5,304.5,119,323]),'<span class="ja"><i class="nv">Step</i>❶</span>',10.5,'ac'), T(R([73.5,428.9,119,447.4]),'<span class="ja"><i class="nv">Step</i>❷</span>',10.5,'ac'), T(R([286.7,428.9,332.3,447.4]),'<span class="ja"><i class="nv">Step</i>❸</span>',10.5,'ac'),
-    T(R([160,485.5,180,497.5]),`<span style="font-size:.8em">${o.lab[0]}</span>`,8.5), T(R([221,485.5,240,497.5]),`<span style="font-size:.8em">${o.lab[1]}</span>`,8.5),
+    T([r1-14,ay+1.5,r1+6,ay+12.5],`<span style="font-size:.8em">${o.lab[0]}</span>`,8.5,'ac'), T([r2-6,ay+1.5,r2+14,ay+12.5],`<span style="font-size:.8em">${o.lab[1]}</span>`,8.5,'ac'),
     L(sx(1),[148,309,326,331],o.c[0]), {s:sx(2), r:R([262,310,326,330]), h:`<span class="ytag">y ＝ 0 と する</span>`, fs:7.8, cls:'xyt'},
     L(sx(2),[148,335,326,357],o.c[1]), L(sx(3),[148,361,326,383],o.c[2]), L(sx(4),[148,387,326,409],o.c[3]),
-    ...(ph1 ? [] : [XA(3,R([323.2,467.2,507.3,498.3]),o.ans,13)])];
+    ...(ph1 ? [] : [XA(8,R([323.2,467.2,507.3,498.3]),o.ans,13),
+       ...o.rw.map((h,i)=>({s:5+2*i, r:[333+i*86,Yd(449),411+i*86,Yd(463)], h:h, fs:11, cls:'xan xwr', al:'c'}))])];
   const svg = [
     `<rect class="xpb" x="73.5" y="${Yd(304.5)}" width="45.5" height="18.5"/><rect class="xpb" x="73.5" y="${Yd(428.9)}" width="45.5" height="18.5"/><rect class="xpb" x="286.7" y="${Yd(428.9)}" width="45.6" height="18.5"/>`,
     `<rect class="xpb" x="142.8" y="${Yd(305.4)}" width="184" height="109.8"/><rect class="xpb" x="354.2" y="${Yd(305.4)}" width="137.2" height="109.8"/><rect class="xpr" x="323.2" y="${Yd(467.2)}" width="184.1" height="31.1"/>`,
@@ -581,13 +583,29 @@ function PR(o){
     `<path d="${d}" fill="none" stroke="#111" stroke-width="1.6"/>`,
     ph1 ? PB({xv:o.gx, yv:Yd(404.5), q:0.05, ay:Yd(384.5), top:Yd(312), s:6, dot:'f', ds:5, ls:7, lab:[[o.gx-20,o.lab[0]],[o.gx+20,o.lab[1]]]})
         : PB({xv:pv.xv, yv:pv.yv+dy, q:pv.q, ay, top, draw:false, paint:o.paint, ps:1, dot:o.dot, ds:2})];
+  if(!ph1){
+    /* x を 置く（塗れた ところと 点線で つなぐ）→ 数と 斜めに 比べる（うすい 帯 ＋ 不等号）*/
+    const f = n => n.toFixed(1);
+    const P = o.out ? {L:[r1,ay+2], R:[r2,ay+2]} : {L:[r1-4,ay+9], R:[r2+4,ay+9]};
+    const X = o.out ? [{at:[r1-22,ay-11], to:[r1-7,Yc(r1-7)]}, {at:[r2+22,ay-11], to:[r2+7,Yc(r2+7)]}]
+                    : [{at:[pv.xv,ay+36], to:[pv.xv,Yc(pv.xv)+1.5]}];
+    const pairs = o.out ? [[X[0].at,P.L,4],[P.R,X[1].at,6]] : [[P.L,X[0].at,4],[X[0].at,P.R,6]];   // [小さい 方, 大きい 方, 番]
+    const le = o.dot==='f';
+    pairs.forEach(([A,B,st])=>{
+      const mx=(A[0]+B[0])/2, my=(A[1]+B[1])/2, ang=Math.atan2(B[1]-A[1],B[0]-A[0])*180/Math.PI, len=Math.hypot(B[0]-A[0],B[1]-A[1])+16;
+      const tr = `translate(${f(mx)} ${f(my)}) rotate(${f(ang)})`;
+      svg.splice(4,0,`<g class="gs" data-s="${st}"><rect class="iband2" x="${f(-len/2)}" y="-7" width="${f(len)}" height="14" rx="7" transform="${tr}"/></g>`);
+      svg.push(`<g class="gs" data-s="${st}"><path class="ilt pt" d="M3.5 -3.5 L-3.5 0 L3.5 3.5${le?' M-3.5 2.6 L3.5 6.1':''}" transform="${tr}"/></g>`);
+    });
+    svg.push(`<g class="gs" data-s="3">${X.map(x=>`<line class="ixln pt" x1="${f(x.at[0])}" y1="${f(x.at[1])}" x2="${f(x.to[0])}" y2="${f(x.to[1])}"/><circle class="ixdot" cx="${f(x.to[0])}" cy="${f(x.to[1])}" r="1.4"/><circle class="ixb" cx="${f(x.at[0])}" cy="${f(x.at[1])}" r="5.2"/><text class="ixt pt" x="${f(x.at[0])}" y="${f(x.at[1]+2.4)}" text-anchor="middle">x</text>`).join('')}</g>`);
+  }
   if(!ph1) svg.push(PB({xv:o.gx, yv:Yd(404.5), q:0.05, ay:Yd(384.5), top:Yd(312), dot:'f', lab:[[o.gx-20,o.lab[0]],[o.gx+20,o.lab[1]]]}).replace(/class="curve pgc" data-s="undefined"/,'class="curve pgc show"').replace(/class="gs" data-s="undefined"/g,'class="gs show"'));
-  return ptSlide({clip:[60,278+dy,535,526+dy], svg, items, done: ph1 ? 7 : 3, cm:o.cm});
+  return ptSlide({clip:[60,278+dy,535,(ph1||o.out?526:544)+dy], svg, items, done: ph1 ? 7 : 8, cm:o.cm});
 }
 const P1 = {dy:0, no:'⑴', eq:EQ1, gx:420, lab:['−1','3'], pv:{xv:201.9, yv:520, q:0.0581},
-  c:[`y ＝ x${P2} − 2x − 3`, `x${P2} − 2x − 3 ＝ 0`, '(x ＋ 1)(x − 3) ＝ 0', 'x ＝ −1, 3'], ans:'x ＜ −1, 3 ＜ x', paint:'up', dot:'o'};
+  c:[`y ＝ x${P2} − 2x − 3`, `x${P2} − 2x − 3 ＝ 0`, '(x ＋ 1)(x − 3) ＝ 0', 'x ＝ −1, 3'], ans:'x ＜ −1, 3 ＜ x', paint:'up', dot:'o', out:true, rw:['x ＜ −1','3 ＜ x']};
 const P2_ = {dy:252, no:'⑵', eq:EQ2, gx:420, lab:['−2','−1'], pv:{xv:201.9, yv:520, q:0.0581},
-  c:[`y ＝ x${P2} ＋ 3x ＋ 2`, `x${P2} ＋ 3x ＋ 2 ＝ 0`, '(x ＋ 2)(x ＋ 1) ＝ 0', 'x ＝ −2, −1'], ans:'−2 ≦ x ≦ −1', paint:'down', dot:'f'};
+  c:[`y ＝ x${P2} ＋ 3x ＋ 2`, `x${P2} ＋ 3x ＋ 2 ＝ 0`, '(x ＋ 2)(x ＋ 1) ＝ 0', 'x ＝ −2, −1'], ans:'−2 ≦ x ≦ −1', paint:'down', dot:'f', out:false, rw:['−2 ≦ x','x ≦ −1']};
 const STEP1CM = (P,fac,why) => [
   `${P.no} ${M(P.eq.replace(/<sup>2<\/sup>/,'²'))}。　<b><i class="nv">Step</i>❶</b>：2次関数の x軸との 共有点の 問題として 解く。`,
   `左の 式を y と おく。　${M(P.c[0].replace(/<sup>2<\/sup>/,'²'))}。`,
@@ -698,7 +716,12 @@ const s5 = PR({...P1, phase:2, cm:[
   `プリントに 書きこもう。　<i class="nv">Step</i>❷ の グラフ。`,
   `x軸より 上の 部分（外側の 2本）を 塗る。`,
   `端の −1、3 は 白丸（含まない）。`,
-  `<i class="nv">Step</i>❸ に ${M('x ＜ −1, 3 ＜ x')}。　<b>完成！</b>`]});
+  `<i class="nv">Step</i>❸。　塗れた 2か所に <b>x</b> を 置く。`,
+  `左：x は −1 より 左 → 小さい。　白丸 なので <b>＜</b>。`,
+  `書き直して ${M('x ＜ −1')}。`,
+  `右：x は 3 より 右 → 大きい。　白丸 なので <b>＜</b>。`,
+  `書き直して ${M('3 ＜ x')}。`,
+  `<i class="nv">Step</i>❸ の 枠に ${M('x ＜ −1, 3 ＜ x')}。　<b>完成！</b>`]});
 
 /* ===== 例⑵ ===== */
 const s6 = PR({...P2_, phase:1, cm:STEP1CM(P2_,'(x ＋ 2)(x ＋ 1) ＝ 0','たして ＋3、かけて ＋2')});
@@ -749,7 +772,12 @@ const s9 = PR({...P2_, phase:2, cm:[
   `プリントに 書きこもう。　<i class="nv">Step</i>❷ の グラフ。`,
   `x軸より 下の 部分（真ん中の 1本）を 塗る。`,
   `端の −2、−1 は 黒丸（含む）。`,
-  `<i class="nv">Step</i>❸ に ${M('−2 ≦ x ≦ −1')}。　<b>完成！</b>`]});
+  `<i class="nv">Step</i>❸。　塗れた ところに <b>x</b> を 置く。`,
+  `x は −2 より 右 → 大きい。　黒丸 なので <b>≦</b>。`,
+  `書き直して ${M('−2 ≦ x')}。`,
+  `x は −1 より 左 → 小さい。　黒丸 なので <b>≦</b>。`,
+  `書き直して ${M('x ≦ −1')}。`,
+  `2つを まとめて、<i class="nv">Step</i>❸ の 枠に ${M('−2 ≦ x ≦ −1')}。　<b>完成！</b>`]});
 
 /* ===== まとめ（アニメーションなし） ===== */
 const MG2 = (out) => {
