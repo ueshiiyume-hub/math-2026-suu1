@@ -13,6 +13,11 @@ const BIG = (sm, big, sub, s, o) => `<div class="v2kw lh" data-s="${s??0}"${o!==
 /* グラフ（主役の 下） */
 const GV = {ay:236, cx:1, sc:40, k:20, r:[-1,3], top:8, W:880, H:320};   // 頂点は x軸の 少し 下、上に 高く   // Step❶ の グラフと 同じ 形（しゅっと）
 
+/* 塗った あとの 形（アニメーション なし）、白丸（s 番で かく、draw＝線を なぞって かく） */
+const E = 0.1;   // 塗りは x軸の この ぶん 手前で 止める（白丸の ふち）
+const PAINTED = (g,a,b) => `<g class="ipaint show v2still"><path d="${g.path(g.xa,a)}"/><path d="${g.path(b,g.xb)}"/></g>`;
+const WD = (g,x,s,draw) => `<circle class="v2wd${draw?' v2draw':''}${s!==undefined?' gs':''}"${s!==undefined?` data-s="${s}"`:''} cx="${g.X(x).toFixed(1)}" cy="${g.ay}" r="9" pathLength="1"/>`;
+
 /* 1：これから やること */
 const v1 = `
   <div class="card abs dcard v2">${EQTAPE}
@@ -77,7 +82,7 @@ const v3 = `
     ${NAV(2)}
     <div class="v2c">
       ${BIG(`<span class="math">x${P2} − 2x − 3</span> を <span class="math">y</span> と みる`, '0より 大きい', '（上を 塗る）')}
-      <div class="v2g">${g3.svg(`<rect class="v2up gs" data-s="1" x="10" y="2" width="${g3.W-20}" height="${g3.ay-2}"/>`, g3.base, g3.seg(g3.xa,-1,2), g3.seg(3,g3.xb,2))}</div>
+      <div class="v2g">${g3.svg(`<rect class="v2up gs" data-s="1" x="10" y="2" width="${g3.W-20}" height="${g3.ay-2}"/>`, g3.base, g3.seg(g3.xa,-1-E,2), g3.seg(3+E,g3.xb,2))}</div>
     </div>
   </div>
   ${cbar([
@@ -85,17 +90,28 @@ const v3 = `
     `x軸より 上を <b>全部</b> 塗る。`,
     `グラフの うち、塗った 中に 入って いる ところが 答えの 部分。`])}`;
 
-/* 4：x軸上は 塗らない（＝ が ない → 白丸） */
+/* 4：x軸上は 塗らない。−1 に ググっと 寄って「ギリギリ ここまで」→ 白丸を かく → 引いて 全体 */
 const g4 = IG({...GV});
+const Z = 3.4;   // 寄る 倍率
 const v4 = `
   <div class="card abs dcard v2">${EQTAPE}
     ${NAV(2)}
     <div class="v2c">
       ${BIG('＞ に ＝ が ない','x軸上は 塗らない')}
-      <div class="v2g">${g4.svg(`<rect class="v2up show" x="10" y="2" width="${g4.W-20}" height="${g4.ay-2}"/>`, g4.base, g4.seg(g4.xa,-1,0).replace('class="ipaint"','class="ipaint show"'), g4.seg(3,g4.xb,0).replace('class="ipaint"','class="ipaint show"'), g4.dot(-1,1,true), g4.dot(3,1,true))}</div>
+      <div class="v2g v2zw" style="width:${g4.W}px;height:${g4.H}px"><div class="v2zoom" data-wa="1" data-wb="4" style="transform-origin:${g4.X(-1)}px ${g4.ay}px">
+        ${g4.svg(`<rect class="v2up show" x="10" y="2" width="${g4.W-20}" height="${g4.ay-2}"/>`, g4.base, PAINTED(g4,-1-E,3+E),
+          `<g class="gs v2zl" data-s="2" data-o="4"><path class="v2zarw" d="M${g4.X(-1.1)+30} ${g4.Y(-1.1)-10} L${g4.X(-1.1)+6} ${g4.Y(-1.1)-2}"/><polygon class="v2zah" points="${g4.X(-1.1)+5},${g4.Y(-1.1)-1.6} ${g4.X(-1.1)+10},${g4.Y(-1.1)-5.5} ${g4.X(-1.1)+11},${g4.Y(-1.1)-1}"/><text class="v2ztx" x="${g4.X(-1.1)+32}" y="${g4.Y(-1.1)-8}">ギリギリ ここまで 塗る</text></g>`,
+          WD(g4,-1,3,true), `<g class="gs v2zl" data-s="3" data-o="4"><text class="v2ztx" x="${g4.X(-1)+14}" y="${g4.ay+16}">白丸（x軸上は 塗らない）</text></g>`,
+          WD(g4,3,4))}
+      </div></div>
     </div>
   </div>
-  ${cbar([`−1 と 3 は x軸の 上（y ＝ 0）。　「＞」に ＝ は ない。`, `だから x軸上は 塗らない → <b>白丸</b>。`])}`;
+  ${cbar([
+    `−1 と 3 は ちょうど x軸の 上（y ＝ 0）。　ここは 塗る？`,
+    `−1 の ところに ぐっと 寄って みよう。`,
+    `0より 大きい ところ だけ 塗る。　y ＝ 0 の x軸上は 塗らない → x軸の <b>ギリギリ 手前</b> まで 塗る。`,
+    `x軸上は 塗って いない、と 分かるように 中が 空っぽの <b>白丸</b> を かく。`,
+    `引いて 全体を 見る。　3 も 同じ → <b>白丸</b>。`])}`;
 
 /* 5：x を 置く → 斜めに 比べる → 答え */
 const g5 = IG({...GV});
@@ -106,7 +122,7 @@ const v5 = `
     <div class="v2c">
       ${BIG('塗れた ところの x は？','x を 置く',null,0,6)}
       <div class="v2kw v2ans lh" data-s="6"><div class="v2sm">答え</div><div class="v2big math"><span class="v2mk">x ＜ −1, 3 ＜ x</span></div></div>
-      <div class="v2g">${g5.svg(C5L.band, C5R.band, g5.base, g5.seg(g5.xa,-1,0).replace('class="ipaint"','class="ipaint show"'), g5.seg(3,g5.xb,0).replace('class="ipaint"','class="ipaint show"'), g5.dot(-1,0,true), g5.dot(3,0,true), C5L.rest, C5R.rest)}</div>
+      <div class="v2g">${g5.svg(C5L.band, C5R.band, g5.base, PAINTED(g5,-1-E,3+E), WD(g5,-1), WD(g5,3), C5L.rest, C5R.rest)}</div>
     </div>
   </div>
   ${cbar([
