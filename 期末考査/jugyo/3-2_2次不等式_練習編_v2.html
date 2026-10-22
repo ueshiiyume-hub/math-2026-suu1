@@ -1768,7 +1768,7 @@ const GARW = (x1,y1,x2,y2,s) => { const ym=(y1+y2)/2, hh=(y2-y1)*.28, hx=x2-(y2-
   return `<g class="gs" data-s="${s}"><polygon points="${x1},${ym-hh} ${hx},${ym-hh} ${hx},${y1} ${x2},${ym} ${hx},${y2} ${hx},${ym+hh} ${x1},${ym+hh}" fill="#c9dca6"/></g>`; };
 
 /* ====== このプリントのスライド ====== */
-const VER = '<i class="nv">ver</i> 2.0　2026-10-22';
+const VER = '<i class="nv">ver</i> 2.1　2026-10-22';
 /* ③-1 ver 2.0 の 土台：ver 1.4 の 部品の 写し（ver 1.4 を 直しても ver 2.0 は 変わらない） */
 
 const IMG = s => s;
@@ -2156,14 +2156,14 @@ const PAINT3 = (g, up, eq, s, cls='') => { const id='c3_'+(++CL3);
   return `<clipPath id="${id}">${r}</clipPath><g clip-path="url(#${id})"><g class="ipaint ${s===undefined?'show v2still':''} ${cls}"${s!==undefined?` data-s="${s}"`:''}><path pathLength="1" d="${g.d}"/></g></g>`; };
 const TINT3 = (g, up, s) => `<rect class="v2up gs" data-s="${s}" x="10" y="${up?2:g.ay}" width="${g.W-20}" height="${up?g.ay-2:g.H-g.ay}"/>`;
 const AX3 = g => `<line class="iax" x1="10" y1="${g.ay}" x2="${g.W-16}" y2="${g.ay}"/><polygon class="iah" points="${g.W-2},${g.ay} ${g.W-20},${g.ay-9} ${g.W-20},${g.ay+9}"/><text class="ixl" x="${g.W-24}" y="${g.ay+38}">x</text>`;
-const NUM3 = (g, xs) => xs.map(x=>`<text class="inum" x="${f1(g.X(x)+(xs.length>1?(x<1?-22:22):0))}" y="${g.ay+42}" text-anchor="middle">${x<0?'−'+(-x):x}</text>`).join('');
+const NUM3 = (g, xs) => xs.map(x=>`<text class="inum" x="${f1(g.X(x)+(xs.length>1?(x<1?-16:16):0))}" y="${g.ay+42}" text-anchor="middle">${x<0?'−'+(-x):x}</text>`).join('');
 const DOT3 = (g, x, filled, s) => `<circle class="${filled?'v2bd':'v2wd'} gs" data-s="${s}" cx="${f1(g.X(x))}" cy="${g.ay}" r="10"/>`;
 
 /* 段ごとの グラフ */
 const ROW3 = [
-  {f:`x${P2} − 2x − 3`, o:{xv:1, k:1, c:-4, sc:44, vs:30, ay:158, top:10}, roots:[-1,3]},
-  {f:`x${P2} − 2x ＋ 1`, o:{xv:1, k:1, c:0, sc:44, vs:30, ay:236, top:10}, roots:[1]},
-  {f:`x${P2} − 2x ＋ 5`, o:{xv:1, k:1, c:1.3, sc:44, vs:30, ay:262, top:10}, roots:[]}];
+  {f:`x${P2} − 2x − 3`, o:{xv:1, k:1, c:-4, sc:40, vs:20, ay:200, top:10}, roots:[-1,3]},
+  {f:`x${P2} − 2x ＋ 1`, o:{xv:1, k:1, c:0, sc:40, vs:20, ay:250, top:10}, roots:[1]},
+  {f:`x${P2} − 2x ＋ 5`, o:{xv:1, k:1, c:2, sc:40, vs:20, ay:272, top:10}, roots:[]}];
 /* 12問：段、不等号、答え、言葉 */
 const SIGN3 = ['＞','＜','≧','≦'];
 const ANS3 = [
