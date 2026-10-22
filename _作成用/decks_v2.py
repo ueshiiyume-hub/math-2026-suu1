@@ -306,6 +306,7 @@ const DECK = {title:'③-1 2次不等式の解法', groups:{'⑴':`⑴ ${EQ1}`, 
   {name:'⑴ ❸ 答える', html:v5}, {name:'⑴ 書きこみ', html:s5b},
   {name:'⑵ ❶ ＝0 に', html:wa}, {name:'⑵ ❶ 解く', html:wb}, {name:'⑵ ❶ プリント', html:w2v}, {name:'⑵ ❷ 下を塗る', html:w3}, {name:'⑵ ❷ x軸上', html:w4}, {name:'⑵ ❷ プリント', html:w5a},
   {name:'⑵ ❸ 答える', html:w5}, {name:'⑵ 書きこみ', html:w5b},
+  {name:'手順の まとめ', html:s1},
   {name:'終', html:endF(KK2 + '　2次不等式の解法', POL)}
 ]};
 '''

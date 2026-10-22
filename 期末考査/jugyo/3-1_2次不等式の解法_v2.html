@@ -1749,7 +1749,7 @@ const GARW = (x1,y1,x2,y2,s) => { const ym=(y1+y2)/2, hh=(y2-y1)*.28, hx=x2-(y2-
   return `<g class="gs" data-s="${s}"><polygon points="${x1},${ym-hh} ${hx},${ym-hh} ${hx},${y1} ${x2},${ym} ${hx},${y2} ${hx},${ym+hh} ${x1},${ym+hh}" fill="#c9dca6"/></g>`; };
 
 /* ====== このプリントのスライド ====== */
-const VER = '<i class="nv">ver</i> 2.15　2026-10-22';
+const VER = '<i class="nv">ver</i> 2.16　2026-10-22';
 /* ③-1 ver 2.0 の 土台：ver 1.4 の 部品の 写し（ver 1.4 を 直しても ver 2.0 は 変わらない） */
 
 const IMG = s => s;
@@ -2420,6 +2420,7 @@ const DECK = {title:'③-1 2次不等式の解法', groups:{'⑴':`⑴ ${EQ1}`, 
   {name:'⑴ ❸ 答える', html:v5}, {name:'⑴ 書きこみ', html:s5b},
   {name:'⑵ ❶ ＝0 に', html:wa}, {name:'⑵ ❶ 解く', html:wb}, {name:'⑵ ❶ プリント', html:w2v}, {name:'⑵ ❷ 下を塗る', html:w3}, {name:'⑵ ❷ x軸上', html:w4}, {name:'⑵ ❷ プリント', html:w5a},
   {name:'⑵ ❸ 答える', html:w5}, {name:'⑵ 書きこみ', html:w5b},
+  {name:'手順の まとめ', html:s1},
   {name:'終', html:endF(KK2 + '　2次不等式の解法', POL)}
 ]};
 
