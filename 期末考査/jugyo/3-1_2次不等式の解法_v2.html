@@ -977,6 +977,8 @@ i.nv{font-style:normal;font-family:inherit}
 .v2ztx{font-family:"Zen Maru Gothic",sans-serif;font-size:9px;font-weight:900;fill:var(--accent)}
 .v2zarw{fill:none;stroke:var(--accent);stroke-width:1.2;stroke-linecap:round}
 .v2zah{fill:var(--accent)}
+/* 前の ページと 同じ 画面が 続く とき（v2cont）は、ページの 切りかえを 一瞬で（チラつかない） */
+.slide:has(.v2cont),.slide:has(+ .slide .v2cont){transition:none!important;transform:none!important}
 
 /* ===== 手書き ===== */
 #ink{position:fixed;left:0;top:0;z-index:15;pointer-events:none;touch-action:none}
@@ -1726,7 +1728,7 @@ const GARW = (x1,y1,x2,y2,s) => { const ym=(y1+y2)/2, hh=(y2-y1)*.28, hx=x2-(y2-
   return `<g class="gs" data-s="${s}"><polygon points="${x1},${ym-hh} ${hx},${ym-hh} ${hx},${y1} ${x2},${ym} ${hx},${y2} ${hx},${ym+hh} ${x1},${ym+hh}" fill="#c9dca6"/></g>`; };
 
 /* ====== このプリントのスライド ====== */
-const VER = '<i class="nv">ver</i> 2.7　2026-10-22';
+const VER = '<i class="nv">ver</i> 2.8　2026-10-22';
 /* ③-1 ver 2.0 の 土台：ver 1.4 の 部品の 写し（ver 1.4 を 直しても ver 2.0 は 変わらない） */
 
 const IMG = s => s;
@@ -2185,7 +2187,7 @@ const v3 = `
 const g4 = IG({...GV});
 const Z = 3.4;   // 寄る 倍率
 const v4 = `
-  <div class="card abs dcard v2">${EQTAPE}
+  <div class="card abs dcard v2 v2cont">${EQTAPE}
     ${NAV(2)}
     <div class="v2c">
       ${BIG('＞ に ＝ が ない','x軸上は 塗らない')}
@@ -2208,7 +2210,7 @@ const v4 = `
 const g5 = IG({...GV});
 const C5L = CMP(g5,'L',-1,-1.3,1,2,'x ＜ −1'), C5R = CMP(g5,'R',3,3.3,1,4,'3 ＜ x');
 const v5 = `
-  <div class="card abs dcard v2">${EQTAPE}
+  <div class="card abs dcard v2 v2cont">${EQTAPE}
     ${NAV(3)}
     <div class="v2c">
       ${BIG('塗れた ところの x は？','x を 置く',null,0,6)}

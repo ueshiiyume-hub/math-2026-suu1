@@ -98,7 +98,7 @@ const v3 = `
 const g4 = IG({...GV});
 const Z = 3.4;   // 寄る 倍率
 const v4 = `
-  <div class="card abs dcard v2">${EQTAPE}
+  <div class="card abs dcard v2 v2cont">${EQTAPE}
     ${NAV(2)}
     <div class="v2c">
       ${BIG('＞ に ＝ が ない','x軸上は 塗らない')}
@@ -121,7 +121,7 @@ const v4 = `
 const g5 = IG({...GV});
 const C5L = CMP(g5,'L',-1,-1.3,1,2,'x ＜ −1'), C5R = CMP(g5,'R',3,3.3,1,4,'3 ＜ x');
 const v5 = `
-  <div class="card abs dcard v2">${EQTAPE}
+  <div class="card abs dcard v2 v2cont">${EQTAPE}
     ${NAV(3)}
     <div class="v2c">
       ${BIG('塗れた ところの x は？','x を 置く',null,0,6)}

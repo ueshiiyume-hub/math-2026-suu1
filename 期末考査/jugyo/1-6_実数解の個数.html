@@ -977,6 +977,8 @@ i.nv{font-style:normal;font-family:inherit}
 .v2ztx{font-family:"Zen Maru Gothic",sans-serif;font-size:9px;font-weight:900;fill:var(--accent)}
 .v2zarw{fill:none;stroke:var(--accent);stroke-width:1.2;stroke-linecap:round}
 .v2zah{fill:var(--accent)}
+/* 前の ページと 同じ 画面が 続く とき（v2cont）は、ページの 切りかえを 一瞬で（チラつかない） */
+.slide:has(.v2cont),.slide:has(+ .slide .v2cont){transition:none!important;transform:none!important}
 
 /* ===== 手書き ===== */
 #ink{position:fixed;left:0;top:0;z-index:15;pointer-events:none;touch-action:none}
