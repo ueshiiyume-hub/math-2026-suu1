@@ -579,3 +579,6 @@ i.nv{font-style:normal;font-family:inherit}
 .slide:has(.v2cont),.slide:has(+ .slide .v2cont){transition:none!important;transform:none!important}
 .ilt-h{fill:none;stroke:var(--paper);stroke-width:16;stroke-linecap:round;stroke-linejoin:round}
 .idot2{stroke:#e0465e;stroke-width:3.5;stroke-dasharray:2 9;stroke-linecap:round}
+.v2bd{fill:var(--ink);stroke:var(--ink);stroke-width:3}
+.v2bd.v2draw{fill-opacity:0;stroke-dasharray:1;stroke-dashoffset:1}
+.v2bd.v2draw.show{fill-opacity:1;stroke-dashoffset:0;transition:stroke-dashoffset .7s ease-out,fill-opacity .4s ease .7s}
