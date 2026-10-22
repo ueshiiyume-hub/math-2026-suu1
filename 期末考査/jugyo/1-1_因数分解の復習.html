@@ -997,6 +997,25 @@ i.nv{font-style:normal;font-family:inherit}
 .v2bd{fill:#f2a35e;stroke:#e07a1f;stroke-width:3}
 .v2bd.v2draw{fill-opacity:0;stroke-dasharray:1;stroke-dashoffset:1}
 .v2bd.v2draw.show{fill-opacity:1;stroke-dashoffset:0;transition:stroke-dashoffset .7s ease-out,fill-opacity .4s ease .7s}
+/* ===== ③-2 ver 2：テンポよく 塗って 答える ===== */
+.p3list{position:absolute;left:28px;top:60px;width:190px;display:flex;flex-direction:column;gap:10px}
+.p3i{display:flex;gap:10px;align-items:baseline;padding:8px 16px;border-radius:10px;background:var(--b-bg);color:var(--muted);font-size:24px;font-weight:900;opacity:.55}
+.p3i .math{font-size:26px}
+.p3i.done{opacity:.8} .p3i.done::after{content:"✓";color:var(--b-ink);margin-left:auto}
+.p3i.on{opacity:1;background:var(--r-bg);color:var(--r-ink);transform:translateX(8px);box-shadow:0 3px 0 var(--r-bd)}
+.p3q{position:absolute;left:24px;top:18px;font-size:46px;white-space:nowrap}
+.p3w{position:absolute;left:24px;top:92px;font-size:52px;font-weight:900;color:var(--b-ink);white-space:nowrap;font-family:"Zen Maru Gothic",sans-serif}
+.p3w.on{opacity:0;transition:opacity .25s}
+.p3w .v2sub{font-size:34px}
+.p3a{display:flex;align-items:baseline;gap:16px}
+.p3a .math{font-family:"STIX Two Text",serif;font-weight:700}
+.p3why{font-size:28px;color:var(--muted)}
+.p3g{position:absolute;left:24px;top:170px}
+.dcard.p3 .v2c{left:250px}
+.p3sum{gap:20px}
+.p3s{width:270px;height:300px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;text-align:center}
+.p3st{font-size:28px;font-weight:900;color:var(--muted)}
+.p3sa{font-size:36px;font-weight:900;color:var(--accent);line-height:1.3}
 
 /* ===== 手書き ===== */
 #ink{position:fixed;left:0;top:0;z-index:15;pointer-events:none;touch-action:none}

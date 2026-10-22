@@ -407,6 +407,7 @@ const DECK = {title:'①-5 2次方程式の解', pages:[
 sys.path.insert(0, B); import decks_kimatsu2; decks_kimatsu2.add(decks)
 # ③-1 ver 2.0（作り直し。ver 1.4 は そのまま 残す）
 import decks_v2; decks_v2.add(decks)
+import decks_32; decks_32.add(decks)   # ③-2 ver 2
 
 # バージョンと 日付（versions.json）。直したら v と date を 書きかえる。表紙の 右下に 出る
 import json
