@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>数学C 解説スライド</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@400;500&family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bgimg:linear-gradient(135deg,#fdeef2 0%,#f4effb 48%,#ebf6f1 100%);
+  --grid:rgba(140,155,200,.17); --grid2:rgba(140,155,200,.30);
+  --ink:#4f4760; --muted:#8c849c; --paper:#fffdf9; --accent:#d4677f;
+  --r-bg:#fbdde1; --r-bd:#f1b3bd; --b-bg:#dde8f8; --b-ink:#4f7cc0;
+  --shadow:0 1px 0 rgba(120,100,140,.06),0 10px 26px rgba(120,100,140,.13);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bgimg:linear-gradient(135deg,#302c3e 0%,#2b2f40 50%,#2a3532 100%);
+    --grid:rgba(220,210,255,.07); --grid2:rgba(220,210,255,.12);
+    --ink:#f0ebf6; --muted:#b9b1c9; --paper:#3b384f; --accent:#ff9fb3;
+    --r-bg:#5a3a48; --r-bd:#8a5567; --b-bg:#33435e; --b-ink:#b3cdf5;
+  }
+}
+:root[data-theme="dark"]{
+  --bgimg:linear-gradient(135deg,#302c3e 0%,#2b2f40 50%,#2a3532 100%);
+  --grid:rgba(220,210,255,.07); --grid2:rgba(220,210,255,.12);
+  --ink:#f0ebf6; --muted:#b9b1c9; --paper:#3b384f; --accent:#ff9fb3;
+  --r-bg:#5a3a48; --r-bd:#8a5567; --b-bg:#33435e; --b-ink:#b3cdf5;
+}
+*{box-sizing:border-box}
+html{min-height:100%}
+body{margin:0;min-height:100vh;color:var(--ink);background-color:#f6f0f7;
+  background-image:
+    linear-gradient(var(--grid2) 1px,transparent 1px),linear-gradient(90deg,var(--grid2) 1px,transparent 1px),
+    linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px),
+    var(--bgimg);
+  background-size:140px 140px,140px 140px,28px 28px,28px 28px,100% 100%;
+  background-attachment:fixed;
+  font-family:"Zen Maru Gothic","Hiragino Maru Gothic ProN","Yu Gothic",Meiryo,sans-serif;font-weight:700}
+main{max-width:1040px;margin:0 auto;padding:48px 16px 64px}
+.kicker{display:inline-block;background:var(--b-bg);color:var(--b-ink);border-radius:999px;padding:2px 18px;font-size:16px;font-weight:900}
+h1{font-family:"Kiwi Maru",serif;font-weight:500;font-size:clamp(32px,6vw,52px);margin:14px 0 6px;letter-spacing:.04em}
+h1 .mk{background:linear-gradient(transparent 62%,var(--r-bg) 62%);padding:0 4px}
+.lead{color:var(--muted);font-size:17px;margin:0 0 40px}
+.list{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:40px 30px}
+.card{position:relative;display:block;background:var(--paper);border-radius:6px;box-shadow:var(--shadow);padding:30px 24px 22px;
+  color:inherit;text-decoration:none;transition:transform .25s}
+.card:hover,.card:focus-visible{transform:translateY(-6px) rotate(0deg)!important}
+.card:focus-visible{outline:3px dashed var(--accent);outline-offset:4px}
+.tape{position:absolute;left:50%;top:-14px;width:112px;height:28px;margin-left:-56px;opacity:.88;
+  clip-path:polygon(2% 0,98% 0,100% 16%,97% 32%,100% 50%,97% 68%,100% 84%,98% 100%,2% 100%,0 84%,3% 68%,0 50%,3% 32%,0 16%)}
+.t-pink{background:repeating-linear-gradient(45deg,rgba(255,255,255,.38) 0 6px,rgba(255,255,255,0) 6px 12px),#f5c2cc}
+.t-mint{background:radial-gradient(circle,rgba(255,255,255,.7) 2px,transparent 2.6px) 0 0/12px 12px,#bfe5d0}
+.t-yellow{background:repeating-linear-gradient(90deg,rgba(255,255,255,.35) 0 4px,rgba(255,255,255,0) 4px 14px),#f8e2a2}
+.t-lav{background:linear-gradient(rgba(255,255,255,.35) 1px,transparent 1px) 0 0/8px 8px,linear-gradient(90deg,rgba(255,255,255,.35) 1px,transparent 1px) 0 0/8px 8px,#d8cdf1}
+.t-blue{background:repeating-linear-gradient(-45deg,rgba(255,255,255,.4) 0 5px,rgba(255,255,255,0) 5px 10px),#c4d8f2}
+.date{font-size:14px;color:var(--accent)}
+.title{font-family:"Kiwi Maru",serif;font-weight:500;font-size:24px;line-height:1.4;margin:6px 0 10px}
+.desc{font-size:15px;color:var(--muted);line-height:1.6;margin:0}
+.tags{margin-top:14px;display:flex;flex-wrap:wrap;gap:6px}
+.toplink{display:inline-block;margin-bottom:18px;font-size:15px;font-weight:900;color:var(--b-ink);background:var(--b-bg);border-radius:999px;padding:4px 16px;text-decoration:none}
+.tag{font-size:13px;border:1.5px solid var(--r-bd);color:var(--accent);border-radius:999px;padding:0 10px}
+.empty{grid-column:1/-1;background:var(--paper);border:2px dashed var(--r-bd);border-radius:6px;padding:28px 20px;text-align:center;color:var(--muted);font-size:17px}
+</style>
+<script>window.THEME_BTN_SIDE="r";</script>
+<!-- 明るい／暗い の 切りかえ（スマホでも 押せる ボタン）。選んだ ものは この サイト 全体で 覚える -->
+<style>
+#themebtn{position:fixed;z-index:26;top:10px;width:40px;height:40px;border-radius:50%;border:2px solid var(--r-bd);background:var(--paper);color:var(--ink);font-size:20px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;box-shadow:0 2px 6px rgba(0,0,0,.12)}
+#themebtn.l{left:12px} #themebtn.r{right:12px}
+</style>
+<script>
+(function(){
+  var d=document.documentElement;
+  try{ var t=localStorage.getItem('theme'); if(t) d.dataset.theme=t; }catch(e){}
+  function isDark(){ return d.dataset.theme ? d.dataset.theme==='dark' : matchMedia('(prefers-color-scheme: dark)').matches; }
+  window.toggleTheme=function(){ d.dataset.theme = isDark() ? 'light' : 'dark'; try{ localStorage.setItem('theme', d.dataset.theme); }catch(e){} paint(); };
+  function paint(){ var b=document.getElementById('themebtn'); if(b){ b.textContent = isDark() ? '☀' : '🌙'; b.title = isDark() ? '明るく する' : '暗く する'; } }
+  document.addEventListener('DOMContentLoaded',function(){
+    var b=document.createElement('button'); b.id='themebtn'; b.className=window.THEME_BTN_SIDE||'l';
+    b.addEventListener('click',function(e){ e.stopPropagation(); e.preventDefault(); toggleTheme(); });
+    document.body.appendChild(b); paint();
+  });
+})();
+</script>
+
+</head>
+<body>
+<main>
+  
+  <span class="kicker">数学C</span>
+  <h1><span class="mk">数学C</span> 解説スライド</h1>
+  <p class="lead">見たい 単元の カードを クリックしてね</p>
+  <div class="list" id="list"></div>
+</main>
+<script>
+/* カードの一覧（menus.py が書きこむ） */
+const ITEMS = [];
+const tapes = ['pink','mint','yellow','lav','blue'];
+document.getElementById('list').innerHTML = ITEMS.length ? ITEMS.map((it,i)=>`
+  <a class="card" href="${it.href}" style="transform:rotate(${i%2?1.2:-1.2}deg)">
+    <span class="tape t-${tapes[i%tapes.length]}"></span>
+    <div class="date">${it.no}</div>
+    <div class="title">${it.title}</div>
+    <p class="desc">${it.desc}</p>
+    
+  </a>`).join('') : '<div class="empty">これから 追加していくよ。お楽しみに！</div>';
+</script>
+</body>
+</html>
