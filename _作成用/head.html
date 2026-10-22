@@ -225,12 +225,25 @@ span.r{display:inline-block}
   background:linear-gradient(90deg,#f5b8c4,#f8dc9a,#b7e2c8,#bcd2f2,#d6c8f0)}
 .ui{position:absolute;z-index:5;right:24px;bottom:12px;font-size:14px;color:var(--muted);transition:opacity .3s}
 .ui.hide,#bar.hide{opacity:0}
-#jump{position:fixed;z-index:20;left:12px;bottom:6px;display:flex;gap:6px;align-items:center;transition:opacity .3s}
+#jump{position:fixed;z-index:20;left:12px;bottom:10px;display:flex;gap:8px;align-items:center;transition:opacity .3s}
 #jump.hide{opacity:0;pointer-events:none}
-#jump span{font:700 12px "Zen Maru Gothic",sans-serif;color:var(--muted);margin-right:2px}
-#jump button{font:700 13px "Zen Maru Gothic",sans-serif;min-width:30px;height:26px;padding:0 8px;border-radius:13px;border:1.5px solid var(--r-bd);background:var(--paper);color:var(--ink);cursor:pointer}
-#jump button:hover{background:var(--r-bg)}
-#jump button.on{background:var(--r-bg);color:var(--r-ink)}
+#jump.open{z-index:40}
+#jump .tocbtn{font:900 14px "Zen Maru Gothic",sans-serif;height:32px;padding:0 14px;border-radius:16px;border:2px solid var(--r-bd);background:var(--paper);color:var(--ink);cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.1)}
+#jump .pgno{font:700 13px "Zen Maru Gothic",sans-serif;color:var(--muted)}
+#jump .tocp{position:fixed;z-index:31;left:0;top:0;bottom:0;width:min(340px,86vw);background:var(--paper);box-shadow:4px 0 24px rgba(0,0,0,.18);transform:translateX(-105%);transition:transform .3s ease;display:flex;flex-direction:column;padding:14px 14px 18px;box-sizing:border-box}
+#jump.open .tocp{transform:none}
+#jump .tocbg{position:fixed;z-index:30;inset:0;background:rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:opacity .3s}
+#jump.open .tocbg{opacity:1;pointer-events:auto}
+#jump .toch{display:flex;align-items:center;justify-content:space-between;gap:8px;font:900 16px "Zen Maru Gothic",sans-serif;color:var(--ink);margin-bottom:8px}
+#jump .tocx{border:none;background:none;font-size:20px;color:var(--muted);cursor:pointer;padding:4px 8px}
+#jump .home{display:inline-block;align-self:flex-start;margin-bottom:10px;font:900 13px "Zen Maru Gothic",sans-serif;color:var(--b-ink);background:var(--b-bg);border-radius:999px;padding:4px 14px;text-decoration:none}
+#jump .tocl{overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:2px}
+#jump .tg{font:900 14px "Zen Maru Gothic",sans-serif;color:var(--accent);margin:10px 0 2px;padding-left:4px}
+#jump .ti{text-align:left;font:700 15px "Zen Maru Gothic",sans-serif;padding:8px 12px;border:none;border-radius:10px;background:none;color:var(--ink);cursor:pointer}
+#jump .ti.in{padding-left:26px}
+#jump .ti:hover{background:var(--b-bg)}
+#jump .ti.on{background:var(--r-bg);color:var(--r-ink)}
+.v2n{cursor:pointer}
 @media (prefers-reduced-motion: reduce){
   .slide,.r.show,#bar,.tm,.cm,.lh,.curve.show{transition-duration:.01s}
   .deco,.tm.cur{animation:none}

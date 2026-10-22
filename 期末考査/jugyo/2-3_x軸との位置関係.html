@@ -225,12 +225,25 @@ span.r{display:inline-block}
   background:linear-gradient(90deg,#f5b8c4,#f8dc9a,#b7e2c8,#bcd2f2,#d6c8f0)}
 .ui{position:absolute;z-index:5;right:24px;bottom:12px;font-size:14px;color:var(--muted);transition:opacity .3s}
 .ui.hide,#bar.hide{opacity:0}
-#jump{position:fixed;z-index:20;left:12px;bottom:6px;display:flex;gap:6px;align-items:center;transition:opacity .3s}
+#jump{position:fixed;z-index:20;left:12px;bottom:10px;display:flex;gap:8px;align-items:center;transition:opacity .3s}
 #jump.hide{opacity:0;pointer-events:none}
-#jump span{font:700 12px "Zen Maru Gothic",sans-serif;color:var(--muted);margin-right:2px}
-#jump button{font:700 13px "Zen Maru Gothic",sans-serif;min-width:30px;height:26px;padding:0 8px;border-radius:13px;border:1.5px solid var(--r-bd);background:var(--paper);color:var(--ink);cursor:pointer}
-#jump button:hover{background:var(--r-bg)}
-#jump button.on{background:var(--r-bg);color:var(--r-ink)}
+#jump.open{z-index:40}
+#jump .tocbtn{font:900 14px "Zen Maru Gothic",sans-serif;height:32px;padding:0 14px;border-radius:16px;border:2px solid var(--r-bd);background:var(--paper);color:var(--ink);cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.1)}
+#jump .pgno{font:700 13px "Zen Maru Gothic",sans-serif;color:var(--muted)}
+#jump .tocp{position:fixed;z-index:31;left:0;top:0;bottom:0;width:min(340px,86vw);background:var(--paper);box-shadow:4px 0 24px rgba(0,0,0,.18);transform:translateX(-105%);transition:transform .3s ease;display:flex;flex-direction:column;padding:14px 14px 18px;box-sizing:border-box}
+#jump.open .tocp{transform:none}
+#jump .tocbg{position:fixed;z-index:30;inset:0;background:rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:opacity .3s}
+#jump.open .tocbg{opacity:1;pointer-events:auto}
+#jump .toch{display:flex;align-items:center;justify-content:space-between;gap:8px;font:900 16px "Zen Maru Gothic",sans-serif;color:var(--ink);margin-bottom:8px}
+#jump .tocx{border:none;background:none;font-size:20px;color:var(--muted);cursor:pointer;padding:4px 8px}
+#jump .home{display:inline-block;align-self:flex-start;margin-bottom:10px;font:900 13px "Zen Maru Gothic",sans-serif;color:var(--b-ink);background:var(--b-bg);border-radius:999px;padding:4px 14px;text-decoration:none}
+#jump .tocl{overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:2px}
+#jump .tg{font:900 14px "Zen Maru Gothic",sans-serif;color:var(--accent);margin:10px 0 2px;padding-left:4px}
+#jump .ti{text-align:left;font:700 15px "Zen Maru Gothic",sans-serif;padding:8px 12px;border:none;border-radius:10px;background:none;color:var(--ink);cursor:pointer}
+#jump .ti.in{padding-left:26px}
+#jump .ti:hover{background:var(--b-bg)}
+#jump .ti.on{background:var(--r-bg);color:var(--r-ink)}
+.v2n{cursor:pointer}
 @media (prefers-reduced-motion: reduce){
   .slide,.r.show,#bar,.tm,.cm,.lh,.curve.show{transition-duration:.01s}
   .deco,.tm.cur{animation:none}
@@ -1013,6 +1026,7 @@ body.portrait #inkbar{top:6px;right:6px}
 <style>
 #themebtn{position:fixed;z-index:26;top:10px;width:40px;height:40px;border-radius:50%;border:2px solid var(--r-bd);background:var(--paper);color:var(--ink);font-size:20px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;box-shadow:0 2px 6px rgba(0,0,0,.12)}
 #themebtn.l{left:12px} #themebtn.r{right:12px}
+#themebtn.inj{position:static;width:32px;height:32px;font-size:16px;box-shadow:0 2px 6px rgba(0,0,0,.1)}
 </style>
 <script>
 (function(){
@@ -1024,7 +1038,9 @@ body.portrait #inkbar{top:6px;right:6px}
   document.addEventListener('DOMContentLoaded',function(){
     var b=document.createElement('button'); b.id='themebtn'; b.className=window.THEME_BTN_SIDE||'l';
     b.addEventListener('click',function(e){ e.stopPropagation(); e.preventDefault(); toggleTheme(); });
-    document.body.appendChild(b); paint();
+    var j=document.getElementById('jump');   // スライドでは 左下の「目次」の 横に 置く
+    if(j){ b.className='inj'; j.insertBefore(b, j.querySelector('.tocp')); } else document.body.appendChild(b);
+    paint();
   });
 })();
 </script>
@@ -1733,7 +1749,7 @@ const GARW = (x1,y1,x2,y2,s) => { const ym=(y1+y2)/2, hh=(y2-y1)*.28, hx=x2-(y2-
   return `<g class="gs" data-s="${s}"><polygon points="${x1},${ym-hh} ${hx},${ym-hh} ${hx},${y1} ${x2},${ym} ${hx},${y2} ${hx},${ym+hh} ${x1},${ym+hh}" fill="#c9dca6"/></g>`; };
 
 /* ====== このプリントのスライド ====== */
-const VER = '<i class="nv">ver</i> 1.0　2026-10-14';
+const VER = '<i class="nv">ver</i> 1.1　2026-10-22';
 
 const IMG = s => s;
 const A = (s,r,h,fs,al) => ({s,r,h,fs,al});
@@ -1877,12 +1893,32 @@ const relayout = r => { layoutFly(r); layoutDist(r); if(typeof layoutExtra==='fu
 if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>relayout(stage));
 const bar = document.getElementById('bar'), ui = document.getElementById('ui');
 const jump = document.getElementById('jump');
-jump.innerHTML='<a class="home" href="目次.html">目次</a><span>ジャンプ</span>'+names.map((n,i)=>`<button data-i="${i}">${n}</button>`).join('');
+/* 目次パネル：ふだんは 左下の「≡ 目次」と ページ番号 だけ。押すと 左から パネルが 出る */
+const GRP = /^([⑴⑵⑶⑷⑸⑹⑺⑻⑼⑽①②③④⑤⑥⑦⑧⑨])\s*(.*)$/;
+const tocRows = (()=>{ let h='', g=null;
+  names.forEach((n,i)=>{ const m=n.match(GRP);
+    if(m){ if(m[1]!==g){ g=m[1]; h+=`<div class="tg">${(DECK.groups&&DECK.groups[g])||g}</div>`; } h+=`<button class="ti in" data-i="${i}">${m[2]||n}</button>`; }
+    else { g=null; h+=`<button class="ti" data-i="${i}">${n}</button>`; } });
+  return h; })();
+jump.innerHTML = `<button class="tocbtn" title="目次">≡ 目次</button><span class="pgno"></span>
+  <div class="tocp"><div class="toch"><b>${DECK.title||''}</b><button class="tocx" title="閉じる">✕</button></div>
+  <a class="home" href="目次.html">← ほかの プリントへ</a><div class="tocl">${tocRows}</div></div><div class="tocbg"></div>`;
+const tocOpen = on => { jump.classList.toggle('open', on); if(on){ const c=jump.querySelector('.ti.on'); if(c) c.scrollIntoView({block:'center'}); } };
 jump.addEventListener('click',e=>{
+  if(e.target.closest('a')) return;
   e.stopPropagation();
-  const b=e.target.closest('button'); if(!b) return;
-  stopAuto(); si=+b.dataset.i; st=0; render(); b.blur();
+  if(e.target.closest('.tocbtn')) return tocOpen(!jump.classList.contains('open'));
+  if(e.target.closest('.tocx,.tocbg')) return tocOpen(false);
+  const b=e.target.closest('.ti'); if(!b) return;
+  stopAuto(); si=+b.dataset.i; st=0; render(); tocOpen(false);
 });
+/* 左上の 現在地（❶ 式 ／ ❷ 塗る ／ ❸ 答える）も 押すと 飛べる */
+document.addEventListener('click',e=>{
+  const n=e.target.closest('.v2n'); if(!n) return;
+  e.stopImmediatePropagation();
+  const k='❶❷❸'[[...n.parentNode.children].indexOf(n)], m=names[si].match(GRP), pre=m?m[1]:'';
+  const i=names.findIndex(x=>x.startsWith(pre) && x.includes(k)); if(i>=0){ stopAuto(); si=i; st=0; render(); }
+}, true);
 let si = 0, st = 0, timer = null, layoutTimer = null;
 
 function render(){
@@ -1902,7 +1938,8 @@ function render(){
   const total = maxStep.reduce((a,m)=>a+m+1,0);
   const done = maxStep.slice(0,si).reduce((a,m)=>a+m+1,0)+st+1;
   bar.style.width = (done/total*100)+'%';
-  [...jump.querySelectorAll('button')].forEach(b=>b.classList.toggle('on',+b.dataset.i===si));
+  [...jump.querySelectorAll('.ti')].forEach(b=>b.classList.toggle('on',+b.dataset.i===si));
+  jump.querySelector('.pgno').textContent = `${si+1} / ${els.length}`;
   ui.textContent = `${si+1} / ${els.length}　←→ 進む・戻る　P 自動再生　Home 最初から　F 全画面　H 表示を隠す　T 明暗${typeof INK!=='undefined'?'　W 書きこむ':''}`;
 }
 function next(){ if(st<maxStep[si]) st++; else if(si<els.length-1){si++;st=0;} else stopAuto(); render(); }
@@ -1926,7 +1963,7 @@ document.addEventListener('keydown',e=>{
       d.dataset.theme = dark ? 'light' : 'dark'; }
   }
 });
-document.addEventListener('click',e=>{ if(e.target.closest('a')) return; stopAuto(); if(e.clientX < document.documentElement.clientWidth/3) prev(); else next(); });
+document.addEventListener('click',e=>{ if(e.target.closest('a,#jump,#inkbar,#themebtn')) return; stopAuto(); if(e.clientX < document.documentElement.clientWidth/3) prev(); else next(); });
 /* 画面に合わせる：縦長（スマホ）なら 720×1280、横長なら 1280×720 */
 function fit(){
   const vw = document.documentElement.clientWidth, vh = document.documentElement.clientHeight;   // スマホでは innerWidth がずれることがある
@@ -1934,8 +1971,6 @@ function fit(){
   document.body.classList.toggle('portrait', portrait);
   const W = portrait?720:1280, H = portrait?1280:720, avail = vh - (portrait?52:0);
   stage.style.setProperty('--s', Math.min(vw/W, avail/H));
-  jump.style.top = portrait ? (vh-46)+'px' : '';   // スマホでは画面の下にそろえる
-  jump.style.bottom = portrait ? 'auto' : '';
   relayout(els[si]);
 }
 addEventListener('resize',fit); fit(); render();

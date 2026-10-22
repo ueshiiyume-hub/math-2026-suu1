@@ -2,6 +2,7 @@
 <style>
 #themebtn{position:fixed;z-index:26;top:10px;width:40px;height:40px;border-radius:50%;border:2px solid var(--r-bd);background:var(--paper);color:var(--ink);font-size:20px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;box-shadow:0 2px 6px rgba(0,0,0,.12)}
 #themebtn.l{left:12px} #themebtn.r{right:12px}
+#themebtn.inj{position:static;width:32px;height:32px;font-size:16px;box-shadow:0 2px 6px rgba(0,0,0,.1)}
 </style>
 <script>
 (function(){
@@ -13,7 +14,9 @@
   document.addEventListener('DOMContentLoaded',function(){
     var b=document.createElement('button'); b.id='themebtn'; b.className=window.THEME_BTN_SIDE||'l';
     b.addEventListener('click',function(e){ e.stopPropagation(); e.preventDefault(); toggleTheme(); });
-    document.body.appendChild(b); paint();
+    var j=document.getElementById('jump');   // スライドでは 左下の「目次」の 横に 置く
+    if(j){ b.className='inj'; j.insertBefore(b, j.querySelector('.tocp')); } else document.body.appendChild(b);
+    paint();
   });
 })();
 </script>

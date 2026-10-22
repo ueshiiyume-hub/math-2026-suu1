@@ -73,12 +73,32 @@ const relayout = r => { layoutFly(r); layoutDist(r); if(typeof layoutExtra==='fu
 if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>relayout(stage));
 const bar = document.getElementById('bar'), ui = document.getElementById('ui');
 const jump = document.getElementById('jump');
-jump.innerHTML='<a class="home" href="目次.html">目次</a><span>ジャンプ</span>'+names.map((n,i)=>`<button data-i="${i}">${n}</button>`).join('');
+/* 目次パネル：ふだんは 左下の「≡ 目次」と ページ番号 だけ。押すと 左から パネルが 出る */
+const GRP = /^([⑴⑵⑶⑷⑸⑹⑺⑻⑼⑽①②③④⑤⑥⑦⑧⑨])\s*(.*)$/;
+const tocRows = (()=>{ let h='', g=null;
+  names.forEach((n,i)=>{ const m=n.match(GRP);
+    if(m){ if(m[1]!==g){ g=m[1]; h+=`<div class="tg">${(DECK.groups&&DECK.groups[g])||g}</div>`; } h+=`<button class="ti in" data-i="${i}">${m[2]||n}</button>`; }
+    else { g=null; h+=`<button class="ti" data-i="${i}">${n}</button>`; } });
+  return h; })();
+jump.innerHTML = `<button class="tocbtn" title="目次">≡ 目次</button><span class="pgno"></span>
+  <div class="tocp"><div class="toch"><b>${DECK.title||''}</b><button class="tocx" title="閉じる">✕</button></div>
+  <a class="home" href="目次.html">← ほかの プリントへ</a><div class="tocl">${tocRows}</div></div><div class="tocbg"></div>`;
+const tocOpen = on => { jump.classList.toggle('open', on); if(on){ const c=jump.querySelector('.ti.on'); if(c) c.scrollIntoView({block:'center'}); } };
 jump.addEventListener('click',e=>{
+  if(e.target.closest('a')) return;
   e.stopPropagation();
-  const b=e.target.closest('button'); if(!b) return;
-  stopAuto(); si=+b.dataset.i; st=0; render(); b.blur();
+  if(e.target.closest('.tocbtn')) return tocOpen(!jump.classList.contains('open'));
+  if(e.target.closest('.tocx,.tocbg')) return tocOpen(false);
+  const b=e.target.closest('.ti'); if(!b) return;
+  stopAuto(); si=+b.dataset.i; st=0; render(); tocOpen(false);
 });
+/* 左上の 現在地（❶ 式 ／ ❷ 塗る ／ ❸ 答える）も 押すと 飛べる */
+document.addEventListener('click',e=>{
+  const n=e.target.closest('.v2n'); if(!n) return;
+  e.stopImmediatePropagation();
+  const k='❶❷❸'[[...n.parentNode.children].indexOf(n)], m=names[si].match(GRP), pre=m?m[1]:'';
+  const i=names.findIndex(x=>x.startsWith(pre) && x.includes(k)); if(i>=0){ stopAuto(); si=i; st=0; render(); }
+}, true);
 let si = 0, st = 0, timer = null, layoutTimer = null;
 
 function render(){
@@ -98,7 +118,8 @@ function render(){
   const total = maxStep.reduce((a,m)=>a+m+1,0);
   const done = maxStep.slice(0,si).reduce((a,m)=>a+m+1,0)+st+1;
   bar.style.width = (done/total*100)+'%';
-  [...jump.querySelectorAll('button')].forEach(b=>b.classList.toggle('on',+b.dataset.i===si));
+  [...jump.querySelectorAll('.ti')].forEach(b=>b.classList.toggle('on',+b.dataset.i===si));
+  jump.querySelector('.pgno').textContent = `${si+1} / ${els.length}`;
   ui.textContent = `${si+1} / ${els.length}　←→ 進む・戻る　P 自動再生　Home 最初から　F 全画面　H 表示を隠す　T 明暗${typeof INK!=='undefined'?'　W 書きこむ':''}`;
 }
 function next(){ if(st<maxStep[si]) st++; else if(si<els.length-1){si++;st=0;} else stopAuto(); render(); }
@@ -122,7 +143,7 @@ document.addEventListener('keydown',e=>{
       d.dataset.theme = dark ? 'light' : 'dark'; }
   }
 });
-document.addEventListener('click',e=>{ if(e.target.closest('a')) return; stopAuto(); if(e.clientX < document.documentElement.clientWidth/3) prev(); else next(); });
+document.addEventListener('click',e=>{ if(e.target.closest('a,#jump,#inkbar,#themebtn')) return; stopAuto(); if(e.clientX < document.documentElement.clientWidth/3) prev(); else next(); });
 /* 画面に合わせる：縦長（スマホ）なら 720×1280、横長なら 1280×720 */
 function fit(){
   const vw = document.documentElement.clientWidth, vh = document.documentElement.clientHeight;   // スマホでは innerWidth がずれることがある
@@ -130,8 +151,6 @@ function fit(){
   document.body.classList.toggle('portrait', portrait);
   const W = portrait?720:1280, H = portrait?1280:720, avail = vh - (portrait?52:0);
   stage.style.setProperty('--s', Math.min(vw/W, avail/H));
-  jump.style.top = portrait ? (vh-46)+'px' : '';   // スマホでは画面の下にそろえる
-  jump.style.bottom = portrait ? 'auto' : '';
   relayout(els[si]);
 }
 addEventListener('resize',fit); fit(); render();

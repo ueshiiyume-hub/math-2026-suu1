@@ -305,7 +305,7 @@ const w5b = AFTER2(PR({...P2_, phase:2, cm:[
   `書き直して ${M('x ≦ −1')}。`,
   `2つを まとめて、<i class="nv">Step</i>❸ の 枠に ${M('−2 ≦ x ≦ −1')}。　<b>完成！</b>`]}));
 
-const DECK = {title:'③-1 2次不等式の解法 ver 2', pages:[
+const DECK = {title:'③-1 2次不等式の解法', groups:{'⑴':`⑴ ${EQ1}`, '⑵':`⑵ ${EQ2}`}, pages:[
   {name:'表紙', html:coverF(KK2, '<span class="mk">2次不等式</span><br>の 解き方', '塗って 答える', '', POL, '3つの Step')},
   {name:'やること', html:v1}, {name:'⑴ ❶ ＝0 に', html:va}, {name:'⑴ ❶ 解く', html:vb}, {name:'⑴ ❶ プリント', html:s2v}, {name:'⑴ ❷ 上を塗る', html:v3}, {name:'⑴ ❷ x軸上', html:v4}, {name:'⑴ ❷ プリント', html:s5a},
   {name:'⑴ ❸ 答える', html:v5}, {name:'⑴ 書きこみ', html:s5b},
