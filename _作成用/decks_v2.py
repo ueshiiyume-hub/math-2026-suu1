@@ -14,8 +14,12 @@ const BIG = (sm, big, sub, s, o) => `<div class="v2kw lh" data-s="${s??0}"${o!==
 const GV = {ay:236, cx:1, sc:40, k:20, r:[-1,3], top:8, W:880, H:320};   // 頂点は x軸の 少し 下、上に 高く   // Step❶ の グラフと 同じ 形（しゅっと）
 
 /* 塗った あとの 形（アニメーション なし）、白丸（s 番で かく、draw＝線を なぞって かく） */
-const E = 0.1;   // 塗りは x軸の この ぶん 手前で 止める（白丸の ふち）
-const PAINTED = (g,a,b) => `<g class="ipaint show v2still"><path d="${g.path(g.xa,a)}"/><path d="${g.path(b,g.xb)}"/></g>`;
+const E = -0.15;   // 塗りは 少し 先まで かいて、x軸の ところで まっすぐ 切る（x軸の ギリギリ まで、x軸は 塗らない）
+let CLN = 0;
+/* 塗りを x軸の すぐ 上で 切る（ClipPath） */
+const UPCUT = (g, inner) => { const id = 'v2cut' + (++CLN);
+  return `<clipPath id="${id}"><rect x="0" y="0" width="${g.W}" height="${(g.ay-2).toFixed(1)}"/></clipPath><g clip-path="url(#${id})">${inner}</g>`; };
+const PAINTED = (g,a,b) => UPCUT(g, `<g class="ipaint show v2still"><path d="${g.path(g.xa,a)}"/><path d="${g.path(b,g.xb)}"/></g>`);
 const WD = (g,x,s,draw) => `<circle class="v2wd${draw?' v2draw':''}${s!==undefined?' gs':''}"${s!==undefined?` data-s="${s}"`:''} cx="${g.X(x).toFixed(1)}" cy="${g.ay}" r="9" pathLength="1"/>`;
 
 /* 1：これから やること */
@@ -82,7 +86,7 @@ const v3 = `
     ${NAV(2)}
     <div class="v2c">
       ${BIG(`<span class="math">x${P2} − 2x − 3</span> を <span class="math">y</span> と みる`, '0より 大きい', '（上を 塗る）')}
-      <div class="v2g">${g3.svg(`<rect class="v2up gs" data-s="1" x="10" y="2" width="${g3.W-20}" height="${g3.ay-2}"/>`, g3.base, g3.seg(g3.xa,-1-E,2), g3.seg(3+E,g3.xb,2))}</div>
+      <div class="v2g">${g3.svg(`<rect class="v2up gs" data-s="1" x="10" y="2" width="${g3.W-20}" height="${g3.ay-2}"/>`, g3.base, UPCUT(g3, g3.seg(g3.xa,-1-E,2) + g3.seg(3+E,g3.xb,2)))}</div>
     </div>
   </div>
   ${cbar([
@@ -100,7 +104,7 @@ const v4 = `
       ${BIG('＞ に ＝ が ない','x軸上は 塗らない')}
       <div class="v2g v2zw" style="width:${g4.W}px;height:${g4.H}px"><div class="v2zoom" data-wa="1" data-wb="4" style="transform-origin:${g4.X(-1)}px ${g4.ay}px">
         ${g4.svg(`<rect class="v2up show" x="10" y="2" width="${g4.W-20}" height="${g4.ay-2}"/>`, g4.base, PAINTED(g4,-1-E,3+E),
-          `<g class="gs v2zl" data-s="2" data-o="4"><path class="v2zarw" d="M${g4.X(-1.1)+30} ${g4.Y(-1.1)-10} L${g4.X(-1.1)+6} ${g4.Y(-1.1)-2}"/><polygon class="v2zah" points="${g4.X(-1.1)+5},${g4.Y(-1.1)-1.6} ${g4.X(-1.1)+10},${g4.Y(-1.1)-5.5} ${g4.X(-1.1)+11},${g4.Y(-1.1)-1}"/><text class="v2ztx" x="${g4.X(-1.1)+32}" y="${g4.Y(-1.1)-8}">ギリギリ ここまで 塗る</text></g>`,
+          `<g class="gs v2zl" data-s="2" data-o="4"><path class="v2zarw" d="M${g4.X(-1.03)+30} ${(g4.ay-4)-10} L${g4.X(-1.03)+6} ${(g4.ay-4)-2}"/><polygon class="v2zah" points="${g4.X(-1.03)+5},${(g4.ay-4)-1.6} ${g4.X(-1.03)+10},${(g4.ay-4)-5.5} ${g4.X(-1.03)+11},${(g4.ay-4)-1}"/><text class="v2ztx" x="${g4.X(-1.03)+32}" y="${(g4.ay-4)-8}">ギリギリ ここまで 塗る</text></g>`,
           WD(g4,-1,3,true), `<g class="gs v2zl" data-s="3" data-o="4"><text class="v2ztx" x="${g4.X(-1)+14}" y="${g4.ay+16}">白丸（x軸上は 塗らない）</text></g>`,
           WD(g4,3,4))}
       </div></div>

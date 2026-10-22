@@ -569,7 +569,7 @@ i.nv{font-style:normal;font-family:inherit}
 .v2zoom.wv-on{transform:scale(3.4)}
 .v2still path{stroke-dasharray:none!important;stroke-dashoffset:0!important}
 .v2wd{fill:var(--paper);stroke:var(--ink);stroke-width:3}
-.v2wd.v2draw{stroke-dasharray:1;stroke-dashoffset:1;opacity:1}
+.v2wd.v2draw{stroke-dasharray:1;stroke-dashoffset:1}
 .v2wd.v2draw.show{stroke-dashoffset:0;transition:stroke-dashoffset .8s ease-out}
 .v2zl.on{opacity:0}
 .v2ztx{font-family:"Zen Maru Gothic",sans-serif;font-size:9px;font-weight:900;fill:var(--accent)}
