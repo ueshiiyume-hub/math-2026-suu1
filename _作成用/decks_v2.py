@@ -164,7 +164,13 @@ const GV2 = {ay:150, cx:-1.5, sc:190, k:240, r:[-2,-1], top:8, W:880, H:316};   
 /* 塗りを x軸の すぐ 下で 切る */
 const DNCUT = (g, inner) => { const id = 'v2cut' + (++CLN);
   return `<clipPath id="${id}"><rect x="0" y="${(g.ay+2).toFixed(1)}" width="${g.W}" height="${g.H}"/></clipPath><g clip-path="url(#${id})">${inner}</g>`; };
-const PAINTED2 = g => DNCUT(g, `<g class="ipaint show v2still"><path d="${g.path(-2.15,-0.85)}"/></g>`);
+const PAINTED2 = (g, full) => { const seg = `<g class="ipaint show v2still"><path d="${g.path(-2.15,-0.85)}"/></g>`;
+  if(!full) return DNCUT(g, seg);
+  const id = 'v2cut' + (++CLN);   // x軸の 上まで（x軸上も 塗る）
+  return `<clipPath id="${id}"><rect x="0" y="${(g.ay-8).toFixed(1)}" width="${g.W}" height="${g.H}"/></clipPath><g clip-path="url(#${id})">${seg}</g>`; };
+/* x軸上 だけを 塗る 部分（s 番で 出る）：x軸の 線の 上まで オレンジが 来る */
+const AXPAINT = (g, s) => { const id = 'v2cut' + (++CLN);
+  return `<clipPath id="${id}"><rect x="0" y="${(g.ay-8).toFixed(1)}" width="${g.W}" height="10"/></clipPath><g clip-path="url(#${id})" class="gs" data-s="${s}"><g class="ipaint show v2still"><path d="${g.path(-2.15,-0.85)}"/></g></g>`; };
 const BD = (g,x,s,draw) => `<circle class="v2bd${draw?' v2draw':''}${s!==undefined?' gs':''}"${s!==undefined?` data-s="${s}"`:''} cx="${g.X(x).toFixed(1)}" cy="${g.ay}" r="9" pathLength="1"/>`;
 
 /* ❶ ＝0 に */
@@ -236,9 +242,9 @@ const w4 = `
     <div class="v2c">
       ${BIG('≦ に ＝ が ある','x軸上も 塗る')}
       <div class="v2g v2zw" style="width:${h4.W}px;height:${h4.H}px"><div class="v2zoom" data-wa="1" data-wb="4" style="transform-origin:${h4.X(-2)}px ${h4.ay}px">
-        ${h4.svg(`<rect class="v2up show" x="10" y="${h4.ay}" width="${h4.W-20}" height="${h4.H-h4.ay}"/>`, h4.base, PAINTED2(h4),
-          `<g class="gs v2zl" data-s="2" data-o="4"><path class="v2zarw" d="M${h4.X(-2)+34} ${h4.ay-12} L${h4.X(-1.97)+6} ${h4.ay+3}"/><text class="v2ztx" x="${h4.X(-2)+36}" y="${h4.ay-10}">x軸の すぐ 下まで 塗れた</text></g>`,
-          BD(h4,-2,3,true), `<g class="gs v2zl" data-s="3" data-o="4"><text class="v2ztx" x="${h4.X(-2)-14}" y="${h4.ay-14}" text-anchor="end">黒丸（x軸上も 塗る）</text></g>`,
+        ${h4.svg(`<rect class="v2up show" x="10" y="${h4.ay}" width="${h4.W-20}" height="${h4.H-h4.ay}"/>`, h4.base, PAINTED2(h4), AXPAINT(h4,2),
+          `<g class="gs v2zl" data-s="2" data-o="4"><path class="v2zarw" d="M${h4.X(-2)+34} ${h4.ay-12} L${h4.X(-1.97)+6} ${h4.ay+3}"/><text class="v2ztx" x="${h4.X(-2)+36}" y="${h4.ay-10}">x軸の 上まで 塗る</text></g>`,
+          BD(h4,-2,3,true), `<g class="gs v2zl" data-s="3" data-o="4"><text class="v2ztx" x="${h4.X(-2)-14}" y="${h4.ay-14}" text-anchor="end">黒丸（塗りつぶす）</text></g>`,
           BD(h4,-1,4))}
       </div></div>
     </div>
@@ -246,8 +252,8 @@ const w4 = `
   ${cbar([
     `今度は ≦。　＝ が ある ので、y ＝ 0 の x軸上も 答えに 入る。`,
     `−2 の ところに ぐっと 寄って みよう。`,
-    `0より 小さい ところは、x軸の すぐ 下まで 塗れて いる。`,
-    `＝ が ある ので <b>x軸上も 塗る</b>。　中まで 塗った <b>黒丸</b> を かく。`,
+    `＝ が ある ので <b>x軸上も 塗る</b>。　オレンジが x軸の 上まで 来る。`,
+    `x軸上も 塗った ことが 分かるように、塗って いる 色で 丸を <b>塗りつぶす</b>。　これが <b>黒丸</b>。`,
     `引いて 全体を 見る。　−1 も 同じ → <b>黒丸</b>。`])}`;
 const w5a = PR({...P2_, phase:2, upto:true, cm:[
   `全体を 見て みよう。　プリントの <i class="nv">Step</i>❷ の グラフ。`,
@@ -277,7 +283,7 @@ const w5 = `
     <div class="v2c">
       ${BIG('塗れた ところの x は？','x を 置く',null,0,6)}
       <div class="v2kw v2ans lh" data-s="6"><div class="v2sm">答え</div><div class="v2big math"><span class="v2mk">−2 ≦ x ≦ −1</span></div></div>
-      <div class="v2g">${h5.svg(D5L.band, D5R.band, `<rect class="v2up show" x="10" y="${h5.ay}" width="0" height="0"/>`, h5.base, PAINTED2(h5), BD(h5,-2), BD(h5,-1),
+      <div class="v2g">${h5.svg(D5L.band, D5R.band, `<rect class="v2up show" x="10" y="${h5.ay}" width="0" height="0"/>`, h5.base, PAINTED2(h5,true), BD(h5,-2), BD(h5,-1),
         `<g class="gs" data-s="1"><line class="ixln" x1="${XP[0]}" y1="${XP[1]-24}" x2="${XC[0]}" y2="${XC[1]+4}"/><circle class="ixdot" cx="${XC[0]}" cy="${XC[1]}" r="6"/><circle class="ixb" cx="${XP[0]}" cy="${XP[1]}" r="24"/><text class="ixt" x="${XP[0]}" y="${XP[1]+10}" text-anchor="middle">x</text></g>`,
         D5L.rest, D5R.rest)}</div>
     </div>
