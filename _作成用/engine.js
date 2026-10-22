@@ -153,4 +153,34 @@ function fit(){
   stage.style.setProperty('--s', Math.min(vw/W, avail/H));
   relayout(els[si]);
 }
-addEventListener('resize',fit); fit(); render();
+/* 縦長（スマホ）：横長の カード（.dcard など）は、中身の ある ところ だけを 切り出して 画面の 幅いっぱいに 大きく する */
+function portraitFit(){
+  const portrait = document.body.classList.contains('portrait');
+  els.forEach(sl=>{
+    if(!sl.classList.contains('t-pg') && !sl.classList.contains('t-k')) return;
+    const card = sl.querySelector('.dcard,.ptcard,.pgcard,.kcard'); if(!card) return;
+    card.style.transform=''; card.style.clipPath=''; card.style.left=''; card.style.top=''; card.classList.remove('pfit');
+    if(!portrait) return;
+    card.classList.add('pfit');
+    const sc = parseFloat(getComputedStyle(stage).getPropertyValue('--s'))||1;
+    const cr = card.getBoundingClientRect();
+    const k = cr.width / card.offsetWidth;   // 今の 見た目の 倍率
+    let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;
+    const walk = el => { [...el.children].forEach(c=>{
+      if(c.classList.contains('tape')||c.classList.contains('v2nav')||c.classList.contains('p3list')) return;
+      const r=c.getBoundingClientRect(); if(r.width<1||r.height<1) return;
+      if(c.tagName!=='svg' && c.children.length && r.width/k > card.offsetWidth*0.8 && r.height/k > card.offsetHeight*0.6) return walk(c);
+      x0=Math.min(x0,(r.left-cr.left)/k); y0=Math.min(y0,(r.top-cr.top)/k); x1=Math.max(x1,(r.right-cr.left)/k); y1=Math.max(y1,(r.bottom-cr.top)/k);
+    }); };
+    walk(card);
+    if(x1<=x0) return;
+    const m=22; x0=Math.max(0,x0-m); y0=Math.max(0,y0-m); x1=Math.min(card.offsetWidth,x1+m); y1=Math.min(card.offsetHeight,y1+m);
+    const w=x1-x0, h=y1-y0, top=30, avail=960, s=Math.min(680/w, avail/h, 1.3);
+    card.style.left='0px'; card.style.top='0px';
+    card.style.transformOrigin='0 0';
+    card.style.transform=`translate(${(20+(680-w*s)/2-x0*s).toFixed(1)}px, ${(top+(avail-h*s)/2-y0*s).toFixed(1)}px) scale(${s.toFixed(3)})`;
+    card.style.clipPath=`inset(${y0.toFixed(1)}px ${(card.offsetWidth-x1).toFixed(1)}px ${(card.offsetHeight-y1).toFixed(1)}px ${x0.toFixed(1)}px round 10px)`;
+  });
+}
+addEventListener('resize',()=>setTimeout(portraitFit,50)); fit(); render(); portraitFit();
+if(document.fonts&&document.fonts.ready) document.fonts.ready.then(portraitFit);

@@ -601,3 +601,28 @@ i.nv{font-style:normal;font-family:inherit}
 .p3s{width:270px;height:300px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;text-align:center}
 .p3st{font-size:28px;font-weight:900;color:var(--muted)}
 .p3sa{font-size:36px;font-weight:900;color:var(--accent);line-height:1.3}
+/* 縦長：portraitFit で 切り出して 大きく する。左の 現在地は 隠す */
+.portrait .t-pg .card.pfit{transform-origin:0 0}
+.portrait .t-pg .pfit .v2nav,.portrait .t-pg .pfit .p3list{display:none}
+
+/* 縦長で 横に 並んで いる ものを 縦に 積む（portraitFit が その あと 大きく する） */
+.portrait .card.pfit{height:1000px!important}
+.portrait .pfit .dbub{left:90px;top:400px}
+.portrait .pfit .br{left:56px;top:440px}
+.portrait .pfit .dres{left:56px;top:770px}
+.portrait .pfit .dpt{left:60px;top:240px}
+.portrait .pfit .dD{left:60px;right:auto;top:420px;text-align:left}
+.portrait .pfit .dtb{right:auto;left:56px;top:470px}
+.portrait .pfit .xbub{left:120px;top:480px}
+.portrait .pfit .v2gbox{left:24px;top:490px;width:530px}
+.portrait .pfit .v2kw.v2ans{top:26px}
+.portrait .pfit .xband{right:auto;width:620px;height:auto;padding:14px 18px;flex-wrap:wrap;white-space:normal;justify-content:flex-start;line-height:1.6}
+.portrait .pfit .xg0{top:230px}
+.portrait .pfit .xbub{top:560px}
+.portrait .pfit .dmsg{left:70px;right:auto;width:600px}
+/* 縦長の まとめ（カードを 縦に 並べる） */
+.portrait .t-pg .end-h{left:40px;top:40px;right:40px}
+.portrait .t-pg .end-h h2{font-size:32px;line-height:1.4}
+.portrait .t-pg .dsum{left:20px;top:150px;width:680px;height:840px;transform:none;flex-direction:column;align-items:center;justify-content:flex-start;gap:16px}
+.portrait .t-pg .dsum .dsc{width:600px;height:auto;min-height:0;padding:14px 0;flex-direction:row;flex-wrap:wrap;gap:8px 22px;border-top-width:10px}
+.portrait .t-pg .dsum .xmg,.portrait .t-pg .dsum .imsv{width:200px;height:auto}
