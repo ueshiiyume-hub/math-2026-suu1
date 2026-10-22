@@ -248,6 +248,7 @@ body.final .pl .pulse{animation:none;opacity:0}
 .pl .roth{fill:var(--deep)}
 .tbl.mt{font-size:21px} .tbl.mt > div{padding:7px 12px}
 body.portrait .tbl.mt{font-size:15px} body.portrait .tbl.mt > div{padding:6px 4px}
+.bd > .r > .pl{max-width:560px}
 
 </style>
 </head>
@@ -385,13 +386,15 @@ function PL(o){
     const s = 14, sx = a>0 ? -s : s, sy = b>0 ? -s : s;
     return `<path class="ram" d="M${X(a)+sx} ${Y(0)} V${Y(0)+sy} H${X(a)}"${n==null?'':` data-s="${n}"`}/>`;
   };
-  /* 角の 弧：実軸の 正の 向きから deg まで 左回り。op: r（半径 px）、lab（文字。なければ deg°）、d、c */
+  /* 角の 弧：実軸の 正の 向き（または from）から deg まで 左回り。op: r（半径 px）、lab（文字。なければ deg°）、la（文字の 角）、from、d */
   g.ang = (deg, n, op={}) => {
-    const r = op.r||34, cx = X(0), cy = Y(0), t = deg*Math.PI/180, m = (op.la!=null ? op.la : deg/2)*Math.PI/180;   // la：文字を 置く 角
-    const ex = cx + r*Math.cos(t), ey = cy - r*Math.sin(t), big = deg>180 ? 1 : 0;
+    const s0 = op.from||0;   // from：始まりの 角（ふつうは 実軸の 0°）
+    const r = op.r||34, cx = X(0), cy = Y(0), t = deg*Math.PI/180, m = (op.la!=null ? op.la : (s0+deg)/2)*Math.PI/180;   // la：文字を 置く 角
+    const ex = cx + r*Math.cos(t), ey = cy - r*Math.sin(t), big = deg-s0>180 ? 1 : 0;
+    const sx = cx + r*Math.cos(s0*Math.PI/180), sy = cy - r*Math.sin(s0*Math.PI/180);
     const at = (dd, ex='') => n==null ? (ex?` style="${ex}"`:'') : ` data-s="${n}"${op.e?` data-e="${op.e}"`:''} style="--d:${dd}s;${ex}"`;
     const lr = r + (op.lr||22);
-    return `<path class="arc${n!=null?' dr':''}" pathLength="1" d="M${cx+r} ${cy} A${r} ${r} 0 ${big} 0 ${f(ex)} ${f(ey)}"${at(op.d||0)}/>`
+    return `<path class="arc${n!=null?' dr':''}" pathLength="1" d="M${f(sx)} ${f(sy)} A${r} ${r} 0 ${big} 0 ${f(ex)} ${f(ey)}"${at(op.d||0)}/>`
       + (op.lab===false ? '' : `<text class="dp" x="${f(cx+lr*Math.cos(m))}" y="${f(cy-lr*Math.sin(m)+7)}" text-anchor="middle"${at((op.d||0)+.4, `font-size:${op.fs||19}px`)}>${op.lab||deg+'°'}</text>`);
   };
   /* 文字 */

@@ -803,3 +803,110 @@ const DECK = {title:'②-1 掛け算と長さ・向き', pages:[
   {name:'長さと 向きを 比べる', html:p3}, {name:'図で 確かめる', html:p4}, {name:'まとめ', html:p5},
 ]};
 ''')
+
+# ---------------------------------------------------------------- ②-2 複素数の積
+DECKS['2-2_複素数の積'] = ('②-2 複素数の積', r'''
+const NO = '②-2', SEC = '数学C　複素数平面';
+const IT = v => `<tspan class="it">${v}</tspan>`;
+const SB = (v, i) => `${IT(v)}<tspan baseline-shift="sub" font-size="15">${i}</tspan>`;
+const S3 = Math.sqrt(3), S2 = Math.sqrt(2), D = Math.PI/180;
+
+const p0 = coverSlide({kicker:'数学C　複素数平面', no:NO, title:'複素数の積', sub:'長さは 掛けて、向きは 足す'});
+
+/* 公式と 意味（図：z₁ を θ₂ 回して r₂ 倍） */
+const gf = PL({x0:-1, x1:4, y0:-1, y1:4, u:84, ticks:false});
+const R1 = 2, T1 = 20, R12 = 3.3, T12 = 62;
+const P1 = [R1*Math.cos(T1*D), R1*Math.sin(T1*D)], P12 = [R12*Math.cos(T12*D), R12*Math.sin(T12*D)];
+const FIG = (n1, n2) => gf.svg(gf.arr(0,0,...P1,n1) + gf.dot(...P1, SB('z',1), n1, {pos:'se', d:.6}) + gf.ang(T1, n1, {r:50, lab:SB('θ',1), lr:20, d:.6, la:8})
+  + gf.text(P1[0]*.55-.1, P1[1]*.55+.3, SB('r',1), 'dp', n1)
+  + gf.arr(0,0,...P12,n2,{c:'g', w:5}) + gf.dot(...P12, SB('z',1)+SB('z',2), n2, {d:.6}) + gf.ang(T12, n2, {r:96, from:T1, lab:SB('θ',2), lr:22, d:.6})
+  + gf.text(P12[0]*.5-.42, P12[1]*.5+.1, SB('r',1)+SB('r',2), 'dp', n2));
+const ZDEF = `<div class="q" style="font-size:24px">${M`z_1=r_1(\cos\theta_1+i\sin\theta_1)`}、<br>${M`z_2=r_2(\cos\theta_2+i\sin\theta_2)`} の とき</div>`;
+const p1 = HD(NO, '複素数の積', SEC) + `<div class="bd">
+  <div class="l">${ZDEF}
+    ${BOX('積', `${M`z_1z_2=`}${FILL(3, M`\RE{r_1r_2}\{\cos(\IM{\theta_1+\theta_2})+i\sin(\IM{\theta_1+\theta_2})\}`, 12)}`)}</div>
+  <div class="r">${FIG(1, 2)}</div>
+</div>` + CAP([
+  `②-1 で 見つけた「長さは 掛け算、向きは 足し算」を、極形式の 式に します。`,
+  `${M`z_1`} は 長さ ${M`r_1`}、向き ${M`\theta_1`}。`,
+  `${M`z_2`} を 掛けると、長さが ${M`r_2`} 倍、向きが さらに ${M`\theta_2`} 回ります。`,
+  `だから ${M`z_1z_2`} は 長さ ${M`r_1r_2`}、向き ${M`\theta_1+\theta_2`}。極形式で 書くと この 式に なります。`
+]);
+const p2 = HD(NO, '式の 持つ 意味', SEC) + `<div class="bd">
+  <div class="l"><div class="q" style="font-size:28px;line-height:2.2">
+    大きさ ${M`r`} は ${FILL(1,'積',2.4)}<br>　…　${M`|z_1z_2|=`}${FILL(1, M`\RE{r_1r_2}`, 3)}<br>
+    偏角 ${M`\theta`} は ${FILL(2,'和',2.4)}<br>　…　${M`\arg(z_1z_2)=`}${FILL(2, M`\IM{\theta_1+\theta_2}`, 4)}</div></div>
+  <div class="r">${FIG(null, null)}</div>
+</div>` + CAP([
+  `公式の 意味を 言葉で まとめます。`,
+  `<b class="re">大きさ（絶対値）は 積</b>：${M`|z_1z_2|=r_1r_2=|z_1||z_2|`}`,
+  `<b class="im">偏角は 和</b>：${M`\arg(z_1z_2)=\theta_1+\theta_2=\arg z_1+\arg z_2`}`
+]);
+
+/* 導出（加法定理と 色で 対応） */
+const C1 = String.raw`\RE{\cos\theta_1\cos\theta_2-\sin\theta_1\sin\theta_2}`, C2 = String.raw`\IM{\sin\theta_1\cos\theta_2+\cos\theta_1\sin\theta_2}`;
+const p3 = HD(NO, '導出', SEC) + `<div class="bd col" style="align-items:flex-start;gap:16px">
+  <div class="calc" style="font-size:25px;gap:8px">
+    <div data-s="1">${M`z_1z_2=r_1r_2(\cos\theta_1+i\sin\theta_1)(\cos\theta_2+i\sin\theta_2)`}</div>
+    <div data-s="2">${M`=r_1r_2(\cos\theta_1\cos\theta_2+i\cos\theta_1\sin\theta_2+i\sin\theta_1\cos\theta_2+\DP{i^2}\sin\theta_1\sin\theta_2)`}</div>
+    <div data-s="3">${M(`=r_1r_2\\{(${C1})+i(${C2})\\}`)}</div>
+    <div data-s="5">${M`=r_1r_2\{\RE{\cos(\theta_1+\theta_2)}+i\IM{\sin(\theta_1+\theta_2)}\}`}</div>
+  </div>
+  <div class="pbox" data-s="4" style="font-size:23px"><div class="pl2">Point</div>
+    ${M`i^2=-1`}、　${M`\RE{\cos(\alpha+\beta)=\cos\alpha\cos\beta-\sin\alpha\sin\beta}`}、　${M`\IM{\sin(\alpha+\beta)=\sin\alpha\cos\beta+\cos\alpha\sin\beta}`}</div>
+</div>` + CAP([
+  `なぜ この 式に なるのか、確かめます。`,
+  `${M`r_1r_2`} を 前に 出して、かっこを 展開します。`,
+  `4つの 項が でき、最後の 項に ${M`i^2`} が 出て きます。`,
+  `${M`i^2=-1`} として、<b class="re">${M`i`} の つかない 項</b> と <b class="im">${M`i`} の つく 項</b> に 分けます。`,
+  `この 形は… 数学Ⅱ の <b>加法定理</b> そのものです。`,
+  `<b class="re">${M`\cos(\theta_1+\theta_2)`}</b>、<b class="im">${M`\sin(\theta_1+\theta_2)`}</b> に まとまり、公式が 出ました。`
+]);
+
+/* 例・問11：極形式に して → 長さを 掛ける・角を 足す → 図 */
+function mulPage(o){
+  const g = PL(o.R), [a1,b1] = o.z1, [a2,b2] = o.z2, [pa,pb] = o.p;
+  const fig = g.arr(0,0,a1,b1,null) + g.dot(a1,b1,SB('z',1),null,{given:true, pos:o.p1||'se'}) + g.ang(o.t1, 1, {r:34, lr:20, fs:17, la:o.l1})
+    + g.arr(0,0,a2,b2,null) + g.dot(a2,b2,SB('z',2),null,{given:true, pos:o.p2||'se'}) + g.ang(o.t2, 2, {r:52, lr:20, fs:17, la:o.l2})
+    + g.arr(0,0,pa,pb,3,{c:'g', w:5}) + g.ang(o.t1+o.t2, 4, {r:76, lr:24, la:o.l3}) + g.dot(pa,pb,SB('z',1)+SB('z',2),4,{pos:o.pp||'nw', d:.5});
+  return HD(NO, o.title, SEC) + `<div class="bd">
+    <div class="l">${o.top}
+      <div class="calc" style="font-size:26px;gap:6px">${o.lines.map(([t,n])=>`<div data-s="${n}">${typeof t==='string'&&t.startsWith('<')?t:M(t)}</div>`).join('')}</div>
+    </div>
+    <div class="r">${g.svg(fig)}</div>
+  </div>` + CAP(o.cm);
+}
+const p4 = mulPage({title:'例', R:{x0:-1, x1:3, y0:-1, y1:3, u:96}, z1:[1,1], z2:[S3,1], p:[S3-1, S3+1], t1:45, t2:30, l1:52, l2:12, l3:82, p1:'nw',
+  top:`<div class="q" style="font-size:24px"><span class="tag">例</span>${M`z_1=1+i`}、${M`z_2=\sqrt{3}+i`} の とき、<br>積 ${M`z_1z_2`} の 絶対値と 偏角を 求めよ。また、点 ${M`z_1z_2`} を 図示せよ。</div>`,
+  lines:[[String.raw`z_1=\sqrt{2}(\cos45^\circ+i\sin45^\circ)`,1], [String.raw`z_2=2(\cos30^\circ+i\sin30^\circ)`,2],
+         [String.raw`|z_1z_2|=\RE{\sqrt{2}\times2}=\DP{2\sqrt{2}}`,3], [String.raw`\arg(z_1z_2)=\IM{45^\circ+30^\circ}=\DP{75^\circ}`,4],
+         [`<span class="vnote">（確かめ：${M`(1+i)(\sqrt{3}+i)=(\sqrt{3}-1)+(\sqrt{3}+1)i`}）</span>`,5]],
+  cm:[`まず、それぞれを 極形式に します（①-4 の 手順）。`, `${M`z_1=1+i`}：長さ ${M`\sqrt{2}`}、向き ${M`45^\circ`}。`, `${M`z_2=\sqrt{3}+i`}：長さ ${M`2`}、向き ${M`30^\circ`}。`,
+      `<b class="re">長さは 掛ける</b>：${M`\sqrt{2}\times2=2\sqrt{2}`}。`, `<b class="im">向きは 足す</b>：${M`45^\circ+30^\circ=75^\circ`}。長さ ${M`2\sqrt{2}`}、向き ${M`75^\circ`} の 点が ${M`z_1z_2`} です。`,
+      `ふつうに 展開した 結果とも 一致します。`]});
+const p5 = mulPage({title:'問11 ⑴', R:{x0:-7, x1:4, y0:-1, y1:7, u:42}, z1:[0,2], z2:[3,3], p:[-6,6], t1:90, t2:45, l1:62, l2:20, l3:150, p1:'nw', p2:'se', pp:'ne',
+  top:`<div class="q" style="font-size:24px"><span class="tag">問11</span>積 ${M`z_1z_2`} の 絶対値と<br>偏角を 求めよ。</div><div class="q big" style="font-size:32px">⑴　${M`z_1=2i,\ z_2=3+3i`}</div>`,
+  lines:[[String.raw`z_1=2(\cos90^\circ+i\sin90^\circ)`,1], [String.raw`z_2=3\sqrt{2}(\cos45^\circ+i\sin45^\circ)`,2],
+         [String.raw`\text{絶対値}\ \ \RE{2\times3\sqrt{2}}=\DP{6\sqrt{2}}`,3], [String.raw`\text{偏角}\ \ \IM{90^\circ+45^\circ}=\DP{135^\circ}`,4],
+         [`<span class="vnote">（確かめ：${M`z_1z_2=-6+6i`}）</span>`,5]],
+  cm:[`同じ 手順で 解きます。`, `${M`z_1=2i`}：真上なので 長さ ${M`2`}、向き ${M`90^\circ`}。`, `${M`z_2=3+3i`}：長さ ${M`3\sqrt{2}`}、向き ${M`45^\circ`}。`,
+      `絶対値は 掛けて ${M`6\sqrt{2}`}。`, `偏角は 足して ${M`135^\circ`}。`, `${M`2i(3+3i)=6i+6i^2=-6+6i`}。図の とおり、長さ ${M`6\sqrt{2}`}、向き ${M`135^\circ`} です。`]});
+const p6 = mulPage({title:'問11 ⑵', R:{x0:-4, x1:3, y0:-1, y1:3, u:52}, z1:[S3,1], z2:[-1,S3], p:[-2*S3,2], t1:30, t2:120, l1:12, l2:62, l3:165, p1:'se', p2:'ne', pp:'nw',
+  top:`<div class="q big" style="font-size:32px">⑵　${M`z_1=\sqrt{3}+i`}<br>　　${M`z_2=-1+\sqrt{3}i`}</div>`,
+  lines:[[String.raw`z_1=2(\cos30^\circ+i\sin30^\circ)`,1], [String.raw`z_2=2(\cos120^\circ+i\sin120^\circ)`,2],
+         [String.raw`\text{絶対値}\ \ \RE{2\times2}=\DP{4}`,3], [String.raw`\text{偏角}\ \ \IM{30^\circ+120^\circ}=\DP{150^\circ}`,4],
+         [`<span class="vnote">（確かめ：${M`z_1z_2=-2\sqrt{3}+2i`}）</span>`,5]],
+  cm:[`⑵ も 同じ 手順です。`, `${M`z_1=\sqrt{3}+i`}：長さ ${M`2`}、向き ${M`30^\circ`}。`, `${M`z_2=-1+\sqrt{3}i`}：長さ ${M`2`}、向き ${M`120^\circ`}（第2象限）。`,
+      `絶対値は 掛けて ${M`4`}。`, `偏角は 足して ${M`150^\circ`}。`, `展開すると ${M`-2\sqrt{3}+2i`}。長さ ${M`4`}、向き ${M`150^\circ`} と 一致します。`]});
+
+/* まとめ（アニメーション なし） */
+const p7 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:28px">
+  ${BOX('複素数の 積', `<span style="font-size:32px">${M`z_1z_2=\RE{r_1r_2}\{\cos(\IM{\theta_1+\theta_2})+i\sin(\IM{\theta_1+\theta_2})\}`}</span>`)}
+  <div class="q" style="font-size:29px">${M`|z_1z_2|=\RE{|z_1||z_2|}`}（<b class="re">長さは 積</b>）　${M`\arg(z_1z_2)=\IM{\arg z_1+\arg z_2}`}（<b class="im">向きは 和</b>）</div>
+</div>` + CAP([`②-3 では、「掛ける ＝ 伸ばして 回す」を 使って、点を 回転させます。`]);
+
+const DECK = {title:'②-2 複素数の積', pages:[
+  {name:'表紙', html:p0}, {name:'複素数の積（公式）', html:p1}, {name:'式の 持つ 意味', html:p2}, {name:'導出', html:p3},
+  {name:'例', html:p4}, {name:'問11 ⑴', html:p5}, {name:'問11 ⑵', html:p6}, {name:'まとめ', html:p7},
+]};
+''')
