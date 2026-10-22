@@ -78,6 +78,27 @@ function PL(o){
   g.axl = (which, n) => which==='re'
     ? `<line class="axl re" x1="${X(o.x0)}" y1="${Y(0)}" x2="${X(o.x1)}" y2="${Y(0)}" data-s="${n}"/>`
     : `<line class="axl im" x1="${X(0)}" y1="${Y(o.y0)}" x2="${X(0)}" y2="${Y(o.y1)}" data-s="${n}"/>`;
+  /* 矢印 (x0,y0)→(x1,y1)。n 番で かく。op: c（k＝黒・g＝深い緑・m＝灰）、dash（点線。かく 動きなし）、d（遅れ）、e（消える番）、w（太さ） */
+  g.arr = (x0, y0, x1, y1, n, op={}) => {
+    const ax = X(x0), ay = Y(y0), bx = X(x1), by = Y(y1), L = Math.hypot(bx-ax, by-ay) || 1;
+    const ux = (bx-ax)/L, uy = (by-ay)/L, hl = 15, hw = 7.5, c = op.c||'k', d = op.d||0;
+    const ex = bx - ux*hl*.8, ey = by - uy*hl*.8;
+    const at = dd => n==null ? '' : ` data-s="${n}"${op.e?` data-e="${op.e}"`:''} style="--d:${dd}s"`;
+    const anim = n!=null && !op.dash;
+    const pts = `${f(bx)},${f(by)} ${f(bx-ux*hl-uy*hw)},${f(by-uy*hl+ux*hw)} ${f(bx-ux*hl+uy*hw)},${f(by-uy*hl-ux*hw)}`;
+    return `<path class="vc ${c}${op.dash?' dsh':''}${anim?' dr':''}" pathLength="1" d="M${f(ax)} ${f(ay)} L${f(ex)} ${f(ey)}"${op.w?` style="stroke-width:${op.w}"`:''}${at(d)}/>`
+      + `<polygon class="vh ${c}" points="${pts}"${at(anim ? d+.5 : d)}/>`;
+  };
+  /* 原点と (a,b) を 通る 直線（平面の 端まで） */
+  g.line = (a, b, n, op={}) => {
+    const ks = [o.x1/a, o.x0/a, o.y1/b, o.y0/b].filter(isFinite);
+    const k1 = Math.min(...ks.filter(v=>v>0)), k0 = Math.min(...ks.filter(v=>v<0).map(v=>-v));
+    return `<line class="ln${n!=null?' dr':''}" pathLength="1" x1="${f(X(-a*k0))}" y1="${f(Y(-b*k0))}" x2="${f(X(a*k1))}" y2="${f(Y(b*k1))}"${n==null?'':` data-s="${n}"`}${op.d?` style="--d:${op.d}s"`:''}/>`;
+  };
+  /* 動かす：n 番で 出て、少し 遅れて (dx,dy) だけ 平行移動 */
+  g.move = (inner, dx, dy, n, op={}) => `<g data-s="${n}"${op.e?` data-e="${op.e}"`:''}><g class="mv" data-o="${n}" style="--tx:${f(dx*u)}px;--ty:${f(-dy*u)}px">${inner}</g></g>`;
+  /* 実軸で 折り返す：n 番で 出て、実軸を 折り目に ひっくり返る */
+  g.flip = (inner, n, op={}) => `<g data-s="${n}"${op.e?` data-e="${op.e}"`:''}><g class="fl" data-o="${n}" style="transform-origin:0px ${Y(0)}px">${inner}</g></g>`;
   /* 文字 */
   g.text = (x, y, s, cls, n, anchor) => `<text class="${cls||''}" x="${X(x)}" y="${Y(y)}" text-anchor="${anchor||'middle'}"${n==null?'':` data-s="${n}"`}>${s}</text>`;
   return g;

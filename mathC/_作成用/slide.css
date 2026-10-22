@@ -105,8 +105,19 @@ body.portrait .pl{height:auto;width:600px}
 .pl .axl{stroke-width:9;stroke-linecap:round;stroke-opacity:.28}
 .pl .axl.re{stroke:var(--re)} .pl .axl.im{stroke:var(--im)}
 .pl .dash{stroke:var(--muted);stroke-width:1.8;stroke-dasharray:6 6;fill:none}
+/* 矢印（ベクトル）・直線・動かす・折り返す */
+.pl .vc{stroke-width:4;fill:none;stroke-linecap:round}
+.pl .vc.k{stroke:var(--ink)} .pl .vc.g{stroke:var(--deep)} .pl .vc.m{stroke:var(--muted)}
+.pl .vh.k{fill:var(--ink)} .pl .vh.g{fill:var(--deep)} .pl .vh.m{fill:var(--muted)}
+.pl .vc.dsh{stroke-dasharray:9 7;stroke-width:3}
+.pl .ln{stroke:var(--main);stroke-width:3}
+.pl .ln:not(.dr){stroke-dasharray:10 8}
+.pl .mv{transition:transform .9s ease-in-out .4s}
+.pl .mv.on{transform:translate(var(--tx),var(--ty))}
+.pl .fl{transition:transform .9s ease-in-out .4s}
+.pl .fl.on{transform:scale(1,-1)}
 /* 線を かく アニメーション（pathLength="1"） */
-.pl .dr{stroke-dasharray:1 1;stroke-dashoffset:1;transition:stroke-dashoffset .55s ease-in-out,opacity .1s}
+.pl .dr{stroke-dasharray:1 1!important;stroke-dashoffset:1;transition:stroke-dashoffset .55s ease-in-out,opacity .1s}
 .pl .dr.show{stroke-dashoffset:0;transition-delay:var(--d,0s)}
 
 /* 表紙 */
@@ -166,3 +177,12 @@ body.portrait #inkbar{top:6px;right:6px}
 
 /* 撮影用：動きを 止めて 最後の 形 */
 body.final *, body.final *::before{transition:none!important;transition-delay:0s!important}
+
+/* 表（まとめ） */
+.tbl{display:grid;grid-template-columns:auto 1fr auto;border-top:2px solid var(--main);font-size:24px;width:100%}
+.tbl > div{padding:12px 16px;border-bottom:1px solid var(--line);line-height:1.7}
+body.portrait .tbl{font-size:23px} body.portrait .tbl > div{padding:12px 10px}
+.tbl > .th{background:var(--pale);color:var(--deep);font-weight:700;font-size:18px;letter-spacing:.1em;padding:6px 16px}
+.calc{display:flex;flex-direction:column;gap:6px;font-size:32px}
+.vnote{font-size:20px;color:var(--muted)}
+.op .box .bc{font-size:24px;line-height:1.9;padding:12px 18px}

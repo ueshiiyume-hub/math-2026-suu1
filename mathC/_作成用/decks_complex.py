@@ -171,3 +171,146 @@ const DECK = {title:'①-1 複素数平面', pages:[
   {name:'まとめ', html:p7},
 ]};
 ''')
+
+# ---------------------------------------------------------------- ①-2 和・差・実数倍・共役
+DECKS['1-2_和差実数倍共役'] = ('①-2 和・差・実数倍・共役', r'''
+const NO = '①-2', SEC = '数学C　複素数平面';
+/* SVG の 文字：z₁ や w、共役（上に 線） */
+const Zs = (v, i) => `<tspan class="it">${v}</tspan>${i?`<tspan baseline-shift="sub" font-size="15">${i}</tspan>`:''}`;
+const BAR = h => `<tspan text-decoration="overline">${h}</tspan>`;
+
+/* 1つの 計算を 図で 見せる ページ
+   kind: add（和）・sub（差）・mul（実数倍）・conj（共役）
+   p：1つ目の 点 [a,b,名前]、q：2つ目の 点（add・sub）、k：実数倍の k、r：結果 [a,b,名前]
+   top：左上（規則の 枠 や 問題）、calc：計算（TeX の 行）、fill：空らんが 埋まる 番、extra：最後に 1段 足す（例 だけ）、cm：説明 */
+function opPage(o){
+  const g = PL(o.R), [pa,pb,pn] = o.p, [ra,rb,rn] = o.r, q = o.q;
+  let fig = g.arr(0,0,pa,pb,null) + g.dot(pa,pb,pn,null,{given:true, pos:o.pp||'ne'});
+  if(q) fig += g.arr(0,0,q[0],q[1],null) + g.dot(q[0],q[1],q[2],null,{given:true, pos:o.qp||'ne'});
+  const res = n => g.dot(ra,rb,rn,n,{pos:o.rp||'ne', d:o.kind==='mul'?.6:1.3});
+  if(o.kind==='add'){
+    fig += g.move(g.arr(0,0,q[0],q[1],null,{c:'m', dash:true}), pa, pb, 2)
+         + g.arr(0,0,ra,rb,3,{c:'g'}) + res(3);
+    if(o.extra) fig += g.move(g.arr(0,0,pa,pb,null,{c:'m', dash:true}), q[0], q[1], 4);
+  }
+  if(o.kind==='sub'){
+    fig += g.move(g.arr(q[0],q[1],pa,pb,null,{c:'g', dash:true}), -q[0], -q[1], 3)
+         + g.arr(q[0],q[1],pa,pb,2,{c:'g', e:3}) + g.arr(0,0,ra,rb,3,{c:'g', d:1.3}) + res(3);
+  }
+  if(o.kind==='mul'){
+    fig += g.line(pa,pb,2) + g.arr(0,0,ra,rb,3,{c:'g'}) + res(3);
+    if(o.extra) fig += g.arr(0,0,-pa,-pb,4,{c:'m'}) + g.dot(-pa,-pb,o.extra,4,{pos:'sw', d:.6});
+  }
+  if(o.kind==='conj'){
+    fig += g.axl('re', 2) + g.flip(g.arr(0,0,pa,pb,null,{c:'g'}), 2) + res(2)
+         + `<line class="dash" x1="${g.X(pa)}" y1="${g.Y(pb)}" x2="${g.X(ra)}" y2="${g.Y(rb)}" data-s="3"/>`;
+  }
+  return HD(NO, o.title, SEC) + `<div class="bd">
+    <div class="l op">${o.top}
+      <div class="calc">${o.calc.map((c,i)=>`<div data-s="1"${i?` style="--d:${i*.5}s"`:''}>${M(c)}</div>`).join('')}</div>
+      ${o.note||''}
+    </div>
+    <div class="r">${g.svg(fig)}</div>
+  </div>` + CAP(o.cm);
+}
+
+const p0 = coverSlide({kicker:'数学C　複素数平面', no:NO, title:'和・差・実数倍・共役', sub:'ベクトルと 同じように 図で 考える'});
+
+/* 点 ＝ 原点からの 矢印 */
+const gv = PL({x0:-1, x1:4, y0:-1, y1:3});
+const p1 = HD(NO, 'ベクトルと 同じように 考える', SEC) + `<div class="bd">
+  <div class="l" style="align-items:center;gap:30px">
+    <div class="big">${M`z=\RE{a}+\IM{b}i`}</div>
+    <div class="big" data-s="1">${M`\updownarrow`}</div>
+    <div class="big" data-s="1">ベクトル ${M`(\RE{a},\ \IM{b})`}</div>
+  </div>
+  <div class="r">${gv.svg(gv.dot(1,2,Zs('z')+' = 1 + 2'+Zs('i'),null) + gv.arr(0,0,1,2,1,{c:'g'}))}</div>
+</div>` + CAP([
+  `①-1 では、複素数 ${M`z=a+bi`} を 点で 表しました。`,
+  `その 点を、原点から のびる <b>矢印</b> と 見ると、ベクトル ${M`(a,\ b)`} と 同じです。`,
+  `だから 和・差・実数倍 は、ベクトルと 同じように 図で 見られます。`
+]);
+
+/* 例：z₁ ＝ 1＋2i、z₂ ＝ 4＋i */
+const RX = {x0:-4, x1:6, y0:-3, y1:5, u:44};
+const EX = `<div class="q"><span class="tag">例</span>${M`z_1=1+2i,\ z_2=4+i`}</div>`;
+const Z1 = [1,2,Zs('z',1)], Z2 = [4,1,Zs('z',2)];
+
+const p2 = opPage({title:'和　z₁＋z₂', kind:'add', R:RX, p:Z1, q:Z2, r:[5,3,Zs('z',1)+' + '+Zs('z',2)], qp:'se', extra:true,
+  top: BOX('和', `点 ${M`z_1`} を、${M`z_2`} の 分だけ<br>${FILL(3,'平行移動')} した 点`) + EX,
+  calc:[String.raw`z_1+z_2=(\RE{1+4})+(\IM{2+1})i`, String.raw`=\DP{5+3i}`],
+  note:`<div class="vnote" data-s="4">ベクトルでは ${M`\overrightarrow{a}+\overrightarrow{b}`}（平行四辺形の 対角線）</div>`,
+  cm:[`${M`z_1`} と ${M`z_2`} を、原点からの 矢印で かいて おきます。`,
+      `計算は、<b class="re">実部どうし</b>・<b class="im">虚部どうし</b> を たします。${M`z_1+z_2=5+3i`}`,
+      `図では、${M`z_2`} の 矢印を ${M`z_1`} の 先へ <b>平行移動</b> します。`,
+      `着いた 点が ${M`z_1+z_2`}。計算した ${M`5+3i`} と 一致します。`,
+      `逆に ${M`z_1`} を ${M`z_2`} の 先へ 動かしても 同じ 点。ベクトルの 和と 同じ 平行四辺形 です。`]});
+
+const p3 = opPage({title:'差　z₁−z₂', kind:'sub', R:RX, p:Z1, q:Z2, r:[-3,1,Zs('z',1)+' − '+Zs('z',2)], qp:'se', rp:'nw',
+  top: BOX('差', `点 ${M`z_2`} から 点 ${M`z_1`} へ 向かう 矢印を、<br>原点から 引いた 先`) + EX,
+  calc:[String.raw`z_1-z_2=(\RE{1-4})+(\IM{2-1})i`, String.raw`=\DP{-3+i}`],
+  note:`<div class="vnote" data-s="3">ベクトルでは ${M`\overrightarrow{a}-\overrightarrow{b}`}</div>`,
+  cm:[`今度は 差 ${M`z_1-z_2`} です。`,
+      `計算は、実部どうし・虚部どうし を ひきます。${M`z_1-z_2=-3+i`}`,
+      `${M`z_2+(z_1-z_2)=z_1`} なので、差は「${M`z_2`} から ${M`z_1`} へ 向かう 矢印」です。`,
+      `その 矢印を 原点から 引くと、先が ${M`z_1-z_2=-3+i`}。計算と 一致します。`]});
+
+const p4 = opPage({title:'実数倍　kz', kind:'mul', R:RX, p:Z1, r:[2,4,'2'+Zs('z',1)], extra:'−'+Zs('z',1),
+  top: BOX('実数倍', `原点と 点 ${M`z`} を 通る ${FILL(2,'直線')} 上。<br>原点からの 距離は ${M`|k|`} 倍`) + EX,
+  calc:[String.raw`2z_1=2(1+2i)`, String.raw`=\DP{2+4i}`],
+  note:`<div class="vnote" data-s="3">ベクトルでは ${M`k\overrightarrow{a}`}</div>`,
+  cm:[`実数倍 ${M`2z_1`} を 図で 見ます。`,
+      `計算は、実部も 虚部も 2倍。${M`2z_1=2+4i`}`,
+      `実部と 虚部が 同じ 割合で 伸びるので、点は 原点と ${M`z_1`} を 通る <b>直線</b> の 上に のります。`,
+      `向きは そのまま、原点からの 距離が 2倍の 点が ${M`2z_1`} です。`,
+      `${M`k`} が 負なら 反対向き。たとえば ${M`-z_1`} は 原点の 反対側に きます。`]});
+
+const p5 = opPage({title:'共役　z̄', kind:'conj', R:RX, p:Z1, r:[1,-2,BAR(Zs('z',1))], rp:'se',
+  top: BOX('共役', `${M`\overline{z}=a-bi`}<br>点 ${M`z`} と ${FILL(2,'実軸')} に<br>関して 対称な 点`) + EX,
+  calc:[String.raw`\overline{z_1}=\RE{1}\on{1}{im}{-2i}`],
+  note:`<div class="vnote" data-s="3">ベクトルでは ${M`y`} 座標の 符号を 変える</div>`,
+  cm:[`最後は 共役 ${M`\overline{z_1}`} です。`,
+      `共役は、<b class="im">虚部の 符号</b> だけを 変えます。${M`\overline{z_1}=1-2i`}`,
+      `縦の 位置だけが 反対に なるので、<b class="re">実軸</b> を 折り目に して 折り返した 点です。`,
+      `${M`z_1`} と ${M`\overline{z_1}`} は、実軸から 同じ 距離の ところに あります。`]});
+
+/* 練習：z ＝ −3＋2i、w ＝ 1＋i */
+const RP = {x0:-5, x1:3, y0:-3, y1:4, u:52};
+const PQ = (n, t) => `<div class="q"><span class="tag">練習</span>${M`z=-3+2i,\ w=1+i`} のとき、次の 点を 図示せよ。</div><div class="q big" style="font-size:36px">${n}　${M(t)}</div>`;
+const ZZ = [-3,2,Zs('z')], WW = [1,1,Zs('w')];
+const p6 = opPage({title:'練習 ⑴', kind:'add', R:RP, p:ZZ, q:WW, r:[-2,3,Zs('z')+' + '+Zs('w')], pp:'nw', qp:'se',
+  top: PQ('⑴', 'z+w'), calc:[String.raw`z+w=(\RE{-3+1})+(\IM{2+1})i`, String.raw`=\DP{-2+3i}`],
+  cm:[`和は「平行移動」でした。`, `実部どうし・虚部どうし を たして ${M`-2+3i`}。`,
+      `${M`w`} の 矢印を ${M`z`} の 先へ 平行移動 します。`, `着いた 点が ${M`z+w=-2+3i`} です。`]});
+const p7 = opPage({title:'練習 ⑵', kind:'sub', R:RP, p:ZZ, q:WW, r:[-4,1,Zs('z')+' − '+Zs('w')], pp:'nw', qp:'se', rp:'nw',
+  top: PQ('⑵', 'z-w'), calc:[String.raw`z-w=(\RE{-3-1})+(\IM{2-1})i`, String.raw`=\DP{-4+i}`],
+  cm:[`差は「${M`w`} から ${M`z`} へ 向かう 矢印」でした。`, `実部どうし・虚部どうし を ひいて ${M`-4+i`}。`,
+      `${M`w`} から ${M`z`} へ 向かう 矢印を かきます。`, `原点から 引くと、先が ${M`z-w=-4+i`} です。`]});
+const p8 = opPage({title:'練習 ⑶', kind:'mul', R:RP, p:WW, r:[2,2,'2'+Zs('w')], pp:'se',
+  top: PQ('⑶', '2w'), calc:[String.raw`2w=2(1+i)`, String.raw`=\DP{2+2i}`],
+  cm:[`実数倍は「原点と 点を 通る 直線の 上」でした。`, `実部も 虚部も 2倍して ${M`2+2i`}。`,
+      `原点と ${M`w`} を 通る 直線を 引きます。`, `その 上で、距離が 2倍の 点が ${M`2w=2+2i`} です。`]});
+const p9 = opPage({title:'練習 ⑷', kind:'conj', R:RP, p:ZZ, r:[-3,-2,BAR(Zs('z'))], pp:'nw', rp:'sw',
+  top: PQ('⑷', String.raw`\overline{z}`), calc:[String.raw`\overline{z}=\RE{-3}\on{1}{im}{-2i}`],
+  cm:[`共役は「実軸に 関して 対称な 点」でした。`, `虚部の 符号だけ 変えて ${M`-3-2i`}。`,
+      `実軸を 折り目に して 折り返します。`, `${M`\overline{z}=-3-2i`} です。`]});
+
+/* まとめ（プリントの 表。アニメーション なし） */
+const p10 = HD(NO, 'まとめ', SEC) + `<div class="bd col">
+  <div class="tbl">
+    <div class="th">計算</div><div class="th">複素数平面での 意味</div><div class="th">ベクトルでは</div>
+    <div>和　${M`z_1+z_2`}</div><div>点 ${M`z_1`} を、${M`z_2`} の 分だけ <b class="dp">平行移動</b> した 点</div><div>${M`\overrightarrow{a}+\overrightarrow{b}`}</div>
+    <div>差　${M`z_1-z_2`}</div><div>点 ${M`z_2`} から 点 ${M`z_1`} へ 向かう 矢印を、原点から 引いた 先</div><div>${M`\overrightarrow{a}-\overrightarrow{b}`}</div>
+    <div>実数倍　${M`kz`}</div><div>原点と 点 ${M`z`} を 通る <b class="dp">直線</b> 上。原点からの 距離は ${M`|k|`} 倍</div><div>${M`k\overrightarrow{a}`}</div>
+    <div>共役　${M`\overline{z}`}</div><div>点 ${M`z`} と <b class="dp">実軸</b> に 関して 対称な 点</div><div>${M`y`} 座標の 符号を 変える</div>
+  </div>
+</div>` + CAP([`複素数の 計算は、点（矢印）の 動きとして 図で 見られます。`]);
+
+const DECK = {title:'①-2 和・差・実数倍・共役', pages:[
+  {name:'表紙', html:p0},
+  {name:'ベクトルと 同じように 考える', html:p1},
+  {name:'例　和', html:p2}, {name:'例　差', html:p3}, {name:'例　実数倍', html:p4}, {name:'例　共役', html:p5},
+  {name:'練習 ⑴　z＋w', html:p6}, {name:'練習 ⑵　z−w', html:p7}, {name:'練習 ⑶　2w', html:p8}, {name:'練習 ⑷　共役', html:p9},
+  {name:'まとめ', html:p10},
+]};
+''')
