@@ -262,13 +262,13 @@ const CMPAB = (g, A, B, s, out, side, le) => {
   const ang = Math.atan2(B[1]-A[1], B[0]-A[0])*180/Math.PI, len = Math.hypot(B[0]-A[0], B[1]-A[1]) + 76;
   const tr = `translate(${f(mx)} ${f(my)}) rotate(${f(ang)})`;
   const sign = `M16 -16 L-16 0 L16 16${le?' M-16 11 L16 27':''}`;
-  const tx = side==='L' ? mx-230 : mx+230, ty = my+12, ex = side==='L' ? tx+96 : tx-96, ey = ty-12;
+  const tx = side==='L' ? mx-170 : mx+170, ty = my+12, ex = side==='L' ? tx+92 : tx-92, ey = ty-12;
   return {band:`<g class="gs" data-s="${s}"><rect class="iband2" x="${f(-len/2)}" y="-30" width="${f(len)}" height="60" rx="30" transform="${tr}"/></g>`,
     rest:`<g class="gs" data-s="${s}"><path class="ilt-h" d="${sign}" transform="${tr}"/><path class="ilt" d="${sign}" transform="${tr}"/></g>
-    <g class="gs" data-s="${s+1}"><line class="idot2" x1="${f(mx+(side==='L'?-50:50))}" y1="${f(my)}" x2="${f(ex)}" y2="${f(ey)}"/>
+    <g class="gs" data-s="${s+1}"><line class="idot2" x1="${f(mx+(side==='L'?-34:34))}" y1="${f(my)}" x2="${f(ex)}" y2="${f(ey)}"/>
       <text class="iwr" x="${f(tx)}" y="${f(ty)}" text-anchor="middle">${out.replace(/x/g,'<tspan font-style="italic">x</tspan>')}</text></g>`}; };
-const h5 = IG({...GV2, sc:270, k:150});
-const XP = [h5.X(-1.5), h5.Y(-1.5)+76];      // x の 札（塗れた ところの 下）
+const h5 = IG({...GV2});   // ほかの ページと 同じ 形
+const XP = [h5.X(-1.5), h5.Y(-1.5)+72];      // x の 札（塗れた ところの 下）
 const XC = [h5.X(-1.5), h5.Y(-1.5)+8];
 const NL = [h5.X(-2), h5.ay+34], NR = [h5.X(-1), h5.ay+34];   // −2・−1 の 数
 const D5L = CMPAB(h5, NL, XP, 2, '−2 ≦ x', 'L', true), D5R = CMPAB(h5, XP, NR, 4, 'x ≦ −1', 'R', true);
