@@ -22,7 +22,14 @@ def make(path, title, back_href, back_label, kicker, h1, lead, items):
     open(p, 'w', encoding='utf-8').write(h)
     print('ok', path)
 
-# 数学C の トップ（スライドができたら ここに カードを足す。no は「第1章　1.1」の 形）
+# 数学C の トップ（単元ごとの カード）
 make('index.html', '数学C 解説スライド', None, None,
      '数学C', '解説スライド', '単元を選んでください', [
+  {'href':'complex/index.html', 'no':'複素数平面', 'title':'複素数平面', 'desc':'①-1〜③-3　点・極形式・積と回転・ド・モアブル'},
+])
+
+# 複素数平面（スライドが できたら ここに 足す。no は プリントと 同じ「①-1」）
+make('complex/index.html', '複素数平面 解説スライド', '../index.html', '数学C の トップへ',
+     '数学C　複素数平面', '解説スライド', '単元を選んでください', [
+  {'href':'1-1_複素数平面.html', 'no':'①-1', 'title':'複素数平面', 'desc':'複素数を 点で 表す　例・問4・問5'},
 ])

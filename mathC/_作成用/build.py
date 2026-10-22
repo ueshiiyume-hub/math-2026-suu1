@@ -1,0 +1,28 @@
+"""数学C の 解説スライドを 作る（数学Ⅰ の _作成用/ とは 別もの）
+使い方: python mathC/_作成用/build.py mathC/complex
+デッキ（スライドの 中身）は decks_complex.py の DECKS に 書く。一覧は menus.py で 作る
+"""
+import os, sys, json
+B = os.path.dirname(os.path.abspath(__file__))
+OUT = sys.argv[1]
+sys.path.insert(0, B)
+rd = lambda f: open(os.path.join(B, f), encoding='utf-8').read()
+from decks_complex import DECKS
+
+head = rd('head.html').replace('{{CSS}}', rd('slide.css'))
+VERS = json.load(open(os.path.join(B, 'versions.json'), encoding='utf-8'))
+BODY = '<body>\n<div id="stage"></div>\n<div id="bar"></div>\n<div id="ui"></div>\n<div id="jump"></div>\n<script>\n'
+
+def page(name, title, js):
+    v = VERS.get(name, {'v': '1.0', 'date': ''})
+    ver = f"const VER = 'ver {v['v']}　{v['date']}';\n"
+    return (head.replace('{{TITLE}}', title) + BODY + ver + rd('parts.js')
+            + '\n/* ====== このプリントの スライド ====== */\n' + js + '\n'
+            + rd('engine.js') + '\n' + rd('ink.js') + '\n</script>\n</body>\n</html>\n')
+
+only = sys.argv[2:]   # 名前を 書けば その デッキ だけ
+os.makedirs(OUT, exist_ok=True)
+for name, (title, js) in DECKS.items():
+    if only and name not in only: continue
+    open(os.path.join(OUT, name + '.html'), 'w', encoding='utf-8').write(page(name, title, js))
+    print('ok', name)

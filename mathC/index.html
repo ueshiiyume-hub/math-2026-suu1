@@ -71,7 +71,14 @@ h1{font-size:clamp(28px,5vw,40px);font-weight:700;letter-spacing:.06em;margin:16
 </main>
 <script>
 /* カードの一覧（menus.py が書きこむ） */
-const ITEMS = [];
+const ITEMS = [
+ {
+  "href": "complex/index.html",
+  "no": "複素数平面",
+  "title": "複素数平面",
+  "desc": "①-1〜③-3　点・極形式・積と回転・ド・モアブル"
+ }
+];
 document.getElementById('list').innerHTML = ITEMS.length ? ITEMS.map(it=>`
   <a class="card" href="${it.href}">
     <div class="no">${it.no}</div>
