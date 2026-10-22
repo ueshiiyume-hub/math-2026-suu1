@@ -242,7 +242,7 @@ const s3b = RIDE({no:'⑴', eq:EQ1, kind:'bird', G:{cx:1, sc:140, k:40, r:[-1,3]
 /* 比べる 組：xs＝x を 置く 側（'L'：数の 左上、'R'：数の 右上）、r＝比べる 数、xc＝線で つなぐ グラフ上の x、s＝出る 番 */
 const CMP = (g, side, r, xc, sx, s, out) => {
   const f = n => n.toFixed(1), nx = g.X(r), ny = g.ay+34;
-  const bx = side==='L' ? nx-120 : nx+120, by = g.ay-44;
+  const bx = side==='L' ? nx-100 : nx+100, by = g.ay-44;
   const cx = g.X(xc), cy = g.Y(xc);
   const mx = (bx+nx)/2, my = (by+ny)/2, ang = Math.atan2(ny-by, nx-bx)*180/Math.PI;
   const rot = side==='L' ? ang : ang-180;

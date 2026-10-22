@@ -11,7 +11,7 @@ const NAV = (on) => `<div class="v2nav">${['❶ 式','❷ 塗る','❸ 答える
 const BIG = (sm, big, sub, s, o) => `<div class="v2kw lh" data-s="${s??0}"${o!==undefined?` data-o="${o}"`:''}>
     ${sm?`<div class="v2sm">${sm}</div>`:''}<div class="v2big"><span class="v2mk">${big}</span>${sub?`<span class="v2sub">${sub}</span>`:''}</div></div>`;
 /* グラフ（主役の 下） */
-const GV = {ay:120, cx:1, sc:120, k:44, r:[-1,3], top:8, W:880, H:310};
+const GV = {ay:160, cx:1, sc:60, k:37, r:[-1,3], top:8, W:880, H:316};   // Step❶ の グラフと 同じ 形（しゅっと）
 
 /* 1：これから やること */
 const v1 = `
@@ -52,7 +52,7 @@ const vb = `
       <div class="v2st"><i class="nv">Step</i>❶</div>
       <div class="v2calc math">
         <div class="v2r1"><span>y ＝ x${P2} − 2x − 3</span><span class="v2q lh" data-s="2">＝</span><span class="v2a lh" data-s="2">0</span></div>
-        <div class="v2r2 lh" data-s="3"><span>(x ＋ 1)(x − 3)</span><span class="v2q">＝</span><span class="v2a">0</span></div>
+        <div class="v2r2"><span class="lh" data-s="3">(x ＋ 1)(x − 3)</span><span class="v2q lh" data-s="3">＝</span><span class="v2a lh" data-s="3">0</span></div>
         <div class="v2r3"><span class="lh" data-s="4">x</span><span class="v2q lh" data-s="4">＝</span><span class="v2a lh" data-s="5"><span class="v2hit">−1, 3</span></span></div>
         <span class="ytag v2yt lh" data-s="1">y ＝ 0 と する</span>
       </div>
