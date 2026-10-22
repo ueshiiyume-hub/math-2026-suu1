@@ -953,6 +953,19 @@ i.nv{font-style:normal;font-family:inherit}
 .v2l{text-align:right;white-space:nowrap} .v2e{padding:0 18px} .v2r{white-space:nowrap}
 .v2box .ytag{position:absolute;right:30px;top:34px;font-size:26px}
 .v2hit{color:var(--accent);background:linear-gradient(transparent 62%,#ffe680 62%);padding:0 6px}
+.v2st{position:absolute;left:24px;top:24px;padding:4px 22px;background:#dce6f2;border-radius:6px;font-size:28px;font-weight:900;color:var(--ink)}
+.v2calc{position:absolute;left:24px;top:84px;width:530px;height:380px;padding:30px 24px;box-sizing:border-box;background:#dce6f2;border-radius:6px;display:grid;grid-template-columns:auto auto auto;justify-content:start;align-content:start;align-items:baseline;row-gap:34px;font-size:42px;white-space:nowrap}
+.v2gbox{position:absolute;left:580px;top:84px;width:350px;height:380px;background:#dbeef4;border-radius:6px;display:flex;align-items:center;justify-content:center}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .v2calc,:root:not([data-theme="light"]) .v2st{background:#33405a} :root:not([data-theme="light"]) .v2gbox{background:#2c4252} }
+:root[data-theme="dark"] .v2calc,:root[data-theme="dark"] .v2st{background:#33405a} :root[data-theme="dark"] .v2gbox{background:#2c4252}
+.v2r1,.v2r2,.v2r3{display:contents}
+.v2calc>div>span:first-child{text-align:right}
+.v2q{padding:0 14px}
+.v2a{color:var(--accent)}
+.v2r1 .v2q,.v2r1 .v2a{color:#e0465e;font-weight:700}
+.v2yt{position:absolute;right:18px;top:-24px;font-size:24px}
+.v2cv{stroke:var(--b-ink);stroke-width:4.5}
+.v2pt{fill:#e0465e}
 
 /* ===== 手書き ===== */
 #ink{position:fixed;left:0;top:0;z-index:15;pointer-events:none;touch-action:none}

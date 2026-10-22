@@ -36,25 +36,39 @@ const va = `
   </div>
   ${cbar([`${M('x² − 2x − 3 ＞ 0')}。　まずは ＞ を ＝ に して…`, `${M('x² − 2x − 3 ＝ 0')}。　これは 2次方程式。`, `まずは <b>2次方程式を 解く</b>。　x軸との 共有点を 求める ため。`])}`;
 
-/* 3：Step❶ の 枠を 大きく（＝ の 位置を そろえる） */
-const RW = (s, l, r, extra='') => `<div class="v2row lh" data-s="${s}"><span class="v2l">${l}</span><span class="v2e">＝</span><span class="v2r">${r}</span>${extra}</div>`;
+/* 3：Step❶ の 枠を 大きく（左：計算、右：グラフ）。書く 順：①y＝0とする ②＝0 ③因数分解 ④x＝ ⑤−1, 3 → 点 → 放物線 → 座標 */
+const CU = (() => {
+  const W=330, H=300, ay=150, X=x=>165+(x-1)*48, Y=x=>ay-30*(x+1)*(x-3);
+  let d=''; for(let i=0;i<=60;i++){ const x=1-2.89+5.78*i/60; d+=(i?'L':'M')+X(x).toFixed(1)+' '+Y(x).toFixed(1)+' '; }
+  return `<svg class="v2gsv" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
+    <line class="iax" x1="10" y1="${ay}" x2="${W-14}" y2="${ay}"/><polygon class="iah" points="${W-2},${ay} ${W-16},${ay-7} ${W-16},${ay+7}"/><text class="ixl" x="${W-22}" y="${ay+32}">x</text>
+    <path class="curve v2cv" data-s="7" pathLength="1" d="${d}"/>
+    <g class="gs" data-s="6"><circle class="v2pt" cx="${X(-1)}" cy="${ay}" r="9"/><circle class="v2pt" cx="${X(3)}" cy="${ay}" r="9"/></g>
+    <g class="gs" data-s="8"><text class="inum" x="${X(-1)-14}" y="${ay+40}" text-anchor="middle">−1</text><text class="inum" x="${X(3)+14}" y="${ay+40}" text-anchor="middle">3</text></g></svg>`; })();
 const vb = `
   <div class="card abs dcard v2">${EQTAPE}
     ${NAV(1)}
     <div class="v2c">
-      <div class="v2box math">
-        ${RW(0,'y',`x${P2} − 2x − 3`,`<span class="ytag lh" data-s="1">y ＝ 0 と する</span>`)}
-        ${RW(1,`x${P2} − 2x − 3`,'0')}
-        ${RW(2,'(x ＋ 1)(x − 3)','0')}
-        ${RW(3,'x','<span class="v2hit">−1, 3</span>')}
+      <div class="v2st"><i class="nv">Step</i>❶</div>
+      <div class="v2calc math">
+        <div class="v2r1"><span>y ＝ x${P2} − 2x − 3</span><span class="v2q lh" data-s="2">＝</span><span class="v2a lh" data-s="2">0</span></div>
+        <div class="v2r2 lh" data-s="3"><span>(x ＋ 1)(x − 3)</span><span class="v2q">＝</span><span class="v2a">0</span></div>
+        <div class="v2r3"><span class="lh" data-s="4">x</span><span class="v2q lh" data-s="4">＝</span><span class="v2a lh" data-s="5"><span class="v2hit">−1, 3</span></span></div>
+        <span class="ytag v2yt lh" data-s="1">y ＝ 0 と する</span>
       </div>
+      <div class="v2gbox">${CU}</div>
     </div>
   </div>
   ${cbar([
-    `${M('x² − 2x − 3')} を y と おく。`,
-    `x軸との 共有点 → <b>y ＝ 0</b> と する。　${M('x² − 2x − 3 ＝ 0')}。`,
+    `<i class="nv">Step</i>❶。　${M('y ＝ x² − 2x − 3')} と おく。`,
+    `x軸との 共有点 → <b>y ＝ 0</b> と する。`,
+    `式の 右に <b>＝ 0</b>。　2次方程式 ${M('x² − 2x − 3 ＝ 0')} に なる。`,
     `たして −2、かけて −3 → 因数分解。`,
-    `${M('x ＝ −1, 3')}。　これが グラフと x軸の 共有点。`])}`;
+    `x ＝ …`,
+    `${M('x ＝ −1, 3')}。　これが グラフと x軸の 共有点。`,
+    `グラフ：x軸に 共有点を 2つ 打つ。`,
+    `下に凸の 放物線を、2つの 点を 通るように かく。`,
+    `点の 下に x座標を 書く。　<i class="nv">Step</i>❶ <b>完成！</b>`])}`;
 
 /* 3：0より 大きい（上を 塗る） */
 const g3 = IG({...GV});

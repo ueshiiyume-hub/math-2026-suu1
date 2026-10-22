@@ -953,6 +953,19 @@ i.nv{font-style:normal;font-family:inherit}
 .v2l{text-align:right;white-space:nowrap} .v2e{padding:0 18px} .v2r{white-space:nowrap}
 .v2box .ytag{position:absolute;right:30px;top:34px;font-size:26px}
 .v2hit{color:var(--accent);background:linear-gradient(transparent 62%,#ffe680 62%);padding:0 6px}
+.v2st{position:absolute;left:24px;top:24px;padding:4px 22px;background:#dce6f2;border-radius:6px;font-size:28px;font-weight:900;color:var(--ink)}
+.v2calc{position:absolute;left:24px;top:84px;width:530px;height:380px;padding:30px 24px;box-sizing:border-box;background:#dce6f2;border-radius:6px;display:grid;grid-template-columns:auto auto auto;justify-content:start;align-content:start;align-items:baseline;row-gap:34px;font-size:42px;white-space:nowrap}
+.v2gbox{position:absolute;left:580px;top:84px;width:350px;height:380px;background:#dbeef4;border-radius:6px;display:flex;align-items:center;justify-content:center}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .v2calc,:root:not([data-theme="light"]) .v2st{background:#33405a} :root:not([data-theme="light"]) .v2gbox{background:#2c4252} }
+:root[data-theme="dark"] .v2calc,:root[data-theme="dark"] .v2st{background:#33405a} :root[data-theme="dark"] .v2gbox{background:#2c4252}
+.v2r1,.v2r2,.v2r3{display:contents}
+.v2calc>div>span:first-child{text-align:right}
+.v2q{padding:0 14px}
+.v2a{color:var(--accent)}
+.v2r1 .v2q,.v2r1 .v2a{color:#e0465e;font-weight:700}
+.v2yt{position:absolute;right:18px;top:-24px;font-size:24px}
+.v2cv{stroke:var(--b-ink);stroke-width:4.5}
+.v2pt{fill:#e0465e}
 
 /* ===== 手書き ===== */
 #ink{position:fixed;left:0;top:0;z-index:15;pointer-events:none;touch-action:none}
@@ -1682,7 +1695,7 @@ const GARW = (x1,y1,x2,y2,s) => { const ym=(y1+y2)/2, hh=(y2-y1)*.28, hx=x2-(y2-
   return `<g class="gs" data-s="${s}"><polygon points="${x1},${ym-hh} ${hx},${ym-hh} ${hx},${y1} ${x2},${ym} ${hx},${y2} ${hx},${ym+hh} ${x1},${ym+hh}" fill="#c9dca6"/></g>`; };
 
 /* ====== このプリントのスライド ====== */
-const VER = '<i class="nv">ver</i> 2.1　2026-10-22';
+const VER = '<i class="nv">ver</i> 2.2　2026-10-22';
 /* ③-1 ver 2.0 の 土台：ver 1.4 の 部品の 写し（ver 1.4 を 直しても ver 2.0 は 変わらない） */
 
 const IMG = s => s;
@@ -2078,25 +2091,39 @@ const va = `
   </div>
   ${cbar([`${M('x² − 2x − 3 ＞ 0')}。　まずは ＞ を ＝ に して…`, `${M('x² − 2x − 3 ＝ 0')}。　これは 2次方程式。`, `まずは <b>2次方程式を 解く</b>。　x軸との 共有点を 求める ため。`])}`;
 
-/* 3：Step❶ の 枠を 大きく（＝ の 位置を そろえる） */
-const RW = (s, l, r, extra='') => `<div class="v2row lh" data-s="${s}"><span class="v2l">${l}</span><span class="v2e">＝</span><span class="v2r">${r}</span>${extra}</div>`;
+/* 3：Step❶ の 枠を 大きく（左：計算、右：グラフ）。書く 順：①y＝0とする ②＝0 ③因数分解 ④x＝ ⑤−1, 3 → 点 → 放物線 → 座標 */
+const CU = (() => {
+  const W=330, H=300, ay=150, X=x=>165+(x-1)*48, Y=x=>ay-30*(x+1)*(x-3);
+  let d=''; for(let i=0;i<=60;i++){ const x=1-2.89+5.78*i/60; d+=(i?'L':'M')+X(x).toFixed(1)+' '+Y(x).toFixed(1)+' '; }
+  return `<svg class="v2gsv" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
+    <line class="iax" x1="10" y1="${ay}" x2="${W-14}" y2="${ay}"/><polygon class="iah" points="${W-2},${ay} ${W-16},${ay-7} ${W-16},${ay+7}"/><text class="ixl" x="${W-22}" y="${ay+32}">x</text>
+    <path class="curve v2cv" data-s="7" pathLength="1" d="${d}"/>
+    <g class="gs" data-s="6"><circle class="v2pt" cx="${X(-1)}" cy="${ay}" r="9"/><circle class="v2pt" cx="${X(3)}" cy="${ay}" r="9"/></g>
+    <g class="gs" data-s="8"><text class="inum" x="${X(-1)-14}" y="${ay+40}" text-anchor="middle">−1</text><text class="inum" x="${X(3)+14}" y="${ay+40}" text-anchor="middle">3</text></g></svg>`; })();
 const vb = `
   <div class="card abs dcard v2">${EQTAPE}
     ${NAV(1)}
     <div class="v2c">
-      <div class="v2box math">
-        ${RW(0,'y',`x${P2} − 2x − 3`,`<span class="ytag lh" data-s="1">y ＝ 0 と する</span>`)}
-        ${RW(1,`x${P2} − 2x − 3`,'0')}
-        ${RW(2,'(x ＋ 1)(x − 3)','0')}
-        ${RW(3,'x','<span class="v2hit">−1, 3</span>')}
+      <div class="v2st"><i class="nv">Step</i>❶</div>
+      <div class="v2calc math">
+        <div class="v2r1"><span>y ＝ x${P2} − 2x − 3</span><span class="v2q lh" data-s="2">＝</span><span class="v2a lh" data-s="2">0</span></div>
+        <div class="v2r2 lh" data-s="3"><span>(x ＋ 1)(x − 3)</span><span class="v2q">＝</span><span class="v2a">0</span></div>
+        <div class="v2r3"><span class="lh" data-s="4">x</span><span class="v2q lh" data-s="4">＝</span><span class="v2a lh" data-s="5"><span class="v2hit">−1, 3</span></span></div>
+        <span class="ytag v2yt lh" data-s="1">y ＝ 0 と する</span>
       </div>
+      <div class="v2gbox">${CU}</div>
     </div>
   </div>
   ${cbar([
-    `${M('x² − 2x − 3')} を y と おく。`,
-    `x軸との 共有点 → <b>y ＝ 0</b> と する。　${M('x² − 2x − 3 ＝ 0')}。`,
+    `<i class="nv">Step</i>❶。　${M('y ＝ x² − 2x − 3')} と おく。`,
+    `x軸との 共有点 → <b>y ＝ 0</b> と する。`,
+    `式の 右に <b>＝ 0</b>。　2次方程式 ${M('x² − 2x − 3 ＝ 0')} に なる。`,
     `たして −2、かけて −3 → 因数分解。`,
-    `${M('x ＝ −1, 3')}。　これが グラフと x軸の 共有点。`])}`;
+    `x ＝ …`,
+    `${M('x ＝ −1, 3')}。　これが グラフと x軸の 共有点。`,
+    `グラフ：x軸に 共有点を 2つ 打つ。`,
+    `下に凸の 放物線を、2つの 点を 通るように かく。`,
+    `点の 下に x座標を 書く。　<i class="nv">Step</i>❶ <b>完成！</b>`])}`;
 
 /* 3：0より 大きい（上を 塗る） */
 const g3 = IG({...GV});
