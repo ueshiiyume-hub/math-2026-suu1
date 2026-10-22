@@ -93,10 +93,10 @@ function PL(o){
     const ax = X(x0), ay = Y(y0), bx = X(x1), by = Y(y1), L = Math.hypot(bx-ax, by-ay) || 1;
     const ux = (bx-ax)/L, uy = (by-ay)/L, hl = 15, hw = 7.5, c = op.c||'k', d = op.d||0;
     const ex = bx - ux*hl*.8, ey = by - uy*hl*.8;
-    const at = dd => n==null ? '' : ` data-s="${n}"${op.e?` data-e="${op.e}"`:''} style="--d:${dd}s"`;
+    const at = (dd, ex='') => n==null ? (ex?` style="${ex}"`:'') : ` data-s="${n}"${op.e?` data-e="${op.e}"`:''} style="--d:${dd}s;${ex}"`;
     const anim = n!=null && !op.dash;
     const pts = `${f(bx)},${f(by)} ${f(bx-ux*hl-uy*hw)},${f(by-uy*hl+ux*hw)} ${f(bx-ux*hl+uy*hw)},${f(by-uy*hl-ux*hw)}`;
-    return `<path class="vc ${c}${op.dash?' dsh':''}${anim?' dr':''}" pathLength="1" d="M${f(ax)} ${f(ay)} L${f(ex)} ${f(ey)}"${op.w?` style="stroke-width:${op.w}"`:''}${at(d)}/>`
+    return `<path class="vc ${c}${op.dash?' dsh':''}${anim?' dr':''}" pathLength="1" d="M${f(ax)} ${f(ay)} L${f(ex)} ${f(ey)}"${at(d, op.w?`stroke-width:${op.w}`:'')}/>`
       + `<polygon class="vh ${c}" points="${pts}"${at(anim ? d+.5 : d)}/>`;
   };
   /* 原点と (a,b) を 通る 直線（平面の 端まで） */
@@ -112,8 +112,8 @@ function PL(o){
   /* 線分 (x0,y0)–(x1,y1)。n 番で かく。op: c（g・k・m）、lab（文字）、ls（文字が 出る 番。ふつうは n）、side（文字を 置く 側 1／−1）、d、e、w */
   g.seg = (x0, y0, x1, y1, n, op={}) => {
     const ax = X(x0), ay = Y(y0), bx = X(x1), by = Y(y1), L = Math.hypot(bx-ax, by-ay) || 1, d = op.d||0;
-    const at = (dd, nn=n) => nn==null ? '' : ` data-s="${nn}"${op.e?` data-e="${op.e}"`:''} style="--d:${dd}s"`;
-    let h = `<path class="vc ${op.c||'g'}${n!=null?' dr':''}" pathLength="1" d="M${f(ax)} ${f(ay)} L${f(bx)} ${f(by)}"${op.w?` style="stroke-width:${op.w}"`:''}${at(d)}/>`;
+    const at = (dd, nn=n, ex='') => nn==null ? (ex?` style="${ex}"`:'') : ` data-s="${nn}"${op.e?` data-e="${op.e}"`:''} style="--d:${dd}s;${ex}"`;
+    let h = `<path class="vc ${op.c||'g'}${n!=null?' dr':''}" pathLength="1" d="M${f(ax)} ${f(ay)} L${f(bx)} ${f(by)}"${at(d, n, op.w?`stroke-width:${op.w}`:'')}/>`;
     if(op.lab){
       const sd = op.side||1, nx = -(by-ay)/L*sd, ny = (bx-ax)/L*sd;   // 線に 垂直な 向き
       h += `<text class="${op.lc||'dp'}" x="${f((ax+bx)/2 + nx*24)}" y="${f((ay+by)/2 + ny*24 + 8)}" text-anchor="middle"${op.ls!=null ? at(0, op.ls) : at(d+.4)}>${op.lab}</text>`;
@@ -127,12 +127,12 @@ function PL(o){
   };
   /* 角の 弧：実軸の 正の 向きから deg まで 左回り。op: r（半径 px）、lab（文字。なければ deg°）、d、c */
   g.ang = (deg, n, op={}) => {
-    const r = op.r||34, cx = X(0), cy = Y(0), t = deg*Math.PI/180, m = t/2;
+    const r = op.r||34, cx = X(0), cy = Y(0), t = deg*Math.PI/180, m = (op.la!=null ? op.la : deg/2)*Math.PI/180;   // la：文字を 置く 角
     const ex = cx + r*Math.cos(t), ey = cy - r*Math.sin(t), big = deg>180 ? 1 : 0;
-    const at = dd => n==null ? '' : ` data-s="${n}"${op.e?` data-e="${op.e}"`:''} style="--d:${dd}s"`;
+    const at = (dd, ex='') => n==null ? (ex?` style="${ex}"`:'') : ` data-s="${n}"${op.e?` data-e="${op.e}"`:''} style="--d:${dd}s;${ex}"`;
     const lr = r + (op.lr||22);
     return `<path class="arc${n!=null?' dr':''}" pathLength="1" d="M${cx+r} ${cy} A${r} ${r} 0 ${big} 0 ${f(ex)} ${f(ey)}"${at(op.d||0)}/>`
-      + (op.lab===false ? '' : `<text class="dp" style="font-size:${op.fs||19}px" x="${f(cx+lr*Math.cos(m))}" y="${f(cy-lr*Math.sin(m)+7)}" text-anchor="middle"${at((op.d||0)+.4)}>${op.lab||deg+'°'}</text>`);
+      + (op.lab===false ? '' : `<text class="dp" x="${f(cx+lr*Math.cos(m))}" y="${f(cy-lr*Math.sin(m)+7)}" text-anchor="middle"${at((op.d||0)+.4, `font-size:${op.fs||19}px`)}>${op.lab||deg+'°'}</text>`);
   };
   /* 文字 */
   g.text = (x, y, s, cls, n, anchor) => `<text class="${cls||''}" x="${X(x)}" y="${Y(y)}" text-anchor="${anchor||'middle'}"${n==null?'':` data-s="${n}"`}>${s}</text>`;

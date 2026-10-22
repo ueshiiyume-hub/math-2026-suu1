@@ -425,20 +425,26 @@ const S3 = Math.sqrt(3), S2 = Math.sqrt(2);
 
 const p0 = coverSlide({kicker:'数学C　複素数平面', no:NO, title:'複素数の極形式', sub:'長さと 向きで 表す'});
 
-/* 2通りの 表し方 */
+/* 2通りの 表し方（②を 強調：①を うすく → 向きに ぐるっと 回す → 長さ r を のばす → 点が 波打つ） */
 const g1 = PL({x0:-1, x1:5, y0:-1, y1:4, ticks:false});
+const T1 = 32.9, R1 = Math.hypot(3.4, 2.2) * g1.u;
 const P1 = g1.dot(3.4, 2.2, 'P', null);
+const SWEEP = `<g data-s="2"><g transform="translate(${g1.X(0)} ${g1.Y(0)})"><g class="sweep" data-o="2" style="--rot:${-T1}deg">
+  <line class="swl" x1="0" y1="0" x2="${(R1+40).toFixed(1)}" y2="0"/></g></g></g>`;
+const RING = `<circle class="pulse" cx="${g1.X(3.4)}" cy="${g1.Y(2.2)}" r="22" data-s="3" style="--d:.6s"/>`;
 const p1 = HD(NO, '点の 位置の 2通りの 表し方', SEC) + `<div class="bd">
   <div class="l" style="gap:30px">
-    <div class="q" data-s="1"><b>①</b>　<span class="re">実軸方向に ${M`a`}</span>、<span class="im">虚軸方向に ${M`b`}</span><br>　→　${M`z=a+bi`}</div>
-    <div class="q" data-s="2"><b>②</b>　<span class="dp">向き ${M`\theta`} に、長さ ${M`r`}</span><br>　→　<b class="dp">長さ ${M`r`} と 向き ${M`\theta`}</b></div>
+    <div class="q dimo" data-s="1" data-o="2"><b>①</b>　<span class="re">実軸方向に ${M`a`}</span>、<span class="im">虚軸方向に ${M`b`}</span><br>　→　${M`z=a+bi`}</div>
+    <div class="q hl2" data-s="2" data-o="3"><b>②</b>　<span class="dp">向き ${M`\theta`} に、長さ ${M`r`}</span><br>　→　<b class="dp">長さ ${M`r`} と 向き ${M`\theta`}</b></div>
   </div>
-  <div class="r">${g1.svg(g1.walk(3.4, 2.2, 1, {plain:true, below:true, la:IT('a'), lb:IT('b')})
-    + g1.seg(0, 0, 3.4, 2.2, 2, {lab:IT('r'), side:-1}) + g1.ang(32.9, 2, {lab:IT('θ'), r:50, d:.5}) + P1)}</div>
+  <div class="r">${g1.svg(`<g class="dimo" data-o="2">${g1.walk(3.4, 2.2, 1, {plain:true, below:true, la:IT('a'), lb:IT('b')})}</g>`
+    + SWEEP + g1.ang(T1, 2, {lab:IT('θ'), r:50, d:1.1, fs:24})
+    + g1.seg(0, 0, 3.4, 2.2, 3, {lab:IT('r'), side:-1, w:6}) + P1 + RING)}</div>
 </div>` + CAP([
   `点 P の 位置の 表し方は、1つでは ありません。`,
   `① これまでの 表し方。<b class="re">横に ${M`a`}</b>、<b class="im">縦に ${M`b`}</b> 進んだ 点 → ${M`a+bi`}。`,
-  `② <b class="dp">どの 向きに、どれだけ 進むか</b> でも 表せます。「北東へ 3km」のような 言い方です。`
+  `② もう1つの 表し方。まず <b class="dp">向き</b>：実軸の 正の 向きから、ぐるっと ${M`\theta`} だけ 回します。`,
+  `次に <b class="dp">長さ</b>：その 向きに ${M`r`} だけ 進みます。「北東へ 3km」のような 言い方です。これが 極形式の もとに なります。`
 ]);
 
 /* 長さ と 向き の 名前 */
@@ -666,5 +672,134 @@ const DECK = {title:'①-4 極形式 練習編（問10）', pages:[
   {name:'表紙', html:p0}, {name:'手順', html:p1},
   ...PR.map((p,i)=>({name:`${p[0]}　${p[1].replace(/\\sqrt\{(\d)\}/g,'√$1').replace(/-/g,'−')}`, html:pages[i]})),
   {name:'答え（一覧）', html:pe},
+]};
+''')
+
+# ---------------------------------------------------------------- ②-1 掛け算と長さ・向き
+DECKS['2-1_掛け算と長さ向き'] = ('②-1 掛け算と長さ・向き', r'''
+const NO = '②-1', SEC = '数学C　複素数平面';
+const IT = v => `<tspan class="it">${v}</tspan>`;
+const S3 = Math.sqrt(3);
+
+const p0 = coverSlide({kicker:'数学C　複素数平面', no:NO, title:'掛け算と長さ・向き', sub:'掛けると 回る'});
+
+/* i を 掛けると */
+const gu = PL({x0:-1.6, x1:1.6, y0:-1.6, y1:1.6, u:140, grid:false, ticks:false});
+const RR = gu.u, CX = gu.X(0), CY = gu.Y(0);
+/* 円の 外側を 回る 矢印（a0° → a1°、左回り） */
+const arcA = (a0, a1, R, n, lab) => {
+  const r = Math.PI/180, x0 = CX+R*Math.cos(a0*r), y0 = CY-R*Math.sin(a0*r), t = a1*r, x1 = CX+R*Math.cos(t), y1 = CY-R*Math.sin(t);
+  const dx = -Math.sin(t), dy = -Math.cos(t), s = 13, w = 7;   // 左回りの 進む 向き
+  const hp = `${x1.toFixed(1)},${y1.toFixed(1)} ${(x1-dx*s-dy*w).toFixed(1)},${(y1-dy*s+dx*w).toFixed(1)} ${(x1-dx*s+dy*w).toFixed(1)},${(y1-dy*s-dx*w).toFixed(1)}`;
+  const m = (a0+a1)/2*r, lx = CX+(R+30)*Math.cos(m), ly = CY-(R+30)*Math.sin(m)+7;
+  return `<path class="arc rot dr" pathLength="1" d="M${x0.toFixed(1)} ${y0.toFixed(1)} A${R} ${R} 0 0 0 ${x1.toFixed(1)} ${y1.toFixed(1)}" data-s="${n}"/>`
+    + `<polygon class="roth" points="${hp}" data-s="${n}" style="--d:.5s"/>`
+    + `<text class="dp" x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="middle" data-s="${n}" style="--d:.3s">×${IT('i')}</text>`;
+};
+const UPTS = [[1,0,'1','nw'],[0,1,IT('i'),'se'],[-1,0,'−1','ne'],[0,-1,'−'+IT('i'),'nw']];
+const p1 = HD(NO, 'i を 掛けると', SEC) + `<div class="bd">
+  <div class="l">
+    <div class="q">${M`1`} に ${M`i`} を 次々に 掛ける。</div>
+    <div class="calc" style="font-size:32px;gap:10px">
+      <div>${M`1\times i=`}${FILL(1, M`i`, 2.4)}</div>
+      <div>${M`i\times i=`}${FILL(2, M`-1`, 2.4)}</div>
+      <div>${M`(-1)\times i=`}${FILL(3, M`-i`, 2.4)}</div>
+      <div>${M`(-i)\times i=`}${FILL(4, M`1`, 2.4)}</div>
+    </div>
+    <div class="q" data-s="5">→ ${M`i`} を 掛けると、原点の まわりに ${FILL(5, M`90^\circ`, 2.6)} 回転</div>
+    <div class="q" data-s="6">→ ${M`i^2=-1`}：${M`90^\circ`} 回転を 2回で 反対向き</div>
+  </div>
+  <div class="r">${gu.svg(`<circle class="ucirc" cx="${CX}" cy="${CY}" r="${RR}"/>`
+    + arcA(4, 86, RR+16, 1) + arcA(94, 176, RR+16, 2) + arcA(184, 266, RR+16, 3) + arcA(274, 356, RR+16, 4)
+    + gu.ang(180, 6, {r:62, lab:IT('i')+'²', fs:22, la:120})
+    + UPTS.map(([a,b,l,p],i)=>gu.dot(a, b, l, i ? i : null, {pos:p, d:i ? .6 : 0})).join(''))}</div>
+</div>` + CAP([
+  `${M`1`} から スタートして、${M`i`} を 1回ずつ 掛けて いきます。`,
+  `${M`1\times i=i`}。点 ${M`1`} が 点 ${M`i`} へ。真上に 回りました。`,
+  `${M`i\times i=i^2=-1`}。さらに 回って 真左へ。`,
+  `${M`(-1)\times i=-i`}。真下へ。`,
+  `${M`(-i)\times i=-i^2=1`}。1周して 元の ${M`1`} に 戻りました。`,
+  `${M`i`} を 掛ける たびに、原点の まわりを <b>${M`90^\circ`} ずつ 回って</b> います。`,
+  `${M`i^2=-1`} は「${M`90^\circ`} 回転を 2回 → ${M`180^\circ`} で 反対向き」と 見られます。`
+]);
+
+/* 積を 計算する */
+const CALC = [String.raw`2\times(1+i)=\DP{2+2i}`, String.raw`i\times(1+i)=i+i^2=\DP{-1+i}`, String.raw`(-1)\times(1+i)=\DP{-1-i}`,
+  String.raw`(1+i)\times(1+i)=1+2i+i^2=\DP{2i}`, String.raw`i\times(\sqrt{3}+i)=\sqrt{3}i+i^2=\DP{-1+\sqrt{3}i}`,
+  String.raw`(1+\sqrt{3}i)(\sqrt{3}+i)=\sqrt{3}+i+3i+\sqrt{3}i^2=\DP{4i}`];
+const p2 = HD(NO, '積を 計算する', SEC) + `<div class="bd col" style="align-items:flex-start">
+  <div class="q">次の 積を 計算し、結果の 長さ（絶対値）と 向き（偏角）を 求めよ。</div>
+  <div class="calc" style="font-size:29px;gap:6px">${CALC.map((c,i)=>`<div data-s="${i+1}">${M(c)}</div>`).join('')}</div>
+</div>` + CAP([
+  `まず、6つの 積を ふつうに 計算します。`,
+  `実数倍は、実部も 虚部も 2倍。`,
+  `${M`i^2=-1`} に 注意。`,
+  `${M`-1`} 倍は 符号が 反対に なります。`,
+  `${M`(1+i)^2=1+2i+i^2`}。${M`i^2=-1`} で 実部が 消えて ${M`2i`}。`,
+  `${M`\sqrt{3}i+i^2=-1+\sqrt{3}i`}。`,
+  `${M`\sqrt{3}i^2=-\sqrt{3}`} なので、実部が 消えて ${M`4i`}。`
+]);
+
+/* 長さと 向きを 表に する */
+const L = (t, n) => `\\on{${n}}{re}{${t}}`, A = (t, n) => `\\on{${n}}{im}{${t}^\\circ}`;
+const ROWS = [
+  [String.raw`2\times(1+i)`, '2','0', String.raw`\sqrt{2}`,'45', '2+2i', String.raw`2\sqrt{2}`,'45'],
+  [String.raw`i\times(1+i)`, '1','90', String.raw`\sqrt{2}`,'45', '-1+i', String.raw`\sqrt{2}`,'135'],
+  [String.raw`(-1)\times(1+i)`, '1','180', String.raw`\sqrt{2}`,'45', '-1-i', String.raw`\sqrt{2}`,'225'],
+  [String.raw`(1+i)\times(1+i)`, String.raw`\sqrt{2}`,'45', String.raw`\sqrt{2}`,'45', '2i', '2','90'],
+  [String.raw`i\times(\sqrt{3}+i)`, '1','90', '2','30', String.raw`-1+\sqrt{3}i`, '2','120'],
+  [String.raw`(1+\sqrt{3}i)(\sqrt{3}+i)`, '2','60', '2','30', '4i', '4','90']];
+const p3 = HD(NO, '長さと 向きを 比べる', SEC) + `<div class="bd col" style="gap:16px">
+  <div class="tbl mt" style="grid-template-columns:auto auto auto auto auto">
+    <div class="th">積</div><div class="th">${M`z_1`} の 長さ，向き</div><div class="th">${M`z_2`} の 長さ，向き</div><div class="th">計算した 結果</div><div class="th">結果の 長さ，向き</div>
+    ${ROWS.map(([p,l1,a1,l2,a2,res,lr,ar],i)=>`<div>${M(p)}</div><div>${M(`${L(l1,7)},\\ ${A(a1,8)}`)}</div><div>${M(`${L(l2,7)},\\ ${A(a2,8)}`)}</div>`
+      + `<div>${FILL(i+1, M(res), 4)}</div><div>${FILL(i+1, M(`${L(lr,7)},\\ ${A(ar,8)}`), 5)}</div>`).join('')}
+  </div>
+  <div class="q" data-s="9">→ 長さは ${FILL(9,'掛け算')}、向きは ${FILL(9,'足し算')}</div>
+</div>` + CAP([
+  `計算した 結果の 長さと 向きを、表に 入れて いきます。`,
+  `${M`2+2i`}：長さ ${M`2\sqrt{2}`}、向き ${M`45^\circ`}。`,
+  `${M`-1+i`}：長さ ${M`\sqrt{2}`}、向き ${M`135^\circ`}。`,
+  `${M`-1-i`}：長さ ${M`\sqrt{2}`}、向き ${M`225^\circ`}。`,
+  `${M`2i`}：長さ ${M`2`}、向き ${M`90^\circ`}。`,
+  `${M`-1+\sqrt{3}i`}：長さ ${M`2`}、向き ${M`120^\circ`}。`,
+  `${M`4i`}：長さ ${M`4`}、向き ${M`90^\circ`}。`,
+  `<b class="re">長さ</b> を 見比べると…　${M`2\times\sqrt{2}=2\sqrt{2}`}、${M`\sqrt{2}\times\sqrt{2}=2`}、${M`2\times2=4`}。<b>掛け算</b> に なって います。`,
+  `<b class="im">向き</b> は…　${M`90^\circ+45^\circ=135^\circ`}、${M`60^\circ+30^\circ=90^\circ`}。<b>足し算</b> に なって います。`,
+  `掛け算は「<b>長さは 掛け算、向きは 足し算</b>」。極形式（長さと 向き）で 見ると、しくみが よく 見えます。`
+]);
+
+/* 図で 確かめる */
+const gm = PL({x0:-1, x1:3, y0:-1, y1:5, u:66});
+const p4 = HD(NO, '図で 確かめる', SEC) + `<div class="bd">
+  <div class="l">
+    <div class="big" style="font-size:38px">${M`(1+\sqrt{3}i)(\sqrt{3}+i)=4i`}</div>
+    <div class="calc" style="font-size:28px;gap:10px">
+      <div data-s="1">${M`z_1=1+\sqrt{3}i`}：長さ ${M`\RE{2}`}、向き ${M`\IM{60^\circ}`}</div>
+      <div data-s="2">${M`z_2=\sqrt{3}+i`}：長さ ${M`\RE{2}`}、向き ${M`\IM{30^\circ}`}</div>
+      <div data-s="3">${M`4i`}：長さ ${M`\RE{2\times2}=4`}、向き ${M`\IM{60^\circ+30^\circ}=90^\circ`}</div>
+    </div>
+  </div>
+  <div class="r">${gm.svg(gm.arr(0,0,1,S3,1) + gm.dot(1,S3,IT('z')+'₁',1,{d:.6}) + gm.ang(60, 1, {r:42, lr:22, d:.6, la:48})
+    + gm.arr(0,0,S3,1,2) + gm.dot(S3,1,IT('z')+'₂',2,{d:.6, pos:'se'}) + gm.ang(30, 2, {r:74, lr:24, d:.6, la:11})
+    + gm.arr(0,0,0,4,3,{c:'g', w:5}) + gm.dot(0,4,'4'+IT('i'),3,{d:.6}) + gm.ang(90, 3, {r:110, lr:26, d:.6, la:76}))}</div>
+</div>` + CAP([
+  `最後の 積を、図で 確かめます。`,
+  `${M`z_1`} は 長さ ${M`2`}、向き ${M`60^\circ`}。`,
+  `${M`z_2`} は 長さ ${M`2`}、向き ${M`30^\circ`}。`,
+  `積 ${M`4i`} は、向きが ${M`60^\circ+30^\circ=90^\circ`}（真上）、長さが ${M`2\times2=4`}。表の とおりです。`
+]);
+
+/* まとめ（アニメーション なし） */
+const p5 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:30px">
+  <div class="sum" style="font-size:32px">
+    <span>${M`\times i`}</span><span class="ar">→</span><span>原点の まわりに ${M`90^\circ`} 回転</span>
+    <span>${M`z_1z_2`}</span><span class="ar">→</span><span><b class="re">長さは 掛け算</b>、<b class="im">向きは 足し算</b></span>
+  </div>
+</div>` + CAP([`②-2 では、この しくみを 極形式の 式で 確かめます。`]);
+
+const DECK = {title:'②-1 掛け算と長さ・向き', pages:[
+  {name:'表紙', html:p0}, {name:'i を 掛けると', html:p1}, {name:'積を 計算する', html:p2},
+  {name:'長さと 向きを 比べる', html:p3}, {name:'図で 確かめる', html:p4}, {name:'まとめ', html:p5},
 ]};
 ''')

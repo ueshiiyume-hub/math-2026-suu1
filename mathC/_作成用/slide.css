@@ -206,3 +206,23 @@ body.portrait .pl.sm2{width:400px;height:auto}
 .ans16{display:grid;grid-template-columns:1fr 1fr;gap:8px 40px;font-size:21px;width:100%}
 .ans16 > div{white-space:nowrap;border-bottom:1px solid var(--line);padding:3px 0}
 body.portrait .ans16{grid-template-columns:1fr;font-size:19px;gap:4px}
+/* 強調：うすくする・光らせる・回す・波紋 */
+.dimo{transition:opacity .5s}
+.dimo.on{opacity:.3}
+.hl2{border-left:6px solid transparent;padding:8px 14px;transition:background-color .5s,border-color .5s,transform .5s}
+.hl2.show{background:var(--pale);border-left-color:var(--main);transform:scale(1.06);transform-origin:left center}
+.hl2.on{border-left-color:var(--deep)}
+.pl .swl{stroke:var(--deep);stroke-width:2.5;stroke-dasharray:8 6}
+.pl .sweep{transform:rotate(0deg);transition:transform 1.1s ease-in-out .15s}
+.pl .sweep.on{transform:rotate(var(--rot))}
+.pl .pulse{fill:none;stroke:var(--deep);stroke-width:3;transform-box:fill-box;transform-origin:center}
+.pl .pulse.show{animation:pulse 1.4s ease-out var(--d,0s) 2 both}
+@keyframes pulse{from{transform:scale(.4);opacity:.9}to{transform:scale(1.8);opacity:0}}
+body.final .pl .pulse{animation:none;opacity:0}
+.dimo.on.cur{background:none}
+/* ②-1 */
+.pl .ucirc{fill:none;stroke:var(--line);stroke-width:2}
+.pl .arc.rot{stroke:var(--deep);stroke-width:3}
+.pl .roth{fill:var(--deep)}
+.tbl.mt{font-size:21px} .tbl.mt > div{padding:7px 12px}
+body.portrait .tbl.mt{font-size:15px} body.portrait .tbl.mt > div{padding:6px 4px}
