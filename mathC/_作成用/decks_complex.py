@@ -314,3 +314,105 @@ const DECK = {title:'①-2 和・差・実数倍・共役', pages:[
   {name:'まとめ', html:p10},
 ]};
 ''')
+
+# ---------------------------------------------------------------- ①-3 複素数の絶対値
+DECKS['1-3_絶対値'] = ('①-3 複素数の絶対値', r'''
+const NO = '①-3', SEC = '数学C　複素数平面';
+const IT = v => `<tspan class="it">${v}</tspan>`;
+const ABSZ = `|${IT('z')}|`;
+
+const p0 = coverSlide({kicker:'数学C　複素数平面', no:NO, title:'複素数の絶対値', sub:'原点からの 距離'});
+
+/* 定義 */
+const gd = PL({x0:-1, x1:5, y0:-1, y1:4, ticks:false});
+const PZ = gd.dot(3, 2, `${IT('z')} = ${IT('a')} + ${IT('b')}${IT('i')}`, null);
+const p1 = HD(NO, '絶対値', SEC) + `<div class="bd">
+  <div class="l">${BOX('定義', `原点 O と 点 ${M`z=a+bi`} の 距離を<br>${M`z`} の ${FILL(1,'絶対値')} といい、${M`|z|`} で 表す。`)}</div>
+  <div class="r">${gd.svg(gd.seg(0,0,3,2,1,{lab:ABSZ, side:-1}) + PZ)}</div>
+</div>` + CAP([
+  `複素数 ${M`z`} は 平面の 点でした。その 点が、原点から どれだけ 離れて いるかを 考えます。`,
+  `原点 O からの 距離を ${M`z`} の <b>絶対値</b> と いい、${M`|z|`} と 書きます。`
+]);
+
+/* 三平方の 定理で 求める */
+const p2 = HD(NO, '絶対値の 求め方', SEC) + `<div class="bd">
+  <div class="l">${BOX('三平方の 定理', `三平方の 定理より　${M`|z|^2=`}${FILL(2, M`\RE{a}^2+\IM{b}^2`, 5)}<br>
+    よって　${M`|z|=|a+bi|=`}${FILL(3, M`\sqrt{\RE{a}^2+\IM{b}^2}`, 6)}`)}</div>
+  <div class="r">${gd.svg(gd.walk(3, 2, 1, {plain:true, la:IT('a'), lb:IT('b')}) + gd.ra(3, 2, 1) + gd.seg(0,0,3,2,null,{lab:ABSZ, side:-1}) + PZ)}</div>
+</div>` + CAP([
+  `距離 ${M`|z|`} を、${M`a`} と ${M`b`} で 表して みましょう。`,
+  `<b class="re">横に ${M`a`}</b>、<b class="im">縦に ${M`b`}</b>。${M`|z|`} は 直角三角形の <b>斜辺</b> です。`,
+  `三平方の 定理で、${M`|z|^2=a^2+b^2`}。`,
+  `${M`|z|`} は 距離で 0 以上 なので、正の 平方根を とって ${M`\sqrt{a^2+b^2}`}。`,
+  `${M`a`} や ${M`b`} が 負でも、2乗 すれば 同じ。いつでも この 式で 求められます。`
+]);
+
+/* 例・練習：点 → 三角形 → 計算
+   pt：[a, b, 点の 名前]、leg：[横の 長さ, 縦の 長さ]、calc：[[TeX, 番, 遅れ], …]、hyp：斜辺の 文字、extra：最後の 1段（SVG） */
+function absPage(o){
+  const g = PL(o.R), [a,b,name] = o.pt;
+  const fig = g.walk(a, b, 1, {plain:true, la:o.leg[0], lb:o.leg[1]}) + (o.noRa ? '' : g.ra(a, b, 1))
+    + g.seg(0, 0, a, b, 2, {lab:o.hyp, ls:3, side:o.side||-1})
+    + g.dot(a, b, name, null, {pos:o.pp||'ne'}) + (o.extra ? o.extra(g) : '');
+  return HD(NO, o.title, SEC) + `<div class="bd">
+    <div class="l">${o.top}
+      <div class="calc">${o.calc.map(([t,n,d])=>`<div data-s="${n}"${d?` style="--d:${d}s"`:''}>${M(t)}</div>`).join('')}</div>
+    </div>
+    <div class="r">${g.svg(fig)}</div>
+  </div>` + CAP(o.cm);
+}
+const Q = (tag, t) => `<div class="q"><span class="tag">${tag}</span>${t}</div>`;
+
+const p3 = absPage({title:'例　|3＋4i|', R:{x0:-1, x1:5, y0:-1, y1:5, u:52}, pt:[3, 4, `3 + 4${IT('i')}`], leg:['3','4'], hyp:'5',
+  top: Q('例', `${M`|3+4i|`} を 求めよ。`),
+  calc:[[String.raw`|3+4i|=\sqrt{\RE{3}^2+\IM{4}^2}`, 2], [String.raw`=\sqrt{25}=\DP{5}`, 3]],
+  cm:[`点 ${M`3+4i`} と 原点の 距離を 求めます。`,
+      `横に ${M`3`}、縦に ${M`4`} の 直角三角形が できます。`,
+      `斜辺の 長さは、三平方の 定理で ${M`\sqrt{3^2+4^2}`}。`,
+      `${M`\sqrt{25}=5`}。原点から 距離 ${M`5`} の ところに あります。`]});
+
+const p4 = absPage({title:'練習 ⑴　|3−4i|', R:{x0:-1, x1:5, y0:-5, y1:5, u:44}, pt:[3, -4, `3 − 4${IT('i')}`], leg:['3','4'], hyp:'5', pp:'se', side:1,
+  top: Q('練習', '次の 複素数の 絶対値を 求めよ。') + `<div class="q big" style="font-size:36px">⑴　${M`3-4i`}</div>`,
+  calc:[[String.raw`|3-4i|=\sqrt{\RE{3}^2+(\IM{-4})^2}`, 2], [String.raw`=\sqrt{25}=\DP{5}`, 3]],
+  extra: g => g.seg(0, 0, 3, 4, 4, {c:'m'}) + g.dot(3, 4, `3 + 4${IT('i')}`, 4, {given:true}) + `<line class="dash" x1="${g.X(3)}" y1="${g.Y(4)}" x2="${g.X(3)}" y2="${g.Y(-4)}" data-s="4"/>`,
+  cm:[`点 ${M`3-4i`} は、実軸より 下に あります。`,
+      `横に ${M`3`}、下へ ${M`4`}。直角を はさむ 辺の 長さは ${M`3`} と ${M`4`} です。`,
+      `${M`-4`} も 2乗 すれば ${M`16`}。${M`\sqrt{3^2+(-4)^2}`} です。`,
+      `${M`\sqrt{25}=5`}。`,
+      `${M`3+4i`}（共役）と 実軸で 対称なので、距離も 同じ ${M`5`} です。`]});
+
+const p5 = absPage({title:'練習 ⑵　|−2i|', R:{x0:-3, x1:3, y0:-3, y1:2, u:60}, pt:[0, -2, `−2${IT('i')}`], leg:['',''], hyp:'2', pp:'se', side:1, noRa:true,
+  top: `<div class="q big" style="font-size:36px">⑵　${M`-2i`}</div>`,
+  calc:[[String.raw`\lvert -2i\rvert=\sqrt{\RE{0}^2+(\IM{-2})^2}`, 2], [String.raw`=\DP{2}`, 3]],
+  cm:[`点 ${M`-2i`} は 虚軸の 上に あります。`,
+      `実部が ${M`0`} なので 横には 進みません。三角形が つぶれて、縦の 線だけに なります。`,
+      `式に あてはめると ${M`\sqrt{0^2+(-2)^2}`}。`,
+      `${M`=2`}。図で 見た とおり、原点から そのまま ${M`2`} です。`]});
+
+const S3 = Math.sqrt(3);
+const p6 = absPage({title:'練習 ⑶　|1＋√3 i|', R:{x0:-1, x1:3, y0:-1, y1:3, u:84}, pt:[1, S3, `1 + √3${IT('i')}`], leg:['1','√3'], hyp:'2',
+  top: `<div class="q big" style="font-size:36px">⑶　${M`1+\sqrt{3}i`}</div>`,
+  calc:[[String.raw`|1+\sqrt{3}i|=\sqrt{\RE{1}^2+(\IM{\sqrt{3}})^2}`, 2], [String.raw`=\sqrt{4}=\DP{2}`, 3]],
+  extra: g => { const r = 32, cx = g.X(0), cy = g.Y(0), ex = cx + r*Math.cos(Math.PI/3), ey = cy - r*Math.sin(Math.PI/3);
+    return `<path class="arc" d="M${cx+r} ${cy} A${r} ${r} 0 0 0 ${ex.toFixed(1)} ${ey.toFixed(1)}" data-s="4"/>`
+      + `<text class="dp" x="${cx+36}" y="${cy-8}" style="font-size:17px" data-s="4">60°</text>`; },
+  cm:[`点 ${M`1+\sqrt{3}i`} は、横に ${M`1`}、縦に ${M`\sqrt{3}`} の ところです。`,
+      `横 ${M`1`}、縦 ${M`\sqrt{3}`} の 直角三角形が できます。`,
+      `${M`(\sqrt{3})^2=3`} なので、${M`\sqrt{1+3}`}。`,
+      `${M`\sqrt{4}=2`}。`,
+      `辺の 比 ${M`1:\sqrt{3}:2`} は 三角定規の 形。この 角 ${M`60^\circ`} は ①-4 で 使います。`]});
+
+/* まとめ（アニメーション なし） */
+const p7 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:34px">
+  ${BOX('絶対値', `<span class="big">${M`|z|=|a+bi|=\sqrt{\RE{a}^2+\IM{b}^2}`}</span><br>（原点からの 距離）`)}
+  <div class="res4">
+    <span>${M`|3+4i|=5`}</span><span>${M`|3-4i|=5`}</span><span>${M`\lvert -2i\rvert=2`}</span><span>${M`|1+\sqrt{3}i|=2`}</span>
+  </div>
+</div>` + CAP([`絶対値は「原点からの 距離」。直角三角形の 斜辺として、三平方の 定理で 求めます。`]);
+
+const DECK = {title:'①-3 複素数の絶対値', pages:[
+  {name:'表紙', html:p0}, {name:'絶対値（定義）', html:p1}, {name:'絶対値の 求め方', html:p2},
+  {name:'例　|3＋4i|', html:p3}, {name:'練習 ⑴　|3−4i|', html:p4}, {name:'練習 ⑵　|−2i|', html:p5}, {name:'練習 ⑶　|1＋√3 i|', html:p6},
+  {name:'まとめ', html:p7},
+]};
+''')

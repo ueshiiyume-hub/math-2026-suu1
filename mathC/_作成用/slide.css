@@ -186,3 +186,8 @@ body.portrait .tbl{font-size:23px} body.portrait .tbl > div{padding:12px 10px}
 .calc{display:flex;flex-direction:column;gap:6px;font-size:32px}
 .vnote{font-size:20px;color:var(--muted)}
 .op .box .bc{font-size:24px;line-height:1.9;padding:12px 18px}
+.pl .ram{fill:none;stroke:var(--axis);stroke-width:1.8}
+.pl .arc{fill:none;stroke:var(--deep);stroke-width:2.5}
+.pl text.dp{font-weight:700}
+.res4{display:grid;grid-template-columns:repeat(4,auto);gap:14px 40px;font-size:30px;white-space:nowrap}
+body.portrait .res4{grid-template-columns:repeat(2,auto)}

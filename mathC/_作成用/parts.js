@@ -59,6 +59,7 @@ function PL(o){
     const at = (nn, dd) => nn==null ? '' : ` data-s="${nn}"${op.e?` data-e="${op.e}"`:''} style="--d:${dd}s"`, dr = n==null ? '' : ' dr';
     const neg = v => String(v).replace('-', '−');
     const hd = (x, y, dir, c, nn, dd) => {   // 矢じり
+      if(op.plain) return '';   // plain：矢じり なし（三角形の 辺）
       const s = 11, pts = dir==='r' ? `${x},${y} ${x-s},${y-s*.6} ${x-s},${y+s*.6}` : dir==='l' ? `${x},${y} ${x+s},${y-s*.6} ${x+s},${y+s*.6}`
         : dir==='u' ? `${x},${y} ${x-s*.6},${y+s} ${x+s*.6},${y+s}` : `${x},${y} ${x-s*.6},${y-s} ${x+s*.6},${y-s}`;
       return `<polygon class="hd-${c}" points="${pts}"${at(nn, dd+.5)}/>`;
@@ -66,11 +67,11 @@ function PL(o){
     let h = '';
     if(a){
       h += `<path class="wk re${dr}" pathLength="1" d="M${X(0)} ${Y(0)} H${X(a)}"${at(n, d)}/>` + hd(X(a), Y(0), a>0?'r':'l', 're', n, d);
-      if(op.lab!==false) h += `<text class="re" x="${f((X(0)+X(a))/2)}" y="${Y(0) - 12}" text-anchor="middle"${at(n, d+.3)}>${op.la||neg(a)}</text>`;
+      if(op.lab!==false) h += `<text class="re" x="${f((X(0)+X(a))/2)}" y="${Y(0) - 12}" text-anchor="middle"${at(n, d+.3)}>${op.la??neg(a)}</text>`;
     }
     if(b){
       h += `<path class="wk im${dr}" pathLength="1" d="M${X(a)} ${Y(0)} V${Y(b)}"${at(nb, db)}/>` + hd(X(a), Y(b), b>0?'u':'d', 'im', nb, db);
-      if(op.lab!==false) h += `<text class="im" x="${X(a) + (a<0 ? -12 : 12)}" y="${f((Y(0)+Y(b))/2)+8}" text-anchor="${a<0?'end':'start'}"${at(nb, db+.3)}>${op.lb||neg(b)}</text>`;
+      if(op.lab!==false) h += `<text class="im" x="${X(a) + (a<0 ? -12 : 12)}" y="${f((Y(0)+Y(b))/2)+8}" text-anchor="${a<0?'end':'start'}"${at(nb, db+.3)}>${op.lb??neg(b)}</text>`;
     }
     return h;
   };
@@ -99,6 +100,22 @@ function PL(o){
   g.move = (inner, dx, dy, n, op={}) => `<g data-s="${n}"${op.e?` data-e="${op.e}"`:''}><g class="mv" data-o="${n}" style="--tx:${f(dx*u)}px;--ty:${f(-dy*u)}px">${inner}</g></g>`;
   /* 実軸で 折り返す：n 番で 出て、実軸を 折り目に ひっくり返る */
   g.flip = (inner, n, op={}) => `<g data-s="${n}"${op.e?` data-e="${op.e}"`:''}><g class="fl" data-o="${n}" style="transform-origin:0px ${Y(0)}px">${inner}</g></g>`;
+  /* 線分 (x0,y0)–(x1,y1)。n 番で かく。op: c（g・k・m）、lab（文字）、ls（文字が 出る 番。ふつうは n）、side（文字を 置く 側 1／−1）、d、e、w */
+  g.seg = (x0, y0, x1, y1, n, op={}) => {
+    const ax = X(x0), ay = Y(y0), bx = X(x1), by = Y(y1), L = Math.hypot(bx-ax, by-ay) || 1, d = op.d||0;
+    const at = (dd, nn=n) => nn==null ? '' : ` data-s="${nn}"${op.e?` data-e="${op.e}"`:''} style="--d:${dd}s"`;
+    let h = `<path class="vc ${op.c||'g'}${n!=null?' dr':''}" pathLength="1" d="M${f(ax)} ${f(ay)} L${f(bx)} ${f(by)}"${op.w?` style="stroke-width:${op.w}"`:''}${at(d)}/>`;
+    if(op.lab){
+      const sd = op.side||1, nx = -(by-ay)/L*sd, ny = (bx-ax)/L*sd;   // 線に 垂直な 向き
+      h += `<text class="${op.lc||'dp'}" x="${f((ax+bx)/2 + nx*24)}" y="${f((ay+by)/2 + ny*24 + 8)}" text-anchor="middle"${op.ls!=null ? at(0, op.ls) : at(d+.4)}>${op.lab}</text>`;
+    }
+    return h;
+  };
+  /* 直角の 印：(a,0) の 角（原点 と (a,b) の 間） */
+  g.ra = (a, b, n) => {
+    const s = 14, sx = a>0 ? -s : s, sy = b>0 ? -s : s;
+    return `<path class="ram" d="M${X(a)+sx} ${Y(0)} V${Y(0)+sy} H${X(a)}"${n==null?'':` data-s="${n}"`}/>`;
+  };
   /* 文字 */
   g.text = (x, y, s, cls, n, anchor) => `<text class="${cls||''}" x="${X(x)}" y="${Y(y)}" text-anchor="${anchor||'middle'}"${n==null?'':` data-s="${n}"`}>${s}</text>`;
   return g;
