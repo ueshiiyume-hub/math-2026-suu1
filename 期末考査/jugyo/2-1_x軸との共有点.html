@@ -937,6 +937,22 @@ i.nv{font-style:normal;font-family:inherit}
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .v2up{fill:#5a3a48} }
 :root[data-theme="dark"] .v2up{fill:#5a3a48}
 .v2 .ititle{display:none}
+.v2eqm{position:absolute;left:24px;top:40px;font-size:72px;white-space:nowrap}
+.v2sw{display:inline-grid}
+.v2gt,.v2eq0{grid-area:1/1;transition:opacity .5s,transform .5s}
+.v2eq0{opacity:0;transform:translateY(-30px);color:#e0465e}
+.v2eq0.on{opacity:1;transform:none}
+.v2gt.on{opacity:0;transform:translateY(30px)}
+.v2c > .v2kw[data-s="2"]{top:230px}
+.v2box{position:absolute;left:24px;top:36px;width:860px;padding:22px 30px;background:#dce6f2;border-radius:8px;display:grid;grid-template-columns:auto auto 1fr;align-items:baseline;row-gap:14px;font-size:50px}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .v2box{background:#33405a} }
+:root[data-theme="dark"] .v2box{background:#33405a}
+.v2row{display:contents}
+.v2row>span{opacity:0;transition:opacity .4s}
+.v2row.show>span{opacity:1}
+.v2l{text-align:right;white-space:nowrap} .v2e{padding:0 18px} .v2r{white-space:nowrap}
+.v2box .ytag{position:absolute;right:30px;top:34px;font-size:26px}
+.v2hit{color:var(--accent);background:linear-gradient(transparent 62%,#ffe680 62%);padding:0 6px}
 
 /* ===== 手書き ===== */
 #ink{position:fixed;left:0;top:0;z-index:15;pointer-events:none;touch-action:none}

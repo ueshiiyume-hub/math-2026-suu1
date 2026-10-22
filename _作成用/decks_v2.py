@@ -24,6 +24,38 @@ const v1 = `
   </div>
   ${cbar([`今日 やるのは <b>2次不等式</b> を 解くこと。`, `たとえば ${M('x² − 2x − 3 ＞ 0')}。　3つの ステップで 解いて いこう。`])}`;
 
+
+/* 2：不等式の「＞ 0」が「＝ 0」に 変わる → 2次方程式を 解く */
+const va = `
+  <div class="card abs dcard v2">${EQTAPE}
+    ${NAV(1)}
+    <div class="v2c">
+      <div class="v2eqm math">x${P2} − 2x − 3 <span class="v2sw"><span class="v2gt" data-o="1">＞ 0</span><span class="v2eq0" data-o="1">＝ 0</span></span></div>
+      ${BIG('まずは','2次方程式を 解く',null,2)}
+    </div>
+  </div>
+  ${cbar([`${M('x² − 2x − 3 ＞ 0')}。　まずは ＞ を ＝ に して…`, `${M('x² − 2x − 3 ＝ 0')}。　これは 2次方程式。`, `まずは <b>2次方程式を 解く</b>。　x軸との 共有点を 求める ため。`])}`;
+
+/* 3：Step❶ の 枠を 大きく（＝ の 位置を そろえる） */
+const RW = (s, l, r, extra='') => `<div class="v2row lh" data-s="${s}"><span class="v2l">${l}</span><span class="v2e">＝</span><span class="v2r">${r}</span>${extra}</div>`;
+const vb = `
+  <div class="card abs dcard v2">${EQTAPE}
+    ${NAV(1)}
+    <div class="v2c">
+      <div class="v2box math">
+        ${RW(0,'y',`x${P2} − 2x − 3`,`<span class="ytag lh" data-s="1">y ＝ 0 と する</span>`)}
+        ${RW(1,`x${P2} − 2x − 3`,'0')}
+        ${RW(2,'(x ＋ 1)(x − 3)','0')}
+        ${RW(3,'x','<span class="v2hit">−1, 3</span>')}
+      </div>
+    </div>
+  </div>
+  ${cbar([
+    `${M('x² − 2x − 3')} を y と おく。`,
+    `x軸との 共有点 → <b>y ＝ 0</b> と する。　${M('x² − 2x − 3 ＝ 0')}。`,
+    `たして −2、かけて −3 → 因数分解。`,
+    `${M('x ＝ −1, 3')}。　これが グラフと x軸の 共有点。`])}`;
+
 /* 3：0より 大きい（上を 塗る） */
 const g3 = IG({...GV});
 const v3 = `
@@ -74,7 +106,7 @@ const v5 = `
 
 const DECK = {title:'③-1 2次不等式の解法 ver 2', pages:[
   {name:'表紙', html:coverF(KK2, '<span class="mk">2次不等式</span><br>の 解き方', '塗って 答える', '', POL, '3つの Step')},
-  {name:'やること', html:v1}, {name:'⑴ ❶ 式', html:s2}, {name:'⑴ ❷ 上を塗る', html:v3}, {name:'⑴ ❷ x軸上', html:v4},
+  {name:'やること', html:v1}, {name:'⑴ ❶ ＝0 に', html:va}, {name:'⑴ ❶ 解く', html:vb}, {name:'⑴ ❶ 式', html:s2}, {name:'⑴ ❷ 上を塗る', html:v3}, {name:'⑴ ❷ x軸上', html:v4},
   {name:'⑴ ❸ 答える', html:v5}, {name:'⑴ 書きこみ', html:s5},
   {name:'終', html:endF(KK2 + '　2次不等式の解法', POL)}
 ]};
