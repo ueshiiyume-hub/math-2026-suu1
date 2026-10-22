@@ -404,6 +404,8 @@ const DECK = {title:'①-5 2次方程式の解', pages:[
 
 # ①-6〜③-4（プリントの 画像を 背景に した スライド）
 sys.path.insert(0, B); import decks_kimatsu2; decks_kimatsu2.add(decks)
+# ③-1 ver 2.0（作り直し。ver 1.4 は そのまま 残す）
+import decks_v2; decks_v2.add(decks)
 
 # バージョンと 日付（versions.json）。直したら v と date を 書きかえる。表紙の 右下に 出る
 import json

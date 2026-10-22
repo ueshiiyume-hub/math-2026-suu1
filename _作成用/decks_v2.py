@@ -1,0 +1,85 @@
+"""③-1 2次不等式の解法 ver 2.0（作り直し）。ver 1.4（3-1_2次不等式の解法.html）は そのまま 残す。
+土台の 部品は v2_base_3-1.js（ver 1.4 の 写し）。この ファイルの 画面は 1画面に 主役 1つ、言葉は 短く。"""
+import os
+B = os.path.dirname(os.path.abspath(__file__))
+
+V2 = r'''
+const KK2 = KIMATSU + '　③-1';
+/* 左の 現在地（❶ 式 ／ ❷ 塗る ／ ❸ 答える） */
+const NAV = (on) => `<div class="v2nav">${['❶ 式','❷ 塗る','❸ 答える'].map((t,i)=>`<div class="v2n${i+1===on?' on':''}${i+1<on?' done':''}">${t}</div>`).join('')}</div>`;
+/* 小さい 一言 ＋ 大きい 主役（mk：マーカー、sub：かっこ書き） */
+const BIG = (sm, big, sub, s, o) => `<div class="v2kw lh" data-s="${s??0}"${o!==undefined?` data-o="${o}"`:''}>
+    ${sm?`<div class="v2sm">${sm}</div>`:''}<div class="v2big"><span class="v2mk">${big}</span>${sub?`<span class="v2sub">${sub}</span>`:''}</div></div>`;
+/* グラフ（主役の 下） */
+const GV = {ay:120, cx:1, sc:120, k:44, r:[-1,3], top:8, W:880, H:310};
+
+/* 1：これから やること */
+const v1 = `
+  <div class="card abs dcard v2">${EQTAPE}
+    ${NAV(0)}
+    <div class="v2c">
+      ${BIG('これから やること','2次不等式を 解く')}
+      <div class="v2eq lh math" data-s="1">${EQ1}</div>
+    </div>
+  </div>
+  ${cbar([`今日 やるのは <b>2次不等式</b> を 解くこと。`, `たとえば ${M('x² − 2x − 3 ＞ 0')}。　3つの ステップで 解いて いこう。`])}`;
+
+/* 3：0より 大きい（上を 塗る） */
+const g3 = IG({...GV});
+const v3 = `
+  <div class="card abs dcard v2">${EQTAPE}
+    ${NAV(2)}
+    <div class="v2c">
+      ${BIG(`<span class="math">x${P2} − 2x − 3</span> を <span class="math">y</span> と みる`, '0より 大きい', '（上を 塗る）')}
+      <div class="v2g">${g3.svg(`<rect class="v2up gs" data-s="1" x="10" y="2" width="${g3.W-20}" height="${g3.ay-2}"/>`, g3.base, g3.seg(g3.xa,-1,2), g3.seg(3,g3.xb,2))}</div>
+    </div>
+  </div>
+  ${cbar([
+    `${M('x² − 2x − 3')} を <b>y</b> と みると、${M('y ＞ 0')}。　0より 大きい → x軸より <b>上</b>。`,
+    `x軸より 上を <b>全部</b> 塗る。`,
+    `グラフの うち、塗った 中に 入って いる ところが 答えの 部分。`])}`;
+
+/* 4：x軸上は 塗らない（＝ が ない → 白丸） */
+const g4 = IG({...GV});
+const v4 = `
+  <div class="card abs dcard v2">${EQTAPE}
+    ${NAV(2)}
+    <div class="v2c">
+      ${BIG('＞ に ＝ が ない','x軸上は 塗らない')}
+      <div class="v2g">${g4.svg(`<rect class="v2up show" x="10" y="2" width="${g4.W-20}" height="${g4.ay-2}"/>`, g4.base, g4.seg(g4.xa,-1,0).replace('class="ipaint"','class="ipaint show"'), g4.seg(3,g4.xb,0).replace('class="ipaint"','class="ipaint show"'), g4.dot(-1,1,true), g4.dot(3,1,true))}</div>
+    </div>
+  </div>
+  ${cbar([`−1 と 3 は x軸の 上（y ＝ 0）。　「＞」に ＝ は ない。`, `だから x軸上は 塗らない → <b>白丸</b>。`])}`;
+
+/* 5：x を 置く → 斜めに 比べる → 答え */
+const g5 = IG({...GV});
+const C5L = CMP(g5,'L',-1,-1.3,1,2,'x ＜ −1'), C5R = CMP(g5,'R',3,3.3,1,4,'3 ＜ x');
+const v5 = `
+  <div class="card abs dcard v2">${EQTAPE}
+    ${NAV(3)}
+    <div class="v2c">
+      ${BIG('塗れた ところの x は？','x を 置く',null,0,6)}
+      <div class="v2kw v2ans lh" data-s="6"><div class="v2sm">答え</div><div class="v2big math"><span class="v2mk">x ＜ −1, 3 ＜ x</span></div></div>
+      <div class="v2g">${g5.svg(C5L.band, C5R.band, g5.base, g5.seg(g5.xa,-1,0).replace('class="ipaint"','class="ipaint show"'), g5.seg(3,g5.xb,0).replace('class="ipaint"','class="ipaint show"'), g5.dot(-1,0,true), g5.dot(3,0,true), C5L.rest, C5R.rest)}</div>
+    </div>
+  </div>
+  ${cbar([
+    `塗れた ところの x は どんな 数？`,
+    `塗れた 2か所に <b>x</b> を 置く。`,
+    `左：x は −1 より 小さい。　白丸 なので ＜。`,
+    `書き直して ${M('x ＜ −1')}。`,
+    `右：x は 3 より 大きい。　白丸 なので ＜。`,
+    `書き直して ${M('3 ＜ x')}。`,
+    `答え ${M('x ＜ −1, 3 ＜ x')}。　<b>完成！</b>`])}`;
+
+const DECK = {title:'③-1 2次不等式の解法 ver 2', pages:[
+  {name:'表紙', html:coverF(KK2, '<span class="mk">2次不等式</span><br>の 解き方', '塗って 答える', '', POL, '3つの Step')},
+  {name:'やること', html:v1}, {name:'⑴ ❶ 式', html:s2}, {name:'⑴ ❷ 上を塗る', html:v3}, {name:'⑴ ❷ x軸上', html:v4},
+  {name:'⑴ ❸ 答える', html:v5}, {name:'⑴ 書きこみ', html:s5},
+  {name:'終', html:endF(KK2 + '　2次不等式の解法', POL)}
+]};
+'''
+
+def add(decks):
+    base = open(os.path.join(B, 'v2_base_3-1.js'), encoding='utf-8').read()
+    decks['3-1_2次不等式の解法_v2'] = ('③-1 2次不等式の解法 ver 2', base + V2)
