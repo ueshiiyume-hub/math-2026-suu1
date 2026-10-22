@@ -148,10 +148,21 @@ const s5a = PR({...P1, phase:2, upto:true, cm:[
   `x軸より 上の 部分を、x軸の ギリギリ まで 塗る。`,
   `x軸上は 塗らない → −1、3 は <b>白丸</b>。　<i class="nv">Step</i>❷ <b>完成！</b>`]});
 
+/* 書きこみ：<i class="nv">Step</i>❷ は もう 塗って ある 形で 始め、❸（x を 置く → 比べる → 答え）だけ 動かす */
+const AFTER2 = h => h.replace(/class="gs" data-s="[12]"/g,'class="gs show"').replace(/data-s="(\d+)"/g,(m,n)=>`data-s="${Math.max(0,n-2)}"`);
+const s5b = AFTER2(PR({...P1, phase:2, cm:[
+  `プリントに 書きこもう。　<i class="nv">Step</i>❷ は もう 塗れて いる。`,
+  `<i class="nv">Step</i>❸。　塗れた 2か所に <b>x</b> を 置く。`,
+  `左：x は −1 より 左 → 小さい。　白丸 なので <b>＜</b>。`,
+  `書き直して ${M('x ＜ −1')}。`,
+  `右：x は 3 より 右 → 大きい。　白丸 なので <b>＜</b>。`,
+  `書き直して ${M('3 ＜ x')}。`,
+  `<i class="nv">Step</i>❸ の 枠に ${M('x ＜ −1, 3 ＜ x')}。　<b>完成！</b>`]}));
+
 const DECK = {title:'③-1 2次不等式の解法 ver 2', pages:[
   {name:'表紙', html:coverF(KK2, '<span class="mk">2次不等式</span><br>の 解き方', '塗って 答える', '', POL, '3つの Step')},
   {name:'やること', html:v1}, {name:'⑴ ❶ ＝0 に', html:va}, {name:'⑴ ❶ 解く', html:vb}, {name:'⑴ ❶ プリント', html:s2v}, {name:'⑴ ❷ 上を塗る', html:v3}, {name:'⑴ ❷ x軸上', html:v4}, {name:'⑴ ❷ プリント', html:s5a},
-  {name:'⑴ ❸ 答える', html:v5}, {name:'⑴ 書きこみ', html:s5},
+  {name:'⑴ ❸ 答える', html:v5}, {name:'⑴ 書きこみ', html:s5b},
   {name:'終', html:endF(KK2 + '　2次不等式の解法', POL)}
 ]};
 '''

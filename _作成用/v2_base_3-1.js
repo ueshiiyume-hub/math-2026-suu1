@@ -259,7 +259,7 @@ const CMP = (g, side, r, xc, sx, s, out) => {
   return {band, rest:`<g class="gs" data-s="${s}"><path class="ilt-h" d="M16 -16 L-16 0 L16 16" transform="translate(${f(mx)} ${f(my)}) rotate(${f(rot)})"/><path class="ilt" d="M16 -16 L-16 0 L16 16" transform="translate(${f(mx)} ${f(my)}) rotate(${f(rot)})"/></g>
     <g class="gs" data-s="${sx}"><line class="ixln" x1="${f(bx)}" y1="${f(by)}" x2="${f(cx)}" y2="${f(cy)}"/><circle class="ixdot" cx="${f(cx)}" cy="${f(cy)}" r="6"/>
       <circle class="ixb" cx="${f(bx)}" cy="${f(by)}" r="24"/><text class="ixt" x="${f(bx)}" y="${f(by+10)}" text-anchor="middle">x</text></g>
-    <g class="gs" data-s="${s+1}"><path class="iarw" d="M${f(mx)} ${f(my+34)} Q${f(qx)} ${f(qy)} ${f(ex)} ${f(ey)}"/><polygon class="iarh" points="${HEAD}"/>
+    <g class="gs" data-s="${s+1}"><line class="idot2" x1="${f(mx+(side==='L'?-10:10))}" y1="${f(my+34)}" x2="${f(ex)}" y2="${f(ey)}"/>
       <text class="iwr" x="${f(tx)}" y="${f(ty)}" text-anchor="middle">${out.replace(/x/g,'<tspan font-style="italic">x</tspan>')}</text></g>`}; };
 const b1 = IG({...G1, ay:190, H:420});
 const C1L = CMP(b1,'L',-1,-1.35,1,2,'x ＜ −1'), C1R = CMP(b1,'R',3,3.35,1,4,'3 ＜ x');
