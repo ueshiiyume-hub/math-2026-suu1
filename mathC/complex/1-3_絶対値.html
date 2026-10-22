@@ -213,6 +213,21 @@ body.portrait .tbl{font-size:23px} body.portrait .tbl > div{padding:12px 10px}
 .pl text.dp{font-weight:700}
 .res4{display:grid;grid-template-columns:repeat(4,auto);gap:14px 40px;font-size:30px;white-space:nowrap}
 body.portrait .res4{grid-template-columns:repeat(2,auto)}
+/* Point の 枠（プリントの 緑の Point） */
+.pbox{border-left:5px solid var(--deep);background:var(--pale);padding:10px 20px 14px;font-size:24px;line-height:1.9}
+.pbox .pl2{color:var(--deep);font-weight:700;font-size:18px;letter-spacing:.08em}
+.tbl.rd{font-size:20px} .tbl.rd > div{padding:8px 8px}
+.tbl.rd .fill{min-width:0!important}
+.pl.pg{height:430px} .pl.uc{height:250px}
+body.portrait .pl.pg{width:520px;height:auto} body.portrait .pl.uc{width:300px;height:auto}
+.pl.sm2{height:330px}
+body.portrait .pl.sm2{width:400px;height:auto}
+/* 練習編 */
+.pl .qd{fill:var(--main);fill-opacity:.16}
+.pl.pr{height:440px} body.portrait .pl.pr{width:540px;height:auto}
+.ans16{display:grid;grid-template-columns:1fr 1fr;gap:8px 40px;font-size:21px;width:100%}
+.ans16 > div{white-space:nowrap;border-bottom:1px solid var(--line);padding:3px 0}
+body.portrait .ans16{grid-template-columns:1fr;font-size:19px;gap:4px}
 
 </style>
 </head>
@@ -257,7 +272,16 @@ function PL(o){
   const X = x => pad + (x-o.x0)*u, Y = y => pad + (o.y1-y)*u;
   const f = v => +v.toFixed(1);
   let base = '';
-  if(o.grid!==false){
+  if(o.polar){   // 同心円と 角の 線（極形式の 読み取り）：polar:{n:円の 数, rays:[角…], labels:[角…]}
+    for(let k=1; k<=o.polar.n; k++) base += `<circle class="gd" cx="${X(0)}" cy="${Y(0)}" r="${k*u}" fill="none"/>`;
+    const R = o.polar.n*u;
+    (o.polar.rays||[]).forEach(t=>{ const c=Math.cos(t*Math.PI/180), s=Math.sin(t*Math.PI/180);
+      base += `<line class="gd" x1="${X(0)}" y1="${Y(0)}" x2="${f(X(0)+R*c)}" y2="${f(Y(0)-R*s)}"/>`; });
+    (o.polar.labels||[]).forEach(t=>{ const c=Math.cos(t*Math.PI/180), s=Math.sin(t*Math.PI/180);
+      base += `<text class="sm" x="${f(X(0)+(R+24)*c)}" y="${f(Y(0)-(R+24)*s+7)}" text-anchor="middle">${t}°</text>`; });
+    for(let k=1; k<=o.polar.n; k++) base += `<text class="sm" x="${X(0)+k*u-5}" y="${Y(0)+22}" text-anchor="end">${k}</text>`;
+  }
+  else if(o.grid!==false){
     for(let x=o.x0; x<=o.x1; x++) base += `<line class="gd" x1="${X(x)}" y1="${Y(o.y0)}" x2="${X(x)}" y2="${Y(o.y1)}"/>`;
     for(let y=o.y0; y<=o.y1; y++) base += `<line class="gd" x1="${X(o.x0)}" y1="${Y(y)}" x2="${X(o.x1)}" y2="${Y(y)}"/>`;
   }
@@ -267,7 +291,7 @@ function PL(o){
   if(o.xl!==null) base += `<text class="${o.xl?'jp':'it'}" x="${ax1+6}" y="${Y(0)+7}">${o.xl||'x'}</text>`;
   if(o.yl!==null) base += `<text class="${o.yl?'jp':'it'}" x="${X(0)+12}" y="${ay1+4}">${o.yl||'y'}</text>`;
   base += `<text x="${X(0)-24}" y="${Y(0)+26}">O</text>`;
-  if(o.ticks!==false) base += `<text x="${X(1)-6}" y="${Y(0)+26}">1</text><text x="${X(0)-20}" y="${Y(1)+8}">1</text>`;
+  if(o.ticks!==false && !o.polar) base += `<text x="${X(1)-6}" y="${Y(0)+26}">1</text><text x="${X(0)-20}" y="${Y(1)+8}">1</text>`;
   const g = {X, Y, u, W, H};
   g.svg = (inner, cls) => `<svg class="pl ${cls||''}" viewBox="${-40} ${-10} ${W+90} ${H+20}">${base}${inner||''}</svg>`;
   /* 点：dot(a, b, 名前, 番, {pos:'ne'|'nw'|'se'|'sw', d:遅れ, given:true}) */
@@ -292,7 +316,7 @@ function PL(o){
     let h = '';
     if(a){
       h += `<path class="wk re${dr}" pathLength="1" d="M${X(0)} ${Y(0)} H${X(a)}"${at(n, d)}/>` + hd(X(a), Y(0), a>0?'r':'l', 're', n, d);
-      if(op.lab!==false) h += `<text class="re" x="${f((X(0)+X(a))/2)}" y="${Y(0) - 12}" text-anchor="middle"${at(n, d+.3)}>${op.la??neg(a)}</text>`;
+      if(op.lab!==false) h += `<text class="re" x="${f((X(0)+X(a))/2)}" y="${Y(0) + (op.below ? 28 : -12)}" text-anchor="middle"${at(n, d+.3)}>${op.la??neg(a)}</text>`;
     }
     if(b){
       h += `<path class="wk im${dr}" pathLength="1" d="M${X(a)} ${Y(0)} V${Y(b)}"${at(nb, db)}/>` + hd(X(a), Y(b), b>0?'u':'d', 'im', nb, db);
@@ -340,6 +364,15 @@ function PL(o){
   g.ra = (a, b, n) => {
     const s = 14, sx = a>0 ? -s : s, sy = b>0 ? -s : s;
     return `<path class="ram" d="M${X(a)+sx} ${Y(0)} V${Y(0)+sy} H${X(a)}"${n==null?'':` data-s="${n}"`}/>`;
+  };
+  /* 角の 弧：実軸の 正の 向きから deg まで 左回り。op: r（半径 px）、lab（文字。なければ deg°）、d、c */
+  g.ang = (deg, n, op={}) => {
+    const r = op.r||34, cx = X(0), cy = Y(0), t = deg*Math.PI/180, m = t/2;
+    const ex = cx + r*Math.cos(t), ey = cy - r*Math.sin(t), big = deg>180 ? 1 : 0;
+    const at = dd => n==null ? '' : ` data-s="${n}"${op.e?` data-e="${op.e}"`:''} style="--d:${dd}s"`;
+    const lr = r + (op.lr||22);
+    return `<path class="arc${n!=null?' dr':''}" pathLength="1" d="M${cx+r} ${cy} A${r} ${r} 0 ${big} 0 ${f(ex)} ${f(ey)}"${at(op.d||0)}/>`
+      + (op.lab===false ? '' : `<text class="dp" style="font-size:${op.fs||19}px" x="${f(cx+lr*Math.cos(m))}" y="${f(cy-lr*Math.sin(m)+7)}" text-anchor="middle"${at((op.d||0)+.4)}>${op.lab||deg+'°'}</text>`);
   };
   /* 文字 */
   g.text = (x, y, s, cls, n, anchor) => `<text class="${cls||''}" x="${X(x)}" y="${Y(y)}" text-anchor="${anchor||'middle'}"${n==null?'':` data-s="${n}"`}>${s}</text>`;

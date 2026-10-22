@@ -416,3 +416,255 @@ const DECK = {title:'①-3 複素数の絶対値', pages:[
   {name:'まとめ', html:p7},
 ]};
 ''')
+
+# ---------------------------------------------------------------- ①-4 複素数の極形式
+DECKS['1-4_極形式'] = ('①-4 複素数の極形式', r'''
+const NO = '①-4', SEC = '数学C　複素数平面';
+const IT = v => `<tspan class="it">${v}</tspan>`;
+const S3 = Math.sqrt(3), S2 = Math.sqrt(2);
+
+const p0 = coverSlide({kicker:'数学C　複素数平面', no:NO, title:'複素数の極形式', sub:'長さと 向きで 表す'});
+
+/* 2通りの 表し方 */
+const g1 = PL({x0:-1, x1:5, y0:-1, y1:4, ticks:false});
+const P1 = g1.dot(3.4, 2.2, 'P', null);
+const p1 = HD(NO, '点の 位置の 2通りの 表し方', SEC) + `<div class="bd">
+  <div class="l" style="gap:30px">
+    <div class="q" data-s="1"><b>①</b>　<span class="re">実軸方向に ${M`a`}</span>、<span class="im">虚軸方向に ${M`b`}</span><br>　→　${M`z=a+bi`}</div>
+    <div class="q" data-s="2"><b>②</b>　<span class="dp">向き ${M`\theta`} に、長さ ${M`r`}</span><br>　→　<b class="dp">長さ ${M`r`} と 向き ${M`\theta`}</b></div>
+  </div>
+  <div class="r">${g1.svg(g1.walk(3.4, 2.2, 1, {plain:true, below:true, la:IT('a'), lb:IT('b')})
+    + g1.seg(0, 0, 3.4, 2.2, 2, {lab:IT('r'), side:-1}) + g1.ang(32.9, 2, {lab:IT('θ'), r:50, d:.5}) + P1)}</div>
+</div>` + CAP([
+  `点 P の 位置の 表し方は、1つでは ありません。`,
+  `① これまでの 表し方。<b class="re">横に ${M`a`}</b>、<b class="im">縦に ${M`b`}</b> 進んだ 点 → ${M`a+bi`}。`,
+  `② <b class="dp">どの 向きに、どれだけ 進むか</b> でも 表せます。「北東へ 3km」のような 言い方です。`
+]);
+
+/* 長さ と 向き の 名前 */
+const p2 = HD(NO, '長さ と 向き', SEC) + `<div class="bd col" style="gap:30px">
+  <div class="tbl" style="grid-template-columns:auto 1fr auto auto">
+    <div class="th"></div><div class="th">意味</div><div class="th">記号</div><div class="th">読み方</div>
+    <div><b class="dp">長さ ${M`r`}</b></div><div>原点 O からの 距離</div><div>${FILL(1, M`|z|`, 3)}</div><div>${M`z`} の 絶対値</div>
+    <div><b class="dp">向き ${M`\theta`}</b></div><div>実軸の 正の 向きから、左回りに 測った 角</div><div>${FILL(2, M`\arg z`, 3.6)}</div><div>${M`z`} の 偏角<br><span class="mu" style="font-size:18px">（arg：argument）</span></div>
+  </div>
+  <div class="q" data-s="3">「${M`\arg z=60^\circ`}」＝「${M`z`} は ${M`60^\circ`} の 向きに ある」</div>
+</div>` + CAP([
+  `②の 長さ と 向き には、名前と 記号が あります。`,
+  `長さ ${M`r`} は、①-3 で 学んだ <b>絶対値</b> ${M`|z|`} です。`,
+  `向き ${M`\theta`} は <b>偏角</b> と いい、${M`\arg z`} と 書きます。実軸の 正の 向きから <b>左回り</b> に 測ります。`,
+  `${M`\arg z`} は「${M`z`} の 向き」と 読みかえると わかりやすいです。`
+]);
+
+/* 極形式 */
+const g3 = PL({x0:-1, x1:5, y0:-1, y1:4, ticks:false});
+const p3 = HD(NO, '極形式', SEC) + `<div class="bd">
+  <div class="l">${BOX('極形式', `長さ ${M`r`}、向き ${M`\theta`} の 点 P の 座標は<br>
+    　${M`a=`}${FILL(1, M`\RE{r\cos\theta}`, 4)}、${M`b=`}${FILL(2, M`\IM{r\sin\theta}`, 4)}<br>
+    よって　${M`z=`}${FILL(3, M`r(\cos\theta+i\sin\theta)`, 8)}<br>
+    これを ${M`z`} の ${FILL(4,'極形式')} という。<br>
+    ${M`\theta`} を ${M`z`} の ${FILL(4,'偏角')} といい、${M`\arg z`} で 表す。`)}
+    <div class="vnote" data-s="5">（${M`\cos\theta+i\sin\theta`}：長さ ${M`1`}、向き ${M`\theta`} の 数）</div>
+  </div>
+  <div class="r">${g3.svg(g3.seg(0, 0, 3.4, 2.2, null, {lab:IT('r'), side:-1}) + g3.ang(32.9, null, {lab:IT('θ'), r:50})
+    + g3.walk(3.4, 2.2, 1, {plain:true, split:true, below:true, la:IT('r')+' cos '+IT('θ'), lb:IT('r')+' sin '+IT('θ')}) + g3.ra(3.4, 2.2, 1)
+    + g3.dot(3.4, 2.2, 'P', null))}</div>
+</div>` + CAP([
+  `長さ ${M`r`} と 向き ${M`\theta`} から、${M`a`} と ${M`b`} を 求めて みます。`,
+  `三角比の 定義 ${M`\cos\theta=\dfrac{a}{r}`} より、横の 長さは ${M`a=r\cos\theta`}。`,
+  `${M`\sin\theta=\dfrac{b}{r}`} より、縦の 長さは ${M`b=r\sin\theta`}。`,
+  `${M`z=a+bi`} に 入れて、${M`r`} で くくると ${M`r(\cos\theta+i\sin\theta)`}。`,
+  `この 形を <b>極形式</b>、${M`\theta`} を <b>偏角</b> と いいます。`,
+  `かっこの 中の ${M`\cos\theta+i\sin\theta`} が「向き」、前の ${M`r`} が「長さ」を 表して います。`
+]);
+
+/* 長さと 向きを 読み取る */
+const PG = {x0:-3, x1:3, y0:-3, y1:3, u:62, grid:false, ticks:false, xl:null, yl:null,
+  polar:{n:3, rays:[0,30,45,60,90,120,135,150,180,210,225,240,270,300,315,330], labels:[30,60,120,150,210,240,300,330]}};
+const g4 = PL(PG);
+const RD = [['A',2,30,[S3,1],'2', String.raw`2(\cos30^\circ+i\sin30^\circ)`, String.raw`\sqrt{3}+i`],
+            ['B',3,90,[0,3],'3', String.raw`3(\cos90^\circ+i\sin90^\circ)`, String.raw`3i`],
+            ['C',1,180,[-1,0],'1', String.raw`\cos180^\circ+i\sin180^\circ`, String.raw`-1`],
+            ['D',2,225,[-S2,-S2],'2', String.raw`2(\cos225^\circ+i\sin225^\circ)`, String.raw`-\sqrt{2}-\sqrt{2}i`]];
+const p4 = HD(NO, '長さと 向きを 読み取る', SEC) + `<div class="bd">
+  <div class="l" style="flex:1.25">
+    <div class="q" style="font-size:22px">点 A〜D の 長さと 向きを 読み取り、<br>極形式と ${M`a+bi`} の 形で 表せ。</div>
+    <div class="tbl rd" style="grid-template-columns:auto auto auto 1fr auto">
+      <div class="th">点</div><div class="th">長さ</div><div class="th">向き</div><div class="th">極形式</div><div class="th">${M`a+bi`}</div>
+      ${RD.map(([n,r,t,p,rs,pf,ab],i)=>`<div>${n}</div><div>${FILL(2*i+1, M(rs), 1.6)}</div><div>${FILL(2*i+1, M(t+'^\\circ'), 2.4)}</div><div>${FILL(2*i+2, M(pf), 4)}</div><div>${FILL(2*i+2, M(ab), 3)}</div>`).join('')}
+    </div>
+  </div>
+  <div class="r">${g4.svg(
+      RD.map(([n,r,t,[a,b]],i)=>g4.seg(0,0,a,b,2*i+1,{e:2*i+3}) + g4.ang(t, 2*i+1, {lab:false, r:26, e:2*i+3})).join('')
+    + RD.map(([n,r,t,[a,b]])=>g4.dot(a, b, n, null, {pos:b<0?'sw':a<0?'nw':'ne'})).join('')
+  , 'pg')}</div>
+</div>` + CAP([
+  `円は 原点からの 距離（長さ）、線は 向きを 表します。`,
+  `A：2つめの 円の 上、${M`30^\circ`} の 線の 上。長さ ${M`2`}、向き ${M`30^\circ`}。`,
+  `極形式は ${M`2(\cos30^\circ+i\sin30^\circ)`}。${M`\cos30^\circ=\frac{\sqrt{3}}{2}`}、${M`\sin30^\circ=\frac{1}{2}`} を 入れて ${M`\sqrt{3}+i`}。`,
+  `B：長さ ${M`3`}、真上なので 向き ${M`90^\circ`}。`,
+  `${M`\cos90^\circ=0`}、${M`\sin90^\circ=1`} なので ${M`3i`}。`,
+  `C：長さ ${M`1`}、真左なので 向き ${M`180^\circ`}。`,
+  `長さが ${M`1`} の ときは、前の ${M`1`} を 書きません。${M`\cos180^\circ=-1`} なので ${M`-1`}。`,
+  `D：長さ ${M`2`}、${M`180^\circ`} より さらに ${M`45^\circ`} 回って ${M`225^\circ`}。`,
+  `${M`\cos225^\circ=\sin225^\circ=-\frac{1}{\sqrt{2}}`} なので ${M`-\sqrt{2}-\sqrt{2}i`}。`
+]);
+
+/* 例：1＋i を 極形式で */
+const g5 = PL({x0:-1, x1:2, y0:-1, y1:2, u:84});
+const POINT = `<div class="pbox"><div class="pl2">Point</div>${M`r=\sqrt{a^2+b^2}`}<br>${M`\cos\theta=\dfrac{a}{r},\ \sin\theta=\dfrac{b}{r}`}</div>`;
+const p5 = HD(NO, '例　1＋i を 極形式で', SEC) + `<div class="bd">
+  <div class="l">
+    <div class="q" style="font-size:23px"><span class="tag">例</span>${M`1+i`} を 極形式で 表せ。<br>ただし、偏角 ${M`\theta`} は ${M`0^\circ\leqq\theta<360^\circ`} とする。</div>
+    <div class="calc" style="font-size:28px;gap:10px">
+      <div>${M`r=|1+i|=`}${FILL(1, M`\sqrt{1^2+1^2}`, 3)}${M`=`}${FILL(1, M`\sqrt{2}`, 2)}</div>
+      <div>${M`\cos\theta=`}${FILL(2, M`\frac{1}{\sqrt{2}}`, 2)}、${M`\sin\theta=`}${FILL(2, M`\frac{1}{\sqrt{2}}`, 2)}</div>
+      <div>${M`0^\circ\leqq\theta<360^\circ`} より　${M`\theta=`}${FILL(3, M`45^\circ`, 2)}</div>
+      <div>よって　${M`1+i=`}${FILL(4, M`\sqrt{2}`, 1.6)}${M`(\cos`}${FILL(4, M`45^\circ`, 1.8)}${M`+i\sin`}${FILL(4, M`45^\circ`, 1.8)}${M`)`}</div>
+    </div>
+  </div>
+  <div class="r" style="flex-direction:column;gap:14px">${g5.svg(g5.walk(1, 1, 1, {plain:true}) + g5.seg(0,0,1,1,1,{lab:'√2', side:-1}) + g5.ang(45, 3, {r:44})
+    + g5.dot(1, 1, `1 + ${IT('i')}`, null), 'sm2')}${POINT}</div>
+</div>` + CAP([
+  `極形式に するには、長さ ${M`r`} と 向き ${M`\theta`} が わかれば よい。`,
+  `長さは 絶対値。${M`r=\sqrt{1^2+1^2}=\sqrt{2}`}。`,
+  `${M`\cos\theta=\dfrac{a}{r}`}、${M`\sin\theta=\dfrac{b}{r}`} に 入れると、どちらも ${M`\dfrac{1}{\sqrt{2}}`}。`,
+  `${M`\cos`} も ${M`\sin`} も ${M`\dfrac{1}{\sqrt{2}}`} に なる 角は ${M`45^\circ`}。図でも 45° です。`,
+  `長さ ${M`\sqrt{2}`}、向き ${M`45^\circ`} なので、${M`1+i=\sqrt{2}(\cos45^\circ+i\sin45^\circ)`}。`
+]);
+
+/* 特別な 角は「くくる」だけ */
+const UC = PL({x0:-1, x1:1, y0:-1, y1:1, u:150, grid:false, ticks:false, xl:null, yl:null});
+const UP = [[30, S3/2, .5, '(√3/2, 1/2)'], [45, 1/S2, 1/S2, '(1/√2, 1/√2)'], [60, .5, S3/2, '(1/2, √3/2)']];
+const ucirc = `<circle class="ln" cx="${UC.X(0)}" cy="${UC.Y(0)}" r="${UC.u}" fill="none" style="stroke-dasharray:none;stroke-width:2"/>`
+  + UP.map(([t,a,b,l],i)=>UC.seg(0,0,a,b,null,{c:'m'}) + UC.dot(a,b,'',null) + `<text class="dp" style="font-size:17px" x="${UC.X(a)+10}" y="${UC.Y(b)+(i===0?16:i===2?-8:4)}">${t}°</text>`).join('');
+const p6 = HD(NO, '特別な 角は「くくる」だけ', SEC) + `<div class="bd">
+  <div class="l">
+    <div class="q">絶対値 ${M`r`} で くくると、かっこの 中が ${M`\cos\theta`}、${M`\sin\theta`} の 値に なる。</div>
+    <div class="calc" style="font-size:30px;gap:8px">
+      <div data-s="1">${M`1+i=\DP{\sqrt{2}}\left(\on{2}{re}{\tfrac{1}{\sqrt{2}}}+\on{2}{im}{\tfrac{1}{\sqrt{2}}}i\right)`}</div>
+      <div data-s="2">${M`\quad=\sqrt{2}(\cos45^\circ+i\sin45^\circ)`}</div>
+      <div data-s="3">${M`1+\sqrt{3}i=\DP{2}\left(\on{4}{re}{\tfrac{1}{2}}+\on{4}{im}{\tfrac{\sqrt{3}}{2}}i\right)`}</div>
+      <div data-s="4">${M`\quad=2(\cos60^\circ+i\sin60^\circ)`}</div>
+    </div>
+  </div>
+  <div class="r" style="flex-direction:column;gap:6px">
+    <div class="pbox"><div class="pl2">Point</div>
+      ${M`\left(\tfrac{\sqrt{3}}{2},\tfrac{1}{2}\right)\to30^\circ`}<br>${M`\left(\tfrac{1}{\sqrt{2}},\tfrac{1}{\sqrt{2}}\right)\to45^\circ`}<br>${M`\left(\tfrac{1}{2},\tfrac{\sqrt{3}}{2}\right)\to60^\circ`}<br>
+      <span style="font-size:19px">（${M`\cos`}，${M`\sin`}）の 符号で 象限を 決める</span></div>
+    ${UC.svg(ucirc, 'uc')}
+  </div>
+</div>` + CAP([
+  `毎回 ${M`\cos\theta`}、${M`\sin\theta`} を 計算しなくても、もっと 速い 方法が あります。`,
+  `長さ ${M`r=\sqrt{2}`} で くくると、かっこの 中に ${M`\tfrac{1}{\sqrt{2}}`} と ${M`\tfrac{1}{\sqrt{2}}`} が 出て きます。`,
+  `これは ${M`(\cos45^\circ,\ \sin45^\circ)`}。そのまま ${M`45^\circ`} と 読めます。`,
+  `${M`1+\sqrt{3}i`} は、長さ ${M`r=2`} で くくります。`,
+  `${M`\left(\tfrac{1}{2},\tfrac{\sqrt{3}}{2}\right)`} は ${M`60^\circ`}。右の 3つの 形を 覚えて おけば、くくる だけで 角が わかります。`
+]);
+
+/* まとめ（アニメーション なし） */
+const p7 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:26px">
+  ${BOX('極形式', `<span class="big">${M`z=a+bi=r(\cos\theta+i\sin\theta)`}</span><br>${M`r=|z|`}（長さ）、${M`\theta=\arg z`}（向き）`)}
+  <div class="q" style="font-size:27px;line-height:1.8">
+    <b class="dp">① 長さ</b>　${M`r=\sqrt{a^2+b^2}`} を 求める<br>
+    <b class="dp">② くくる</b>　${M`r`} で くくって、かっこの 中を ${M`(\cos\theta,\ \sin\theta)`} に する<br>
+    <b class="dp">③ 向き</b>　30°・45°・60° の 形と、符号（象限）から ${M`\theta`} を 決める
+  </div>
+</div>` + CAP([`この 手順で、練習編（問10）の 16問を 解いて いきます。`]);
+
+const DECK = {title:'①-4 複素数の極形式', pages:[
+  {name:'表紙', html:p0}, {name:'2通りの 表し方', html:p1}, {name:'長さ と 向き', html:p2}, {name:'極形式', html:p3},
+  {name:'長さと 向きを 読み取る', html:p4}, {name:'例　1＋i を 極形式で', html:p5}, {name:'特別な 角は「くくる」だけ', html:p6},
+  {name:'まとめ', html:p7},
+]};
+''')
+
+# ---------------------------------------------------------------- ①-4 練習編（問10）
+DECKS['1-4_極形式_練習編'] = ('①-4 極形式 練習編（問10）', r'''
+const NO = '①-4', SEC = '数学C　複素数平面　練習編';
+const IT = v => `<tspan class="it">${v}</tspan>`;
+const S3 = Math.sqrt(3), S2 = Math.sqrt(2), S6 = Math.sqrt(6);
+/* 基準の 角 → かっこの 中の (cos, sin) の 大きさ */
+const FR = {30:[String.raw`\dfrac{\sqrt{3}}{2}`, String.raw`\dfrac{1}{2}`], 45:[String.raw`\dfrac{1}{\sqrt{2}}`, String.raw`\dfrac{1}{\sqrt{2}}`], 60:[String.raw`\dfrac{1}{2}`, String.raw`\dfrac{\sqrt{3}}{2}`]};
+const KK = (r, a, b, base) => `${r}\\left(\\RE{${a<0?'-':''}${FR[base][0]}}${b<0?'-':'+'}\\IM{${FR[base][1]}}i\\right)`;
+const POLAR = (r, t) => r==='1' ? `\\cos${t}^\\circ+i\\sin${t}^\\circ` : `${r}(\\cos${t}^\\circ+i\\sin${t}^\\circ)`;
+const QN = (a, b) => a>0 ? (b>0 ? 1 : 4) : (b>0 ? 2 : 3);
+const SG = v => v>0 ? '＋' : '−';
+/* [番号, z, a, b, r の 計算, r（図の 文字）, r（TeX）, 基準の 角（軸の 上は null）, θ, 軸の 上の ときの 言葉] */
+const PR = [
+  ['⑴', String.raw`\sqrt{3}+i`, S3, 1, String.raw`\sqrt{(\sqrt{3})^2+1^2}=\sqrt{4}=2`, '2', '2', 30, 30],
+  ['⑵', String.raw`-1+i`, -1, 1, String.raw`\sqrt{(-1)^2+1^2}=\sqrt{2}`, '√2', String.raw`\sqrt{2}`, 45, 135],
+  ['⑶', String.raw`1-i`, 1, -1, String.raw`\sqrt{1^2+(-1)^2}=\sqrt{2}`, '√2', String.raw`\sqrt{2}`, 45, 315],
+  ['⑷', String.raw`-1+\sqrt{3}i`, -1, S3, String.raw`\sqrt{(-1)^2+(\sqrt{3})^2}=\sqrt{4}=2`, '2', '2', 60, 120],
+  ['⑸', String.raw`-\sqrt{3}+i`, -S3, 1, String.raw`\sqrt{(-\sqrt{3})^2+1^2}=\sqrt{4}=2`, '2', '2', 30, 150],
+  ['⑹', String.raw`2+2i`, 2, 2, String.raw`\sqrt{2^2+2^2}=\sqrt{8}=2\sqrt{2}`, '2√2', String.raw`2\sqrt{2}`, 45, 45],
+  ['⑺', String.raw`i`, 0, 1, String.raw`\sqrt{0^2+1^2}=1`, '1', '1', null, 90, '虚軸の 正の 向き（真上）'],
+  ['⑻', String.raw`-3`, -3, 0, String.raw`\sqrt{(-3)^2+0^2}=3`, '3', '3', null, 180, '実軸の 負の 向き（真左）'],
+  ['⑼', String.raw`-1-\sqrt{3}i`, -1, -S3, String.raw`\sqrt{(-1)^2+(-\sqrt{3})^2}=\sqrt{4}=2`, '2', '2', 60, 240],
+  ['⑽', String.raw`\sqrt{3}-i`, S3, -1, String.raw`\sqrt{(\sqrt{3})^2+(-1)^2}=\sqrt{4}=2`, '2', '2', 30, 330],
+  ['⑾', String.raw`-2i`, 0, -2, String.raw`\sqrt{0^2+(-2)^2}=2`, '2', '2', null, 270, '虚軸の 負の 向き（真下）'],
+  ['⑿', String.raw`4`, 4, 0, String.raw`\sqrt{4^2+0^2}=4`, '4', '4', null, 0, '実軸の 正の 向き（真右）'],
+  ['⒀', String.raw`-2-2i`, -2, -2, String.raw`\sqrt{(-2)^2+(-2)^2}=\sqrt{8}=2\sqrt{2}`, '2√2', String.raw`2\sqrt{2}`, 45, 225],
+  ['⒁', String.raw`1-\sqrt{3}i`, 1, -S3, String.raw`\sqrt{1^2+(-\sqrt{3})^2}=\sqrt{4}=2`, '2', '2', 60, 300],
+  ['⒂', String.raw`3+\sqrt{3}i`, 3, S3, String.raw`\sqrt{3^2+(\sqrt{3})^2}=\sqrt{12}=2\sqrt{3}`, '2√3', String.raw`2\sqrt{3}`, 30, 30],
+  ['⒃', String.raw`-\sqrt{6}+\sqrt{2}i`, -S6, S2, String.raw`\sqrt{(-\sqrt{6})^2+(\sqrt{2})^2}=\sqrt{8}=2\sqrt{2}`, '2√2', String.raw`2\sqrt{2}`, 30, 150],
+];
+const QTX = {1:(b,t)=>`第1象限 なので そのまま ${M(`\\theta=${t}^\\circ`)}`, 2:(b,t)=>`第2象限 なので ${M(`\\theta=180^\\circ-${b}^\\circ=${t}^\\circ`)}`,
+             3:(b,t)=>`第3象限 なので ${M(`\\theta=180^\\circ+${b}^\\circ=${t}^\\circ`)}`, 4:(b,t)=>`第4象限 なので ${M(`\\theta=360^\\circ-${b}^\\circ=${t}^\\circ`)}`};
+
+function prPage([no, z, a, b, rc, rl, rt, base, t, axis]){
+  const R = Math.ceil(Math.max(Math.abs(a), Math.abs(b))) + 1, g = PL({x0:-R, x1:R, y0:-R, y1:R, u:Math.floor(400/(2*R)), ticks:false});
+  const q = base ? QN(a, b) : 0, ans = POLAR(rt, t), sa = 2;   // 番：1 長さ、2 くくる（軸は 向き）、3 象限・角、4 答え
+  const qx = q===1||q===4 ? 0 : -R, qy = q===1||q===2 ? R : 0;
+  const quad = q ? `<rect class="qd" x="${g.X(qx)}" y="${g.Y(qy)}" width="${R*g.u}" height="${R*g.u}" data-s="3"/>` : '';
+  const fig = quad + g.seg(0, 0, a, b, 1, {lab:rl, side:(a>=0)===(b>=0) ? -1 : 1}) + (t ? g.ang(t, base ? 3 : 2, {r:34, lr:26}) : g.text(R*.3, -R*.2, '0°', 'dp', 2))
+    + g.dot(a, b, `${no}`, null, {pos:(b<0?'s':'n')+(a<0?'w':'e')});
+  const lines = base
+    ? [[`r=${rc}`, 1], [`${z}=${KK(rt, a, b, base)}`, 2], [`\\theta=${t}^\\circ`, 3], [`${z}=\\DP{${ans}}`, 4]]
+    : [[`r=${rc}`, 1], [`\\theta=${t}^\\circ`, 2], [`${z}=\\DP{${ans}}`, 3]];
+  const cm = base
+    ? [`${M(z)} を 極形式に します。`,
+       `① 長さ：${M(`r=${rc}`)}`,
+       `② ${M(rt)} で くくると、かっこの 中は（${M('\\cos')}，${M('\\sin')}）＝（${SG(a)}，${SG(b)}）で、大きさは ${M(`${base}^\\circ`)} の 形。`,
+       `③ 符号が（${SG(a)}，${SG(b)}）→ ${QTX[q](base, t)}。`,
+       `${M(`${z}=${ans}`)}`]
+    : [`${M(z)} を 極形式に します。`,
+       `① 長さ：${M(`r=${rc}`)}`,
+       `② 点は ${axis}。だから 向きは ${M(`${t}^\\circ`)}。`,
+       `${M(`${z}=${ans}`)}${rt==='1' ? '（長さ 1 は 書かない）' : ''}`];
+  return HD(NO, `問10 ${no}　${'<span class="m">'+z+'</span>'}`, SEC) + `<div class="bd">
+    <div class="l">
+      <div class="q big" style="font-size:40px">${no}　${M(z)}</div>
+      <div class="calc" style="font-size:30px;gap:10px">${lines.map(([x,n])=>`<div data-s="${n}">${M(x)}</div>`).join('')}</div>
+    </div>
+    <div class="r">${g.svg(fig, 'pr')}</div>
+  </div>` + CAP(cm);
+}
+
+const p0 = coverSlide({kicker:'数学C　複素数平面', no:NO+'　練習編', title:'極形式（問10）', sub:'⑴〜⒃　手順どおりに テンポよく'});
+
+/* 手順と 象限 */
+const gq = PL({x0:-3, x1:3, y0:-3, y1:3, u:62, grid:false, ticks:false, xl:null, yl:null});
+const QL = [[1.5,1.6,'第1象限','（＋，＋）','θ ＝ 基準'],[-1.5,1.6,'第2象限','（−，＋）','180° − 基準'],[-1.5,-1.4,'第3象限','（−，−）','180° ＋ 基準'],[1.5,-1.4,'第4象限','（＋，−）','360° − 基準']];
+const p1 = HD(NO, '手順', SEC) + `<div class="bd">
+  <div class="l"><div class="q" style="font-size:27px;line-height:1.9">
+    <b class="dp">① 長さ</b>　${M`r=\sqrt{a^2+b^2}`}<br>
+    <b class="dp">② くくる</b>　${M`r`} で くくって（${M`\cos`}，${M`\sin`}）の 形に<br>
+    <b class="dp">③ 向き</b>　基準の 角（30°・45°・60°）と 符号（象限）で ${M`\theta`}<br>
+    <span class="mu" style="font-size:22px">軸の 上の 点は、図から そのまま 向きを 読む</span></div></div>
+  <div class="r">${gq.svg(QL.map(([x,y,n,s,f])=>gq.text(x,y,n,'jp dp') + gq.text(x,y-.45,s,'') + gq.text(x,y-.9,f,'sm')).join(''), 'pr')}</div>
+</div>` + CAP([`かっこの 中の 符号（${M`\cos`}，${M`\sin`}）で 象限が 決まり、基準の 角から ${M`\theta`} が 決まります。`]);
+
+const pages = PR.map(prPage);
+
+/* 答えの 一覧（アニメーション なし） */
+const pe = HD(NO, '答え（問10）', SEC) + `<div class="bd col"><div class="ans16">
+  ${PR.map(([no,z,a,b,rc,rl,rt,base,t])=>`<div><span class="mu">${no}</span> ${M(`${z}=${POLAR(rt,t)}`)}</div>`).join('')}
+</div></div>` + CAP([`まちがえた 問題は、目次から その ページに 戻って 確かめましょう。`]);
+
+const DECK = {title:'①-4 極形式 練習編（問10）', pages:[
+  {name:'表紙', html:p0}, {name:'手順', html:p1},
+  ...PR.map((p,i)=>({name:`${p[0]}　${p[1].replace(/\\sqrt\{(\d)\}/g,'√$1').replace(/-/g,'−')}`, html:pages[i]})),
+  {name:'答え（一覧）', html:pe},
+]};
+''')

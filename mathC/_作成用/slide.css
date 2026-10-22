@@ -191,3 +191,18 @@ body.portrait .tbl{font-size:23px} body.portrait .tbl > div{padding:12px 10px}
 .pl text.dp{font-weight:700}
 .res4{display:grid;grid-template-columns:repeat(4,auto);gap:14px 40px;font-size:30px;white-space:nowrap}
 body.portrait .res4{grid-template-columns:repeat(2,auto)}
+/* Point の 枠（プリントの 緑の Point） */
+.pbox{border-left:5px solid var(--deep);background:var(--pale);padding:10px 20px 14px;font-size:24px;line-height:1.9}
+.pbox .pl2{color:var(--deep);font-weight:700;font-size:18px;letter-spacing:.08em}
+.tbl.rd{font-size:20px} .tbl.rd > div{padding:8px 8px}
+.tbl.rd .fill{min-width:0!important}
+.pl.pg{height:430px} .pl.uc{height:250px}
+body.portrait .pl.pg{width:520px;height:auto} body.portrait .pl.uc{width:300px;height:auto}
+.pl.sm2{height:330px}
+body.portrait .pl.sm2{width:400px;height:auto}
+/* 練習編 */
+.pl .qd{fill:var(--main);fill-opacity:.16}
+.pl.pr{height:440px} body.portrait .pl.pr{width:540px;height:auto}
+.ans16{display:grid;grid-template-columns:1fr 1fr;gap:8px 40px;font-size:21px;width:100%}
+.ans16 > div{white-space:nowrap;border-bottom:1px solid var(--line);padding:3px 0}
+body.portrait .ans16{grid-template-columns:1fr;font-size:19px;gap:4px}
