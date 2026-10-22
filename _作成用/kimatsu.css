@@ -577,3 +577,4 @@ i.nv{font-style:normal;font-family:inherit}
 .v2zah{fill:var(--accent)}
 /* 前の ページと 同じ 画面が 続く とき（v2cont）は、ページの 切りかえを 一瞬で（チラつかない） */
 .slide:has(.v2cont),.slide:has(+ .slide .v2cont){transition:none!important;transform:none!important}
+.ilt-h{fill:none;stroke:var(--paper);stroke-width:16;stroke-linecap:round;stroke-linejoin:round}

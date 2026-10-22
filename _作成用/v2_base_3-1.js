@@ -137,7 +137,7 @@ function PR(o){
     T([r1-14,ay+1.5,r1+6,ay+12.5],`<span style="font-size:.8em">${o.lab[0]}</span>`,8.5,'ac'), T([r2-6,ay+1.5,r2+14,ay+12.5],`<span style="font-size:.8em">${o.lab[1]}</span>`,8.5,'ac'),
     L(sx(1),[148,309,326,331],o.c[0]), {s:sx(2), r:R([262,310,326,330]), h:`<span class="ytag">y ＝ 0 と する</span>`, fs:7.8, cls:'xyt'},
     L(sx(2),[148,335,326,357],o.c[1]), L(sx(3),[148,361,326,383],o.c[2]), L(sx(4),[148,387,326,409],o.c[3]),
-    ...(ph1 ? [] : [XA(8,R([323.2,467.2,507.3,498.3]),o.ans,13),
+    ...(ph1 || o.upto ? [] : [XA(8,R([323.2,467.2,507.3,498.3]),o.ans,13),
        ...o.rw.map((h,i)=>({s:5+2*i, r:[333+i*86,Yd(449),411+i*86,Yd(463)], h:h, fs:11, cls:'xan xwr', al:'c'}))])];
   const svg = [
     `<rect class="xpb" x="73.5" y="${Yd(304.5)}" width="45.5" height="18.5"/><rect class="xpb" x="73.5" y="${Yd(428.9)}" width="45.5" height="18.5"/><rect class="xpb" x="286.7" y="${Yd(428.9)}" width="45.6" height="18.5"/>`,
@@ -147,7 +147,7 @@ function PR(o){
     `<path d="${d}" fill="none" stroke="#111" stroke-width="1.6"/>`,
     ph1 ? PB({xv:o.gx, yv:Yd(404.5), q:0.05, ay:Yd(384.5), top:Yd(312), s:6, dot:'f', ds:5, ls:7, lab:[[o.gx-20,o.lab[0]],[o.gx+20,o.lab[1]]]})
         : PB({xv:pv.xv, yv:pv.yv+dy, q:pv.q, ay, top, draw:false, paint:o.paint, ps:1, dot:o.dot, ds:2})];
-  if(!ph1){
+  if(!ph1 && !o.upto){
     /* x を 置く（塗れた ところと 点線で つなぐ）→ 数と 斜めに 比べる（うすい 帯 ＋ 不等号）*/
     const f = n => n.toFixed(1);
     const P = o.out ? {L:[r1,ay+2], R:[r2,ay+2]} : {L:[r1-4,ay+9], R:[r2+4,ay+9]};
@@ -164,7 +164,7 @@ function PR(o){
     svg.push(`<g class="gs" data-s="3">${X.map(x=>`<line class="ixln pt" x1="${f(x.at[0])}" y1="${f(x.at[1])}" x2="${f(x.to[0])}" y2="${f(x.to[1])}"/><circle class="ixdot" cx="${f(x.to[0])}" cy="${f(x.to[1])}" r="1.4"/><circle class="ixb" cx="${f(x.at[0])}" cy="${f(x.at[1])}" r="5.2"/><text class="ixt pt" x="${f(x.at[0])}" y="${f(x.at[1]+2.4)}" text-anchor="middle">x</text>`).join('')}</g>`);
   }
   if(!ph1) svg.push(PB({xv:o.gx, yv:Yd(404.5), q:0.05, ay:Yd(384.5), top:Yd(312), dot:'f', lab:[[o.gx-20,o.lab[0]],[o.gx+20,o.lab[1]]]}).replace(/class="curve pgc" data-s="undefined"/,'class="curve pgc show"').replace(/class="gs" data-s="undefined"/g,'class="gs show"'));
-  return ptSlide({clip:[60,278+dy,535,(ph1||o.out?526:544)+dy], svg, items, done: ph1 ? 7 : 8, cm:o.cm});
+  return ptSlide({clip:[60,278+dy,535,(ph1||o.out?526:544)+dy], svg, items, done: ph1 ? 7 : (o.upto ? 2 : 8), cm:o.cm});
 }
 const P1 = {dy:0, no:'⑴', eq:EQ1, gx:420, lab:['−1','3'], pv:{xv:201.9, yv:520, q:0.0581},
   c:[`y ＝ x${P2} − 2x − 3`, `x${P2} − 2x − 3 ＝ 0`, '(x ＋ 1)(x − 3) ＝ 0', 'x ＝ −1, 3'], ans:'x ＜ −1, 3 ＜ x', paint:'up', dot:'o', out:true, rw:['x ＜ −1','3 ＜ x']};
@@ -249,13 +249,17 @@ const CMP = (g, side, r, xc, sx, s, out) => {
   const len = Math.hypot(nx-bx, ny-by) + 76;
   const low = g.H-g.ay < 140;   // 下に 場所が ない ときは 横へ 書き直す
   const tx = side==='L' ? nx-(low?200:70) : nx+(low?200:70), ty = low ? g.ay+80 : g.ay+150;
+  /* 書き直す 矢印：曲線の 終わりの 向きに 合わせて 先の 三角を 作る */
+  const qx = low ? (mx+tx)/2 : (mx+tx)/2-10, qy = low ? g.ay+50 : ty-60, ex = low ? tx+(side==='L'?84:-84) : tx, ey = low ? ty-12 : ty-40;
+  const dl = Math.hypot(ex-qx, ey-qy), ux = (ex-qx)/dl, uy = (ey-qy)/dl;
+  const HEAD = [[ex+ux*12, ey+uy*12],[ex-uy*8, ey+ux*8],[ex+uy*8, ey-ux*8]].map(p=>p.map(f).join(',')).join(' ');
   /* 斜めの 帯（マーカーで なぞった ような うすい 色）を x と 数の 後ろに */
   const band = `<g class="gs" data-s="${s}"><rect class="iband2" x="${f(-len/2)}" y="-30" width="${f(len)}" height="60" rx="30" transform="translate(${f(mx)} ${f(my)}) rotate(${f(ang)})"/>
 </g>`;
-  return {band, rest:`<g class="gs" data-s="${s}"><path class="ilt" d="M16 -16 L-16 0 L16 16" transform="translate(${f(mx)} ${f(my)}) rotate(${f(rot)})"/></g>
+  return {band, rest:`<g class="gs" data-s="${s}"><path class="ilt-h" d="M16 -16 L-16 0 L16 16" transform="translate(${f(mx)} ${f(my)}) rotate(${f(rot)})"/><path class="ilt" d="M16 -16 L-16 0 L16 16" transform="translate(${f(mx)} ${f(my)}) rotate(${f(rot)})"/></g>
     <g class="gs" data-s="${sx}"><line class="ixln" x1="${f(bx)}" y1="${f(by)}" x2="${f(cx)}" y2="${f(cy)}"/><circle class="ixdot" cx="${f(cx)}" cy="${f(cy)}" r="6"/>
       <circle class="ixb" cx="${f(bx)}" cy="${f(by)}" r="24"/><text class="ixt" x="${f(bx)}" y="${f(by+10)}" text-anchor="middle">x</text></g>
-    <g class="gs" data-s="${s+1}"><path class="iarw" d="M${f(mx)} ${f(my+34)} Q${f((mx+tx)/2-10)} ${f(ty-60)} ${f(tx)} ${f(ty-40)}"/><polygon class="iarh" points="${f(tx-8)},${f(ty-50)} ${f(tx+8)},${f(ty-46)} ${f(tx)},${f(ty-32)}"/>
+    <g class="gs" data-s="${s+1}"><path class="iarw" d="M${f(mx)} ${f(my+34)} Q${f(qx)} ${f(qy)} ${f(ex)} ${f(ey)}"/><polygon class="iarh" points="${HEAD}"/>
       <text class="iwr" x="${f(tx)}" y="${f(ty)}" text-anchor="middle">${out.replace(/x/g,'<tspan font-style="italic">x</tspan>')}</text></g>`}; };
 const b1 = IG({...G1, ay:190, H:420});
 const C1L = CMP(b1,'L',-1,-1.35,1,2,'x ＜ −1'), C1R = CMP(b1,'R',3,3.35,1,4,'3 ＜ x');
