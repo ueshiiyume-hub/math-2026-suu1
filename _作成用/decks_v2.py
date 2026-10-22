@@ -118,9 +118,13 @@ const v5 = `
     `書き直して ${M('3 ＜ x')}。`,
     `答え ${M('x ＜ −1, 3 ＜ x')}。　<b>完成！</b>`])}`;
 
+/* プリントの 配置の ページ（Step❶）：アニメーション なしで、書いた あとの 形を 出す */
+const STILL = h => h.replace(/data-s="\d+"/g,'data-s="0"').replace(/<div class="abs r done pgdone"[^]*?<\/div><\/div>/,'');
+const s2v = STILL(PR({...P1, phase:1, cm:[`プリントでは こう なる。　<i class="nv">Step</i>❶ の 全体。`]}));
+
 const DECK = {title:'③-1 2次不等式の解法 ver 2', pages:[
   {name:'表紙', html:coverF(KK2, '<span class="mk">2次不等式</span><br>の 解き方', '塗って 答える', '', POL, '3つの Step')},
-  {name:'やること', html:v1}, {name:'⑴ ❶ ＝0 に', html:va}, {name:'⑴ ❶ 解く', html:vb}, {name:'⑴ ❶ 式', html:s2}, {name:'⑴ ❷ 上を塗る', html:v3}, {name:'⑴ ❷ x軸上', html:v4},
+  {name:'やること', html:v1}, {name:'⑴ ❶ ＝0 に', html:va}, {name:'⑴ ❶ 解く', html:vb}, {name:'⑴ ❶ プリント', html:s2v}, {name:'⑴ ❷ 上を塗る', html:v3}, {name:'⑴ ❷ x軸上', html:v4},
   {name:'⑴ ❸ 答える', html:v5}, {name:'⑴ 書きこみ', html:s5},
   {name:'終', html:endF(KK2 + '　2次不等式の解法', POL)}
 ]};

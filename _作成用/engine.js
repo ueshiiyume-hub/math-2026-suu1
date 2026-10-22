@@ -116,9 +116,10 @@ document.addEventListener('keydown',e=>{
   else if(k==='f'||k==='F'){ try{ if(document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen(); }catch(_){} }
   else if(k==='h'||k==='H'){ ui.classList.toggle('hide'); bar.classList.toggle('hide'); jump.classList.toggle('hide'); }
   else if(k==='t'||k==='T'){
-    const d=document.documentElement;
-    const dark = d.dataset.theme ? d.dataset.theme==='dark' : matchMedia('(prefers-color-scheme: dark)').matches;
-    d.dataset.theme = dark ? 'light' : 'dark';
+    if(typeof toggleTheme==='function') toggleTheme();
+    else { const d=document.documentElement;
+      const dark = d.dataset.theme ? d.dataset.theme==='dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+      d.dataset.theme = dark ? 'light' : 'dark'; }
   }
 });
 document.addEventListener('click',e=>{ if(e.target.closest('a')) return; stopAuto(); if(e.clientX < document.documentElement.clientWidth/3) prev(); else next(); });

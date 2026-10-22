@@ -64,6 +64,28 @@ h1 .mk{background:linear-gradient(transparent 62%,var(--r-bg) 62%);padding:0 4px
 .tag{font-size:13px;border:1.5px solid var(--r-bd);color:var(--accent);border-radius:999px;padding:0 10px}
 .empty{grid-column:1/-1;background:var(--paper);border:2px dashed var(--r-bd);border-radius:6px;padding:28px 20px;text-align:center;color:var(--muted);font-size:17px}
 </style>
+<script>window.THEME_BTN_SIDE="r";</script>
+<!-- 明るい／暗い の 切りかえ（スマホでも 押せる ボタン）。選んだ ものは この サイト 全体で 覚える -->
+<style>
+#themebtn{position:fixed;z-index:26;top:10px;width:40px;height:40px;border-radius:50%;border:2px solid var(--r-bd);background:var(--paper);color:var(--ink);font-size:20px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;box-shadow:0 2px 6px rgba(0,0,0,.12)}
+#themebtn.l{left:12px} #themebtn.r{right:12px}
+.empty{grid-column:1/-1;background:var(--paper);border:2px dashed var(--r-bd);border-radius:6px;padding:28px 20px;text-align:center;color:var(--muted);font-size:17px}
+</style>
+<script>
+(function(){
+  var d=document.documentElement;
+  try{ var t=localStorage.getItem('theme'); if(t) d.dataset.theme=t; }catch(e){}
+  function isDark(){ return d.dataset.theme ? d.dataset.theme==='dark' : matchMedia('(prefers-color-scheme: dark)').matches; }
+  window.toggleTheme=function(){ d.dataset.theme = isDark() ? 'light' : 'dark'; try{ localStorage.setItem('theme', d.dataset.theme); }catch(e){} paint(); };
+  function paint(){ var b=document.getElementById('themebtn'); if(b){ b.textContent = isDark() ? '☀' : '🌙'; b.title = isDark() ? '明るく する' : '暗く する'; } }
+  document.addEventListener('DOMContentLoaded',function(){
+    var b=document.createElement('button'); b.id='themebtn'; b.className=window.THEME_BTN_SIDE||'l';
+    b.addEventListener('click',function(e){ e.stopPropagation(); e.preventDefault(); toggleTheme(); });
+    document.body.appendChild(b); paint();
+  });
+})();
+</script>
+
 </head>
 <body>
 <main>

@@ -8,6 +8,7 @@ OUT = sys.argv[1]
 rd = lambda f: open(os.path.join(B, f), encoding='utf-8').read()
 head = rd('head.html').replace('</style>', rd('extra.css') + '\n' + rd('kimatsu.css') + '\n' + rd('ink.css') + '\n</style>')
 head = head[:head.index('</head>')] + '</head>\n'
+head = head.replace('</head>', rd('theme.html') + '\n</head>')   # 明るい／暗い の ボタン
 core = rd('core.js') + '\n' + rd('kimatsu.js')
 engine = rd('engine.js') + '\n' + rd('ink.js')   # 手書き
 

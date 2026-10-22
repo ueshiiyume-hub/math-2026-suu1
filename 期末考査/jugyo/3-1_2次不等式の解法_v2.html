@@ -991,6 +991,26 @@ body.portrait #inkbar .ink-tools{flex-wrap:wrap;max-width:calc(100vw - 70px)}
 body.portrait #inkbar{top:6px;right:6px}
 
 </style>
+<!-- 明るい／暗い の 切りかえ（スマホでも 押せる ボタン）。選んだ ものは この サイト 全体で 覚える -->
+<style>
+#themebtn{position:fixed;z-index:26;top:10px;width:40px;height:40px;border-radius:50%;border:2px solid var(--r-bd);background:var(--paper);color:var(--ink);font-size:20px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;box-shadow:0 2px 6px rgba(0,0,0,.12)}
+#themebtn.l{left:12px} #themebtn.r{right:12px}
+</style>
+<script>
+(function(){
+  var d=document.documentElement;
+  try{ var t=localStorage.getItem('theme'); if(t) d.dataset.theme=t; }catch(e){}
+  function isDark(){ return d.dataset.theme ? d.dataset.theme==='dark' : matchMedia('(prefers-color-scheme: dark)').matches; }
+  window.toggleTheme=function(){ d.dataset.theme = isDark() ? 'light' : 'dark'; try{ localStorage.setItem('theme', d.dataset.theme); }catch(e){} paint(); };
+  function paint(){ var b=document.getElementById('themebtn'); if(b){ b.textContent = isDark() ? '☀' : '🌙'; b.title = isDark() ? '明るく する' : '暗く する'; } }
+  document.addEventListener('DOMContentLoaded',function(){
+    var b=document.createElement('button'); b.id='themebtn'; b.className=window.THEME_BTN_SIDE||'l';
+    b.addEventListener('click',function(e){ e.stopPropagation(); e.preventDefault(); toggleTheme(); });
+    document.body.appendChild(b); paint();
+  });
+})();
+</script>
+
 </head>
 <body>
 <div id="bg"></div>
@@ -1695,7 +1715,7 @@ const GARW = (x1,y1,x2,y2,s) => { const ym=(y1+y2)/2, hh=(y2-y1)*.28, hx=x2-(y2-
   return `<g class="gs" data-s="${s}"><polygon points="${x1},${ym-hh} ${hx},${ym-hh} ${hx},${y1} ${x2},${ym} ${hx},${y2} ${hx},${ym+hh} ${x1},${ym+hh}" fill="#c9dca6"/></g>`; };
 
 /* ====== このプリントのスライド ====== */
-const VER = '<i class="nv">ver</i> 2.2　2026-10-22';
+const VER = '<i class="nv">ver</i> 2.3　2026-10-22';
 /* ③-1 ver 2.0 の 土台：ver 1.4 の 部品の 写し（ver 1.4 を 直しても ver 2.0 は 変わらない） */
 
 const IMG = s => s;
@@ -2173,9 +2193,13 @@ const v5 = `
     `書き直して ${M('3 ＜ x')}。`,
     `答え ${M('x ＜ −1, 3 ＜ x')}。　<b>完成！</b>`])}`;
 
+/* プリントの 配置の ページ（Step❶）：アニメーション なしで、書いた あとの 形を 出す */
+const STILL = h => h.replace(/data-s="\d+"/g,'data-s="0"').replace(/<div class="abs r done pgdone"[^]*?<\/div><\/div>/,'');
+const s2v = STILL(PR({...P1, phase:1, cm:[`プリントでは こう なる。　<i class="nv">Step</i>❶ の 全体。`]}));
+
 const DECK = {title:'③-1 2次不等式の解法 ver 2', pages:[
   {name:'表紙', html:coverF(KK2, '<span class="mk">2次不等式</span><br>の 解き方', '塗って 答える', '', POL, '3つの Step')},
-  {name:'やること', html:v1}, {name:'⑴ ❶ ＝0 に', html:va}, {name:'⑴ ❶ 解く', html:vb}, {name:'⑴ ❶ 式', html:s2}, {name:'⑴ ❷ 上を塗る', html:v3}, {name:'⑴ ❷ x軸上', html:v4},
+  {name:'やること', html:v1}, {name:'⑴ ❶ ＝0 に', html:va}, {name:'⑴ ❶ 解く', html:vb}, {name:'⑴ ❶ プリント', html:s2v}, {name:'⑴ ❷ 上を塗る', html:v3}, {name:'⑴ ❷ x軸上', html:v4},
   {name:'⑴ ❸ 答える', html:v5}, {name:'⑴ 書きこみ', html:s5},
   {name:'終', html:endF(KK2 + '　2次不等式の解法', POL)}
 ]};
@@ -2298,9 +2322,10 @@ document.addEventListener('keydown',e=>{
   else if(k==='f'||k==='F'){ try{ if(document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen(); }catch(_){} }
   else if(k==='h'||k==='H'){ ui.classList.toggle('hide'); bar.classList.toggle('hide'); jump.classList.toggle('hide'); }
   else if(k==='t'||k==='T'){
-    const d=document.documentElement;
-    const dark = d.dataset.theme ? d.dataset.theme==='dark' : matchMedia('(prefers-color-scheme: dark)').matches;
-    d.dataset.theme = dark ? 'light' : 'dark';
+    if(typeof toggleTheme==='function') toggleTheme();
+    else { const d=document.documentElement;
+      const dark = d.dataset.theme ? d.dataset.theme==='dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+      d.dataset.theme = dark ? 'light' : 'dark'; }
   }
 });
 document.addEventListener('click',e=>{ if(e.target.closest('a')) return; stopAuto(); if(e.clientX < document.documentElement.clientWidth/3) prev(); else next(); });
