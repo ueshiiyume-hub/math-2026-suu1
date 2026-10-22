@@ -11,7 +11,7 @@ const NAV = (on) => `<div class="v2nav">${['❶ 式','❷ 塗る','❸ 答える
 const BIG = (sm, big, sub, s, o) => `<div class="v2kw lh" data-s="${s??0}"${o!==undefined?` data-o="${o}"`:''}>
     ${sm?`<div class="v2sm">${sm}</div>`:''}<div class="v2big"><span class="v2mk">${big}</span>${sub?`<span class="v2sub">${sub}</span>`:''}</div></div>`;
 /* グラフ（主役の 下） */
-const GV = {ay:160, cx:1, sc:60, k:37, r:[-1,3], top:8, W:880, H:316};   // Step❶ の グラフと 同じ 形（しゅっと）
+const GV = {ay:236, cx:1, sc:40, k:20, r:[-1,3], top:8, W:880, H:320};   // 頂点は x軸の 少し 下、上に 高く   // Step❶ の グラフと 同じ 形（しゅっと）
 
 /* 1：これから やること */
 const v1 = `
@@ -38,8 +38,8 @@ const va = `
 
 /* 3：Step❶ の 枠を 大きく（左：計算、右：グラフ）。書く 順：①y＝0とする ②＝0 ③因数分解 ④x＝ ⑤−1, 3 → 点 → 放物線 → 座標 */
 const CU = (() => {
-  const W=330, H=300, ay=150, X=x=>165+(x-1)*48, Y=x=>ay-30*(x+1)*(x-3);
-  let d=''; for(let i=0;i<=60;i++){ const x=1-2.89+5.78*i/60; d+=(i?'L':'M')+X(x).toFixed(1)+' '+Y(x).toFixed(1)+' '; }
+  const W=330, H=300, ay=210, X=x=>165+(x-1)*36, Y=x=>ay-14*(x+1)*(x-3);
+  let d=''; for(let i=0;i<=60;i++){ const x=1-3.8+7.6*i/60; d+=(i?'L':'M')+X(x).toFixed(1)+' '+Y(x).toFixed(1)+' '; }
   return `<svg class="v2gsv" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
     <line class="iax" x1="10" y1="${ay}" x2="${W-14}" y2="${ay}"/><polygon class="iah" points="${W-2},${ay} ${W-16},${ay-7} ${W-16},${ay+7}"/><text class="ixl" x="${W-22}" y="${ay+32}">x</text>
     <path class="curve v2cv" data-s="7" pathLength="1" d="${d}"/>

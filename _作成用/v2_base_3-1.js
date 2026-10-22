@@ -247,7 +247,8 @@ const CMP = (g, side, r, xc, sx, s, out) => {
   const mx = (bx+nx)/2, my = (by+ny)/2, ang = Math.atan2(ny-by, nx-bx)*180/Math.PI;
   const rot = side==='L' ? ang : ang-180;
   const len = Math.hypot(nx-bx, ny-by) + 76;
-  const tx = side==='L' ? nx-70 : nx+70, ty = g.ay+150;
+  const low = g.H-g.ay < 140;   // 下に 場所が ない ときは 横へ 書き直す
+  const tx = side==='L' ? nx-(low?200:70) : nx+(low?200:70), ty = low ? g.ay+80 : g.ay+150;
   /* 斜めの 帯（マーカーで なぞった ような うすい 色）を x と 数の 後ろに */
   const band = `<g class="gs" data-s="${s}"><rect class="iband2" x="${f(-len/2)}" y="-30" width="${f(len)}" height="60" rx="30" transform="translate(${f(mx)} ${f(my)}) rotate(${f(ang)})"/>
 </g>`;
