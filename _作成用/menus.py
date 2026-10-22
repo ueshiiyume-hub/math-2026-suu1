@@ -18,6 +18,10 @@ def make(path, title, back_href, back_label, kicker, h1, lead, items):
     h = h.replace('<h1><span class="mk">解説</span>スライド</h1>', f'<h1>{h1}</h1>')
     h = h.replace('<p class="lead">見たい 大問の カードを クリックしてね</p>', f'<p class="lead">{lead}</p>')
     h = h.replace('/* 大問の一覧（build.py が書きこむ） */', '/* カードの一覧（menus.py が書きこむ） */')
+    # スマホが 古い スライドを 覚えて いても、新しい 版が 出るように リンクに ?v=バージョン を つける
+    try: VERS = json.load(open(os.path.join(B, 'versions.json'), encoding='utf-8'))
+    except Exception: VERS = {}
+    items = [dict(it, href=it['href'] + ('?v=' + VERS[it['href'][:-5]]['v'] + '_' + VERS[it['href'][:-5]]['date'] if it['href'].endswith('.html') and it['href'][:-5] in VERS else '')) for it in items]
     h = h.replace('{{ITEMS}}', json.dumps(items, ensure_ascii=False, indent=1))
     # カードが まだ無いときは「準備中」を出す
     h = h.replace('</style>', EMPTY_CSS)
