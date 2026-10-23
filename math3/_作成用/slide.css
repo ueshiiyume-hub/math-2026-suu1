@@ -1,0 +1,182 @@
+/* ===== 数学Ⅲ スライド（数学C の 案A を 青に：薄い青・ゴシック体・まっすぐな 枠） ===== */
+:root{
+  --bg:#eef2f8; --paper:#ffffff; --ink:#2b3340; --muted:#687385;
+  --main:#8fb4e0; --deep:#2f5f9e; --pale:#eaf1fa; --line:#c5d6ec;
+  --a:#c8642a; --b:#8a4fb0;              /* 橙＝変わる ところ、紫＝置きかえた t（全デッキ共通） */
+  --shadow:0 1px 2px rgba(35,55,90,.05),0 4px 14px rgba(35,55,90,.08);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#151920; --paper:#222833; --ink:#e6ebf2; --muted:#a3adbd;
+    --main:#7fa6d6; --deep:#a9c8f0; --pale:#2a3444; --line:#3d4a5e;
+    --a:#f2a775; --b:#cfa2ec;
+    --shadow:0 1px 2px rgba(0,0,0,.2),0 4px 14px rgba(0,0,0,.3);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#151920; --paper:#222833; --ink:#e6ebf2; --muted:#a3adbd;
+  --main:#7fa6d6; --deep:#a9c8f0; --pale:#2a3444; --line:#3d4a5e;
+  --a:#f2a775; --b:#cfa2ec;
+  --shadow:0 1px 2px rgba(0,0,0,.2),0 4px 14px rgba(0,0,0,.3);
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--ink);font-family:"Noto Sans JP","Hiragino Sans","Yu Gothic",Meiryo,sans-serif;font-weight:400;
+  -webkit-user-select:none;user-select:none}
+.katex{font-size:1.08em}
+
+/* 台紙：横長 1280×720、縦長（スマホ）720×1280 を 画面に 合わせて 拡大 */
+#stage{position:fixed;left:50%;top:50%;width:1280px;height:720px;transform:translate(-50%,-50%) scale(var(--s,1));
+  background:var(--paper);box-shadow:var(--shadow)}
+body.portrait #stage{width:720px;height:1280px}
+.slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s}
+.slide.active{opacity:1;visibility:visible}
+
+/* 見出し */
+.hd{position:absolute;left:48px;right:48px;top:26px;height:62px;display:flex;align-items:center;gap:18px;border-bottom:2px solid var(--main)}
+.hd .no{background:var(--deep);color:var(--paper);font-weight:700;font-size:22px;padding:2px 12px;letter-spacing:.04em}
+.hd h2{font-size:32px;font-weight:700;margin:0;letter-spacing:.04em}
+.hd .sec{margin-left:auto;margin-right:70px;font-size:17px;color:var(--muted);letter-spacing:.08em}
+/* 中身 */
+.bd{position:absolute;left:48px;right:48px;top:106px;bottom:122px;display:flex;gap:40px;align-items:center;justify-content:center}
+.bd.col{flex-direction:column;gap:22px}
+.bd > .l{flex:1;min-width:0;display:flex;flex-direction:column;gap:18px}
+.bd > .r{flex:none;display:flex;align-items:center;justify-content:center}
+/* 下の 説明欄（「なぜ」を 言葉で） */
+.cap{position:absolute;left:48px;right:230px;bottom:22px;height:82px;display:flex;align-items:center;
+  border-left:5px solid var(--main);background:var(--pale);padding:0 22px;font-size:24px;line-height:1.5}
+.cap p{display:none;margin:0} .cap p.cur{display:block}
+
+/* 縦長（スマホ） */
+body.portrait .hd{left:28px;right:28px;top:22px}
+body.portrait .hd .sec{display:none}
+body.portrait .bd{left:28px;right:28px;top:104px;bottom:236px;flex-direction:column;gap:26px;justify-content:flex-start}
+body.portrait .bd > .l{flex:none;width:100%}
+body.portrait .cap{left:28px;right:28px;bottom:84px;height:132px;font-size:27px}
+
+/* 枠（定義・記法 など） */
+.box{border:1.5px solid var(--main);background:var(--paper)}
+.box .bl{background:var(--pale);color:var(--deep);font-weight:700;font-size:18px;padding:4px 16px;border-bottom:1px solid var(--line);letter-spacing:.1em}
+.box .bc{padding:16px 22px;font-size:27px;line-height:2}
+.q{font-size:26px;line-height:1.6}
+.q .tag{display:inline-block;color:var(--deep);font-weight:700;margin-right:.6em}
+/* 空らん（プリントの 緑の 箱）：答えは あとから 出る */
+.fill{display:inline-block;min-width:4.6em;background:var(--pale);border-bottom:2px solid var(--main);text-align:center;padding:0 .35em;margin:0 .15em;line-height:1.45}
+.fill > span{color:var(--deep);font-weight:700}
+/* 問題の 並び（1行 1つ） */
+.rows{display:flex;flex-direction:column;gap:10px}
+.row{display:flex;align-items:center;gap:18px;font-size:32px;padding:6px 16px;border-left:5px solid transparent;transition:background .3s,border-color .3s}
+.row.cur{background:var(--pale);border-left-color:var(--main)}
+.row .nt{font-size:22px;color:var(--muted)}
+.row .ans{margin-left:auto}
+.a{color:var(--a)} .b{color:var(--b)} .dp{color:var(--deep)}
+.mu{color:var(--muted)}
+.big{font-size:44px}
+/* まとめ（アニメーション なし） */
+.sum{display:grid;grid-template-columns:auto auto 1fr;gap:14px 22px;align-items:center;font-size:30px}
+.sum .ar{color:var(--deep);font-weight:700}
+
+/* 出る・光る：data-s（その番で 出る）data-e（その番で 消える）data-o（その番で 色が つく） */
+[data-s]{opacity:0;transition:opacity .45s}
+[data-s].show{opacity:1;transition-delay:var(--d,0s)}
+[data-o]{transition:color .3s,background-color .3s;border-radius:4px}
+[data-o].on[data-c="a"]{color:var(--a)} [data-o].on[data-c="b"]{color:var(--b)} [data-o].on[data-c="dp"]{color:var(--deep)}
+[data-o].on.cur{background:color-mix(in srgb,var(--main) 22%,transparent)}
+
+/* 表紙 */
+.cover{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.cover .k{font-size:20px;letter-spacing:.3em;color:var(--deep);font-weight:500}
+.cover .n{margin-top:26px;font-size:30px;font-weight:700;color:var(--paper);background:var(--deep);padding:2px 18px}
+.cover h1{font-size:68px;font-weight:700;letter-spacing:.08em;margin:18px 0 6px}
+.cover .sb{font-size:26px;color:var(--muted)}
+.cover .ln{width:120px;height:3px;background:var(--main);margin:30px 0 0}
+.cover .ver{position:absolute;left:48px;bottom:30px;font-size:17px;color:var(--muted)}
+body.portrait .cover h1{font-size:60px}
+
+/* 進み具合・操作の 案内 */
+#bar{position:fixed;left:0;bottom:0;height:4px;background:var(--main);transition:width .3s;z-index:20}
+#ui{position:fixed;left:12px;bottom:8px;font-size:12px;color:var(--muted);z-index:20;opacity:.8}
+body.portrait #ui{display:none}
+#bar.hide,#ui.hide,#jump.hide{opacity:0;pointer-events:none}
+/* 目次（右下） */
+#jump{position:fixed;right:14px;bottom:14px;z-index:24;display:flex;align-items:center;gap:8px}
+#jump > button,#jump .pgno{height:38px;border:1px solid var(--line);background:var(--paper);color:var(--ink);font:500 15px "Noto Sans JP",sans-serif;
+  padding:0 14px;display:flex;align-items:center;box-shadow:var(--shadow);cursor:pointer}
+#jump .pgno{cursor:default;color:var(--muted)}
+#jump #themebtn{width:38px;padding:0;justify-content:center;font-size:17px}
+#jump .tocp{position:fixed;top:0;right:0;bottom:0;width:min(360px,86vw);background:var(--paper);border-left:1px solid var(--line);
+  box-shadow:var(--shadow);transform:translateX(105%);transition:transform .3s;display:flex;flex-direction:column;z-index:2}
+#jump.open .tocp{transform:none}
+#jump .tocbg{position:fixed;inset:0;background:rgba(0,0,0,.18);display:none;z-index:1}
+#jump.open .tocbg{display:block}
+#jump .toch{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:2px solid var(--main);font-size:17px}
+#jump .tocx{border:none;background:none;color:var(--muted);font-size:20px;cursor:pointer}
+#jump .home{display:block;padding:10px 18px;font-size:14px;color:var(--deep);text-decoration:none;border-bottom:1px solid var(--line)}
+#jump .tocl{overflow:auto;padding:8px 0}
+#jump .ti{display:block;width:100%;text-align:left;border:none;background:none;color:var(--ink);font:400 16px "Noto Sans JP",sans-serif;padding:9px 18px;border-left:4px solid transparent;cursor:pointer}
+#jump .ti.on{border-left-color:var(--main);background:var(--pale);font-weight:700}
+
+/* ===== 手書き（ink.js） ===== */
+#ink{position:fixed;left:0;top:0;z-index:15;pointer-events:none;touch-action:none}
+body.inking #ink{pointer-events:auto;cursor:crosshair}
+body.pen-dev, body.pen-dev *{touch-action:none}
+#inkbar{position:fixed;z-index:25;right:12px;top:10px;display:flex;align-items:center;gap:6px;padding:5px;
+  background:color-mix(in srgb,var(--paper) 90%,transparent);border:1px solid var(--line);box-shadow:var(--shadow);transition:opacity .3s}
+#inkbar.hide{opacity:0;pointer-events:none}
+#inkbar button{font:500 15px "Noto Sans JP",sans-serif;height:34px;min-width:34px;padding:0 10px;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+#inkbar .ink-tg{font-size:17px}
+body.inking #inkbar .ink-tg{background:var(--deep);border-color:var(--deep);color:var(--paper)}
+#inkbar .ink-tools{display:none;gap:6px;align-items:center}
+body.inking #inkbar .ink-tools{display:flex}
+#inkbar .ink-c{width:34px;padding:0;background:var(--c);border-color:transparent}
+#inkbar .ink-c.sel{box-shadow:0 0 0 3px var(--paper),0 0 0 5px var(--c)}
+#inkbar .ink-er.sel{background:var(--pale)}
+#inkbar .ink-w{width:34px;padding:0;display:flex;align-items:center;justify-content:center}
+#inkbar .ink-w i{display:block;border-radius:50%;background:var(--ink)}
+#inkbar .ink-w.sel{border-color:var(--deep);background:var(--pale)}
+#inkbar .ink-sep{width:1px;height:24px;background:var(--line);margin:0 2px}
+body.portrait #inkbar .ink-tools{flex-wrap:wrap;max-width:calc(100vw - 70px)}
+body.portrait #inkbar{top:6px;right:6px}
+
+/* 撮影用：動きを 止めて 最後の 形 */
+body.final *, body.final *::before{transition:none!important;transition-delay:0s!important}
+
+
+/* ===== 数学Ⅲ（積分）の 部品 ===== */
+.tbl{display:grid;grid-template-columns:auto 1fr auto;border-top:2px solid var(--main);font-size:24px;width:100%}
+.tbl > div{padding:12px 16px;border-bottom:1px solid var(--line);line-height:1.7}
+.calc{display:flex;flex-direction:column;gap:4px;font-size:27px}
+.calc > div{min-height:1.6em;display:flex;align-items:center;flex-wrap:wrap;column-gap:.3em}
+.vnote{font-size:20px;color:var(--muted)}
+/* Point の 枠（プリントの 赤枠の コメント） */
+.pbox{border-left:5px solid var(--deep);background:var(--pale);padding:8px 18px 12px;font-size:22px;line-height:1.75}
+.pbox .pl2{color:var(--deep);font-weight:700;font-size:17px;letter-spacing:.08em}
+/* 問題の 書き出し */
+.pq{font-size:28px;display:flex;align-items:center;gap:.5em}
+.pq .tag,.q .tag{color:var(--deep);font-weight:700}
+.qline{font-size:23px}
+/* 1ページに 何問か（格子） */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px 44px;width:100%;align-items:start}
+.grid.c1{grid-template-columns:1fr}
+.grid .it{display:flex;flex-direction:column;gap:6px;padding:6px 14px;border-left:4px solid var(--line)}
+.grid .it .calc{font-size:25px;padding-left:1.6em}
+body.portrait .grid{grid-template-columns:1fr;gap:14px}
+/* 置換積分：左＝置きかえの 準備、右＝計算 */
+.two{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:30px;width:100%;align-items:start}
+.two > .l2{display:flex;flex-direction:column;gap:14px}
+.two .box .bc{font-size:24px;line-height:1.7;padding:10px 18px}
+.two .box .bc .calc{font-size:24px}
+.two .calc.main{font-size:26px;gap:12px}
+body.portrait .two{grid-template-columns:1fr;gap:18px}
+/* 帳尻合わせ */
+.two.aj{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.adj > div{white-space:nowrap}
+.adj{display:flex;flex-direction:column;gap:10px;font-size:25px;border:1.5px solid var(--main);padding:12px 18px}
+.adj .k{display:inline-block;min-width:5.6em;color:var(--deep);font-weight:700;font-size:20px;letter-spacing:.06em}
+/* 確かめ（微分すると 元に 戻る） */
+.chk{font-size:24px;color:var(--ink)}
+.chk .k{color:var(--muted);font-size:19px;letter-spacing:.06em}
+.sum{display:grid;grid-template-columns:auto auto 1fr;gap:14px 22px;align-items:center;font-size:28px}
+.sum .ar{color:var(--deep);font-weight:700}
+.bd.st{justify-content:flex-start;align-items:stretch}
+.fill.wide{min-width:8em}
