@@ -93,10 +93,11 @@ const p0 = coverSlide({kicker:'数学Ⅲ　積分法', no:NO, title:`${M`x^n`} �
 
 /* 方針 と 例 */
 const p1 = HD(NO, '方針', SEC) + `<div class="bd col" style="gap:30px">
+  <div class="big" style="font-size:38px">${D`\int\frac{2x-3}{x^2}\,dx`}</div>
   ${BOX('分子が 多項式である 場合の 不定積分の 方針', `${FILL(1, '分子の 各項を 分母で 割ってから、項ごとに 積分する。', 22)}`)}
   <div class="big" data-s="2" style="font-size:36px">${D`\frac{\A{2x}-\A{3}}{x^2}=\frac{\A{2x}}{x^2}-\frac{\A{3}}{x^2}=\frac{2}{x}-3x^{-2}`}</div>
 </div>` + CAP([
-  `分数の 式は、そのままでは 積分できません。`,
+  `${M`\int\frac{2x-3}{x^2}\,dx`} のような 分数の 式は、そのままでは 積分できません。`,
   `分子の 項を 1つずつ 分母で 割って、${M`x^{\alpha}`} の 項の 和に します。`,
   `こう 分ければ、①-1 の 公式が 使えます。`
 ]);
