@@ -136,6 +136,18 @@ function PL(o){
     return `<path class="arc${n!=null?' dr':''}" pathLength="1" d="M${f(sx)} ${f(sy)} A${r} ${r} 0 ${big} 0 ${f(ex)} ${f(ey)}"${at(op.d||0)}/>`
       + (op.lab===false ? '' : `<text class="dp" x="${f(cx+lr*Math.cos(m))}" y="${f(cy-lr*Math.sin(m)+7)}" text-anchor="middle"${at((op.d||0)+.4, `font-size:${op.fs||19}px`)}>${op.lab||deg+'°'}</text>`);
   };
+  /* 原点の まわりを 回る 矢印：a0° → a1°（左回り）、半径 R（px）。op: lab（外側の 文字）、d（遅れ）、lr（文字の 半径の 足し） */
+  g.carc = (a0, a1, R, n, op={}) => {
+    const r = Math.PI/180, cx = X(0), cy = Y(0), d = op.d||0;
+    const x0 = cx+R*Math.cos(a0*r), y0 = cy-R*Math.sin(a0*r), t = a1*r, x1 = cx+R*Math.cos(t), y1 = cy-R*Math.sin(t);
+    const dx = -Math.sin(t), dy = -Math.cos(t), s = 13, w = 7;   // 左回りの 進む 向き
+    const hp = `${f(x1)},${f(y1)} ${f(x1-dx*s-dy*w)},${f(y1-dy*s+dx*w)} ${f(x1-dx*s+dy*w)},${f(y1-dy*s-dx*w)}`;
+    const m = (a0+a1)/2*r, lr = R + (op.lr||30);
+    const at = dd => n==null ? '' : ` data-s="${n}"${op.e?` data-e="${op.e}"`:''} style="--d:${dd}s"`;
+    return `<path class="arc rot${n!=null?' dr':''}" pathLength="1" d="M${f(x0)} ${f(y0)} A${R} ${R} 0 ${a1-a0>180?1:0} 0 ${f(x1)} ${f(y1)}"${at(d)}/>`
+      + `<polygon class="roth" points="${hp}"${at(d+.5)}/>`
+      + (op.lab ? `<text class="dp" x="${f(cx+lr*Math.cos(m))}" y="${f(cy-lr*Math.sin(m)+7)}" text-anchor="middle"${at(d+.3)}>${op.lab}</text>` : '');
+  };
   /* 文字 */
   g.text = (x, y, s, cls, n, anchor) => `<text class="${cls||''}" x="${X(x)}" y="${Y(y)}" text-anchor="${anchor||'middle'}"${n==null?'':` data-s="${n}"`}>${s}</text>`;
   return g;
