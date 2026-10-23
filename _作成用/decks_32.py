@@ -11,7 +11,7 @@ const f1 = n => n.toFixed(1);
 
 /* グラフ（px）：y ＝ k(x − xv)² ＋ c を 下に凸で。sc：1目もりの px、ay：x軸 */
 function SG(o){
-  const W = o.W||800, H = o.H||290, ay = o.ay;
+  const W = o.W||800, H = o.H||300, ay = o.ay;
   const vs = o.vs||o.sc, X = x => W/2 + (x-o.xv)*o.sc, Y = x => ay - (o.k*(x-o.xv)**2 + o.c)*vs;
   const hw = Math.sqrt(((ay-o.top)/vs - o.c)/o.k);
   let d=''; for(let i=0;i<=80;i++){ const x=o.xv-hw+2*hw*i/80; d+=(i?'L':'M')+f1(X(x))+' '+f1(Y(x))+' '; }
@@ -29,7 +29,7 @@ const DOT3 = (g, x, filled, s) => `<circle class="${filled?'v2bd':'v2wd'} gs" da
 
 /* 段ごとの グラフ */
 const ROW3 = [
-  {f:`x${P2} − 2x − 3`, o:{xv:1, k:1, c:-4, sc:40, vs:20, ay:200, top:10}, roots:[-1,3]},
+  {f:`x${P2} − 2x − 3`, o:{xv:1, k:1, c:-4, sc:40, vs:20, ay:170, top:10, H:316}, roots:[-1,3]},
   {f:`x${P2} − 2x ＋ 1`, o:{xv:1, k:1, c:0, sc:40, vs:20, ay:250, top:10}, roots:[1]},
   {f:`x${P2} − 2x ＋ 5`, o:{xv:1, k:1, c:2, sc:40, vs:20, ay:272, top:10}, roots:[]}];
 /* 12問：段、不等号、答え、言葉 */
@@ -48,14 +48,57 @@ const MATHY = a => /^[x−\d ＜＝≦,]+$/.test(a.replace(/\s/g,''));
 /* 左：この 段の 4問（今の 問題を 目立たせる） */
 const LIST3 = (r, j, j2=j) => `<div class="p3list">${SIGN3.map((sg,k)=>`<div class="p3i${k>=j&&k<=j2?' on':''}${k<j?' done':''}"><span>${NO3[r*4+k]}</span><span class="math">${sg} 0</span></div>`).join('')}</div>`;
 
+
+/* x の 札（塗れた ところと 点線で つなぐ） */
+const XB3 = (at, to) => `<line class="ixln" x1="${f1(at[0])}" y1="${f1(at[1])}" x2="${f1(to[0])}" y2="${f1(to[1])}"/><circle class="ixdot" cx="${f1(to[0])}" cy="${f1(to[1])}" r="6"/><circle class="ixb" cx="${f1(at[0])}" cy="${f1(at[1])}" r="22"/><text class="ixt" x="${f1(at[0])}" y="${f1(at[1]+10)}" text-anchor="middle">x</text>`;
+/* A（小さい 方）と B（大きい 方）を 斜めに 比べる：帯（後ろ）と 不等号（前）。le＝≦ */
+const CMP3 = (A, B, le) => { const mx=(A[0]+B[0])/2, my=(A[1]+B[1])/2, ang=Math.atan2(B[1]-A[1],B[0]-A[0])*180/Math.PI, len=Math.hypot(B[0]-A[0],B[1]-A[1])+64;
+  const tr=`translate(${f1(mx)} ${f1(my)}) rotate(${f1(ang)})`, d=`M13 -13 L-13 0 L13 13${le?' M-13 9 L13 22':''}`;
+  return {band:`<rect class="iband2" x="${f1(-len/2)}" y="-26" width="${f1(len)}" height="52" rx="26" transform="${tr}"/>`,
+          sign:`<path class="ilt-h" d="${d}" transform="${tr}"/><path class="ilt" d="${d}" transform="${tr}"/>`}; };
+const WR3 = (x, y, t) => `<text class="iwr p3wr" x="${f1(x)}" y="${f1(y)}" text-anchor="middle">${t.replace(/x/g,'<tspan font-style="italic">x</tspan>')}</text>`;
+/* 1問の「x を 置く（3番）→ 式を 書く（4番）」 */
+function XSTEP(r, j, g){
+  const up = j%2===0, le = j>=2, sg = le?'≦':'＜';
+  const NL = x => [g.X(x)+(x<1?-20:20), g.ay+32];      // 数（−1・3）の 文字の 位置
+  let back='', x3='', w4='';
+  if(r===0 && up){            // 外側 2か所
+    const L=[g.X(-1)-110, g.ay-48], R=[g.X(3)+110, g.ay-48];
+    const c1=CMP3(L, NL(-1), le), c2=CMP3(NL(3), R, le);
+    back = `<g class="gs" data-s="4">${c1.band}${c2.band}</g>`;
+    x3 = XB3(L,[g.X(-1.4),g.Y(-1.4)]) + XB3(R,[g.X(3.4),g.Y(3.4)]);
+    w4 = c1.sign + c2.sign + WR3(g.X(-1)-200, g.ay+80, `x ${sg} −1`) + WR3(g.X(3)+200, g.ay+80, `3 ${sg} x`);
+  } else if(r===0){           // 内側
+    const X=[g.X(1), g.Y(1)+42], c1=CMP3(NL(-1), X, le), c2=CMP3(X, NL(3), le);
+    back = `<g class="gs" data-s="4">${c1.band}${c2.band}</g>`;
+    x3 = XB3(X,[g.X(1),g.Y(1)]);
+    w4 = c1.sign + c2.sign + WR3(g.X(-1)-170, g.ay+90, `−1 ${sg} x`) + WR3(g.X(3)+170, g.ay+90, `x ${sg} 3`);
+  } else if(r===1 && j===0){  // 1 以外
+    const L=[g.X(1)-150, g.ay-80], R=[g.X(1)+150, g.ay-80], N=[g.X(1), g.ay+34];
+    const c1=CMP3(L, N, false), c2=CMP3(N, R, false);
+    back = `<g class="gs" data-s="4">${c1.band}${c2.band}</g>`;
+    x3 = XB3(L,[g.X(-0.5),g.Y(-0.5)]) + XB3(R,[g.X(2.5),g.Y(2.5)]);
+    w4 = c1.sign + c2.sign + WR3(g.X(1)-250, g.ay+20, 'x ＜ 1') + WR3(g.X(1)+250, g.ay+20, '1 ＜ x');
+  } else if(r===1 && j===3){  // 1点 だけ
+    const A=[g.X(1)+110, g.ay-60];
+    x3 = XB3(A,[g.X(1),g.ay]);
+    w4 = WR3(g.X(1)+220, g.ay-50, 'x ＝ 1');
+  } else if(up){              // 全部 塗れた
+    const A=[g.X(2.4)+100, g.Y(2.4)];
+    x3 = XB3(A,[g.X(2.4),g.Y(2.4)]);
+    w4 = `<text class="iwr p3wr" x="${f1(g.X(2.4)+140)}" y="${f1(g.Y(2.4)+10)}">どこでも OK</text>`;
+  } else {                    // 塗れた ところが ない
+    x3 = `<text class="iwr p3wr" x="${f1(g.X(3.2))}" y="${f1(g.ay-120)}" style="fill:var(--muted)">x を 置く ところが ない</text>`;
+  }
+  return {back, front:`<g class="gs" data-s="3">${x3}</g><g class="gs" data-s="4">${w4}</g>`};
+}
 function Q3(r, j){
   const R = ROW3[r], up = j%2===0, eq = j>=2, sg = SIGN3[j], g = SG({...R.o}), ans = ANS3[r][j];
-  /* 塗りが 入る ところが あるか */
   const any = !(r===1 && !up) && !(r===2 && !up);
   const dots = R.roots.map(x=>DOT3(g, x, eq, 2)).join('');
   const w1 = `${up?'0より 大きい':'0より 小さい'}<span class="v2sub">（${up?'上':'下'}を 塗る）</span>`;
   const w2 = R.roots.length ? (eq ? 'x軸上も 塗る' : 'x軸上は 塗らない') : 'x軸上に グラフは ない';
-  const am = MATHY(ans);
+  const am = MATHY(ans), xs = XSTEP(r, j, g);
   return `
   <div class="card abs dcard v2 p3">${EQTAPE}
     ${LIST3(r,j)}
@@ -63,16 +106,18 @@ function Q3(r, j){
       <div class="p3q math">${NO3[r*4+j]}　${R.f} ${sg} 0</div>
       <div class="p3w lh" data-s="1" data-o="2"><span class="v2mk">${w1}</span></div>
       <div class="p3w lh" data-s="2" data-o="3"><span class="v2mk">${w2}</span></div>
-      <div class="p3w p3a lh" data-s="3"><span class="p3why">${WHY[r][j]} →</span><span class="v2mk ${am?'math':''}">${ans}</span></div>
+      <div class="p3w lh" data-s="3" data-o="4"><span class="v2mk">${any?'塗れた ところに x を 置く':'塗れた ところは？'}</span></div>
+      <div class="p3w p3a lh" data-s="4"><span class="p3why">${WHY[r][j]} →</span><span class="v2mk ${am?'math':''}">${ans}</span></div>
       <div class="p3g"><svg class="isv" width="${g.W}" height="${g.H}" viewBox="0 0 ${g.W} ${g.H}">
-        ${TINT3(g, up, 1)}${AX3(g)}${NUM3(g, R.roots)}<path class="icv" d="${g.d}"/>
-        ${PAINT3(g, up, false, 1)}${eq && R.roots.length ? `<g class="gs" data-s="2">${PAINT3(g, up, true)}</g>` : ''}${dots}</svg></div>
+        ${TINT3(g, up, 1)}${xs.back}${AX3(g)}${NUM3(g, R.roots)}<path class="icv" d="${g.d}"/>
+        ${PAINT3(g, up, false, 1)}${eq && R.roots.length ? `<g class="gs" data-s="2">${PAINT3(g, up, true)}</g>` : ''}${dots}${xs.front}</svg></div>
     </div>
   </div>
   ${cbar([
     `${NO3[r*4+j]} ${M(`${R.f.replace(/<sup>2<\/sup>/,'²')} ${sg} 0`)}`,
     `${up?'0より 大きい → x軸より <b>上</b> を 塗る。':'0より 小さい → x軸より <b>下</b> を 塗る。'}${any?'':'　…でも グラフは x軸より 下に ない！'}`,
     R.roots.length ? (eq ? `＝ が ある → x軸上も 塗る → <b>黒丸</b>。` : `＝ が ない → x軸上は 塗らない → <b>白丸</b>。`) : `x軸と 交わらない ので、x軸上の 点は ない。`,
+    any ? `塗れた ところに <b>x</b> を 置く。` : `塗れた ところが ない ので、x を 置けない。`,
     `${WHY[r][j]} → 答え <b>${ans}</b>。`])}`;
 }
 
@@ -159,7 +204,7 @@ const SUM3 = `
 const PG = [{name:'表紙', html:coverF(KK3, '<span class="mk">2次不等式</span><br>練習編', '塗って 答える', 'テンポよく 12問', POL3, '塗って 答える')}];
 for(let r=0;r<3;r++){
   PG.push({name:`${['1','2','3'][r]}段目`, html:ROWHEAD(r)});
-  for(let j=0;j<4;j+=2) PG.push({name:`${NO3[r*4+j]}${NO3[r*4+j+1]} ${SIGN3[j]}・${SIGN3[j+1]}`, html:PAIR3(r,j)});
+  for(let j=0;j<4;j++) PG.push({name:`${NO3[r*4+j]} ${SIGN3[j]} 0`, html:Q3(r,j)});
   PG.push({name:`${['1','2','3'][r]}段目 書きこみ`, html:WRITE(r)});
 }
 PG.push({name:'まとめ', html:SUM3}, {name:'終', html:endF(KK3 + '　2次不等式 練習編', POL3)});
