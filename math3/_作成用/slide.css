@@ -180,3 +180,8 @@ body.portrait .two{grid-template-columns:1fr;gap:18px}
 .sum .ar{color:var(--deep);font-weight:700}
 .bd.st{justify-content:flex-start;align-items:stretch}
 .fill.wide{min-width:8em}
+/* ③-1 から：部分積分の 選び方（微分する方＝橙、積分する方＝紫） */
+.tg{display:inline-block;min-width:5.4em;font-size:18px;font-weight:700;letter-spacing:.04em;color:var(--deep)}
+.tg.a{color:var(--a)} .tg.b{color:var(--b)}
+.lst{display:flex;flex-direction:column;gap:14px;font-size:26px;line-height:1.6}
+.lst .k{color:var(--deep);font-weight:700}

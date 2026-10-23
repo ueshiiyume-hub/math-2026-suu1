@@ -685,3 +685,427 @@ const DECK = {title:'②-4 置換積分（分子が 分母の 微分）', pages:
   {name:'問9　⑴', html:p4}, {name:'問9　⑵', html:p5}, {name:'問9　⑶', html:p6}, {name:'問9　⑷', html:p7}, {name:'まとめ', html:p8},
 ]};
 ''')
+
+# ---------------------------------------------------------------- ③-1 部分積分法
+PICK_JS = r'''
+/* 部分積分の 1問：左＝選び方（微分する方 橙・積分する方 紫）と 積、右＝計算
+   o = {title, tag, q, top, f:[元, 微分], g:[元, 積分], prod, calc, cm} */
+function ppPage(o){
+  return subPage({no:NO, sec:SEC, title:o.title, tag:o.tag, q:o.q, top:o.top, plabel:'選び方',
+    prep:[[1, `<div><span class="tg a">微分する方</span>${M(String.raw`\A{${o.f[0]}}\ \to\ \A{${o.f[1]}}`)}</div>`],
+          [2, `<div><span class="tg b">積分する方</span>${M(String.raw`\B{${o.g[0]}}\ \to\ \B{${o.g[1]}}`)}</div>`]],
+    pt:PT(3, '微分した方 × 積分した方', `${D(o.prod)}${o.pnote ? `<br>${o.pnote}` : '　→ 積分できる'}`),
+    calc:o.calc, cm:o.cm});
+}
+'''
+DECKS['3-1_部分積分'] = ('③-1 部分積分法', r'''
+const NO = '③-1', SEC = '数学Ⅲ　積分法';
+''' + PICK_JS + r'''
+const p0 = coverSlide({kicker:'数学Ⅲ　積分法', no:NO, title:'部分積分法', sub:'積の 形を「微分する方」と「積分する方」に 分ける'});
+
+const p1 = HD(NO, '部分積分法', SEC) + `<div class="bd col" style="gap:20px">
+  ${BOX('部分積分法', `${D`\int\A{f(x)}\B{g'(x)}\,dx=`}${FILL(1, D`\A{f(x)}\B{g(x)}-\int\A{f'(x)}\B{g(x)}\,dx`, 13)}`)}
+  <div class="pbox" data-s="2"><div class="pl2">なぜ？（積の 微分から）</div>
+    ${CALC([[2, String.raw`\{f(x)g(x)\}'=f'(x)g(x)+f(x)g'(x)`], [3, String.raw`f(x)g(x)=\int f'(x)g(x)\,dx+\int f(x)g'(x)\,dx`]])}</div>
+</div>` + CAP([
+  `${M`x\sin x`} のような <b>積</b> の 積分に 使う 公式です。`,
+  `${M`f(x)`} は <b class="a">微分</b> して、${M`g'(x)`} は <b class="b">積分</b> して 使います。`,
+  `なぜ この 式に なるのか。数学Ⅲ の 積の 微分の 公式から 出ます。`,
+  `両辺を 積分して、${M`\int f'(x)g(x)\,dx`} を 左に 移せば 公式です。`
+]);
+
+const p2 = HD(NO, '選び方', SEC) + `<div class="bd col" style="gap:22px">
+  ${BOX('どちらを 微分する？', `<div class="lst">
+    <div data-s="1">① <span class="k a">【微分する方】</span>${M`f(x)`}：微分しやすく、微分した 後の 式が 簡単に なる 方</div>
+    <div data-s="2">② <span class="k b">【積分する方】</span>${M`g'(x)`}：積分しやすい 方</div>
+    <div data-s="3">③「微分した 方」と「積分した 方」の 積が 積分できそうかを 予想しておく</div></div>`)}
+</div>` + CAP([
+  `公式を 使う 前に、2つの うち どちらを 微分するかを 決めます。`,
+  `${M`x`} は 微分すると ${M`1`}。式が 簡単に なるので、微分する 方に 向いて います。`,
+  `${M`\sin x`}、${M`\cos x`}、${M`e^x`} は、積分しても 形が ほとんど 変わりません。`,
+  `最後に 残る ${M`\int f'(x)g(x)\,dx`} が 積分できれば 成功です。先に 確かめておきます。`
+]);
+
+const Q = `<div class="q qline">次の 不定積分を 求めよ。</div>`;
+const p3 = ppPage({title:'例', tag:'⑴', q:String.raw`\int x\sin x\,dx`, top:Q,
+  f:['x', '1'], g:[String.raw`\sin x`, String.raw`-\cos x`], prod:String.raw`1\cdot(-\cos x)=-\cos x`,
+  calc:[[4, String.raw`=\A{x}\cdot\B{(-\cos x)}-\int\A{1}\cdot\B{(-\cos x)}\,dx`], [5, String.raw`=-x\cos x+\int\cos x\,dx`], [6, String.raw`=\DP{-x\cos x+\sin x+C}`]],
+  cm:[`${M`x`} と ${M`\sin x`} の 積です。どちらを 微分する 方に するかを 決めます。`,
+      `<b class="a">微分する方</b> は ${M`x`}。微分すると ${M`1`} に なり、簡単です。`,
+      `<b class="b">積分する方</b> は ${M`\sin x`}。積分すると ${M`-\cos x`}。`,
+      `微分した方と 積分した方の 積は ${M`-\cos x`}。これなら 積分できます。`,
+      `公式「${M`fg-\int f'g\,dx`}」に 入れます。`,
+      `マイナスが 2つで プラスに なります。`,
+      `${M`\int\cos x\,dx=\sin x`}。`]});
+
+const p4 = ppPage({title:'問10　⑴', tag:'⑴', q:String.raw`\int x\cos x\,dx`, top:Q,
+  f:['x', '1'], g:[String.raw`\cos x`, String.raw`\sin x`], prod:String.raw`1\cdot\sin x=\sin x`,
+  calc:[[4, String.raw`=\A{x}\B{\sin x}-\int\A{1}\cdot\B{\sin x}\,dx`], [5, String.raw`=\DP{x\sin x+\cos x+C}`]],
+  cm:[`例と 同じ 形です。`, `微分する方は ${M`x`}。`, `積分する方は ${M`\cos x`}。積分すると ${M`\sin x`}。`, `積は ${M`\sin x`}。積分できます。`,
+      `公式に 入れます。`, `${M`\int\sin x\,dx=-\cos x`} なので、${M`-(-\cos x)=+\cos x`}。`]});
+const p5 = ppPage({title:'問10　⑵', tag:'⑵', q:String.raw`\int x\sin 3x\,dx`,
+  f:['x', '1'], g:[String.raw`\sin 3x`, String.raw`-\frac{1}{3}\cos 3x`], prod:String.raw`-\frac{1}{3}\cos 3x`,
+  calc:[[4, String.raw`=\A{x}\cdot\B{\left(-\frac{1}{3}\cos 3x\right)}-\int\A{1}\cdot\B{\left(-\frac{1}{3}\cos 3x\right)}dx`],
+        [5, String.raw`=-\frac{1}{3}x\cos 3x+\frac{1}{3}\int\cos 3x\,dx`], [6, String.raw`=\DP{-\frac{1}{3}x\cos 3x+\frac{1}{9}\sin 3x+C}`]],
+  cm:[`中身が ${M`3x`} です。`, `微分する方は ${M`x`}。`, `${M`\sin 3x`} の 積分は、①-5 の 帳尻合わせで ${M`-\frac{1}{3}\cos 3x`}。`, `積も ${M`\cos 3x`} の 形なので 積分できます。`,
+      `公式に 入れます。`, `定数 ${M`\frac{1}{3}`} を 前に 出します。`, `${M`\int\cos 3x\,dx=\frac{1}{3}\sin 3x`}。${M`\frac{1}{3}\cdot\frac{1}{3}=\frac{1}{9}`}。`]});
+const p6 = ppPage({title:'問10　⑶', tag:'⑶', q:String.raw`\int(2x+1)\sin x\,dx`,
+  f:['2x+1', '2'], g:[String.raw`\sin x`, String.raw`-\cos x`], prod:String.raw`2\cdot(-\cos x)=-2\cos x`,
+  calc:[[4, String.raw`=\A{(2x+1)}\B{(-\cos x)}-\int\A{2}\cdot\B{(-\cos x)}\,dx`], [5, String.raw`=-(2x+1)\cos x+2\int\cos x\,dx`], [6, String.raw`=\DP{-(2x+1)\cos x+2\sin x+C}`]],
+  cm:[`1次式 ${M`2x+1`} と ${M`\sin x`} の 積です。`, `微分する方は ${M`2x+1`}。微分すると ${M`2`}。`, `積分する方は ${M`\sin x`}。`, `積は ${M`-2\cos x`}。積分できます。`,
+      `公式に 入れます。`, `マイナスが 2つで プラス、${M`2`} を 前に 出します。`, `${M`2\int\cos x\,dx=2\sin x`}。`]});
+const p7 = ppPage({title:'問10　⑷', tag:'⑷', q:String.raw`\int(x+1)\cos 2x\,dx`,
+  f:['x+1', '1'], g:[String.raw`\cos 2x`, String.raw`\frac{1}{2}\sin 2x`], prod:String.raw`\frac{1}{2}\sin 2x`,
+  calc:[[4, String.raw`=\A{(x+1)}\cdot\B{\frac{1}{2}\sin 2x}-\int\A{1}\cdot\B{\frac{1}{2}\sin 2x}\,dx`],
+        [5, String.raw`=\frac{1}{2}(x+1)\sin 2x-\frac{1}{2}\cdot\left(-\frac{1}{2}\cos 2x\right)+C`], [6, String.raw`=\DP{\frac{1}{2}(x+1)\sin 2x+\frac{1}{4}\cos 2x+C}`]],
+  cm:[`中身が ${M`2x`} です。`, `微分する方は ${M`x+1`}。`, `${M`\cos 2x`} の 積分は ${M`\frac{1}{2}\sin 2x`}。`, `積は ${M`\frac{1}{2}\sin 2x`}。積分できます。`,
+      `公式に 入れます。`, `${M`\int\sin 2x\,dx=-\frac{1}{2}\cos 2x`}。`, `${M`-\frac{1}{2}\cdot\left(-\frac{1}{2}\right)=+\frac{1}{4}`}。`]});
+
+const p8 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:26px">
+  ${BOX('部分積分法', `${D`\int\A{f(x)}\B{g'(x)}\,dx=\A{f(x)}\B{g(x)}-\int\A{f'(x)}\B{g(x)}\,dx`}`)}
+  <div class="sum">
+    <span class="a">微分する方</span><span class="ar">→</span><span>${M`x`}、${M`2x+1`} などの 多項式（微分すると 簡単）</span>
+    <span class="b">積分する方</span><span class="ar">→</span><span>${M`\sin x`}、${M`\cos 3x`} など（積分しやすい）</span>
+  </div>
+</div>` + CAP([`③-2 では、${M`e^x`} や ${M`\log x`} を 含む 積の 部分積分を 学びます。`]);
+
+const DECK = {title:'③-1 部分積分法', pages:[
+  {name:'表紙', html:p0}, {name:'部分積分法', html:p1}, {name:'選び方', html:p2}, {name:'例', html:p3},
+  {name:'問10　⑴', html:p4}, {name:'問10　⑵', html:p5}, {name:'問10　⑶', html:p6}, {name:'問10　⑷', html:p7}, {name:'まとめ', html:p8},
+]};
+''')
+
+# ---------------------------------------------------------------- ③-2 部分積分（eˣ・log x）
+DECKS['3-2_部分積分_指数と対数'] = ('③-2 部分積分（eˣ・log x）', r'''
+const NO = '③-2', SEC = '数学Ⅲ　積分法';
+''' + PICK_JS + r'''
+const p0 = coverSlide({kicker:'数学Ⅲ　積分法', no:NO, title:'部分積分法', sub:`${M`e^x`} と ${M`\log x`} を 含む 積`});
+const Q = `<div class="q qline">次の 不定積分を 求めよ。</div>`;
+
+const p1 = ppPage({title:'例　⑴', tag:'⑴', q:String.raw`\int xe^x\,dx`, top:Q,
+  f:['x', '1'], g:['e^x', 'e^x'], prod:String.raw`1\cdot e^x=e^x`,
+  calc:[[4, String.raw`=\A{x}\B{e^x}-\int\A{1}\cdot\B{e^x}\,dx`], [5, String.raw`=xe^x-e^x+C`], [6, String.raw`=\DP{(x-1)e^x+C}`]],
+  cm:[`${M`x`} と ${M`e^x`} の 積です。`, `微分する方は ${M`x`}。`, `積分する方は ${M`e^x`}。積分しても ${M`e^x`} の まま です。`, `積は ${M`e^x`}。積分できます。`,
+      `公式に 入れます。`, `${M`\int e^x\,dx=e^x`}。`, `${M`e^x`} で くくって 整理します。`]});
+const p2 = ppPage({title:'例　⑵', tag:'⑵', q:String.raw`\int\log x\,dx`,
+  top:PT(null, 'ポイント', `${M`\log x=\B{1}\cdot\A{\log x}`} と 考える。${M`1`} を 積分する方（${M`1=(x)'`}）に する。`),
+  f:[String.raw`\log x`, String.raw`\frac{1}{x}`], g:['1', 'x'], prod:String.raw`\frac{1}{x}\cdot x=1`,
+  calc:[[4, String.raw`=\int\B{1}\cdot\A{\log x}\,dx=\B{x}\A{\log x}-\int\B{x}\cdot\A{\frac{1}{x}}\,dx`], [5, String.raw`=x\log x-\int1\,dx`], [6, String.raw`=\DP{x\log x-x+C}`]],
+  cm:[`${M`\log x`} だけでは 積に 見えません。${M`1\times\log x`} と 考えます。`, `${M`\log x`} は 積分の 公式が ないので、<b class="a">微分する方</b>。微分すると ${M`\frac{1}{x}`}。`,
+      `残りの ${M`1`} を <b class="b">積分する方</b> に します。積分すると ${M`x`}。`, `積は ${M`\frac{1}{x}\cdot x=1`}。約分されて 簡単に なります。`,
+      `公式に 入れます。`, `${M`x\cdot\frac{1}{x}=1`}。`, `${M`\int1\,dx=x`}。この 結果は 公式として 覚えて おくと 便利です。`]});
+
+const p3 = ppPage({title:'問11　⑴', tag:'⑴', q:String.raw`\int(2x-1)e^x\,dx`, top:Q,
+  f:['2x-1', '2'], g:['e^x', 'e^x'], prod:'2e^x',
+  calc:[[4, String.raw`=\A{(2x-1)}\B{e^x}-\int\A{2}\B{e^x}\,dx`], [5, String.raw`=(2x-1)e^x-2e^x+C`], [6, String.raw`=\DP{(2x-3)e^x+C}`]],
+  cm:[`例⑴ と 同じ 形です。`, `微分する方は ${M`2x-1`}。`, `積分する方は ${M`e^x`}。`, `積は ${M`2e^x`}。`, `公式に 入れます。`, `${M`2\int e^x\,dx=2e^x`}。`, `${M`e^x`} で くくると ${M`(2x-1)-2=2x-3`}。`]});
+const p4 = ppPage({title:'問11　⑵', tag:'⑵', q:String.raw`\int xe^{2x}\,dx`,
+  f:['x', '1'], g:['e^{2x}', String.raw`\frac{1}{2}e^{2x}`], prod:String.raw`\frac{1}{2}e^{2x}`,
+  calc:[[4, String.raw`=\A{x}\cdot\B{\frac{1}{2}e^{2x}}-\int\A{1}\cdot\B{\frac{1}{2}e^{2x}}\,dx`], [5, String.raw`=\frac{1}{2}xe^{2x}-\frac{1}{4}e^{2x}+C`], [6, String.raw`=\DP{\frac{1}{4}(2x-1)e^{2x}+C}`]],
+  cm:[`中身が ${M`2x`} です。`, `微分する方は ${M`x`}。`, `${M`e^{2x}`} の 積分は ${M`\frac{1}{2}e^{2x}`}（帳尻合わせ）。`, `積は ${M`\frac{1}{2}e^{2x}`}。`,
+      `公式に 入れます。`, `${M`\frac{1}{2}\int e^{2x}\,dx=\frac{1}{2}\cdot\frac{1}{2}e^{2x}=\frac{1}{4}e^{2x}`}。`, `${M`\frac{1}{4}e^{2x}`} で くくります。`]});
+const p5 = ppPage({title:'問11　⑶', tag:'⑶', q:String.raw`\int xe^{-x}\,dx`,
+  f:['x', '1'], g:['e^{-x}', '-e^{-x}'], prod:'-e^{-x}',
+  calc:[[4, String.raw`=\A{x}\B{(-e^{-x})}-\int\A{1}\cdot\B{(-e^{-x})}\,dx`], [5, String.raw`=-xe^{-x}+\int e^{-x}\,dx`], [6, String.raw`=-xe^{-x}-e^{-x}+C`], [7, String.raw`=\DP{-(x+1)e^{-x}+C}`]],
+  cm:[`中身が ${M`-x`} です。符号に 注意します。`, `微分する方は ${M`x`}。`, `${M`e^{-x}`} の 積分は ${M`-e^{-x}`}。`, `積は ${M`-e^{-x}`}。`,
+      `公式に 入れます。`, `マイナスが 2つで プラス。`, `${M`\int e^{-x}\,dx=-e^{-x}`}。`, `${M`-e^{-x}`} で くくります。`]});
+
+const p6 = ppPage({title:'問12　⑴', tag:'⑴', q:String.raw`\int\log 2x\,dx`, top:Q,
+  f:[String.raw`\log 2x`, String.raw`\frac{1}{x}`], g:['1', 'x'], prod:String.raw`\frac{1}{x}\cdot x=1`,
+  calc:[[4, String.raw`=\B{x}\A{\log 2x}-\int\B{x}\cdot\A{\frac{1}{x}}\,dx`], [5, String.raw`=x\log 2x-\int1\,dx`], [6, String.raw`=\DP{x\log 2x-x+C}`]],
+  cm:[`例⑵ と 同じく、${M`1\times\log 2x`} と 考えます。`, `${M`(\log 2x)'=\frac{2}{2x}=\frac{1}{x}`}。`, `${M`1`} を 積分する方に して ${M`x`}。`, `積は ${M`1`}。`,
+      `公式に 入れます。`, `${M`x\cdot\frac{1}{x}=1`}。`, `${M`\int1\,dx=x`}。`]});
+const p7 = ppPage({title:'問12　⑵', tag:'⑵', q:String.raw`\int x\log x\,dx`,
+  f:[String.raw`\log x`, String.raw`\frac{1}{x}`], g:['x', String.raw`\frac{1}{2}x^2`], prod:String.raw`\frac{1}{x}\cdot\frac{1}{2}x^2=\frac{1}{2}x`,
+  calc:[[4, String.raw`=\B{\frac{1}{2}x^2}\A{\log x}-\int\B{\frac{1}{2}x^2}\cdot\A{\frac{1}{x}}\,dx`], [5, String.raw`=\frac{1}{2}x^2\log x-\frac{1}{2}\int x\,dx`], [6, String.raw`=\DP{\frac{1}{2}x^2\log x-\frac{1}{4}x^2+C}`]],
+  cm:[`${M`\log x`} が あるときは、${M`\log x`} を 微分する方に します。`, `${M`\log x`} を 微分すると ${M`\frac{1}{x}`}。`, `${M`x`} を 積分すると ${M`\frac{1}{2}x^2`}。`, `積は ${M`\frac{1}{2}x`}。約分されて 積分できます。`,
+      `公式に 入れます。`, `${M`\frac{1}{2}x^2\cdot\frac{1}{x}=\frac{1}{2}x`}。`, `${M`\frac{1}{2}\int x\,dx=\frac{1}{4}x^2`}。`]});
+const p8 = ppPage({title:'問12　⑶', tag:'⑶', q:String.raw`\int(2x+1)\log x\,dx`,
+  f:[String.raw`\log x`, String.raw`\frac{1}{x}`], g:['2x+1', 'x^2+x'], prod:String.raw`\frac{1}{x}\cdot(x^2+x)=x+1`,
+  calc:[[4, String.raw`=\B{(x^2+x)}\A{\log x}-\int\B{(x^2+x)}\cdot\A{\frac{1}{x}}\,dx`], [5, String.raw`=(x^2+x)\log x-\int(x+1)\,dx`], [6, String.raw`=\DP{(x^2+x)\log x-\frac{1}{2}x^2-x+C}`]],
+  cm:[`ここでも ${M`\log x`} を 微分する方に します。`, `${M`\log x`} を 微分すると ${M`\frac{1}{x}`}。`, `${M`2x+1`} を 積分すると ${M`x^2+x`}。`, `積は ${M`x+1`}。`,
+      `公式に 入れます。`, `${M`(x^2+x)\cdot\frac{1}{x}=x+1`}。`, `${M`\int(x+1)\,dx=\frac{1}{2}x^2+x`}。`]});
+const p9 = ppPage({title:'問12　⑷', tag:'⑷', q:String.raw`\int\log(x+1)\,dx`,
+  f:[String.raw`\log(x+1)`, String.raw`\frac{1}{x+1}`], g:['1', 'x+1'], prod:String.raw`\frac{1}{x+1}\cdot(x+1)=1`,
+  pnote:`${M`1`} の 積分を ${M`x`} では なく <b>${M`x+1`}</b> に すると 約分できる`,
+  calc:[[4, String.raw`=\B{(x+1)}\A{\log(x+1)}-\int\B{(x+1)}\cdot\A{\frac{1}{x+1}}\,dx`], [5, String.raw`=(x+1)\log(x+1)-\int1\,dx`], [6, String.raw`=\DP{(x+1)\log(x+1)-x+C}`]],
+  cm:[`${M`1\times\log(x+1)`} と 考えます。`, `${M`\log(x+1)`} を 微分すると ${M`\frac{1}{x+1}`}。`, `${M`1`} を 積分します。${M`(x+1)'=1`} なので、${M`x+1`} と しても 正しい 積分です。`,
+      `${M`x+1`} を 選ぶと、積が ${M`1`} に なります。これが 工夫です。`, `公式に 入れます。`, `${M`(x+1)\cdot\frac{1}{x+1}=1`}。`, `${M`\int1\,dx=x`}。（${M`x+1>0`} なので ${M`\log`} の 中は そのまま）`]});
+
+const p10 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:26px">
+  <div class="sum">
+    <span>${M`x`} と ${M`e^x`}</span><span class="ar">→</span><span><b class="a">${M`x`} を 微分</b>、${M`e^x`} を 積分</span>
+    <span>${M`\log x`} を 含む</span><span class="ar">→</span><span><b class="a">${M`\log x`} を 微分</b>（${M`\log x`} は 積分しにくい）</span>
+    <span>${M`\log x`} だけ</span><span class="ar">→</span><span>${M`1\times\log x`} と 考え、${M`\int\log x\,dx=x\log x-x+C`}</span>
+  </div>
+</div>` + CAP([`④-1 では、分数関数の 不定積分を 学びます。`]);
+
+const DECK = {title:'③-2 部分積分（eˣ・log x）', pages:[
+  {name:'表紙', html:p0}, {name:'例　⑴', html:p1}, {name:'例　⑵', html:p2},
+  {name:'問11　⑴', html:p3}, {name:'問11　⑵', html:p4}, {name:'問11　⑶', html:p5},
+  {name:'問12　⑴', html:p6}, {name:'問12　⑵', html:p7}, {name:'問12　⑶', html:p8}, {name:'問12　⑷', html:p9}, {name:'まとめ', html:p10},
+]};
+''')
+
+# ---------------------------------------------------------------- ④-1 分数関数の不定積分
+DECKS['4-1_分数関数の不定積分'] = ('④-1 分数関数の不定積分', r'''
+const NO = '④-1', SEC = '数学Ⅲ　積分法';
+const p0 = coverSlide({kicker:'数学Ⅲ　積分法', no:NO, title:'分数関数の不定積分', sub:'割り算か、部分分数に 分解するか'});
+
+const p1 = HD(NO, '方針', SEC) + `<div class="bd col" style="gap:20px">
+  ${BOX('分子の 次数 ≧ 分母の 次数', `${FILL(1, `分子を 分母で 割って、（商）＋ ${M`\frac{\text{余り}}{\text{分母}}`} の 形に する`, 20)}`)}
+  ${BOX('分母の 次数が 高い（2次）', `${FILL(2, '部分分数に 分解して、項ごとに 積分する', 16)}<br><span data-s="3" style="font-size:23px">分母が 1次 ${M`\frac{1}{ax+b}`} なら ${M`\frac{1}{a}\log|ax+b|`} で 積分できる</span>`)}
+</div>` + CAP([
+  `分数の 式は、分子と 分母の 次数を 比べて 方針を 決めます。`,
+  `分子の 次数が 大きい（同じ）ときは、整数の 割り算と 同じように 割ります。`,
+  `分母の 次数が 高く、置換積分も 部分積分も 使えない ときは、部分分数に 分解します。`,
+  `最後は 分母が 1次式の 分数に なり、${M`\log`} で 積分できます。`
+]);
+
+/* 左＝変形（割り算・部分分数）、右＝計算 */
+function frPage(o){ return subPage({no:NO, sec:SEC, title:o.title, tag:o.tag, q:o.q, top:o.top, plabel:o.lab, prep:o.prep, pt:o.pt, calc:o.calc, cm:o.cm}); }
+const Q = `<div class="q qline">次の 不定積分を 求めよ。</div>`;
+
+const p2 = frPage({title:'例　⑴', tag:'⑴', q:String.raw`\int\frac{2x^2+1}{x-1}\,dx`, top:Q, lab:'割り算',
+  prep:[[1, String.raw`2x^2+1=(x-1)(\A{2x+2})+\A{3}`], [2, String.raw`\frac{2x^2+1}{x-1}=\A{2x+2}+\frac{\A{3}}{x-1}`]],
+  calc:[[3, String.raw`=\int\left(2x+2+\frac{3}{x-1}\right)dx`], [4, String.raw`=\DP{x^2+2x+3\log|x-1|+C}`]],
+  cm:[`分子は 2次、分母は 1次。分子の 次数が 大きいので 割ります。`, `${M`2x^2+1`} を ${M`x-1`} で 割ると、商 ${M`2x+2`}、余り ${M`3`}。`,
+      `「商 ＋ 余り／分母」の 形に 書きかえます。`, `これなら 項ごとに 積分できます。`, `${M`\frac{3}{x-1}`} の 積分は ${M`3\log|x-1|`}。`]});
+const p3 = frPage({title:'例　⑵', tag:'⑵', q:String.raw`\int\frac{2}{x^2-1}\,dx`, lab:'部分分数に 分解',
+  top:PT(null, '使える？', `置換積分 → ×（分子が 分母の 微分で ない）　部分積分 → ×`),
+  prep:[[1, String.raw`\frac{2}{x^2-1}=\frac{2}{(x-1)(x+1)}`], [2, String.raw`=\frac{1}{x-1}-\frac{1}{x+1}`]],
+  pt:PT(2, '確かめ（通分）', `${D`\frac{(x+1)-(x-1)}{(x-1)(x+1)}=\frac{2}{x^2-1}`}`),
+  calc:[[3, String.raw`=\int\left(\frac{1}{x-1}-\frac{1}{x+1}\right)dx`], [4, String.raw`=\log|x-1|-\log|x+1|+C`], [5, String.raw`=\DP{\log\left|\frac{x-1}{x+1}\right|+C}`]],
+  cm:[`分母が 2次で、分子は ${M`2`}。割り算は できません。置換も 部分積分も 使えません。`, `分母を 因数分解します。`,
+      `2つの 分数の 差に 分けます（部分分数分解）。通分して 確かめると 元に 戻ります。`, `分母が 1次の 分数なので、積分できます。`,
+      `それぞれ ${M`\log`} に なります。`, `${M`\log A-\log B=\log\frac{A}{B}`} で 1つに まとめます。`]});
+
+const p4 = frPage({title:'問14　⑴', tag:'⑴', q:String.raw`\int\frac{x^2+1}{x+2}\,dx`, top:Q, lab:'割り算',
+  prep:[[1, String.raw`x^2+1=(x+2)(\A{x-2})+\A{5}`]],
+  calc:[[2, String.raw`=\int\left(x-2+\frac{5}{x+2}\right)dx`], [3, String.raw`=\DP{\frac{1}{2}x^2-2x+5\log|x+2|+C}`]],
+  cm:[`分子の 次数が 大きいので 割ります。`, `商 ${M`x-2`}、余り ${M`5`}。`, `「商 ＋ 余り／分母」に して、項ごとに 積分します。`, `${M`\frac{5}{x+2}`} の 積分は ${M`5\log|x+2|`}。`]});
+const p5 = frPage({title:'問14　⑵', tag:'⑵', q:String.raw`\int\frac{2x^2}{2x-1}\,dx`, lab:'割り算',
+  prep:[[1, String.raw`2x^2=(2x-1)\left(\A{x+\frac{1}{2}}\right)+\A{\frac{1}{2}}`]],
+  pt:PT(3, '分母が 2x−1', `${D`\int\frac{dx}{2x-1}=\frac{1}{2}\log|2x-1|`}（${M`x`} の 係数 ${M`2`} で 割る）`),
+  calc:[[2, String.raw`=\int\left(x+\frac{1}{2}+\frac{1}{2}\cdot\frac{1}{2x-1}\right)dx`], [3, String.raw`=\DP{\frac{1}{2}x^2+\frac{1}{2}x+\frac{1}{4}\log|2x-1|+C}`]],
+  cm:[`分子の 次数が 大きいので 割ります。`, `商 ${M`x+\frac{1}{2}`}、余り ${M`\frac{1}{2}`}。`, `「商 ＋ 余り／分母」に します。`, `${M`\frac{1}{2x-1}`} の 積分は ${M`\frac{1}{2}\log|2x-1|`}。${M`\frac{1}{2}\cdot\frac{1}{2}=\frac{1}{4}`}。`]});
+
+const Q16 = `<div class="q qline">次の 不定積分を 求めよ。</div>`;
+const p6 = frPage({title:'問16　⑴', tag:'⑴', q:String.raw`\int\frac{dx}{x(x+1)}`, top:Q16, lab:'部分分数に 分解',
+  prep:[[1, String.raw`\frac{1}{x(x+1)}=\frac{1}{x}-\frac{1}{x+1}`]],
+  calc:[[2, String.raw`=\int\left(\frac{1}{x}-\frac{1}{x+1}\right)dx`], [3, String.raw`=\log|x|-\log|x+1|+C`], [4, String.raw`=\DP{\log\left|\frac{x}{x+1}\right|+C}`]],
+  cm:[`分母が 2次。部分分数に 分解します。`, `${M`\frac{1}{x}-\frac{1}{x+1}=\frac{(x+1)-x}{x(x+1)}=\frac{1}{x(x+1)}`}。ぴったり 元に 戻ります。`,
+      `項ごとに 積分します。`, `それぞれ ${M`\log`} に なります。`, `1つの ${M`\log`} に まとめます。`]});
+const p7 = frPage({title:'問16　⑵', tag:'⑵', q:String.raw`\int\frac{dx}{(x-2)(x+2)}`, lab:'部分分数に 分解',
+  prep:[[1, String.raw`\frac{1}{x-2}-\frac{1}{x+2}=\frac{\A{4}}{(x-2)(x+2)}`], [2, String.raw`\frac{1}{(x-2)(x+2)}=\A{\frac{1}{4}}\left(\frac{1}{x-2}-\frac{1}{x+2}\right)`]],
+  pt:PT(1, '係数に 注意', `差を 通分すると 分子が ${M`4`}。だから ${M`\frac{1}{4}`} 倍 する`),
+  calc:[[3, String.raw`=\frac{1}{4}\int\left(\frac{1}{x-2}-\frac{1}{x+2}\right)dx`], [4, String.raw`=\frac{1}{4}\left(\log|x-2|-\log|x+2|\right)+C`], [5, String.raw`=\DP{\frac{1}{4}\log\left|\frac{x-2}{x+2}\right|+C}`]],
+  cm:[`まず 差の 形を 作って みます。`, `通分すると 分子が ${M`4`} に なります。元の 分子は ${M`1`} なので…`, `${M`\frac{1}{4}`} 倍 すれば 元の 式です。`,
+      `${M`\frac{1}{4}`} を 前に 出して 積分します。`, `それぞれ ${M`\log`} に なります。`, `1つの ${M`\log`} に まとめます。`]});
+const p8 = frPage({title:'問16　⑶', tag:'⑶', q:String.raw`\int\frac{3}{x^2-x-2}\,dx`, lab:'部分分数に 分解',
+  prep:[[1, String.raw`x^2-x-2=(x-2)(x+1)`], [2, String.raw`\frac{3}{(x-2)(x+1)}=\frac{1}{x-2}-\frac{1}{x+1}`]],
+  calc:[[3, String.raw`=\int\left(\frac{1}{x-2}-\frac{1}{x+1}\right)dx`], [4, String.raw`=\log|x-2|-\log|x+1|+C`], [5, String.raw`=\DP{\log\left|\frac{x-2}{x+1}\right|+C}`]],
+  cm:[`分母を 因数分解する ところから 始めます。`, `${M`x^2-x-2=(x-2)(x+1)`}。`, `${M`\frac{1}{x-2}-\frac{1}{x+1}=\frac{3}{(x-2)(x+1)}`}。分子の ${M`3`} と ぴったり 合います。`,
+      `項ごとに 積分します。`, `それぞれ ${M`\log`} に なります。`, `1つの ${M`\log`} に まとめます。`]});
+
+const p9 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:26px">
+  <div class="sum">
+    <span>分子の 次数 ≧ 分母</span><span class="ar">→</span><span>割り算して「商 ＋ ${M`\frac{\text{余り}}{\text{分母}}`}」</span>
+    <span>分母が 2次</span><span class="ar">→</span><span>因数分解して 部分分数に 分解</span>
+    <span>分母が 1次</span><span class="ar">→</span><span>${M`\int\frac{dx}{ax+b}=\frac{1}{a}\log|ax+b|+C`}</span>
+  </div>
+</div>` + CAP([`④-2 では、三角関数の 積分に 使う 公式を 加法定理から 導きます。`]);
+
+const DECK = {title:'④-1 分数関数の不定積分', pages:[
+  {name:'表紙', html:p0}, {name:'方針', html:p1}, {name:'例　⑴', html:p2}, {name:'例　⑵', html:p3},
+  {name:'問14　⑴', html:p4}, {name:'問14　⑵', html:p5}, {name:'問16　⑴', html:p6}, {name:'問16　⑵', html:p7}, {name:'問16　⑶', html:p8}, {name:'まとめ', html:p9},
+]};
+''')
+
+# ---------------------------------------------------------------- ④-2 半角・積和の公式を 導く
+DECKS['4-2_半角と積和の公式'] = ('④-2 半角の公式・積和の公式', r'''
+const NO = '④-2', SEC = '数学Ⅲ　積分法';
+const p0 = coverSlide({kicker:'数学Ⅲ　積分法', no:NO, title:'半角の公式・積和の公式', sub:'加法定理から 導く'});
+
+const LIST = (an) => `<div class="tbl" style="grid-template-columns:auto 1fr;font-size:21px;white-space:nowrap">
+  <div class="th">半角の 公式</div><div class="th">（2乗を 1次に）</div>
+  <div>❶</div><div>${D`\sin^2x=\frac{1-\cos2x}{2}`}</div><div>❷</div><div>${D`\cos^2x=\frac{1+\cos2x}{2}`}</div>
+  <div class="th">2倍角の 公式の 変形</div><div class="th"></div><div>❸</div><div>${D`\sin x\cos x=\frac{\sin2x}{2}`}</div>
+</div>`;
+const LIST2 = `<div class="tbl" style="grid-template-columns:auto 1fr;font-size:21px;white-space:nowrap">
+  <div class="th">積和の 公式</div><div class="th">（積を 和・差に）</div>
+  <div>❹</div><div>${D`\sin\alpha\cos\beta=\frac{1}{2}\{\sin(\alpha+\beta)+\sin(\alpha-\beta)\}`}</div>
+  <div>❺</div><div>${D`\cos\alpha\cos\beta=\frac{1}{2}\{\cos(\alpha+\beta)+\cos(\alpha-\beta)\}`}</div>
+  <div>❻</div><div>${D`\sin\alpha\sin\beta=-\frac{1}{2}\{\cos(\alpha+\beta)-\cos(\alpha-\beta)\}`}</div>
+</div>`;
+const p1 = HD(NO, 'これから 導く 公式', SEC) + `<div class="bd" style="align-items:flex-start;gap:20px">
+  <div class="l">${LIST()}</div><div class="l">${LIST2}</div>
+</div>` + CAP([`④-3・④-4 の 積分で 使う 6つの 公式です。どれも 加法定理から 導けます。`]);
+
+const ADD = PT(null, '加法定理', `${M`\sin(\alpha+\beta)=\sin\alpha\cos\beta+\cos\alpha\sin\beta`}<br>${M`\cos(\alpha+\beta)=\cos\alpha\cos\beta-\sin\alpha\sin\beta`}`);
+const p2 = HD(NO, 'Ⅰ　2倍角の 公式', SEC) + `<div class="bd col st" style="gap:18px">
+  ${ADD}
+  <div class="q" style="font-size:27px;line-height:2.3">
+    ${M`\beta=\alpha`} と おくと<br>
+    ${M`\sin2\alpha=`}${FILL(1, M`2\sin\alpha\cos\alpha`, 7)}　　${M`\cos2\alpha=`}${FILL(2, M`\cos^2\alpha-\sin^2\alpha`, 8)}<br>
+    さらに ${M`\sin^2\alpha+\cos^2\alpha=1`} を 使うと<br>
+    ${M`\cos2\alpha=`}${FILL(3, M`1-2\sin^2\alpha`, 7)}${M`=`}${FILL(4, M`2\cos^2\alpha-1`, 7)}</div>
+</div>` + CAP([
+  `加法定理で ${M`\beta`} を ${M`\alpha`} に すると、2倍角の 公式に なります。`,
+  `${M`\sin\alpha\cos\alpha+\cos\alpha\sin\alpha=2\sin\alpha\cos\alpha`}。`,
+  `${M`\cos\alpha\cos\alpha-\sin\alpha\sin\alpha=\cos^2\alpha-\sin^2\alpha`}。`,
+  `${M`\cos^2\alpha=1-\sin^2\alpha`} を 入れると ${M`1-2\sin^2\alpha`}。`,
+  `${M`\sin^2\alpha=1-\cos^2\alpha`} を 入れると ${M`2\cos^2\alpha-1`}。`
+]);
+
+const p3 = HD(NO, 'Ⅱ　半角の 公式（次数を 下げる）', SEC) + `<div class="bd col st" style="gap:22px">
+  <div class="q qline">Ⅰの 式の ${M`\alpha`} を ${M`x`} に かえて、${M`\sin^2x`}、${M`\cos^2x`}、${M`\sin x\cos x`} について 解く。</div>
+  <div class="grid" style="grid-template-columns:1fr 1fr 1fr;gap:16px 24px">
+    <div class="it"><div>${M`\cos2x=1-2\sin^2x`} より</div><div class="big" style="font-size:30px">❶ ${D`\sin^2x=`}${FILL(1, D`\frac{1-\cos2x}{2}`, 4)}</div></div>
+    <div class="it"><div>${M`\cos2x=2\cos^2x-1`} より</div><div class="big" style="font-size:30px">❷ ${D`\cos^2x=`}${FILL(2, D`\frac{1+\cos2x}{2}`, 4)}</div></div>
+    <div class="it"><div>${M`\sin2x=2\sin x\cos x`} より</div><div class="big" style="font-size:30px">❸ ${D`\sin x\cos x=`}${FILL(3, D`\frac{\sin2x}{2}`, 3)}</div></div>
+  </div>
+</div>` + CAP([
+  `2乗や 積を、${M`\cos2x`} や ${M`\sin2x`}（1次）に 直す 形に します。`,
+  `${M`2\sin^2x=1-\cos2x`}。両辺を ${M`2`} で 割ります。`,
+  `${M`2\cos^2x=1+\cos2x`}。両辺を ${M`2`} で 割ります。`,
+  `${M`\sin2x=2\sin x\cos x`} の 両辺を ${M`2`} で 割ります。`
+]);
+
+const CS = String.raw`\A{\cos\alpha\sin\beta}`;
+const p4 = HD(NO, 'Ⅲ　積和の 公式 ❹', SEC) + `<div class="bd col st" style="gap:16px">
+  <div class="calc" style="font-size:25px">
+    <div>① ${M(String.raw`\sin(\alpha+\beta)=\sin\alpha\cos\beta+` + CS)}</div>
+    <div>② ${M(String.raw`\sin(\alpha-\beta)=\sin\alpha\cos\beta-` + CS)}</div></div>
+  <div class="q" style="font-size:26px;line-height:2.2">
+    【①＋②】${M`\sin(\alpha+\beta)+\sin(\alpha-\beta)=`}${FILL(2, M`2\sin\alpha\cos\beta`, 6)}<br>
+    <span data-s="3">左辺と 右辺を 入れかえて、両辺を 2 で 割ると</span><br>
+    ${M`\sin\alpha\cos\beta=`}${FILL(3, M`\frac{1}{2}\{\sin(\alpha+\beta)+\sin(\alpha-\beta)\}`, 12)}　…❹</div>
+</div>` + CAP([
+  `今度は、加法定理の ${M`\alpha+\beta`} と ${M`\alpha-\beta`} の 式を 使います。`,
+  `①と②を たすと、<b class="a">${M`\cos\alpha\sin\beta`}</b> が 打ち消し合って 消えます。`,
+  `右辺には ${M`\sin\alpha\cos\beta`} が 2つ 残ります。`,
+  `入れかえて 2 で 割ると、積 ${M`\sin\alpha\cos\beta`} を 和で 表す 式 ❹ に なります。`
+]);
+const p5 = HD(NO, 'Ⅲ　積和の 公式 ❺・❻', SEC) + `<div class="bd col st" style="gap:16px">
+  <div class="calc" style="font-size:25px">
+    <div>③ ${M`\cos(\alpha+\beta)=\cos\alpha\cos\beta-\A{\sin\alpha\sin\beta}`}</div>
+    <div>④ ${M`\cos(\alpha-\beta)=\cos\alpha\cos\beta+\A{\sin\alpha\sin\beta}`}</div></div>
+  <div class="q" style="font-size:26px;line-height:2.3">
+    【③＋④】${M`\cos(\alpha+\beta)+\cos(\alpha-\beta)=`}${FILL(1, M`2\cos\alpha\cos\beta`, 6)}　両辺を 2 で 割ると → ❺<br>
+    【③－④】${M`\cos(\alpha+\beta)-\cos(\alpha-\beta)=`}${FILL(2, M`-2\sin\alpha\sin\beta`, 6)}　両辺を ${FILL(3, M`-2`, 2)} で 割ると → ❻</div>
+</div>` + CAP([
+  `③と④（${M`\cos`} の 加法定理）を 使います。`,
+  `たすと ${M`\sin\alpha\sin\beta`} が 消えて、${M`2\cos\alpha\cos\beta`}。2 で 割れば ❺。`,
+  `ひくと ${M`\cos\alpha\cos\beta`} が 消えて、${M`-\sin\alpha\sin\beta`} が 2つ。`,
+  `${M`-2`} で 割ると ❻。マイナスが 付くのは この ためです。`
+]);
+
+const p6 = HD(NO, 'まとめ', SEC) + `<div class="bd" style="align-items:flex-start;gap:20px">
+  <div class="l">${LIST()}</div><div class="l">${LIST2}</div>
+</div>` + CAP([`④-3 では ❶〜❸ で 次数を 下げ、④-4 では ❹〜❻ で 積を 和に 直して 積分します。`]);
+
+const DECK = {title:'④-2 半角の公式・積和の公式', pages:[
+  {name:'表紙', html:p0}, {name:'これから 導く 公式', html:p1}, {name:'Ⅰ　2倍角の 公式', html:p2}, {name:'Ⅱ　半角の 公式', html:p3},
+  {name:'Ⅲ　積和の 公式 ❹', html:p4}, {name:'Ⅲ　積和の 公式 ❺・❻', html:p5}, {name:'まとめ', html:p6},
+]};
+''')
+
+# ---------------------------------------------------------------- ④-3 三角関数の不定積分（次数を 下げる）
+DECKS['4-3_三角関数_次数を下げる'] = ('④-3 三角関数の不定積分（次数を下げる）', r'''
+const NO = '④-3', SEC = '数学Ⅲ　積分法';
+const p0 = coverSlide({kicker:'数学Ⅲ　積分法', no:NO, title:'三角関数の不定積分', sub:'2乗・積は 公式❶〜❸で 次数を 下げる'});
+const F13 = BOX('次数を 下げる 公式（④-2）', `❶ ${D`\sin^2x=\frac{1-\cos2x}{2}`}　　❷ ${D`\cos^2x=\frac{1+\cos2x}{2}`}　　❸ ${D`\sin x\cos x=\frac{\sin2x}{2}`}`);
+
+const p1 = HD(NO, '方針', SEC) + `<div class="bd col" style="gap:24px">
+  <div class="q" style="font-size:27px">次数が 高く、置換積分・部分積分が 使えない ときは、<br>④-2 の 公式 ❶〜❸ で <b class="a">次数を 下げて</b> 積分する。</div>
+  ${F13}
+</div>` + CAP([`${M`\sin^2x`} の 積分の 公式は ありません。${M`\cos2x`}（1次）に 直せば、①-5 の 合成関数の 積分が 使えます。`]);
+
+const p2 = gridPage({no:NO, sec:SEC, title:'例', q:'次の 不定積分を 求めよ。', items:[
+  {tag:'⑴', q:String.raw`\int\sin^2x\,dx`, lines:[[1, String.raw`=\int\frac{1-\cos2x}{2}\,dx=\frac{1}{2}\int(1-\cos2x)\,dx`], [2, String.raw`=\frac{1}{2}\left(x-\frac{1}{2}\sin2x\right)+C`], [3, String.raw`=\DP{\frac{1}{2}x-\frac{1}{4}\sin2x+C}`]]},
+  {tag:'⑵', q:String.raw`\int\sin x\cos x\,dx`, lines:[[4, String.raw`=\int\frac{1}{2}\sin2x\,dx`], [5, String.raw`=\frac{1}{2}\cdot\left(-\frac{1}{2}\cos2x\right)+C`], [6, String.raw`=\DP{-\frac{1}{4}\cos2x+C}`]]},
+], cm:[
+  `どちらも 公式で 次数を 下げてから 積分します。`,
+  `⑴ 公式 ❶ で ${M`\sin^2x=\frac{1-\cos2x}{2}`}。${M`\frac{1}{2}`} を 前に 出します。`,
+  `${M`\cos2x`} の 積分は ${M`\frac{1}{2}\sin2x`}（帳尻合わせ）。`,
+  `かっこを はずして 答えます。`,
+  `⑵ 公式 ❸ で ${M`\sin x\cos x=\frac{1}{2}\sin2x`}。`,
+  `${M`\sin2x`} の 積分は ${M`-\frac{1}{2}\cos2x`}。`,
+  `${M`\frac{1}{2}\cdot\left(-\frac{1}{2}\right)=-\frac{1}{4}`}。（置換積分 ${M`\sin x=t`} でも 解けます）`
+]});
+
+const p3 = gridPage({no:NO, sec:SEC, title:'問17', q:'次の 不定積分を 求めよ。', items:[
+  {tag:'⑴', q:String.raw`\int\cos^2x\,dx`, o:1, lines:[[1, String.raw`=\int\frac{1+\cos2x}{2}\,dx`], [2, String.raw`=\DP{\frac{1}{2}x+\frac{1}{4}\sin2x+C}`]]},
+  {tag:'⑵', q:String.raw`\int\sin^2 2x\,dx`, o:3, lines:[[3, String.raw`=\int\frac{1-\cos4x}{2}\,dx`], [4, String.raw`=\DP{\frac{1}{2}x-\frac{1}{8}\sin4x+C}`]]},
+  {tag:'⑶', q:String.raw`\int(\sin x+\cos x)^2\,dx`, o:5, lines:[[5, String.raw`=\int(\sin^2x+2\sin x\cos x+\cos^2x)\,dx`], [6, String.raw`=\int(1+\sin2x)\,dx=\DP{x-\frac{1}{2}\cos2x+C}`]]},
+], cm:[
+  `公式で 次数を 下げてから 積分します。`,
+  `⑴ 公式 ❷ で ${M`\cos^2x=\frac{1+\cos2x}{2}`}。`,
+  `${M`\frac{1}{2}\int(1+\cos2x)\,dx=\frac{1}{2}\left(x+\frac{1}{2}\sin2x\right)`}。`,
+  `⑵ 公式 ❶ の ${M`x`} を ${M`2x`} に かえると ${M`\sin^22x=\frac{1-\cos4x}{2}`}。`,
+  `${M`\cos4x`} の 積分は ${M`\frac{1}{4}\sin4x`}。${M`\frac{1}{2}\cdot\frac{1}{4}=\frac{1}{8}`}。`,
+  `⑶ まず 展開します。`,
+  `${M`\sin^2x+\cos^2x=1`}、${M`2\sin x\cos x=\sin2x`}。${M`\sin2x`} の 積分は ${M`-\frac{1}{2}\cos2x`}。`
+]});
+
+const p4 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:24px">
+  ${F13}
+  <div class="sum">
+    <span>${M`\sin^2x`}、${M`\cos^2x`}</span><span class="ar">→</span><span>❶・❷ で ${M`\cos2x`} の 式に</span>
+    <span>${M`\sin x\cos x`}</span><span class="ar">→</span><span>❸ で ${M`\frac{1}{2}\sin2x`} に</span>
+  </div>
+</div>` + CAP([`④-4 では、積和の 公式 ❹〜❻ を 使って 積分します。`]);
+
+const DECK = {title:'④-3 三角関数の不定積分（次数を下げる）', pages:[
+  {name:'表紙', html:p0}, {name:'方針', html:p1}, {name:'例', html:p2}, {name:'問17', html:p3}, {name:'まとめ', html:p4},
+]};
+''')
+
+# ---------------------------------------------------------------- ④-4 三角関数の不定積分（積を 和に）
+DECKS['4-4_三角関数_積を和に'] = ('④-4 三角関数の不定積分（積を和に）', r'''
+const NO = '④-4', SEC = '数学Ⅲ　積分法';
+const p0 = coverSlide({kicker:'数学Ⅲ　積分法', no:NO, title:'三角関数の不定積分', sub:'積は 公式❹〜❻で 和・差に 直す'});
+const F46 = BOX('積和の 公式（④-2）', `<div style="display:flex;flex-direction:column;gap:10px;line-height:1.5">
+  <div>❹ ${D`\sin\alpha\cos\beta=\frac{1}{2}\{\sin(\alpha+\beta)+\sin(\alpha-\beta)\}`}</div>
+  <div>❺ ${D`\cos\alpha\cos\beta=\frac{1}{2}\{\cos(\alpha+\beta)+\cos(\alpha-\beta)\}`}</div>
+  <div>❻ ${D`\sin\alpha\sin\beta=-\frac{1}{2}\{\cos(\alpha+\beta)-\cos(\alpha-\beta)\}`}</div></div>`);
+
+const p1 = HD(NO, '方針', SEC) + `<div class="bd col" style="gap:20px">
+  <div class="q" style="font-size:27px">三角関数の 積は、積和の 公式 ❹〜❻ で <b class="a">和・差に 直して から</b> 積分する。</div>
+  ${F46}
+</div>` + CAP([`${M`\sin3\theta\cos\theta`} のような 積は そのまま 積分できません。和に 直せば、1つずつ 積分できます。`]);
+
+/* 左＝公式に あてはめる（α・β）、右＝計算 */
+function pdPage(o){ return subPage({no:NO, sec:SEC, title:o.title, tag:o.tag, q:o.q, top:o.top, plabel:o.lab, prep:o.prep, calc:o.calc, cm:o.cm}); }
+const Q = `<div class="q qline">次の 不定積分を 求めよ。</div>`;
+const p2 = pdPage({title:'例', tag:'⑴', q:String.raw`\int\sin3\theta\cos\theta\,d\theta`, top:Q, lab:'公式 ❹ に あてはめる',
+  prep:[[1, String.raw`\alpha=\A{3\theta},\ \beta=\B{\theta}`], [2, String.raw`\alpha+\beta=4\theta,\ \ \alpha-\beta=2\theta`]],
+  calc:[[3, String.raw`=\int\frac{1}{2}(\sin4\theta+\sin2\theta)\,d\theta`], [4, String.raw`=\frac{1}{2}\left(-\frac{1}{4}\cos4\theta-\frac{1}{2}\cos2\theta\right)+C`], [5, String.raw`=\DP{-\frac{1}{8}\cos4\theta-\frac{1}{4}\cos2\theta+C}`]],
+  cm:[`${M`\sin\times\cos`} の 積なので、公式 ❹ を 使います。`, `${M`\alpha=3\theta`}、${M`\beta=\theta`} と します。`, `${M`\alpha+\beta=4\theta`}、${M`\alpha-\beta=2\theta`}。`,
+      `公式 ❹ で 和に 直します。`, `${M`\sin4\theta`} の 積分は ${M`-\frac{1}{4}\cos4\theta`}、${M`\sin2\theta`} は ${M`-\frac{1}{2}\cos2\theta`}。`, `${M`\frac{1}{2}`} を 掛けて 整理します。`]});
+
+const p3 = pdPage({title:'問18　⑴', tag:'⑴', q:String.raw`\int\sin2\theta\cos\theta\,d\theta`, top:Q, lab:'公式 ❹ に あてはめる',
+  prep:[[1, String.raw`\alpha=\A{2\theta},\ \beta=\B{\theta}`], [2, String.raw`\alpha+\beta=3\theta,\ \ \alpha-\beta=\theta`]],
+  calc:[[3, String.raw`=\int\frac{1}{2}(\sin3\theta+\sin\theta)\,d\theta`], [4, String.raw`=\frac{1}{2}\left(-\frac{1}{3}\cos3\theta-\cos\theta\right)+C`], [5, String.raw`=\DP{-\frac{1}{6}\cos3\theta-\frac{1}{2}\cos\theta+C}`]],
+  cm:[`例と 同じく 公式 ❹ です。`, `${M`\alpha=2\theta`}、${M`\beta=\theta`}。`, `${M`\alpha+\beta=3\theta`}、${M`\alpha-\beta=\theta`}。`, `和に 直します。`, `それぞれ 積分します。`, `${M`\frac{1}{2}`} を 掛けて 整理します。`]});
+const p4 = pdPage({title:'問18　⑵', tag:'⑵', q:String.raw`\int\cos2x\cos x\,dx`, lab:'公式 ❺ に あてはめる',
+  prep:[[1, String.raw`\alpha=\A{2x},\ \beta=\B{x}`], [2, String.raw`\alpha+\beta=3x,\ \ \alpha-\beta=x`]],
+  calc:[[3, String.raw`=\int\frac{1}{2}(\cos3x+\cos x)\,dx`], [4, String.raw`=\DP{\frac{1}{6}\sin3x+\frac{1}{2}\sin x+C}`]],
+  cm:[`${M`\cos\times\cos`} の 積なので、公式 ❺ です。`, `${M`\alpha=2x`}、${M`\beta=x`}。`, `${M`\alpha+\beta=3x`}、${M`\alpha-\beta=x`}。`, `和に 直します。`, `${M`\cos3x\to\frac{1}{3}\sin3x`}。${M`\frac{1}{2}\cdot\frac{1}{3}=\frac{1}{6}`}。`]});
+const p5 = pdPage({title:'問18　⑶', tag:'⑶', q:String.raw`\int\sin4x\sin2x\,dx`, lab:'公式 ❻ に あてはめる',
+  prep:[[1, String.raw`\alpha=\A{4x},\ \beta=\B{2x}`], [2, String.raw`\alpha+\beta=6x,\ \ \alpha-\beta=2x`]],
+  calc:[[3, String.raw`=\int\left\{-\frac{1}{2}(\cos6x-\cos2x)\right\}dx`], [4, String.raw`=-\frac{1}{2}\left(\frac{1}{6}\sin6x-\frac{1}{2}\sin2x\right)+C`], [5, String.raw`=\DP{-\frac{1}{12}\sin6x+\frac{1}{4}\sin2x+C}`]],
+  cm:[`${M`\sin\times\sin`} の 積なので、公式 ❻ です。マイナスに 注意。`, `${M`\alpha=4x`}、${M`\beta=2x`}。`, `${M`\alpha+\beta=6x`}、${M`\alpha-\beta=2x`}。`,
+      `差に 直します。前に ${M`-\frac{1}{2}`} が 付きます。`, `${M`\cos6x\to\frac{1}{6}\sin6x`}、${M`\cos2x\to\frac{1}{2}\sin2x`}。`, `${M`-\frac{1}{2}`} を 掛けて 整理します。`]});
+
+const p6 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:20px">
+  ${F46}
+  <div class="q" style="font-size:26px">${M`\alpha`}、${M`\beta`} を 決めて ${M`\alpha+\beta`}、${M`\alpha-\beta`} を 計算 → 和・差に 直して 1つずつ 積分</div>
+</div>` + CAP([`これで ④ の 三角関数の 積分は 終わりです。`]);
+
+const DECK = {title:'④-4 三角関数の不定積分（積を和に）', pages:[
+  {name:'表紙', html:p0}, {name:'方針', html:p1}, {name:'例', html:p2},
+  {name:'問18　⑴', html:p3}, {name:'問18　⑵', html:p4}, {name:'問18　⑶', html:p5}, {name:'まとめ', html:p6},
+]};
+''')
