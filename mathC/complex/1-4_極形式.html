@@ -249,6 +249,10 @@ body.final .pl .pulse{animation:none;opacity:0}
 .tbl.mt{font-size:21px} .tbl.mt > div{padding:7px 12px}
 body.portrait .tbl.mt{font-size:15px} body.portrait .tbl.mt > div{padding:6px 4px}
 .bd > .r > .pl{max-width:560px}
+.trig{display:grid;grid-template-columns:auto repeat(5,auto);border-top:1px solid var(--line);border-left:1px solid var(--line);font-size:22px;background:var(--paper)}
+.trig > div{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:4px 10px;text-align:center;line-height:1.5}
+.trig > .th{background:var(--pale)}
+body.portrait .trig{font-size:19px}
 
 </style>
 </head>
@@ -258,7 +262,7 @@ body.portrait .tbl.mt{font-size:15px} body.portrait .tbl.mt > div{padding:6px 4p
 <div id="ui"></div>
 <div id="jump"></div>
 <script>
-const VER = 'ver 1.1　2026-10-22';
+const VER = 'ver 1.2　2026-10-23';
 /* ====== 数学C の 部品 ====== */
 
 /* 数式：M`z = a + bi`（\ を そのまま 書ける）。KaTeX で かく */
@@ -525,10 +529,12 @@ const p5 = HD(NO, '例　1＋i を 極形式で', SEC) + `<div class="bd">
 ]);
 
 /* 特別な 角は「くくる」だけ */
-const UC = PL({x0:-1, x1:1, y0:-1, y1:1, u:150, grid:false, ticks:false, xl:null, yl:null});
-const UP = [[30, S3/2, .5, '(√3/2, 1/2)'], [45, 1/S2, 1/S2, '(1/√2, 1/√2)'], [60, .5, S3/2, '(1/2, √3/2)']];
-const ucirc = `<circle class="ln" cx="${UC.X(0)}" cy="${UC.Y(0)}" r="${UC.u}" fill="none" style="stroke-dasharray:none;stroke-width:2"/>`
-  + UP.map(([t,a,b,l],i)=>UC.seg(0,0,a,b,null,{c:'m'}) + UC.dot(a,b,'',null) + `<text class="dp" style="font-size:17px" x="${UC.X(a)+10}" y="${UC.Y(b)+(i===0?16:i===2?-8:4)}">${t}°</text>`).join('');
+/* プリントの Point：三角比の 表（2026-10-23 の プリント更新で 変わった） */
+const TRIG = `<div class="trig">${[
+  ['\\theta', '0^\\circ','30^\\circ','45^\\circ','60^\\circ','90^\\circ'],
+  ['\\sin\\theta', '0','\\frac{1}{2}','\\frac{1}{\\sqrt{2}}','\\frac{\\sqrt{3}}{2}','1'],
+  ['\\cos\\theta', '1','\\frac{\\sqrt{3}}{2}','\\frac{1}{\\sqrt{2}}','\\frac{1}{2}','0'],
+  ['\\tan\\theta', '0','\\frac{1}{\\sqrt{3}}','1','\\sqrt{3}','なし']].map((r,i)=>r.map((c,j)=>`<div class="${i===0||j===0?'th':''}">${c==='なし'?c:M(c)}</div>`).join('')).join('')}</div>`;
 const p6 = HD(NO, '特別な 角は「くくる」だけ', SEC) + `<div class="bd">
   <div class="l">
     <div class="q">絶対値 ${M`r`} で くくると、かっこの 中が ${M`\cos\theta`}、${M`\sin\theta`} の 値に なる。</div>
@@ -540,17 +546,14 @@ const p6 = HD(NO, '特別な 角は「くくる」だけ', SEC) + `<div class="b
     </div>
   </div>
   <div class="r" style="flex-direction:column;gap:6px">
-    <div class="pbox"><div class="pl2">Point</div>
-      ${M`\left(\tfrac{\sqrt{3}}{2},\tfrac{1}{2}\right)\to30^\circ`}<br>${M`\left(\tfrac{1}{\sqrt{2}},\tfrac{1}{\sqrt{2}}\right)\to45^\circ`}<br>${M`\left(\tfrac{1}{2},\tfrac{\sqrt{3}}{2}\right)\to60^\circ`}<br>
-      <span style="font-size:19px">（${M`\cos`}，${M`\sin`}）の 符号で 象限を 決める</span></div>
-    ${UC.svg(ucirc, 'uc')}
+    <div class="pbox"><div class="pl2">Point</div>${TRIG}</div>
   </div>
 </div>` + CAP([
   `毎回 ${M`\cos\theta`}、${M`\sin\theta`} を 計算しなくても、もっと 速い 方法が あります。`,
   `長さ ${M`r=\sqrt{2}`} で くくると、かっこの 中に ${M`\tfrac{1}{\sqrt{2}}`} と ${M`\tfrac{1}{\sqrt{2}}`} が 出て きます。`,
   `これは ${M`(\cos45^\circ,\ \sin45^\circ)`}。そのまま ${M`45^\circ`} と 読めます。`,
   `${M`1+\sqrt{3}i`} は、長さ ${M`r=2`} で くくります。`,
-  `${M`\left(\tfrac{1}{2},\tfrac{\sqrt{3}}{2}\right)`} は ${M`60^\circ`}。右の 3つの 形を 覚えて おけば、くくる だけで 角が わかります。`
+  `${M`\left(\tfrac{1}{2},\tfrac{\sqrt{3}}{2}\right)`} は ${M`60^\circ`}。Point の 表の 値と 見比べれば、くくる だけで 角が わかります。`
 ]);
 
 /* まとめ（アニメーション なし） */
