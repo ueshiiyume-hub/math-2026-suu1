@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>数学Ⅲ 解説スライド</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* 数学Ⅲ のデザイン（数学C の 案A を 青に）：薄い青・ゴシック体・まっすぐな カード */
+:root{
+  --bg:#f5f8fc; --paper:#ffffff; --ink:#2b3340; --muted:#687385;
+  --main:#8fb4e0; --deep:#2f5f9e; --pale:#eaf1fa; --line:#c5d6ec;
+  --shadow:0 1px 2px rgba(35,55,90,.05),0 4px 14px rgba(35,55,90,.06);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1d222b; --paper:#272e39; --ink:#e6ebf2; --muted:#a3adbd;
+    --main:#7fa6d6; --deep:#a9c8f0; --pale:#2c3647; --line:#3f4c62;
+    --shadow:0 1px 2px rgba(0,0,0,.2),0 4px 14px rgba(0,0,0,.25);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1d222b; --paper:#272e39; --ink:#e6ebf2; --muted:#a3adbd;
+  --main:#7fa6d6; --deep:#a9c8f0; --pale:#2c3647; --line:#3f4c62;
+  --shadow:0 1px 2px rgba(0,0,0,.2),0 4px 14px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);
+  font-family:"Noto Sans JP","Hiragino Sans","Yu Gothic",Meiryo,sans-serif;font-weight:400;line-height:1.6}
+main{max-width:960px;margin:0 auto;padding:56px 16px 64px}
+.kicker{display:inline-block;font-size:14px;font-weight:500;letter-spacing:.2em;color:var(--deep);border-bottom:2px solid var(--main);padding-bottom:6px}
+h1{font-size:clamp(28px,5vw,40px);font-weight:700;letter-spacing:.06em;margin:16px 0 4px}
+.lead{color:var(--muted);font-size:15px;margin:0 0 36px}
+.toplink{display:inline-block;margin-bottom:20px;font-size:14px;color:var(--deep);text-decoration:none;border-bottom:1px solid var(--line)}
+.list{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,280px),1fr));gap:16px}
+.card{display:block;background:var(--paper);border:1px solid var(--line);border-left:5px solid var(--main);box-shadow:var(--shadow);
+  padding:16px 18px;color:inherit;text-decoration:none;transition:border-color .2s,background .2s}
+.card:hover{background:var(--pale);border-left-color:var(--deep)}
+.card:focus-visible{outline:2px solid var(--deep);outline-offset:3px}
+.no{font-size:13px;font-weight:500;letter-spacing:.1em;color:var(--deep)}
+.title{font-size:20px;font-weight:700;margin:2px 0 4px}
+.desc{font-size:14px;color:var(--muted);margin:0}
+.empty{grid-column:1/-1;background:var(--paper);border:1px dashed var(--line);padding:28px 20px;text-align:center;color:var(--muted);font-size:15px}
+#themebtn{position:fixed;z-index:26;top:12px;right:12px;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--paper);color:var(--ink);font-size:18px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;box-shadow:var(--shadow)}
+</style>
+<!-- 明るい／暗い の 切りかえ（スマホでも 押せる ボタン）。選んだ ものは この サイト 全体で 覚える -->
+<script>
+(function(){
+  var d=document.documentElement;
+  try{ var t=localStorage.getItem('theme'); if(t) d.dataset.theme=t; }catch(e){}
+  function isDark(){ return d.dataset.theme ? d.dataset.theme==='dark' : matchMedia('(prefers-color-scheme: dark)').matches; }
+  window.toggleTheme=function(){ d.dataset.theme = isDark() ? 'light' : 'dark'; try{ localStorage.setItem('theme', d.dataset.theme); }catch(e){} paint(); };
+  function paint(){ var b=document.getElementById('themebtn'); if(b){ b.textContent = isDark() ? '☀' : '☾'; b.title = isDark() ? '明るくする' : '暗くする'; } }
+  document.addEventListener('DOMContentLoaded',function(){
+    var b=document.createElement('button'); b.id='themebtn';
+    b.addEventListener('click',function(e){ e.stopPropagation(); e.preventDefault(); toggleTheme(); });
+    document.body.appendChild(b); paint();
+  });
+})();
+</script>
+</head>
+<body>
+<main>
+  
+  <span class="kicker">数学Ⅲ</span>
+  <h1>解説スライド</h1>
+  <p class="lead">単元を選んでください</p>
+  <div class="list" id="list"></div>
+</main>
+<script>
+/* カードの一覧（menus.py が書きこむ） */
+const ITEMS = [
+ {
+  "href": "integral/index.html",
+  "no": "積分法",
+  "title": "積分法",
+  "desc": "①-1〜　不定積分の 公式・合成関数・置換積分"
+ }
+];
+document.getElementById('list').innerHTML = ITEMS.length ? ITEMS.map(it=>`
+  <a class="card" href="${it.href}">
+    <div class="no">${it.no}</div>
+    <div class="title">${it.title}</div>
+    <p class="desc">${it.desc}</p>
+  </a>`).join('') : '<div class="empty">準備中です。スライドは順次追加します。</div>';
+</script>
+</body>
+</html>

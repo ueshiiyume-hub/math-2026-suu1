@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>①-4 指数関数の不定積分</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<!-- 数式（KaTeX） -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<!-- 明るい／暗い：選んだ ものは この サイト 全体で 覚える（ボタンは engine.js が 目次の 横に 置く） -->
+<script>
+(function(){
+  var d=document.documentElement;
+  try{ var t=localStorage.getItem('theme'); if(t) d.dataset.theme=t; }catch(e){}
+  window.isDark=function(){ return d.dataset.theme ? d.dataset.theme==='dark' : matchMedia('(prefers-color-scheme: dark)').matches; };
+  window.toggleTheme=function(){ d.dataset.theme = isDark() ? 'light' : 'dark'; try{ localStorage.setItem('theme', d.dataset.theme); }catch(e){} if(window.paintTheme) paintTheme(); };
+})();
+</script>
+<style>
+/* ===== 数学Ⅲ スライド（数学C の 案A を 青に：薄い青・ゴシック体・まっすぐな 枠） ===== */
+:root{
+  --bg:#eef2f8; --paper:#ffffff; --ink:#2b3340; --muted:#687385;
+  --main:#8fb4e0; --deep:#2f5f9e; --pale:#eaf1fa; --line:#c5d6ec;
+  --a:#c8642a; --b:#8a4fb0;              /* 橙＝変わる ところ、紫＝置きかえた t（全デッキ共通） */
+  --shadow:0 1px 2px rgba(35,55,90,.05),0 4px 14px rgba(35,55,90,.08);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#151920; --paper:#222833; --ink:#e6ebf2; --muted:#a3adbd;
+    --main:#7fa6d6; --deep:#a9c8f0; --pale:#2a3444; --line:#3d4a5e;
+    --a:#f2a775; --b:#cfa2ec;
+    --shadow:0 1px 2px rgba(0,0,0,.2),0 4px 14px rgba(0,0,0,.3);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#151920; --paper:#222833; --ink:#e6ebf2; --muted:#a3adbd;
+  --main:#7fa6d6; --deep:#a9c8f0; --pale:#2a3444; --line:#3d4a5e;
+  --a:#f2a775; --b:#cfa2ec;
+  --shadow:0 1px 2px rgba(0,0,0,.2),0 4px 14px rgba(0,0,0,.3);
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--ink);font-family:"Noto Sans JP","Hiragino Sans","Yu Gothic",Meiryo,sans-serif;font-weight:400;
+  -webkit-user-select:none;user-select:none}
+.katex{font-size:1.08em}
+
+/* 台紙：横長 1280×720、縦長（スマホ）720×1280 を 画面に 合わせて 拡大 */
+#stage{position:fixed;left:50%;top:50%;width:1280px;height:720px;transform:translate(-50%,-50%) scale(var(--s,1));
+  background:var(--paper);box-shadow:var(--shadow)}
+body.portrait #stage{width:720px;height:1280px}
+.slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s}
+.slide.active{opacity:1;visibility:visible}
+
+/* 見出し */
+.hd{position:absolute;left:48px;right:48px;top:26px;height:62px;display:flex;align-items:center;gap:18px;border-bottom:2px solid var(--main)}
+.hd .no{background:var(--deep);color:var(--paper);font-weight:700;font-size:22px;padding:2px 12px;letter-spacing:.04em}
+.hd h2{font-size:32px;font-weight:700;margin:0;letter-spacing:.04em}
+.hd .sec{margin-left:auto;margin-right:70px;font-size:17px;color:var(--muted);letter-spacing:.08em}
+/* 中身 */
+.bd{position:absolute;left:48px;right:48px;top:106px;bottom:122px;display:flex;gap:40px;align-items:center;justify-content:center}
+.bd.col{flex-direction:column;gap:22px}
+.bd > .l{flex:1;min-width:0;display:flex;flex-direction:column;gap:18px}
+.bd > .r{flex:none;display:flex;align-items:center;justify-content:center}
+/* 下の 説明欄（「なぜ」を 言葉で） */
+.cap{position:absolute;left:48px;right:230px;bottom:22px;height:82px;display:flex;align-items:center;
+  border-left:5px solid var(--main);background:var(--pale);padding:0 22px;font-size:24px;line-height:1.5}
+.cap p{display:none;margin:0} .cap p.cur{display:block}
+
+/* 縦長（スマホ） */
+body.portrait .hd{left:28px;right:28px;top:22px}
+body.portrait .hd .sec{display:none}
+body.portrait .bd{left:28px;right:28px;top:104px;bottom:236px;flex-direction:column;gap:26px;justify-content:flex-start}
+body.portrait .bd > .l{flex:none;width:100%}
+body.portrait .cap{left:28px;right:28px;bottom:84px;height:132px;font-size:27px}
+
+/* 枠（定義・記法 など） */
+.box{border:1.5px solid var(--main);background:var(--paper)}
+.box .bl{background:var(--pale);color:var(--deep);font-weight:700;font-size:18px;padding:4px 16px;border-bottom:1px solid var(--line);letter-spacing:.1em}
+.box .bc{padding:16px 22px;font-size:27px;line-height:2}
+.q{font-size:26px;line-height:1.6}
+.q .tag{display:inline-block;color:var(--deep);font-weight:700;margin-right:.6em}
+/* 空らん（プリントの 緑の 箱）：答えは あとから 出る */
+.fill{display:inline-block;min-width:4.6em;background:var(--pale);border-bottom:2px solid var(--main);text-align:center;padding:0 .35em;margin:0 .15em;line-height:1.45}
+.fill > span{color:var(--deep);font-weight:700}
+/* 問題の 並び（1行 1つ） */
+.rows{display:flex;flex-direction:column;gap:10px}
+.row{display:flex;align-items:center;gap:18px;font-size:32px;padding:6px 16px;border-left:5px solid transparent;transition:background .3s,border-color .3s}
+.row.cur{background:var(--pale);border-left-color:var(--main)}
+.row .nt{font-size:22px;color:var(--muted)}
+.row .ans{margin-left:auto}
+.a{color:var(--a)} .b{color:var(--b)} .dp{color:var(--deep)}
+.mu{color:var(--muted)}
+.big{font-size:44px}
+/* まとめ（アニメーション なし） */
+.sum{display:grid;grid-template-columns:auto auto 1fr;gap:14px 22px;align-items:center;font-size:30px}
+.sum .ar{color:var(--deep);font-weight:700}
+
+/* 出る・光る：data-s（その番で 出る）data-e（その番で 消える）data-o（その番で 色が つく） */
+[data-s]{opacity:0;transition:opacity .45s}
+[data-s].show{opacity:1;transition-delay:var(--d,0s)}
+[data-o]{transition:color .3s,background-color .3s;border-radius:4px}
+[data-o].on[data-c="a"]{color:var(--a)} [data-o].on[data-c="b"]{color:var(--b)} [data-o].on[data-c="dp"]{color:var(--deep)}
+[data-o].on.cur{background:color-mix(in srgb,var(--main) 22%,transparent)}
+
+/* 表紙 */
+.cover{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.cover .k{font-size:20px;letter-spacing:.3em;color:var(--deep);font-weight:500}
+.cover .n{margin-top:26px;font-size:30px;font-weight:700;color:var(--paper);background:var(--deep);padding:2px 18px}
+.cover h1{font-size:68px;font-weight:700;letter-spacing:.08em;margin:18px 0 6px}
+.cover .sb{font-size:26px;color:var(--muted)}
+.cover .ln{width:120px;height:3px;background:var(--main);margin:30px 0 0}
+.cover .ver{position:absolute;left:48px;bottom:30px;font-size:17px;color:var(--muted)}
+body.portrait .cover h1{font-size:60px}
+
+/* 進み具合・操作の 案内 */
+#bar{position:fixed;left:0;bottom:0;height:4px;background:var(--main);transition:width .3s;z-index:20}
+#ui{position:fixed;left:12px;bottom:8px;font-size:12px;color:var(--muted);z-index:20;opacity:.8}
+body.portrait #ui{display:none}
+#bar.hide,#ui.hide,#jump.hide{opacity:0;pointer-events:none}
+/* 目次（右下） */
+#jump{position:fixed;right:14px;bottom:14px;z-index:24;display:flex;align-items:center;gap:8px}
+#jump > button,#jump .pgno{height:38px;border:1px solid var(--line);background:var(--paper);color:var(--ink);font:500 15px "Noto Sans JP",sans-serif;
+  padding:0 14px;display:flex;align-items:center;box-shadow:var(--shadow);cursor:pointer}
+#jump .pgno{cursor:default;color:var(--muted)}
+#jump #themebtn{width:38px;padding:0;justify-content:center;font-size:17px}
+#jump .tocp{position:fixed;top:0;right:0;bottom:0;width:min(360px,86vw);background:var(--paper);border-left:1px solid var(--line);
+  box-shadow:var(--shadow);transform:translateX(105%);transition:transform .3s;display:flex;flex-direction:column;z-index:2}
+#jump.open .tocp{transform:none}
+#jump .tocbg{position:fixed;inset:0;background:rgba(0,0,0,.18);display:none;z-index:1}
+#jump.open .tocbg{display:block}
+#jump .toch{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:2px solid var(--main);font-size:17px}
+#jump .tocx{border:none;background:none;color:var(--muted);font-size:20px;cursor:pointer}
+#jump .home{display:block;padding:10px 18px;font-size:14px;color:var(--deep);text-decoration:none;border-bottom:1px solid var(--line)}
+#jump .tocl{overflow:auto;padding:8px 0}
+#jump .ti{display:block;width:100%;text-align:left;border:none;background:none;color:var(--ink);font:400 16px "Noto Sans JP",sans-serif;padding:9px 18px;border-left:4px solid transparent;cursor:pointer}
+#jump .ti.on{border-left-color:var(--main);background:var(--pale);font-weight:700}
+
+/* ===== 手書き（ink.js） ===== */
+#ink{position:fixed;left:0;top:0;z-index:15;pointer-events:none;touch-action:none}
+body.inking #ink{pointer-events:auto;cursor:crosshair}
+body.pen-dev, body.pen-dev *{touch-action:none}
+#inkbar{position:fixed;z-index:25;right:12px;top:10px;display:flex;align-items:center;gap:6px;padding:5px;
+  background:color-mix(in srgb,var(--paper) 90%,transparent);border:1px solid var(--line);box-shadow:var(--shadow);transition:opacity .3s}
+#inkbar.hide{opacity:0;pointer-events:none}
+#inkbar button{font:500 15px "Noto Sans JP",sans-serif;height:34px;min-width:34px;padding:0 10px;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+#inkbar .ink-tg{font-size:17px}
+body.inking #inkbar .ink-tg{background:var(--deep);border-color:var(--deep);color:var(--paper)}
+#inkbar .ink-tools{display:none;gap:6px;align-items:center}
+body.inking #inkbar .ink-tools{display:flex}
+#inkbar .ink-c{width:34px;padding:0;background:var(--c);border-color:transparent}
+#inkbar .ink-c.sel{box-shadow:0 0 0 3px var(--paper),0 0 0 5px var(--c)}
+#inkbar .ink-er.sel{background:var(--pale)}
+#inkbar .ink-w{width:34px;padding:0;display:flex;align-items:center;justify-content:center}
+#inkbar .ink-w i{display:block;border-radius:50%;background:var(--ink)}
+#inkbar .ink-w.sel{border-color:var(--deep);background:var(--pale)}
+#inkbar .ink-sep{width:1px;height:24px;background:var(--line);margin:0 2px}
+body.portrait #inkbar .ink-tools{flex-wrap:wrap;max-width:calc(100vw - 70px)}
+body.portrait #inkbar{top:6px;right:6px}
+
+/* 撮影用：動きを 止めて 最後の 形 */
+body.final *, body.final *::before{transition:none!important;transition-delay:0s!important}
+
+
+/* ===== 数学Ⅲ（積分）の 部品 ===== */
+.tbl{display:grid;grid-template-columns:auto 1fr auto;border-top:2px solid var(--main);font-size:24px;width:100%}
+.tbl > div{padding:12px 16px;border-bottom:1px solid var(--line);line-height:1.7}
+.calc{display:flex;flex-direction:column;gap:4px;font-size:27px}
+.calc > div{min-height:1.6em;display:flex;align-items:center;flex-wrap:wrap;column-gap:.3em}
+.vnote{font-size:20px;color:var(--muted)}
+/* Point の 枠（プリントの 赤枠の コメント） */
+.pbox{border-left:5px solid var(--deep);background:var(--pale);padding:8px 18px 12px;font-size:22px;line-height:1.75}
+.pbox .pl2{color:var(--deep);font-weight:700;font-size:17px;letter-spacing:.08em}
+/* 問題の 書き出し */
+.pq{font-size:28px;display:flex;align-items:center;gap:.5em}
+.pq .tag,.q .tag{color:var(--deep);font-weight:700}
+.qline{font-size:23px}
+/* 1ページに 何問か（格子） */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px 44px;width:100%;align-items:start}
+.grid.c1{grid-template-columns:1fr}
+.grid .it{display:flex;flex-direction:column;gap:6px;padding:6px 14px;border-left:4px solid var(--line)}
+.grid .it .calc{font-size:25px;padding-left:1.6em}
+body.portrait .grid{grid-template-columns:1fr;gap:14px}
+/* 置換積分：左＝置きかえの 準備、右＝計算 */
+.two{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:30px;width:100%;align-items:start}
+.two > .l2{display:flex;flex-direction:column;gap:14px}
+.two .box .bc{font-size:24px;line-height:1.7;padding:10px 18px}
+.two .box .bc .calc{font-size:24px}
+.two .calc.main{font-size:26px;gap:12px}
+body.portrait .two{grid-template-columns:1fr;gap:18px}
+/* 帳尻合わせ */
+.two.aj{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.adj > div{white-space:nowrap}
+.adj{display:flex;flex-direction:column;gap:10px;font-size:25px;border:1.5px solid var(--main);padding:12px 18px}
+.adj .k{display:inline-block;min-width:5.6em;color:var(--deep);font-weight:700;font-size:20px;letter-spacing:.06em}
+/* 確かめ（微分すると 元に 戻る） */
+.chk{font-size:24px;color:var(--ink)}
+.chk .k{color:var(--muted);font-size:19px;letter-spacing:.06em}
+.sum{display:grid;grid-template-columns:auto auto 1fr;gap:14px 22px;align-items:center;font-size:28px}
+.sum .ar{color:var(--deep);font-weight:700}
+.bd.st{justify-content:flex-start;align-items:stretch}
+.fill.wide{min-width:8em}
+
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="bar"></div>
+<div id="ui"></div>
+<div id="jump"></div>
+<script>
+const VER = 'ver 1.0　2026-10-23';
+/* ====== 数学Ⅲ の 部品（数学C の parts.js を 元に した 別もの） ====== */
+
+/* 数式：M`\int x^3\,dx`（\ を そのまま 書ける）。KaTeX で かく。D は 大きい 形（\displaystyle：計算の 行に 使う） */
+function M(s, ...v){
+  const t = typeof s==='string' ? s : String.raw(s, ...v);
+  return `<span class="m">${t.replace(/&/g,'&amp;').replace(/</g,'&lt;')}</span>`;
+}
+function D(s, ...v){ return M('\\displaystyle ' + (typeof s==='string' ? s : String.raw(s, ...v))); }
+/* 出る番：S(番, html, 遅れ秒) */
+const S = (n, h, d) => `<span data-s="${n}"${d?` style="--d:${d}s"`:''}>${h}</span>`;
+/* 空らん（プリントの 書きこむ ところ）。答えは n 番で 出る */
+const FILL = (n, h, w) => `<span class="fill"${w?` style="min-width:${w}em"`:''}><span data-s="${n}">${h}</span></span>`;
+/* 説明欄：cm の i 番目が i 番で 出る（null は とばす） */
+const CAP = cm => `<div class="cap">${cm.map((c,i)=>c==null?'':`<p data-m="${i}">${c}</p>`).join('')}</div>`;
+/* 見出し */
+const HD = (no, title, sec) => `<header class="hd"><span class="no">${no}</span><h2>${title}</h2>${sec?`<span class="sec">${sec}</span>`:''}</header>`;
+/* 枠（公式・方針 など） */
+const BOX = (label, body) => `<div class="box"><div class="bl">${label}</div><div class="bc">${body}</div></div>`;
+/* Point の 枠：n 番で 出る（n が null なら はじめから） */
+const PT = (n, label, body) => `<div class="pbox"${n==null?'':` data-s="${n}"`}><div class="pl2">${label}</div>${body}</div>`;
+
+/* 計算の 行：[[番, TeX], …]。TeX が '<' で 始まれば html の まま。番が null なら はじめから */
+const CALC = (lines, cls) => `<div class="calc ${cls||''}">${lines.map(([n,t])=>
+  `<div${n==null?'':` data-s="${n}"`}>${t.startsWith('<') ? t : D(t)}</div>`).join('')}</div>`;
+/* 問題 1つ：⑴ と 式 */
+const PQ = (tag, tex) => `<div class="pq"><span class="tag">${tag}</span>${D(tex)}</div>`;
+
+/* 表紙 */
+function coverSlide(o){
+  return `<div class="cover"><div class="k">${o.kicker||'数学Ⅲ'}</div><div class="n">${o.no}</div>
+    <h1>${o.title}</h1><div class="sb">${o.sub||''}</div><div class="ln"></div>
+    <div class="ver">${VER}</div></div>`;
+}
+
+/* 何問かを 格子に 並べる ページ
+   o = {no, sec, title, q（上の 問題文 html）, items:[{tag, q:TeX, lines:[[番,TeX],…]}], c1（1列）, side（下に 足す html）, cm} */
+function gridPage(o){
+  return HD(o.no, o.title, o.sec) + `<div class="bd col st" style="gap:16px">
+    ${o.q ? `<div class="q qline">${o.q}</div>` : ''}
+    <div class="grid${o.c1?' c1':''}">${o.items.map(it=>`<div class="it"${it.o!=null?` data-o="${it.o}"`:''}>${PQ(it.tag, it.q)}${CALC(it.lines)}</div>`).join('')}</div>
+    ${o.side||''}
+  </div>` + CAP(o.cm);
+}
+
+/* 置換積分の ページ：左＝置きかえの 準備（BOX）と Point、右＝計算
+   o = {no, sec, title, tag, q:TeX, prep:[[番,TeX],…], plabel（BOX の 名前）, pt（左に 足す html）, calc:[[番,TeX],…], cm} */
+function subPage(o){
+  return HD(o.no, o.title, o.sec) + `<div class="bd col st" style="gap:14px">
+    ${o.top||''}${PQ(o.tag, o.q)}
+    <div class="two">
+      <div class="l2">${BOX(o.plabel||'置きかえ', CALC(o.prep))}${o.pt||''}</div>
+      ${CALC(o.calc, 'main')}
+    </div>
+  </div>` + CAP(o.cm);
+}
+
+/* ====== このプリントの スライド ====== */
+
+const NO = '①-4', SEC = '数学Ⅲ　積分法';
+const p0 = coverSlide({kicker:'数学Ⅲ　積分法', no:NO, title:'指数関数の不定積分', sub:`${M`e^x`} は そのまま、${M`a^x`} は ${M`\log a`} で 割る`});
+
+const p1 = HD(NO, '公式', SEC) + `<div class="bd col" style="gap:24px">
+  ${BOX('公式', `<div style="display:flex;gap:60px;flex-wrap:wrap">
+    <span>${D`\int e^x\,dx=`}${FILL(1, D`e^x+C`, 5)}</span>
+    <span>${D`\int a^x\,dx=`}${FILL(2, D`\frac{a^x}{\A{\log a}}+C`, 5.5)}</span></div>`)}
+  <div class="pbox" data-s="1"><div class="pl2">確かめ（微分の 公式）</div>
+    <span data-s="1">${D`(e^x)'=e^x`}</span>　　<span data-s="2">${D`(a^x)'=a^x\A{\log a}`}</span></div>
+</div>` + CAP([
+  `指数関数も、微分の 公式を 逆に 読みます。`,
+  `${M`e^x`} は 微分しても ${M`e^x`}。だから 積分しても ${M`e^x`} です。`,
+  `${M`a^x`} を 微分すると ${M`\log a`} が 掛かります。積分では 逆に <b class="a">${M`\log a`} で 割り</b> ます。`
+]);
+
+const p2 = gridPage({no:NO, sec:SEC, title:'例', q:'次の 不定積分を 求めよ。', items:[
+  {tag:'⑴', q:String.raw`\int\left(2e^x+1\right)dx`, lines:[[1, String.raw`=\DP{2e^x+x+C}`]]},
+  {tag:'⑵', q:String.raw`\int3^x\,dx`, lines:[[2, String.raw`=\DP{\frac{3^x}{\log3}+C}`]]},
+], cm:[
+  `公式を そのまま 使います。`,
+  `⑴ ${M`2e^x\to2e^x`}、${M`1\to x`}。`,
+  `⑵ ${M`a=3`}。${M`\log3`} で 割ります。`
+]});
+
+const p3 = gridPage({no:NO, sec:SEC, title:'問4', q:'次の 不定積分を 求めよ。', items:[
+  {tag:'⑴', q:String.raw`\int4e^x\,dx`, o:1, lines:[[1, String.raw`=\DP{4e^x+C}`]]},
+  {tag:'⑵', q:String.raw`\int5^x\,dx`, o:2, lines:[[2, String.raw`=\DP{\frac{5^x}{\log5}+C}`]]},
+  {tag:'⑶', q:String.raw`\int\left(3x^2-2e^x\right)dx`, o:3, lines:[[3, String.raw`=\DP{x^3-2e^x+C}`]]},
+], cm:[
+  `${M`e^x`} は そのまま、${M`a^x`} は ${M`\log a`} で 割ります。`,
+  `⑴ 係数 ${M`4`} は そのまま 残します。`,
+  `⑵ ${M`a=5`}。${M`\log5`} で 割ります。`,
+  `⑶ ${M`3x^2\to3\cdot\frac{1}{3}x^3=x^3`}、${M`-2e^x\to-2e^x`}。`
+]});
+
+const p4 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:26px">
+  ${BOX('公式', `${D`\int e^x\,dx=e^x+C`}　　　${D`\int a^x\,dx=\frac{a^x}{\log a}+C`}`)}
+</div>` + CAP([`①-5 では、${M`(2x+3)^4`} のような 合成関数の 不定積分を 学びます。`]);
+
+const DECK = {title:'①-4 指数関数の不定積分', pages:[
+  {name:'表紙', html:p0}, {name:'公式', html:p1}, {name:'例', html:p2}, {name:'問4', html:p3}, {name:'まとめ', html:p4},
+]};
+
+/* ====== 組み立て・操作（数学Ⅲ。数学C の engine.js を 元に した 別もの） ======
+   DECK = {title, pages:[{name, html}]}。
+   data-s（その番で 出る）・data-e（その番で 消える）・data-o（その番で 色が つく）・cap の p[data-m]（その番の 説明）から 段数を 数える。 */
+const stage = document.getElementById('stage');
+const names = DECK.pages.map(p=>p.name);
+document.title = DECK.title;
+stage.innerHTML = DECK.pages.map(p=>`<section class="slide">${p.html}</section>`).join('');
+
+/* 数式：<span class="m">TeX</span> を KaTeX で かく。\A{…}＝橙（変わる ところ）、\B{…}＝紫（置きかえ t）、\DP{…}＝深い青（答え）、\on{番}{a|b|dp}{…}＝その番で 色が つく */
+const KX = {throwOnError:false, trust:true, strict:false, macros:{
+  '\\A':'\\htmlClass{a}{#1}', '\\B':'\\htmlClass{b}{#1}', '\\DP':'\\htmlClass{dp}{#1}', '\\MU':'\\htmlClass{mu}{#1}',
+  '\\BOX':'\\htmlClass{bx}{#1}',
+  '\\on':'\\htmlData{o=#1, c=#2}{#3}'}};
+stage.querySelectorAll('.m').forEach(e=>{
+  if(typeof katex==='undefined') return;
+  try{ katex.render(e.textContent, e, KX); }catch(_){}
+});
+
+const els = [...stage.querySelectorAll('.slide')];
+const nums = e => ['s','e','o','m'].map(k=>e.dataset[k]).filter(v=>v!==undefined).map(Number);
+const maxStep = els.map(el => Math.max(0, ...[...el.querySelectorAll('[data-s],[data-e],[data-o],[data-m]')].flatMap(nums)));
+
+const bar = document.getElementById('bar'), ui = document.getElementById('ui'), jump = document.getElementById('jump');
+jump.innerHTML = `<button id="themebtn" title="明るく／暗く（T）"></button><button class="tocbtn" title="目次">≡ 目次</button><span class="pgno"></span>
+  <div class="tocbg"></div><div class="tocp"><div class="toch"><b>${DECK.title}</b><button class="tocx" title="閉じる">✕</button></div>
+  <a class="home" href="index.html">← スライドの 一覧へ</a>
+  <div class="tocl">${names.map((n,i)=>`<button class="ti" data-i="${i}">${n}</button>`).join('')}</div></div>`;
+window.paintTheme = () => { const b=document.getElementById('themebtn'); b.textContent = isDark() ? '☀' : '☾'; };
+paintTheme();
+const tocOpen = on => { jump.classList.toggle('open', on); if(on){ const c=jump.querySelector('.ti.on'); if(c) c.scrollIntoView({block:'center'}); } };
+jump.addEventListener('click', e=>{
+  if(e.target.closest('a')) return;
+  e.stopPropagation();
+  if(e.target.closest('#themebtn')) return toggleTheme();
+  if(e.target.closest('.tocbtn')) return tocOpen(!jump.classList.contains('open'));
+  if(e.target.closest('.tocx,.tocbg')) return tocOpen(false);
+  const b = e.target.closest('.ti'); if(!b) return;
+  stopAuto(); si = +b.dataset.i; st = 0; render(); tocOpen(false);
+});
+
+let si = 0, st = 0, timer = null;
+function render(){
+  els.forEach((el,i)=>{
+    const now = i===si, t = now ? st : -1;   // ほかの ページは 何も 出ていない 状態に もどす（入った とき 動きが 見える）
+    el.classList.toggle('active', now);
+    el.querySelectorAll('[data-s],[data-e]').forEach(e=>{
+      const s = e.dataset.s===undefined ? 0 : +e.dataset.s, x = e.dataset.e===undefined ? 1e9 : +e.dataset.e;
+      e.classList.toggle('show', s<=t && t<x);
+    });
+    el.querySelectorAll('[data-o]').forEach(e=>{ e.classList.toggle('on', +e.dataset.o<=t); e.classList.toggle('cur', +e.dataset.o===t); });
+    /* 説明：今の 番 以下で いちばん 新しい もの */
+    const ps = [...el.querySelectorAll('.cap [data-m]')];
+    const best = ps.filter(p=>+p.dataset.m<=t).pop();
+    ps.forEach(p=>p.classList.toggle('cur', p===best));
+  });
+  const total = maxStep.reduce((a,m)=>a+m+1,0), done = maxStep.slice(0,si).reduce((a,m)=>a+m+1,0)+st+1;
+  bar.style.width = (done/total*100)+'%';
+  jump.querySelectorAll('.ti').forEach(b=>b.classList.toggle('on', +b.dataset.i===si));
+  jump.querySelector('.pgno').textContent = `${si+1} / ${els.length}`;
+  ui.textContent = '←→ 進む・戻る　P 自動再生　F 全画面　H 表示を隠す　T 明暗　W 書きこむ';
+}
+function next(){ if(st<maxStep[si]) st++; else if(si<els.length-1){ si++; st=0; } else stopAuto(); render(); }
+function prev(){ if(st>0) st--; else if(si>0){ si--; st=maxStep[si]; } render(); }
+function stopAuto(){ if(timer){ clearInterval(timer); timer=null; } }
+function toggleAuto(){ if(timer) stopAuto(); else timer=setInterval(next,4000); }
+
+document.addEventListener('keydown', e=>{
+  const k = e.key;
+  if(['ArrowRight','ArrowDown',' ','Enter','PageDown'].includes(k)){ e.preventDefault(); stopAuto(); next(); }
+  else if(['ArrowLeft','ArrowUp','Backspace','PageUp'].includes(k)){ e.preventDefault(); stopAuto(); prev(); }
+  else if(k==='Home'){ stopAuto(); si=0; st=0; render(); }
+  else if(k==='End'){ stopAuto(); si=els.length-1; st=maxStep[si]; render(); }
+  else if(k==='p'||k==='P') toggleAuto();
+  else if(k==='f'||k==='F'){ try{ if(document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen(); }catch(_){} }
+  else if(k==='h'||k==='H'){ ui.classList.toggle('hide'); bar.classList.toggle('hide'); jump.classList.toggle('hide'); }
+  else if(k==='t'||k==='T') toggleTheme();
+  else if(k==='Escape') tocOpen(false);
+});
+/* 画面の 左 1/3 を 押すと 戻る、それ以外は 進む */
+document.addEventListener('click', e=>{
+  if(e.target.closest('a,button,#jump,#inkbar')) return;
+  stopAuto(); if(e.clientX < document.documentElement.clientWidth/3) prev(); else next();
+});
+/* 画面に 合わせる：縦長（スマホ）なら 720×1280、横長なら 1280×720 */
+function fit(){
+  const vw = document.documentElement.clientWidth, vh = document.documentElement.clientHeight;
+  const portrait = vh > vw;
+  document.body.classList.toggle('portrait', portrait);
+  const W = portrait?720:1280, H = portrait?1280:720;
+  stage.style.setProperty('--s', Math.min(vw/W, vh/H));
+}
+addEventListener('resize', fit);
+/* URL の #3-2 で 4ページ目の 2番から 始める（撮影・リンク用）。#3-e は その ページの 最後。?final で 動きを 止める */
+(function(){
+  const m = location.hash.match(/^#(\d+)-(\d+|e)$/); if(!m) return;
+  si = Math.min(+m[1], els.length-1); st = m[2]==='e' ? maxStep[si] : Math.min(+m[2], maxStep[si]);
+})();
+if(/final/.test(location.search)) document.body.classList.add('final');
+fit(); render();
+
+/* ====== 手書き（授業中に スライドの上から 書きこむ） ======
+   右上の ✏ ボタン か W キーで 書く／やめる。ペンの 後ろ（消しゴム側）で なぞると 消える。
+   ペン（Surface ペンなど）で 画面に さわると、自動で 書くモードに なる。
+   書いた線は スライドごとに 残る（ページを 開き直すと 消える）。
+   線は 台紙（1280×720 / 720×1280）の 座標で 覚えるので、画面の 大きさが 変わっても ずれない。 */
+var INK = {on:false, color:'#e0465e', tool:'pen', w:3.5, strokes:{}, cur:null};
+(function(){
+  const cv = document.createElement('canvas'); cv.id = 'ink'; document.body.appendChild(cv);
+  const ctx = cv.getContext('2d');
+  const bar = document.createElement('div'); bar.id = 'inkbar';
+  const COLORS = [['#e0465e','赤'],['#1f3f9e','青'],['#f07a12','オレンジ'],['#1f9a4a','緑'],['#33303d','黒']];
+  const SIZES = [[3.5,'細'],[5,'太']];   // 細 が 最初
+  bar.innerHTML = `<button class="ink-tg" title="書きこむ（W）">✏</button>
+    <span class="ink-tools">${COLORS.map(([c,n])=>`<button class="ink-c" data-c="${c}" title="${n}" style="--c:${c}"></button>`).join('')}
+    <span class="ink-sep"></span>${SIZES.map(([w,n])=>`<button class="ink-w" data-w="${w}" title="${n}"><i style="width:${w*2}px;height:${w*2}px"></i></button>`).join('')}<span class="ink-sep"></span>
+    <button class="ink-er" title="消しゴム（E）">消</button><button class="ink-un" title="1つ戻す（Ctrl+Z）">↶</button>
+    <button class="ink-cl" title="このページを 全部 消す">全消</button></span>`;
+  document.body.appendChild(bar);
+  const key = () => si + (document.body.classList.contains('portrait') ? 'p' : 'l');
+  const list = () => (INK.strokes[key()] ||= []);
+  /* 画面の点 ⇔ 台紙の点 */
+  const box = () => stage.getBoundingClientRect();
+  const sz  = () => document.body.classList.contains('portrait') ? [720,1280] : [1280,720];
+  const toStage = (x,y) => { const b=box(), [W,H]=sz(); return [(x-b.left)/b.width*W, (y-b.top)/b.height*H]; };
+  function size(){
+    const r = devicePixelRatio || 1;
+    cv.width = innerWidth * r; cv.height = innerHeight * r;
+    cv.style.width = innerWidth + 'px'; cv.style.height = innerHeight + 'px';
+    draw();
+  }
+  function draw(){
+    const r = devicePixelRatio || 1, b = box(), [W] = sz(), k = b.width / W;
+    ctx.setTransform(r,0,0,r,0,0); ctx.clearRect(0,0,innerWidth,innerHeight);
+    ctx.setTransform(r*k,0,0,r*k,r*b.left,r*b.top);
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    for(const s of list()){
+      ctx.strokeStyle = s.c; ctx.lineWidth = s.w; ctx.beginPath();
+      s.p.forEach(([x,y],i)=> i ? ctx.lineTo(x,y) : ctx.moveTo(x,y));
+      if(s.p.length===1) ctx.lineTo(s.p[0][0]+.1, s.p[0][1]);
+      ctx.stroke();
+    }
+  }
+  function erase(x,y){
+    const L = list(), n = L.length;
+    for(let i=L.length-1;i>=0;i--) if(L[i].p.some(([a,b])=>Math.hypot(a-x,b-y)<16)) L.splice(i,1);
+    if(L.length!==n) draw();
+  }
+  function setOn(v){
+    INK.on = v; document.body.classList.toggle('inking', v);
+    if(!v) INK.cur = null;
+  }
+  function setTool(t,c){
+    INK.tool = t; if(c) INK.color = c;
+    bar.querySelectorAll('.ink-c').forEach(b=>b.classList.toggle('sel', t==='pen' && b.dataset.c===INK.color));
+    bar.querySelector('.ink-er').classList.toggle('sel', t==='er');
+    bar.querySelectorAll('.ink-w').forEach(b=>b.classList.toggle('sel', +b.dataset.w===INK.w));
+  }
+  function start(e){
+    e.preventDefault(); try{ cv.setPointerCapture(e.pointerId); }catch(_){}
+    const p = toStage(e.clientX,e.clientY);
+    /* ペンの 後ろ（消しゴム側）で さわったら 消しゴム。Surface ペンなどは buttons に 32 が 入る */
+    const back = e.pointerType==='pen' && (e.button===5 || (e.buttons & 32));
+    if(INK.tool==='er' || back){ INK.cur = {er:true}; erase(...p); return; }
+    INK.cur = {c:INK.color, w:INK.w, p:[p]}; list().push(INK.cur); draw();
+  }
+  cv.addEventListener('pointerdown', e=>{ if(INK.on) start(e); });
+  /* ペンを 近づけた（さわる前の ホバー）時点で、ブラウザの スクロール・拡大の 判定を 止める。
+     止めないと、ペンで さわって すぐ 書き始めた線が 0.3秒ほどで 打ち切られる（pointercancel） */
+  const penSeen = e => { if(e.pointerType==='pen') document.body.classList.add('pen-dev'); };
+  ['pointerover','pointermove','pointerdown'].forEach(t=>document.addEventListener(t, penSeen, {capture:true, passive:true}));
+  /* ペンで 画面に さわったら、自動で 書くモードに する（ボタンや リンクは ふつうに 押せる） */
+  let skipClick = false;
+  document.addEventListener('pointerdown', e=>{
+    if(INK.on || e.pointerType!=='pen' || e.target.closest('#inkbar,#jump,a,button')) return;
+    setOn(true); if(INK.tool!=='er') setTool('pen'); skipClick = true; start(e);
+  }, true);
+  document.addEventListener('click', e=>{ if(skipClick){ skipClick = false; e.stopPropagation(); e.preventDefault(); } }, true);
+  cv.addEventListener('pointermove', e=>{
+    if(!INK.cur) return;
+    const evs = e.getCoalescedEvents ? e.getCoalescedEvents() : [e];
+    for(const ev of evs){
+      const p = toStage(ev.clientX,ev.clientY);
+      if(INK.cur.er) erase(...p); else INK.cur.p.push(p);
+    }
+    if(!INK.cur.er) draw();
+  });
+  const end = () => { INK.cur = null; };
+  cv.addEventListener('pointerup', end); cv.addEventListener('pointercancel', end);
+  cv.addEventListener('click', e=>e.stopPropagation());
+  bar.addEventListener('click', e=>{
+    e.stopPropagation();
+    const b = e.target.closest('button'); if(!b) return;
+    if(b.classList.contains('ink-tg')){ setOn(!INK.on); if(INK.on) setTool('pen'); }
+    else if(b.classList.contains('ink-c')) setTool('pen', b.dataset.c);
+    else if(b.classList.contains('ink-w')){ INK.w = +b.dataset.w; setTool('pen'); }
+    else if(b.classList.contains('ink-er')) setTool('er');
+    else if(b.classList.contains('ink-un')){ list().pop(); draw(); }
+    else if(b.classList.contains('ink-cl')){ INK.strokes[key()] = []; draw(); }
+    b.blur();
+  });
+  document.addEventListener('keydown', e=>{
+    const k = e.key;
+    if(k==='w'||k==='W'){ setOn(!INK.on); if(INK.on) setTool('pen'); }
+    else if(INK.on && (k==='e'||k==='E')) setTool(INK.tool==='er' ? 'pen' : 'er');
+    else if(INK.on && k==='Escape') setOn(false);
+    else if(k==='h'||k==='H') bar.classList.toggle('hide');
+    else if((e.ctrlKey||e.metaKey) && (k==='z'||k==='Z')){ e.preventDefault(); list().pop(); draw(); }
+  });
+  /* ページを めくったら、そのページの 線を かく */
+  const r0 = render; render = function(){ r0(); draw(); };
+  addEventListener('resize', size);
+  setTool('pen'); size();
+})();
+
+</script>
+</body>
+</html>
