@@ -1045,3 +1045,133 @@ const DECK = {title:'②-3 掛け算と回転', pages:[
   {name:'まとめ', html:p9},
 ]};
 ''')
+
+# ---------------------------------------------------------------- ③-1 ド・モアブルの定理
+DECKS['3-1_ド・モアブルの定理'] = ('③-1 ド・モアブルの定理', r'''
+const NO = '③-1', SEC = '数学C　複素数平面';
+const IT = v => `<tspan class="it">${v}</tspan>`;
+const SP = (v, k) => `${v}<tspan baseline-shift="super" font-size="15">${k}</tspan>`;
+const S3 = Math.sqrt(3), S2 = Math.sqrt(2), D = Math.PI/180;
+
+const p0 = coverSlide({kicker:'数学C　複素数平面', no:NO, title:'ド・モアブルの定理', sub:'同じ 回転の くり返し'});
+
+/* 同じ 回転の くり返し：w ＝ cos45°＋i sin45° を 次々に 掛ける */
+const gw = PL({x0:-1.6, x1:1.6, y0:-1.6, y1:1.6, u:130, grid:false, ticks:false});
+const WR = gw.u;
+const WP = k => [Math.cos(45*k*D), Math.sin(45*k*D)];
+const WL = k => k===1 ? IT('w') : SP(IT('w'), k);
+/* k 番目の 点が 出る 番（5〜7乗は まとめて 1回） */
+const WS = {1:1, 2:2, 3:3, 4:4, 5:5, 6:5, 7:5, 8:6};
+const WPOS = {1:'sw', 2:'se', 3:'se', 4:'ne', 5:'ne', 6:'ne', 7:'nw', 8:'nw'};   // 円の 内側に 名前
+const figW = `<circle class="ucirc" cx="${gw.X(0)}" cy="${gw.Y(0)}" r="${WR}"/>` + gw.dot(1, 0, '1', null, {pos:'se'})
+  + [1,2,3,4,5,6,7,8].map(k => gw.carc(45*(k-1)+4, 45*k-4, WR+18, WS[k], {d:k>=5&&k<=7 ? (k-5)*.9 : 0, lab:k===1?'45°':''})
+      + gw.dot(...WP(k), WL(k), WS[k], {pos:WPOS[k], d:(k>=5&&k<=7 ? (k-5)*.9 : 0)+.6})).join('');
+const p1 = HD(NO, '同じ 回転の くり返し', SEC) + `<div class="bd">
+  <div class="l" style="gap:14px">
+    <div class="q" style="font-size:24px">${M`w=\cos45^\circ+i\sin45^\circ`}（長さ ${M`1`}、向き ${M`45^\circ`}）を 次々に 掛ける。<br><span class="mu" style="font-size:20px">（掛け算：長さは 掛け算、向きは 足し算）</span></div>
+    <div class="tbl wt" style="grid-template-columns:repeat(6,auto)">
+      <div class="th"></div><div class="th">${M`w`}</div><div class="th">${M`w^2`}</div><div class="th">${M`w^3`}</div><div class="th">${M`w^4`}</div><div class="th">${M`w^8`}</div>
+      <div class="th">向き</div><div>${M`45^\circ`}</div><div>${FILL(2, M`90^\circ`, 2.4)}</div><div>${FILL(3, M`135^\circ`, 2.6)}</div><div>${FILL(4, M`180^\circ`, 2.6)}</div><div>${FILL(6, M`360^\circ`, 2.6)}</div>
+      <div class="th">値</div><div>${M`w`}</div><div>${FILL(2, M`i`, 2)}</div><div>${FILL(3, M`-\tfrac{1}{\sqrt{2}}+\tfrac{1}{\sqrt{2}}i`, 5.6)}</div><div>${FILL(4, M`-1`, 2)}</div><div>${FILL(6, M`1`, 2)}</div>
+    </div>
+    <div class="q" data-s="7" style="font-size:25px">→ ${M`w^n`} の 向きは ${FILL(7, M`45^\circ\times n`, 4)}、${M`w^8=`}${FILL(7, M`1`, 1.6)}（1周して 元に 戻る）</div>
+  </div>
+  <div class="r">${gw.svg(figW)}</div>
+</div>` + CAP([
+  `長さ ${M`1`}、向き ${M`45^\circ`} の 数 ${M`w`} を、${M`1`} に 次々に 掛けて いきます。`,
+  `${M`w`}：向き ${M`45^\circ`}。`,
+  `${M`w^2`}：向きは 足し算 なので ${M`45^\circ+45^\circ=90^\circ`}。長さは ${M`1\times1=1`} の まま。真上の ${M`i`} です。`,
+  `${M`w^3`}：向き ${M`135^\circ`}。値は ${M`\cos135^\circ+i\sin135^\circ`}。`,
+  `${M`w^4`}：向き ${M`180^\circ`}。真左の ${M`-1`} です。`,
+  `${M`w^5,\ w^6,\ w^7`} と、${M`45^\circ`} ずつ 円の 上を 進みます。`,
+  `${M`w^8`}：向き ${M`45^\circ\times8=360^\circ`}。1周して ${M`1`} に 戻りました。`,
+  `${M`n`} 回 掛けると、向きは ${M`45^\circ`} を ${M`n`} 回 足して ${M`45^\circ\times n`}。長さは ${M`1`} の まま です。`
+]);
+
+/* ド・モアブルの 定理 */
+const gd = PL({x0:-1.6, x1:1.6, y0:-1.6, y1:1.6, u:130, grid:false, ticks:false});
+const TH = 40;
+const p2 = HD(NO, 'ド・モアブルの定理', SEC) + `<div class="bd">
+  <div class="l" style="gap:20px">
+    ${BOX('ド・モアブルの定理', `${M`n`} が 整数の とき<br><span style="font-size:32px">${M`(\cos\theta+i\sin\theta)^n=`}${FILL(4, M`\cos\DP{n\theta}+i\sin\DP{n\theta}`, 7)}</span>`)}
+    <div class="q" data-s="4" style="font-size:24px">（${M`\theta`} 回転を ${M`n`} 回 くり返す ＝ ${M`n\theta`} 回転）</div>
+  </div>
+  <div class="r">${gd.svg(`<circle class="ucirc" cx="${gd.X(0)}" cy="${gd.Y(0)}" r="${gd.u}"/>` + gd.dot(1, 0, '1', null, {pos:'se'})
+    + [1,2,3].map(k => gd.carc(TH*(k-1)+3, TH*k-3, gd.u+18, k, {lab:IT('θ')}) + gd.dot(Math.cos(TH*k*D), Math.sin(TH*k*D), '', k, {d:.6})).join('')
+    + gd.seg(0, 0, Math.cos(3*TH*D), Math.sin(3*TH*D), 4, {c:'g'}) + gd.ang(3*TH, 4, {r:46, lab:'3'+IT('θ'), lr:24, d:.4}))}</div>
+</div>` + CAP([
+  `①-4 で、${M`\cos\theta+i\sin\theta`} は「長さ ${M`1`}、向き ${M`\theta`} の 数」でした。`,
+  `1回 掛けると、${M`\theta`} だけ 回ります。`,
+  `2回 掛けると ${M`2\theta`}。長さは ${M`1\times1=1`} の まま。`,
+  `3回で ${M`3\theta`}。${M`n`} 回 掛けると、${M`\theta`} を ${M`n`} 回 足して ${M`n\theta`} です。`,
+  `だから ${M`(\cos\theta+i\sin\theta)^n`} は、長さ ${M`1`}、向き ${M`n\theta`} の 数。これが ド・モアブルの定理 です。`
+]);
+
+/* 例・問16：極形式 → 長さは n 乗、角は n 倍 → 値 */
+function dmPage(o){
+  const g = PL(o.R), [a,b] = o.z, [ra,rb] = o.res;
+  const fig = g.arr(0,0,a,b,null) + g.dot(a,b,o.zl,null,{given:true, pos:o.zp||'se'}) + g.ang(o.t, 1, {r:o.r1||32, lr:20, fs:17, la:o.l1})
+    + g.ang(o.t*o.n, 2, {r:o.r2||54, lr:24, la:o.l2}) + g.arr(0,0,ra,rb,3,{c:'g', w:5}) + g.dot(ra, rb, o.rl, 3, {d:.5, pos:o.rp||'nw'});
+  return HD(NO, o.title, SEC) + `<div class="bd">
+    <div class="l">${o.top}
+      <div class="calc" style="font-size:26px;gap:8px">${o.lines.map(([t,n])=>`<div data-s="${n}">${M(t)}</div>`).join('')}</div>
+    </div>
+    <div class="r">${g.svg(fig)}</div>
+  </div>` + CAP(o.cm);
+}
+const p3 = dmPage({title:'例　(1＋i)⁴ の 値', R:{x0:-5, x1:2, y0:-1, y1:2, u:66, ticks:false}, z:[1,1], zl:`1 + ${IT('i')}`, t:45, n:4, l2:150, res:[-4,0], rl:'−4', rp:'nw',
+  top:`<div class="q" style="font-size:26px"><span class="tag">例</span>${M`(1+i)^4`} の 値を 求めよ。</div>`,
+  lines:[[String.raw`1+i=\RE{\sqrt{2}}(\cos\IM{45^\circ}+i\sin\IM{45^\circ})\ \text{より}`,1],
+         [String.raw`(1+i)^4=\RE{(\sqrt{2})^4}(\cos\IM{180^\circ}+i\sin\IM{180^\circ})`,2], [String.raw`=4\times(-1)=\DP{-4}`,3]],
+  cm:[`4回 掛ける 計算を、極形式で 楽に します。`, `まず 極形式に。長さ ${M`\sqrt{2}`}、向き ${M`45^\circ`}。`,
+      `4乗 すると、<b class="re">長さは 4回 掛けて ${M`(\sqrt{2})^4=4`}</b>、<b class="im">向きは 4倍 で ${M`45^\circ\times4=180^\circ`}</b>。`,
+      `${M`\cos180^\circ=-1`}、${M`\sin180^\circ=0`} なので ${M`-4`}。真左、長さ ${M`4`} の 点です。`]});
+
+/* 例：図示（うずまき） */
+const gs = PL({x0:-5, x1:2, y0:-1, y1:3, u:66, ticks:false});
+const SPI = [[1,1,`1 + ${IT('i')}`,'se'], [0,2,`(1 + ${IT('i')})²`,'ne'], [-2,2,`(1 + ${IT('i')})³`,'nw'], [-4,0,`(1 + ${IT('i')})⁴`,'nw']];
+const p4 = HD(NO, '例　図示する', SEC) + `<div class="bd">
+  <div class="l">
+    <div class="q" style="font-size:24px">また、${M`1+i`}、${M`(1+i)^2`}、${M`(1+i)^3`}、${M`(1+i)^4`} を 図示せよ。</div>
+    <div class="calc" style="font-size:27px;gap:8px">
+      <div data-s="2">${M`(1+i)^2=2i`}</div><div data-s="3">${M`(1+i)^3=-2+2i`}</div><div data-s="4">${M`(1+i)^4=-4`}</div>
+      <div data-s="5" style="font-size:24px">→ ${M`\IM{45^\circ}`} ずつ 回転し、原点からの 距離は ${M`\RE{\sqrt{2}}`} 倍ずつ</div>
+    </div>
+  </div>
+  <div class="r">${gs.svg(SPI.map(([a,b,l,p],i)=>gs.arr(0,0,a,b,i+1,{c:i===3?'g':'m'}) + gs.dot(a,b,l,i+1,{pos:p, d:.6})).join('')
+    + SPI.slice(0,3).map(([a,b],i)=>{ const [c,d] = SPI[i+1]; return `<line class="dash" x1="${gs.X(a)}" y1="${gs.Y(b)}" x2="${gs.X(c)}" y2="${gs.Y(d)}" data-s="5"/>`; }).join(''))}</div>
+</div>` + CAP([
+  `${M`(1+i)`} を 1回ずつ 掛けた 点を、順に 打って いきます。`,
+  `${M`1+i`}：長さ ${M`\sqrt{2}`}、向き ${M`45^\circ`}。`,
+  `${M`(1+i)^2=2i`}：向き ${M`90^\circ`}、長さ ${M`2`}。`,
+  `${M`(1+i)^3=-2+2i`}：向き ${M`135^\circ`}、長さ ${M`2\sqrt{2}`}。`,
+  `${M`(1+i)^4=-4`}：向き ${M`180^\circ`}、長さ ${M`4`}。`,
+  `1回 掛ける ごとに ${M`45^\circ`} 回り、${M`\sqrt{2}`} 倍に 伸びて、うずまきの ように 外へ 広がります。`
+]);
+
+const p5 = dmPage({title:'問16 ⑴　(1＋√3 i)³', R:{x0:-9, x1:3, y0:-1, y1:3, u:42, ticks:false}, z:[1,S3], zl:`1 + √3${IT('i')}`, t:60, n:3, r1:30, r2:50, l1:30, l2:120, res:[-8,0], rl:'−8', rp:'nw',
+  top:`<div class="q" style="font-size:24px"><span class="tag">問16</span>次の 複素数の 値を 求めよ。</div><div class="q big" style="font-size:34px">⑴　${M`(1+\sqrt{3}i)^3`}</div>`,
+  lines:[[String.raw`1+\sqrt{3}i=\RE{2}(\cos\IM{60^\circ}+i\sin\IM{60^\circ})\ \text{より}`,1],
+         [String.raw`(1+\sqrt{3}i)^3=\RE{2^3}(\cos\IM{180^\circ}+i\sin\IM{180^\circ})`,2], [String.raw`=8\times(-1)=\DP{-8}`,3]],
+  cm:[`同じ 手順です。`, `極形式に。長さ ${M`2`}、向き ${M`60^\circ`}。`, `3乗：長さは ${M`2^3=8`}、向きは ${M`60^\circ\times3=180^\circ`}。`, `${M`-8`}。真左、長さ ${M`8`} の 点です。`]});
+const p6 = dmPage({title:'問16 ⑵　(1＋i)⁷', R:{x0:-1, x1:9, y0:-9, y1:2, u:40, ticks:false}, z:[1,1], zl:`1 + ${IT('i')}`, t:45, n:7, r1:30, r2:46, l1:22, l2:200, res:[8,-8], rl:`8 − 8${IT('i')}`, rp:'se',
+  top:`<div class="q big" style="font-size:34px">⑵　${M`(1+i)^7`}</div>`,
+  lines:[[String.raw`1+i=\RE{\sqrt{2}}(\cos\IM{45^\circ}+i\sin\IM{45^\circ})\ \text{より}`,1],
+         [String.raw`(1+i)^7=\RE{(\sqrt{2})^7}(\cos\IM{315^\circ}+i\sin\IM{315^\circ})`,2],
+         [String.raw`=8\sqrt{2}\left(\tfrac{1}{\sqrt{2}}-\tfrac{1}{\sqrt{2}}i\right)=\DP{8-8i}`,3]],
+  cm:[`7回 掛けるのは 大変ですが、極形式なら すぐです。`, `長さ ${M`\sqrt{2}`}、向き ${M`45^\circ`}。`,
+      `7乗：長さは ${M`(\sqrt{2})^7=8\sqrt{2}`}、向きは ${M`45^\circ\times7=315^\circ`}（第4象限）。`,
+      `${M`\cos315^\circ=\tfrac{1}{\sqrt{2}}`}、${M`\sin315^\circ=-\tfrac{1}{\sqrt{2}}`} なので ${M`8-8i`}。`]});
+
+/* まとめ（アニメーション なし） */
+const p7 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:26px">
+  ${BOX('ド・モアブルの定理', `<span style="font-size:32px">${M`(\cos\theta+i\sin\theta)^n=\cos n\theta+i\sin n\theta`}</span>`)}
+  <div class="q" style="font-size:28px">${M`z=r(\cos\theta+i\sin\theta)`} の とき<br>${M`z^n=\RE{r^n}(\cos\IM{n\theta}+i\sin\IM{n\theta})`}（<b class="re">長さは ${M`n`} 乗</b>、<b class="im">向きは ${M`n`} 倍</b>）</div>
+</div>` + CAP([`③-2 では、逆に「${M`n`} 乗して ${M`1`} に なる 数」を 探します。`]);
+
+const DECK = {title:'③-1 ド・モアブルの定理', pages:[
+  {name:'表紙', html:p0}, {name:'同じ 回転の くり返し', html:p1}, {name:'ド・モアブルの定理', html:p2},
+  {name:'例　(1＋i)⁴ の 値', html:p3}, {name:'例　図示する', html:p4},
+  {name:'問16 ⑴', html:p5}, {name:'問16 ⑵', html:p6}, {name:'まとめ', html:p7},
+]};
+''')

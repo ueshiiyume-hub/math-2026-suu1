@@ -231,3 +231,5 @@ body.portrait .tbl.mt{font-size:15px} body.portrait .tbl.mt > div{padding:6px 4p
 .trig > div{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:4px 10px;text-align:center;line-height:1.5}
 .trig > .th{background:var(--pale)}
 body.portrait .trig{font-size:19px}
+.tbl.wt{font-size:21px} .tbl.wt > div{padding:6px 8px;text-align:center}
+body.portrait .tbl.wt{font-size:17px}
