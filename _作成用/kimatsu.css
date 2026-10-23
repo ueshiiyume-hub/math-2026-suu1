@@ -642,3 +642,6 @@ i.nv{font-style:normal;font-family:inherit}
 .p3 .iband2{fill:#fff0b3;opacity:1}
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .p3 .iband2{fill:#5e5428} }
 :root[data-theme="dark"] .p3 .iband2{fill:#5e5428}
+.p3sg{display:inline-block;padding:0 8px;border-radius:8px;transition:background .3s,box-shadow .3s,color .3s}
+.p3sg.on{color:#e0465e;background:#fff0b3;box-shadow:0 0 0 3px #e0465e}
+.p3w .v2sub.lh{display:inline-block}

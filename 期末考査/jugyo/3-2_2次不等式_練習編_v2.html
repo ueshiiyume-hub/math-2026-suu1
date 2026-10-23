@@ -1057,6 +1057,9 @@ i.nv{font-style:normal;font-family:inherit}
 .p3 .iband2{fill:#fff0b3;opacity:1}
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .p3 .iband2{fill:#5e5428} }
 :root[data-theme="dark"] .p3 .iband2{fill:#5e5428}
+.p3sg{display:inline-block;padding:0 8px;border-radius:8px;transition:background .3s,box-shadow .3s,color .3s}
+.p3sg.on{color:#e0465e;background:#fff0b3;box-shadow:0 0 0 3px #e0465e}
+.p3w .v2sub.lh{display:inline-block}
 
 /* ===== 手書き ===== */
 #ink{position:fixed;left:0;top:0;z-index:15;pointer-events:none;touch-action:none}
@@ -1809,7 +1812,7 @@ const GARW = (x1,y1,x2,y2,s) => { const ym=(y1+y2)/2, hh=(y2-y1)*.28, hx=x2-(y2-
   return `<g class="gs" data-s="${s}"><polygon points="${x1},${ym-hh} ${hx},${ym-hh} ${hx},${y1} ${x2},${ym} ${hx},${y2} ${hx},${ym+hh} ${x1},${ym+hh}" fill="#c9dca6"/></g>`; };
 
 /* ====== このプリントのスライド ====== */
-const VER = '<i class="nv">ver</i> 2.4　2026-10-23';
+const VER = '<i class="nv">ver</i> 2.5　2026-10-23';
 /* ③-1 ver 2.0 の 土台：ver 1.4 の 部品の 写し（ver 1.4 を 直しても ver 2.0 は 変わらない） */
 
 const IMG = s => s;
@@ -2238,18 +2241,18 @@ function XSTEP(r, j, g){
   if(r===0 && up){            // 外側 2か所
     const L=[g.X(-1)-110, g.ay-48], R=[g.X(3)+110, g.ay-48];
     const c1=CMP3(L, NL(-1), le), c2=CMP3(NL(3), R, le);
-    back = `<g class="gs" data-s="4">${c1.band}${c2.band}</g>`;
+    back = `<g class="gs" data-s="6">${c1.band}${c2.band}</g>`;
     x3 = XB3(L,[g.X(-1.4),g.Y(-1.4)]) + XB3(R,[g.X(3.4),g.Y(3.4)]);
     w4 = c1.sign + c2.sign + WR3(g.X(-1)-200, g.ay+80, `x ${sg} −1`) + WR3(g.X(3)+200, g.ay+80, `3 ${sg} x`);
   } else if(r===0){           // 内側
     const X=[g.X(1), g.Y(1)+42], c1=CMP3(NL(-1), X, le), c2=CMP3(X, NL(3), le);
-    back = `<g class="gs" data-s="4">${c1.band}${c2.band}</g>`;
+    back = `<g class="gs" data-s="6">${c1.band}${c2.band}</g>`;
     x3 = XB3(X,[g.X(1),g.Y(1)]);
     w4 = c1.sign + c2.sign + WR3(g.X(-1)-170, g.ay+90, `−1 ${sg} x`) + WR3(g.X(3)+170, g.ay+90, `x ${sg} 3`);
   } else if(r===1 && j===0){  // 1 以外
     const L=[g.X(1)-150, g.ay-80], R=[g.X(1)+150, g.ay-80], N=[g.X(1), g.ay+34];
     const c1=CMP3(L, N, false), c2=CMP3(N, R, false);
-    back = `<g class="gs" data-s="4">${c1.band}${c2.band}</g>`;
+    back = `<g class="gs" data-s="6">${c1.band}${c2.band}</g>`;
     x3 = XB3(L,[g.X(-0.5),g.Y(-0.5)]) + XB3(R,[g.X(2.5),g.Y(2.5)]);
     w4 = c1.sign + c2.sign + WR3(g.X(1)-250, g.ay+20, 'x ＜ 1') + WR3(g.X(1)+250, g.ay+20, '1 ＜ x');
   } else if(r===1 && j===3){  // 1点 だけ
@@ -2263,31 +2266,33 @@ function XSTEP(r, j, g){
   } else {                    // 塗れた ところが ない
     x3 = `<text class="iwr p3wr" x="${f1(g.X(3.2))}" y="${f1(g.ay-120)}" style="fill:var(--muted)">x を 置く ところが ない</text>`;
   }
-  return {back, front:`<g class="gs" data-s="3">${x3}</g><g class="gs" data-s="4">${w4}</g>`};
+  return {back, front:`<g class="gs" data-s="5">${x3}</g><g class="gs" data-s="6">${w4}</g>`};
 }
 function Q3(r, j){
   const R = ROW3[r], up = j%2===0, eq = j>=2, sg = SIGN3[j], g = SG({...R.o}), ans = ANS3[r][j];
   const any = !(r===1 && !up) && !(r===2 && !up);
-  const dots = R.roots.map(x=>DOT3(g, x, eq, 2)).join('');
-  const w1 = `${up?'0より 大きい':'0より 小さい'}<span class="v2sub">（${up?'上':'下'}を 塗る）</span>`;
+  const dots = R.roots.map(x=>DOT3(g, x, eq, 4)).join('');
   const w2 = R.roots.length ? (eq ? 'x軸上も 塗る' : 'x軸上は 塗らない') : 'x軸上に グラフは ない';
   const am = MATHY(ans), xs = XSTEP(r, j, g);
+  /* 番：1 ${sg} 0 を 強調、2 0より 大きい／小さい、3 上／下を 塗る、4 x軸上、5 x を 置く、6 式・答え */
   return `
   <div class="card abs dcard v2 p3">${EQTAPE}
     ${LIST3(r,j)}
     <div class="v2c">
-      <div class="p3q math">${NO3[r*4+j]}　${R.f} ${sg} 0</div>
-      <div class="p3w lh" data-s="1" data-o="2"><span class="v2mk">${w1}</span></div>
-      <div class="p3w lh" data-s="2" data-o="3"><span class="v2mk">${w2}</span></div>
-      <div class="p3w lh" data-s="3" data-o="4"><span class="v2mk">${any?'塗れた ところに x を 置く':'塗れた ところは？'}</span></div>
-      <div class="p3w p3a lh" data-s="4"><span class="p3why">${WHY[r][j]} →</span><span class="v2mk ${am?'math':''}">${ans}</span></div>
+      <div class="p3q math">${NO3[r*4+j]}　${R.f} <span class="p3sg" data-o="1">${sg} 0</span></div>
+      <div class="p3w lh" data-s="2" data-o="4"><span class="v2mk">${up?'0より 大きい':'0より 小さい'}</span><span class="v2sub lh" data-s="3">（${up?'上':'下'}を 塗る）</span></div>
+      <div class="p3w lh" data-s="4" data-o="5"><span class="v2mk">${w2}</span></div>
+      <div class="p3w lh" data-s="5" data-o="6"><span class="v2mk">${any?'塗れた ところに x を 置く':'塗れた ところは？'}</span></div>
+      <div class="p3w p3a lh" data-s="6"><span class="p3why">${WHY[r][j]} →</span><span class="v2mk ${am?'math':''}">${ans}</span></div>
       <div class="p3g"><svg class="isv" width="${g.W}" height="${g.H}" viewBox="0 0 ${g.W} ${g.H}">
-        ${TINT3(g, up, 1)}${xs.back}${AX3(g)}${NUM3(g, R.roots)}<path class="icv" d="${g.d}"/>
-        ${PAINT3(g, up, false, 1)}${eq && R.roots.length ? `<g class="gs" data-s="2">${PAINT3(g, up, true)}</g>` : ''}${dots}${xs.front}</svg></div>
+        ${TINT3(g, up, 3)}${xs.back}${AX3(g)}${NUM3(g, R.roots)}<path class="icv" d="${g.d}"/>
+        ${any ? PAINT3(g, up, false, 3) : ''}${eq && R.roots.length ? `<g class="gs" data-s="4">${PAINT3(g, up, true)}</g>` : ''}${dots}${xs.front}</svg></div>
     </div>
   </div>
   ${cbar([
     `${NO3[r*4+j]} ${M(`${R.f.replace(/<sup>2<\/sup>/,'²')} ${sg} 0`)}`,
+    `右側の「${sg} 0」に 注目。`,
+    `${up?'0より 大きい':'0より 小さい'}。`,
     `${up?'0より 大きい → x軸より <b>上</b> を 塗る。':'0より 小さい → x軸より <b>下</b> を 塗る。'}${any?'':'　…でも グラフは x軸より 下に ない！'}`,
     R.roots.length ? (eq ? `＝ が ある → x軸上も 塗る → <b>黒丸</b>。` : `＝ が ない → x軸上は 塗らない → <b>白丸</b>。`) : `x軸と 交わらない ので、x軸上の 点は ない。`,
     any ? `塗れた ところに <b>x</b> を 置く。` : `塗れた ところが ない ので、x を 置けない。`,
