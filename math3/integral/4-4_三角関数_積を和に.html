@@ -208,6 +208,35 @@ body.portrait .two{grid-template-columns:1fr;gap:18px}
 .lst{display:flex;flex-direction:column;gap:14px;font-size:26px;line-height:1.6}
 .lst .k{color:var(--deep);font-weight:700}
 
+/* 終わりの パネル（最後の ページの 先） */
+#endp{position:absolute;inset:0;z-index:5;background:var(--paper);display:flex;align-items:center;justify-content:center;
+  opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s}
+#endp.open{opacity:1;visibility:visible}
+#endp .ein{width:min(980px,90%);display:flex;flex-direction:column;align-items:center;gap:20px}
+#endp .ek{font-size:20px;letter-spacing:.2em;color:var(--deep);font-weight:500}
+#endp .eh{font-size:44px;font-weight:700;letter-spacing:.2em;margin-top:-8px;padding-bottom:10px;border-bottom:3px solid var(--main)}
+#endp a{color:inherit;text-decoration:none}
+#endp .enext{display:flex;align-items:center;gap:18px;width:100%;padding:18px 26px;background:var(--pale);border:1.5px solid var(--main);
+  border-left:8px solid var(--deep);font-size:28px;transition:background .2s}
+#endp .enext:hover{background:color-mix(in srgb,var(--main) 30%,var(--paper))}
+#endp .enext .el{font-size:18px;color:var(--muted);letter-spacing:.06em}
+#endp .enext .en{background:var(--deep);color:var(--paper);font-weight:700;padding:0 12px}
+#endp .enext .et{font-weight:700}
+#endp .enext .ea{margin-left:auto;color:var(--deep);font-size:34px;font-weight:700}
+#endp .elast{font-size:24px;color:var(--muted)}
+#endp .ebtns{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+#endp .ebtns > *{font:500 19px "Noto Sans JP",sans-serif;border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:9px 18px;cursor:pointer}
+#endp .ebtns > *:hover{background:var(--pale)}
+#endp .elist{display:grid;grid-template-columns:repeat(3,1fr);gap:6px 14px;width:100%;border-top:1px solid var(--line);padding-top:14px}
+#endp .elist a{font-size:16px;padding:5px 10px;border-left:4px solid transparent;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#endp .elist a b{color:var(--deep);margin-right:.5em}
+#endp .elist a:hover{background:var(--pale)}
+#endp .elist a.me{border-left-color:var(--main);background:var(--pale);font-weight:700}
+#endp .eback{border:none;background:none;color:var(--muted);font:400 16px "Noto Sans JP",sans-serif;cursor:pointer}
+body.portrait #endp .elist{grid-template-columns:1fr 1fr}
+body.portrait #endp .enext{flex-wrap:wrap;font-size:26px}
+body.portrait #endp .eh{font-size:40px}
+
 </style>
 </head>
 <body>
@@ -216,7 +245,8 @@ body.portrait .two{grid-template-columns:1fr;gap:18px}
 <div id="ui"></div>
 <div id="jump"></div>
 <script>
-const VER = 'ver 1.0　2026-10-23';
+const VER = 'ver 1.1　2026-10-23';
+const SERIES = [{"f": "1-1_xnの不定積分", "no": "①-1", "t": "xⁿ の不定積分", "v": "1.1_2026-10-23"}, {"f": "1-2_分子が多項式の場合", "no": "①-2", "t": "分子が多項式の場合", "v": "1.2_2026-10-23"}, {"f": "1-3_三角関数の不定積分", "no": "①-3", "t": "三角関数の不定積分", "v": "1.1_2026-10-23"}, {"f": "1-4_指数関数の不定積分", "no": "①-4", "t": "指数関数の不定積分", "v": "1.1_2026-10-23"}, {"f": "1-5_合成関数の不定積分", "no": "①-5", "t": "合成関数の不定積分", "v": "1.1_2026-10-23"}, {"f": "2-1_置換積分_1次式", "no": "②-1", "t": "置換積分（1次式を t に）", "v": "1.1_2026-10-23"}, {"f": "2-2_置換積分_根号", "no": "②-2", "t": "置換積分（√ を t に）", "v": "1.1_2026-10-23"}, {"f": "2-3_置換積分_xで微分", "no": "②-3", "t": "置換積分（x で 微分する 型）", "v": "1.1_2026-10-23"}, {"f": "2-4_置換積分_分子が分母の微分", "no": "②-4", "t": "置換積分（分子が 分母の 微分）", "v": "1.1_2026-10-23"}, {"f": "3-1_部分積分", "no": "③-1", "t": "部分積分法", "v": "1.1_2026-10-23"}, {"f": "3-2_部分積分_指数と対数", "no": "③-2", "t": "部分積分（eˣ・log x）", "v": "1.1_2026-10-23"}, {"f": "4-1_分数関数の不定積分", "no": "④-1", "t": "分数関数の不定積分", "v": "1.1_2026-10-23"}, {"f": "4-2_半角と積和の公式", "no": "④-2", "t": "半角の公式・積和の公式", "v": "1.1_2026-10-23"}, {"f": "4-3_三角関数_次数を下げる", "no": "④-3", "t": "三角関数の不定積分（次数を下げる）", "v": "1.1_2026-10-23"}, {"f": "4-4_三角関数_積を和に", "no": "④-4", "t": "三角関数の不定積分（積を和に）", "v": "1.1_2026-10-23"}], ME = "4-4_三角関数_積を和に";
 /* ====== 数学Ⅲ の 部品（数学C の parts.js を 元に した 別もの） ====== */
 
 /* 数式：M`\int x^3\,dx`（\ を そのまま 書ける）。KaTeX で かく。D は 大きい 形（\displaystyle：計算の 行に 使う） */
@@ -381,8 +411,28 @@ function render(){
   jump.querySelector('.pgno').textContent = `${si+1} / ${els.length}`;
   ui.textContent = '←→ 進む・戻る　P 自動再生　F 全画面　H 表示を隠す　T 明暗　W 書きこむ';
 }
-function next(){ if(st<maxStep[si]) st++; else if(si<els.length-1){ si++; st=0; } else stopAuto(); render(); }
-function prev(){ if(st>0) st--; else if(si>0){ si--; st=maxStep[si]; } render(); }
+function next(){ if(endOpen()) return; if(st<maxStep[si]) st++; else if(si<els.length-1){ si++; st=0; } else { stopAuto(); return endShow(true); } render(); }
+function prev(){ if(endOpen()) return endShow(false); if(st>0) st--; else if(si>0){ si--; st=maxStep[si]; } render(); }
+
+/* 終わりの パネル：最後の ページの 先で 出す。次の プリント・もう一度・一覧 を 選ぶ */
+const endp = document.createElement('div'); endp.id = 'endp'; stage.appendChild(endp);
+(function(){
+  const i = SERIES.findIndex(d=>d.f===ME), nx = SERIES[i+1], pv = SERIES[i-1];
+  const url = d => `${d.f}.html?v=${encodeURIComponent(d.v)}`;
+  endp.innerHTML = `<div class="ein">
+    <div class="ek">${DECK.title}</div><div class="eh">おわり</div>
+    ${nx ? `<a class="enext" href="${url(nx)}"><span class="el">次の プリントへ</span><span class="en">${nx.no}</span><span class="et">${nx.t}</span><span class="ea">→</span></a>`
+         : `<div class="elast">この 単元の スライドは ここまで です</div>`}
+    <div class="ebtns"><button class="eagain">↺ もう一度 最初から</button>
+      ${pv ? `<a href="${url(pv)}">← 前の プリント（${pv.no}）</a>` : ''}<a href="index.html">≡ スライドの 一覧へ</a></div>
+    <div class="elist">${SERIES.map(d=>`<a class="${d.f===ME?'me':''}" href="${url(d)}"><b>${d.no}</b>${d.t}</a>`).join('')}</div>
+    <button class="eback">← 最後の ページに 戻る</button></div>`;
+  endp.querySelectorAll('.m').forEach(e=>{ try{ katex.render(e.textContent, e, KX); }catch(_){} });
+  endp.querySelector('.eagain').addEventListener('click', e=>{ e.stopPropagation(); endShow(false); si=0; st=0; render(); });
+  endp.querySelector('.eback').addEventListener('click', e=>{ e.stopPropagation(); endShow(false); });
+})();
+function endOpen(){ return endp.classList.contains('open'); }
+function endShow(on){ endp.classList.toggle('open', on); if(on){ bar.style.width='100%'; jump.querySelector('.pgno').textContent='おわり'; } else render(); }
 function stopAuto(){ if(timer){ clearInterval(timer); timer=null; } }
 function toggleAuto(){ if(timer) stopAuto(); else timer=setInterval(next,4000); }
 
@@ -396,11 +446,11 @@ document.addEventListener('keydown', e=>{
   else if(k==='f'||k==='F'){ try{ if(document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen(); }catch(_){} }
   else if(k==='h'||k==='H'){ ui.classList.toggle('hide'); bar.classList.toggle('hide'); jump.classList.toggle('hide'); }
   else if(k==='t'||k==='T') toggleTheme();
-  else if(k==='Escape') tocOpen(false);
+  else if(k==='Escape'){ tocOpen(false); if(endOpen()) endShow(false); }
 });
 /* 画面の 左 1/3 を 押すと 戻る、それ以外は 進む */
 document.addEventListener('click', e=>{
-  if(e.target.closest('a,button,#jump,#inkbar')) return;
+  if(e.target.closest('a,button,#jump,#inkbar,#endp')) return;
   stopAuto(); if(e.clientX < document.documentElement.clientWidth/3) prev(); else next();
 });
 /* 画面に 合わせる：縦長（スマホ）なら 720×1280、横長なら 1280×720 */
@@ -419,6 +469,7 @@ addEventListener('resize', fit);
 })();
 if(/final/.test(location.search)) document.body.classList.add('final');
 fit(); render();
+if(location.hash==='#end') endShow(true);
 
 /* ====== 手書き（授業中に スライドの上から 書きこむ） ======
    右上の ✏ ボタン か W キーで 書く／やめる。ペンの 後ろ（消しゴム側）で なぞると 消える。

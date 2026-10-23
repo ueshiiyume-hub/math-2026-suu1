@@ -59,8 +59,28 @@ function render(){
   jump.querySelector('.pgno').textContent = `${si+1} / ${els.length}`;
   ui.textContent = '←→ 進む・戻る　P 自動再生　F 全画面　H 表示を隠す　T 明暗　W 書きこむ';
 }
-function next(){ if(st<maxStep[si]) st++; else if(si<els.length-1){ si++; st=0; } else stopAuto(); render(); }
-function prev(){ if(st>0) st--; else if(si>0){ si--; st=maxStep[si]; } render(); }
+function next(){ if(endOpen()) return; if(st<maxStep[si]) st++; else if(si<els.length-1){ si++; st=0; } else { stopAuto(); return endShow(true); } render(); }
+function prev(){ if(endOpen()) return endShow(false); if(st>0) st--; else if(si>0){ si--; st=maxStep[si]; } render(); }
+
+/* 終わりの パネル：最後の ページの 先で 出す。次の プリント・もう一度・一覧 を 選ぶ */
+const endp = document.createElement('div'); endp.id = 'endp'; stage.appendChild(endp);
+(function(){
+  const i = SERIES.findIndex(d=>d.f===ME), nx = SERIES[i+1], pv = SERIES[i-1];
+  const url = d => `${d.f}.html?v=${encodeURIComponent(d.v)}`;
+  endp.innerHTML = `<div class="ein">
+    <div class="ek">${DECK.title}</div><div class="eh">おわり</div>
+    ${nx ? `<a class="enext" href="${url(nx)}"><span class="el">次の プリントへ</span><span class="en">${nx.no}</span><span class="et">${nx.t}</span><span class="ea">→</span></a>`
+         : `<div class="elast">この 単元の スライドは ここまで です</div>`}
+    <div class="ebtns"><button class="eagain">↺ もう一度 最初から</button>
+      ${pv ? `<a href="${url(pv)}">← 前の プリント（${pv.no}）</a>` : ''}<a href="index.html">≡ スライドの 一覧へ</a></div>
+    <div class="elist">${SERIES.map(d=>`<a class="${d.f===ME?'me':''}" href="${url(d)}"><b>${d.no}</b>${d.t}</a>`).join('')}</div>
+    <button class="eback">← 最後の ページに 戻る</button></div>`;
+  endp.querySelectorAll('.m').forEach(e=>{ try{ katex.render(e.textContent, e, KX); }catch(_){} });
+  endp.querySelector('.eagain').addEventListener('click', e=>{ e.stopPropagation(); endShow(false); si=0; st=0; render(); });
+  endp.querySelector('.eback').addEventListener('click', e=>{ e.stopPropagation(); endShow(false); });
+})();
+function endOpen(){ return endp.classList.contains('open'); }
+function endShow(on){ endp.classList.toggle('open', on); if(on){ bar.style.width='100%'; jump.querySelector('.pgno').textContent='おわり'; } else render(); }
 function stopAuto(){ if(timer){ clearInterval(timer); timer=null; } }
 function toggleAuto(){ if(timer) stopAuto(); else timer=setInterval(next,4000); }
 
@@ -74,11 +94,11 @@ document.addEventListener('keydown', e=>{
   else if(k==='f'||k==='F'){ try{ if(document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen(); }catch(_){} }
   else if(k==='h'||k==='H'){ ui.classList.toggle('hide'); bar.classList.toggle('hide'); jump.classList.toggle('hide'); }
   else if(k==='t'||k==='T') toggleTheme();
-  else if(k==='Escape') tocOpen(false);
+  else if(k==='Escape'){ tocOpen(false); if(endOpen()) endShow(false); }
 });
 /* 画面の 左 1/3 を 押すと 戻る、それ以外は 進む */
 document.addEventListener('click', e=>{
-  if(e.target.closest('a,button,#jump,#inkbar')) return;
+  if(e.target.closest('a,button,#jump,#inkbar,#endp')) return;
   stopAuto(); if(e.clientX < document.documentElement.clientWidth/3) prev(); else next();
 });
 /* 画面に 合わせる：縦長（スマホ）なら 720×1280、横長なら 1280×720 */
@@ -97,3 +117,4 @@ addEventListener('resize', fit);
 })();
 if(/final/.test(location.search)) document.body.classList.add('final');
 fit(); render();
+if(location.hash==='#end') endShow(true);
