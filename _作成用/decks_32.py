@@ -24,7 +24,7 @@ const PAINT3 = (g, up, eq, s, cls='') => { const id='c3_'+(++CL3);
   return `<clipPath id="${id}">${r}</clipPath><g clip-path="url(#${id})"><g class="ipaint ${s===undefined?'show v2still':''} ${cls}"${s!==undefined?` data-s="${s}"`:''}><path pathLength="1" d="${g.d}"/></g></g>`; };
 const TINT3 = (g, up, s) => `<rect class="v2up gs" data-s="${s}" x="10" y="${up?2:g.ay}" width="${g.W-20}" height="${up?g.ay-2:g.H-g.ay}"/>`;
 const AX3 = g => `<line class="iax" x1="10" y1="${g.ay}" x2="${g.W-16}" y2="${g.ay}"/><polygon class="iah" points="${g.W-2},${g.ay} ${g.W-20},${g.ay-9} ${g.W-20},${g.ay+9}"/><text class="ixl" x="${g.W-24}" y="${g.ay+38}">x</text>`;
-const NUM3 = (g, xs) => xs.map(x=>`<text class="inum" x="${f1(g.X(x)+(xs.length>1?(x<1?-16:16):0))}" y="${g.ay+42}" text-anchor="middle">${x<0?'−'+(-x):x}</text>`).join('');
+const NUM3 = (g, xs) => xs.map(x=>`<text class="inum" x="${f1(g.X(x)+(xs.length>1?(x<1?-20:20):0))}" y="${g.ay+42}" text-anchor="middle">${x<0?'−'+(-x):x}</text>`).join('');
 const DOT3 = (g, x, filled, s) => `<circle class="${filled?'v2bd':'v2wd'} gs" data-s="${s}" cx="${f1(g.X(x))}" cy="${g.ay}" r="10"/>`;
 
 /* 段ごとの グラフ */
@@ -46,7 +46,7 @@ const NO3 = '⑴⑵⑶⑷⑸⑹⑺⑻⑼⑽⑾⑿';
 const MATHY = a => /^[x−\d ＜＝≦,]+$/.test(a.replace(/\s/g,''));
 
 /* 左：この 段の 4問（今の 問題を 目立たせる） */
-const LIST3 = (r, j) => `<div class="p3list">${SIGN3.map((sg,k)=>`<div class="p3i${k===j?' on':''}${k<j?' done':''}"><span>${NO3[r*4+k]}</span><span class="math">${sg} 0</span></div>`).join('')}</div>`;
+const LIST3 = (r, j, j2=j) => `<div class="p3list">${SIGN3.map((sg,k)=>`<div class="p3i${k>=j&&k<=j2?' on':''}${k<j?' done':''}"><span>${NO3[r*4+k]}</span><span class="math">${sg} 0</span></div>`).join('')}</div>`;
 
 function Q3(r, j){
   const R = ROW3[r], up = j%2===0, eq = j>=2, sg = SIGN3[j], g = SG({...R.o}), ans = ANS3[r][j];
@@ -76,6 +76,41 @@ function Q3(r, j){
     `${WHY[r][j]} → 答え <b>${ans}</b>。`])}`;
 }
 
+
+/* 2問 1ページ（左右に 並べて、塗る → x軸上 → 答え を 同時に） */
+function HALF3(r, j){
+  const R = ROW3[r], up = j%2===0, eq = j>=2, sg = SIGN3[j], ans = ANS3[r][j];
+  const o = {...R.o, sc:R.o.sc*0.7, vs:R.o.vs*0.7, W:440, H:250, ay:Math.round(R.o.ay*0.86), top:8};
+  const g = SG(o), dots = R.roots.map(x=>DOT3(g, x, eq, 2)).join(''), am = MATHY(ans);
+  const w1 = `${up?'0より 大きい':'0より 小さい'}<span class="p3s2">（${up?'上':'下'}を 塗る）</span>`;
+  const w2 = R.roots.length ? (eq ? 'x軸上も 塗る' : 'x軸上は 塗らない') : 'x軸上に グラフは ない';
+  return `<div class="p3h">
+      <div class="p3hq math">${NO3[r*4+j]}　${R.f} ${sg} 0</div>
+      <div class="p3hw">
+        <div class="p3w2 lh" data-s="1" data-o="2"><span class="v2mk">${w1}</span></div>
+        <div class="p3w2 lh" data-s="2" data-o="3"><span class="v2mk">${w2}</span></div>
+        <div class="p3w2 p3a2 lh" data-s="3"><span class="p3why">${WHY[r][j]}</span><span class="v2mk ${am?'math':''}">${ans}</span></div>
+      </div>
+      <svg class="isv" width="${g.W}" height="${g.H}" viewBox="0 0 ${g.W} ${g.H}">
+        ${TINT3(g, up, 1)}${AX3(g)}${NUM3(g, R.roots)}<path class="icv" d="${g.d}"/>
+        ${PAINT3(g, up, false, 1)}${eq && R.roots.length ? `<g class="gs" data-s="2">${PAINT3(g, up, true)}</g>` : ''}${dots}</svg>
+    </div>`;
+}
+function PAIR3(r, j){
+  const R = ROW3[r], a = j, b = j+1, sa = SIGN3[a], sb = SIGN3[b];
+  const lw = j===0 ? '＞ は 上、＜ は 下 を 塗る。' : '≧ は 上、≦ は 下。　＝ が ある ので x軸上も 塗る。';
+  const x2 = R.roots.length ? (j===0 ? `＝ が ない → x軸上は 塗らない → <b>白丸</b>。` : `＝ が ある → x軸上も 塗る → <b>黒丸</b>。`) : `x軸と 交わらない ので、x軸上の 点は ない。`;
+  return `
+  <div class="card abs dcard v2 p3 p3pair">${EQTAPE}
+    ${LIST3(r,a,b)}
+    <div class="v2c p3pc">${HALF3(r,a)}${HALF3(r,b)}</div>
+  </div>
+  ${cbar([
+    `${NO3[r*4+a]} と ${NO3[r*4+b]}。　同じ グラフで 不等号 だけ ちがう。`,
+    lw + (r>0 && j===0 ? '' : ''),
+    x2,
+    `${NO3[r*4+a]} ${WHY[r][a]} → <b>${ANS3[r][a]}</b>。　${NO3[r*4+b]} ${WHY[r][b]} → <b>${ANS3[r][b]}</b>。`])}`;
+}
 /* 段の はじめ：グラフを 大きく */
 const HEAD3 = ['x軸と 2点で 交わる', 'x軸と 1点で 接する', 'x軸と 交わらない'];
 function ROWHEAD(r){
@@ -124,7 +159,7 @@ const SUM3 = `
 const PG = [{name:'表紙', html:coverF(KK3, '<span class="mk">2次不等式</span><br>練習編', '塗って 答える', 'テンポよく 12問', POL3, '塗って 答える')}];
 for(let r=0;r<3;r++){
   PG.push({name:`${['1','2','3'][r]}段目`, html:ROWHEAD(r)});
-  for(let j=0;j<4;j++) PG.push({name:`${NO3[r*4+j]} ${SIGN3[j]} 0`, html:Q3(r,j)});
+  for(let j=0;j<4;j+=2) PG.push({name:`${NO3[r*4+j]}${NO3[r*4+j+1]} ${SIGN3[j]}・${SIGN3[j+1]}`, html:PAIR3(r,j)});
   PG.push({name:`${['1','2','3'][r]}段目 書きこみ`, html:WRITE(r)});
 }
 PG.push({name:'まとめ', html:SUM3}, {name:'終', html:endF(KK3 + '　2次不等式 練習編', POL3)});
