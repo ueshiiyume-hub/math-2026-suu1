@@ -190,7 +190,31 @@ const p4b = HD(NO, '問2　⑶　くわしく', SEC) + `<div class="bd">
   `わり算は 指数の ひき算です。たとえば ${M`\frac{x^3}{x^2}=x^{3-2}=x^1`}。`,
   `${M`\sqrt{x}=x^{\frac{1}{2}}`} なので、${M`\frac{x}{\sqrt{x}}=x^{1-\frac{1}{2}}=x^{\frac{1}{2}}`}。`,
   `分母に ある ${M`\sqrt{x}`} は、上に 上げると 指数が マイナス：${M`\frac{1}{\sqrt{x}}=x^{-\frac{1}{2}}`}。`,
-  `これで ${M`x^{\alpha}`} の 形に なりました。あとは ①-1 の 公式で 積分します（問2⑶ の ページ）。`
+  `これで ${M`x^{\alpha}`} の 形に なりました。あとは ①-1 の 公式で 積分します（次の ページ）。`
+]);
+
+/* 問2⑶ の くわしく（2）：指数を 1 増やして、分数で 割る */
+const p4c = HD(NO, '問2　⑶　くわしく（積分する）', SEC) + `<div class="bd">
+  <div class="l" style="gap:14px">
+    <div class="calc" style="font-size:32px;gap:14px">
+      <div>${D`\int\left(3x^{\frac{1}{2}}-2x^{-\frac{1}{2}}\right)dx`}</div>
+      <div data-s="2">${D`=\frac{3}{\on{2}{a}{\frac{3}{2}}}x^{\on{1}{a}{\frac{3}{2}}}-\frac{2}{\on{2}{a}{\frac{1}{2}}}x^{\on{1}{a}{\frac{1}{2}}}+C`}</div>
+      <div data-s="4">${D`=\on{3}{dp}{2}x^{\frac{3}{2}}-\on{4}{dp}{4}x^{\frac{1}{2}}+C`}</div>
+      <div data-s="5">${D`=\DP{2x\sqrt{x}-4\sqrt{x}+C}`}</div>
+    </div>
+  </div>
+  <div class="r bigpt" style="flex-direction:column;gap:14px;align-items:stretch;width:440px">
+    ${PT(1, '① 指数を 1 増やす', `${D`\frac{1}{2}+1=\A{\frac{3}{2}}`}　${D`-\frac{1}{2}+1=\A{\frac{1}{2}}`}`)}
+    ${PT(3, '② 分数で 割る ＝ 逆数を 掛ける', `${D`3\div\frac{3}{2}=3\times\frac{2}{3}=2`}<div data-s="4">${D`2\div\frac{1}{2}=2\times2=4`}</div>`)}
+    ${PT(5, '③ 根号に 戻す', `${D`x^{\frac{3}{2}}=x\sqrt{x}`}　${D`x^{\frac{1}{2}}=\sqrt{x}`}`)}
+  </div>
+</div>` + CAP([
+  `指数の 形に できたので、①-1 の 公式で 積分します。`,
+  `① それぞれ 指数を 1 増やします。${M`\frac{1}{2}\to\frac{3}{2}`}、${M`-\frac{1}{2}\to\frac{1}{2}`}。`,
+  `② 増やした 指数で 割ります。係数 ${M`3`}・${M`2`} の 下に ${M`\frac{3}{2}`}・${M`\frac{1}{2}`} が きます。`,
+  `分数で 割る ことは、逆数を 掛ける こと。${M`3\div\frac{3}{2}=3\times\frac{2}{3}=2`}。`,
+  `${M`2\div\frac{1}{2}=2\times2=4`}。`,
+  `③ ${M`x^{\frac{3}{2}}=x^{1}\cdot x^{\frac{1}{2}}=x\sqrt{x}`}、${M`x^{\frac{1}{2}}=\sqrt{x}`} と 根号に 戻して 答えます。`
 ]);
 
 const p5 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:28px">
@@ -200,7 +224,7 @@ const p5 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:28px">
 
 const DECK = {title:'①-2 分子が多項式の場合', pages:[
   {name:'表紙', html:p0}, {name:'方針', html:p1}, {name:'例', html:p2},
-  {name:'問2　⑴・⑵', html:p3}, {name:'問2　⑵　くわしく', html:p3b}, {name:'問2　⑶・⑷', html:p4}, {name:'問2　⑶　くわしく', html:p4b}, {name:'まとめ', html:p5},
+  {name:'問2　⑴・⑵', html:p3}, {name:'問2　⑵　くわしく', html:p3b}, {name:'問2　⑶・⑷', html:p4}, {name:'問2　⑶　くわしく', html:p4b}, {name:'問2　⑶　くわしく（積分する）', html:p4c}, {name:'まとめ', html:p5},
 ]};
 ''')
 
