@@ -217,6 +217,50 @@ const p4c = HD(NO, '問2　⑶　くわしく（積分する）', SEC) + `<div c
   `③ ${M`x^{\frac{3}{2}}=x^{1}\cdot x^{\frac{1}{2}}=x\sqrt{x}`}、${M`x^{\frac{1}{2}}=\sqrt{x}`} と 根号に 戻して 答えます。`
 ]);
 
+/* 問2⑷ の くわしく（板書と 同じ 流れ）：① 展開して x^α に、② 積分して x>0 で log を 直す */
+const p4d = HD(NO, '問2　⑷　くわしく', SEC) + `<div class="bd">
+  <div class="l" style="gap:14px">
+    <div class="calc" style="font-size:30px;gap:12px">
+      <div>${D`\int\frac{(\sqrt{x}+2)^2}{x}\,dx`}　<span class="pbox" style="display:inline-block;padding:2px 12px;font-size:24px" data-s="1">${M`x>0`}</span></div>
+      <div data-s="2">${D`=\int\frac{x+4\sqrt{x}+4}{x}\,dx`}</div>
+      <div data-s="3">${D`=\int\left(\frac{x}{x}+\frac{4\sqrt{x}}{x}+\frac{4}{x}\right)dx`}</div>
+      <div data-s="5">${D`=\DP{\int\left(1+4x^{-\frac{1}{2}}+\frac{4}{x}\right)dx}`}</div>
+    </div>
+  </div>
+  <div class="r bigpt" style="flex-direction:column;gap:14px;align-items:stretch;width:440px">
+    ${PT(1, 'x の 範囲', `${M`\sqrt{x}`} が あり、分母が ${M`x`} → ${M`x>0`}`)}
+    ${PT(2, '展開', `${D`(\sqrt{x}+2)^2=x+4\sqrt{x}+4`}`)}
+    ${PT(4, 'わり算は 指数の ひき算', `${D`\frac{x}{x}=1`}<div>${D`\frac{\sqrt{x}}{x}=\frac{x^{\frac{1}{2}}}{x^{1}}=x^{\frac{1}{2}-1}=x^{\A{-\frac{1}{2}}}`}</div>`)}
+  </div>
+</div>` + CAP([
+  `問2⑷ を、${M`x^{\alpha}`} の 形に 直す ところまで くわしく 見ます。`,
+  `まず 注目。${M`\sqrt{x}`} が あり、分母が ${M`x`} なので ${M`x>0`} です（後で 使います）。`,
+  `分子を 展開します。${M`(\sqrt{x})^2=x`}、${M`2\cdot\sqrt{x}\cdot2=4\sqrt{x}`}。`,
+  `分子の 各項を ${M`x`} で 割り、3つの 分数に 分けます。`,
+  `${M`\frac{x}{x}=1`}。${M`\frac{\sqrt{x}}{x}`} は 指数の ひき算で ${M`x^{\frac{1}{2}-1}=x^{-\frac{1}{2}}`}。`,
+  `${M`\frac{4}{x}`} は そのまま（${M`\log`} に なる 形）。次の ページで 積分します。`
+]);
+const p4e = HD(NO, '問2　⑷　くわしく（積分する）', SEC) + `<div class="bd">
+  <div class="l" style="gap:14px">
+    <div class="calc" style="font-size:31px;gap:14px">
+      <div>${D`\int\left(1+4x^{-\frac{1}{2}}+\frac{4}{x}\right)dx`}</div>
+      <div data-s="1">${D`=x+\frac{4}{\on{2}{a}{\frac{1}{2}}}x^{\on{1}{a}{\frac{1}{2}}}+4\on{3}{a}{\log|x|}+C`}</div>
+      <div data-s="4">${D`=\DP{x+8\sqrt{x}+4\log x+C}`}</div>
+    </div>
+  </div>
+  <div class="r bigpt" style="flex-direction:column;gap:14px;align-items:stretch;width:440px">
+    ${PT(1, '① 指数を 1 増やす', `${D`-\frac{1}{2}+1=\A{\frac{1}{2}}`}`)}
+    ${PT(2, '② 分数で 割る ＝ 逆数を 掛ける', `${D`4\div\frac{1}{2}=4\times2=8`}`)}
+    ${PT(3, '③ x>0 より', `${D`\log|x|=\log x`}（絶対値は いらない）`)}
+  </div>
+</div>` + CAP([
+  `${M`1`}、${M`4x^{-\frac{1}{2}}`}、${M`\frac{4}{x}`} を 1つずつ 積分します。`,
+  `${M`1\to x`}。${M`x^{-\frac{1}{2}}`} は 指数を 1 増やして ${M`\frac{1}{2}`}。`,
+  `増やした 指数 ${M`\frac{1}{2}`} で 割る ＝ ${M`2`} を 掛ける。${M`4\div\frac{1}{2}=8`}。`,
+  `${M`\frac{4}{x}\to4\log|x|`}。でも はじめに 確かめた とおり ${M`x>0`} なので、${M`|\ \ |`} は はずせます。`,
+  `${M`x^{\frac{1}{2}}=\sqrt{x}`} と 根号に 戻して 答えます。`
+]);
+
 const p5 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:28px">
   ${BOX('方針', `<span style="font-size:30px">分子の 各項を 分母で 割ってから、項ごとに 積分する。</span>`)}
   <div class="big" style="font-size:34px">${D`\frac{2x-3}{x^2}=\frac{2}{x}-3x^{-2}`}　→　${D`\frac{1}{x}`} は ${D`\log|x|`}</div>
@@ -224,7 +268,7 @@ const p5 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:28px">
 
 const DECK = {title:'①-2 分子が多項式の場合', pages:[
   {name:'表紙', html:p0}, {name:'方針', html:p1}, {name:'例', html:p2},
-  {name:'問2　⑴・⑵', html:p3}, {name:'問2　⑵　くわしく', html:p3b}, {name:'問2　⑶・⑷', html:p4}, {name:'問2　⑶　くわしく', html:p4b}, {name:'問2　⑶　くわしく（積分する）', html:p4c}, {name:'まとめ', html:p5},
+  {name:'問2　⑴・⑵', html:p3}, {name:'問2　⑵　くわしく', html:p3b}, {name:'問2　⑶・⑷', html:p4}, {name:'問2　⑶　くわしく', html:p4b}, {name:'問2　⑶　くわしく（積分する）', html:p4c}, {name:'問2　⑷　くわしく', html:p4d}, {name:'問2　⑷　くわしく（積分する）', html:p4e}, {name:'まとめ', html:p5},
 ]};
 ''')
 

@@ -218,3 +218,4 @@ body.portrait #endp .eh{font-size:40px}
 /* 「くわしく」の ページ：右の Point を 大きく */
 .bigpt .pbox{font-size:27px;line-height:1.6} .bigpt .pbox .pl2{font-size:18px}
 .bigpt .pbox > div[data-s]{margin-top:10px}
+.bigpt .pbox > div:not([data-s]):not(.pl2){margin-top:8px}
