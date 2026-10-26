@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>数学C 複素数平面 プリントの 解答</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* 数学C のデザイン（案A）：薄い緑・ゴシック体・まっすぐな カード */
+:root{
+  --bg:#f6f9f7; --paper:#ffffff; --ink:#2d3833; --muted:#6b7a72;
+  --main:#8cc5a5; --deep:#3f7d5e; --pale:#eaf4ee; --line:#c6dfd0; --grid:#e1ebe5; --axis:#4a5a52;
+  --shadow:0 1px 2px rgba(40,70,55,.05),0 4px 14px rgba(40,70,55,.06);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1f2623; --paper:#29312d; --ink:#e6eee9; --muted:#a3b3aa;
+    --main:#7fb99a; --deep:#a8d8bd; --pale:#2f3d36; --line:#40524a; --grid:#2e3a34; --axis:#c5d3cb;
+    --shadow:0 1px 2px rgba(0,0,0,.2),0 4px 14px rgba(0,0,0,.25);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1f2623; --paper:#29312d; --ink:#e6eee9; --muted:#a3b3aa;
+  --main:#7fb99a; --deep:#a8d8bd; --pale:#2f3d36; --line:#40524a; --grid:#2e3a34; --axis:#c5d3cb;
+  --shadow:0 1px 2px rgba(0,0,0,.2),0 4px 14px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);
+  font-family:"Noto Sans JP","Hiragino Sans","Yu Gothic",Meiryo,sans-serif;font-weight:400;line-height:1.6}
+main{max-width:960px;margin:0 auto;padding:56px 16px 64px}
+.kicker{display:inline-block;font-size:14px;font-weight:500;letter-spacing:.2em;color:var(--deep);border-bottom:2px solid var(--main);padding-bottom:6px}
+h1{font-size:clamp(28px,5vw,40px);font-weight:700;letter-spacing:.06em;margin:16px 0 4px}
+.lead{color:var(--muted);font-size:15px;margin:0 0 36px}
+.toplink{display:inline-block;margin-bottom:20px;font-size:14px;color:var(--deep);text-decoration:none;border-bottom:1px solid var(--line)}
+.list{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,280px),1fr));gap:16px}
+.card{display:block;background:var(--paper);border:1px solid var(--line);border-left:5px solid var(--main);box-shadow:var(--shadow);
+  padding:16px 18px;color:inherit;text-decoration:none;transition:border-color .2s,background .2s}
+.card:hover{background:var(--pale);border-left-color:var(--deep)}
+.card:focus-visible{outline:2px solid var(--deep);outline-offset:3px}
+.no{font-size:13px;font-weight:500;letter-spacing:.1em;color:var(--deep)}
+.title{font-size:20px;font-weight:700;margin:2px 0 4px}
+.desc{font-size:14px;color:var(--muted);margin:0}
+.empty{grid-column:1/-1;background:var(--paper);border:1px dashed var(--line);padding:28px 20px;text-align:center;color:var(--muted);font-size:15px}
+#themebtn{position:fixed;z-index:26;top:12px;right:12px;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--paper);color:var(--ink);font-size:18px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;box-shadow:var(--shadow)}
+
+/* ===== 解答の ページ ===== */
+:root{--ans:#c62828}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--ans:#ff8a80}}
+:root[data-theme="dark"]{--ans:#ff8a80}
+.katex{font-size:1.1em}
+.toc{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr));gap:8px;margin:0 0 40px}
+.toc a{display:block;background:var(--paper);border:1px solid var(--line);border-left:5px solid var(--main);padding:9px 14px;color:inherit;text-decoration:none;font-size:15px}
+.toc a:hover{background:var(--pale);border-left-color:var(--deep)}
+.toc b{color:var(--deep);margin-right:.6em}
+section{margin:0 0 56px;scroll-margin-top:8px}
+section h2{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:12px;margin:0 0 14px;padding:10px 4px;background:var(--bg);
+  font-size:21px;border-bottom:2px solid var(--main)}
+section h2 .no{background:var(--deep);color:var(--paper);font-size:16px;padding:1px 10px;flex:none}
+section h2 .up{margin-left:auto;flex:none;font-size:13px;font-weight:500;color:var(--deep);text-decoration:none;border:1px solid var(--line);background:var(--paper);padding:3px 10px}
+section h3{font-size:17px;color:var(--deep);margin:22px 0 10px;padding-left:10px;border-left:5px solid var(--deep)}
+section h3 small{font-size:14px;color:var(--muted);font-weight:400}
+.box{border:1.5px solid var(--main);background:var(--paper);margin:0 0 10px}
+.box .bl{background:var(--pale);color:var(--deep);font-weight:700;font-size:14px;padding:3px 14px;border-bottom:1px solid var(--line)}
+.box .bc{padding:10px 16px;line-height:2.1;font-size:16px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:820px){.grid{grid-template-columns:1fr}}
+.it{background:var(--paper);border:1px solid var(--line);padding:12px 14px;min-width:0}
+.it .q{display:flex;align-items:center;gap:10px;font-size:16px}
+.it .tag{color:var(--deep);font-weight:700}
+.ans{color:var(--ans);padding-left:1.6em;margin-top:4px;overflow-x:auto}
+.ln{padding:3px 0;font-size:15px}
+.note{border:1.5px solid var(--ans);color:var(--ans);font-size:14px;line-height:1.9;padding:6px 12px;margin:10px 0 0 1.6em}
+.note .nt{font-weight:700}
+.note.add{border-color:#c8642a;color:inherit;background:color-mix(in srgb,#c8642a 8%,var(--paper))}
+.note.add .nt{color:#c8642a}
+.nadd{margin-left:.6em;font-size:11px;font-weight:700;color:#fff;background:#c8642a;padding:1px 6px;vertical-align:1px}
+.der{background:var(--paper);border:1px solid var(--line);padding:10px 16px;line-height:2.3;font-size:15px;overflow-x:auto}
+.fill{color:var(--ans);font-weight:700;border-bottom:2px solid var(--ans);padding:0 .3em}
+.ver{font-size:13px;color:var(--muted);margin-top:-28px;margin-bottom:28px}
+/* 数学C：表・図・本文 */
+.tb{display:grid;border-top:2px solid var(--main);background:var(--paper);margin:0 0 12px;font-size:15px;overflow-x:auto}
+.tb > div{padding:7px 10px;border-bottom:1px solid var(--line);line-height:1.8}
+.tb > .th{background:var(--pale);color:var(--deep);font-weight:700;font-size:13px}
+.tx{background:var(--paper);border:1px solid var(--line);padding:10px 16px;line-height:2.1;font-size:15px;margin:0 0 12px;overflow-x:auto}
+.it .q{flex-wrap:wrap}
+.figs{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px;padding-left:1.6em}
+svg.pl{max-width:100%;height:auto;background:var(--paper)}
+svg.pl .gd{stroke:var(--grid);stroke-width:1}
+svg.pl .ax{stroke:var(--axis);stroke-width:1.6;fill:none}
+svg.pl .axh{fill:var(--axis)}
+svg.pl text{font-family:"KaTeX_Main","Times New Roman",serif;font-size:15px;fill:var(--ink)}
+svg.pl text.a{fill:var(--ans);font-weight:700}
+svg.pl .pt{fill:var(--ink)} svg.pl .pt.a{fill:var(--ans)}
+svg.pl .vc{stroke:var(--ink);stroke-width:2;fill:none} svg.pl .vc.a{stroke:var(--ans)} svg.pl .vc.d{stroke-dasharray:5 4;stroke:var(--muted)}
+svg.pl .uc{fill:none;stroke:var(--line);stroke-width:1.5}
+svg.pl .pg{fill:var(--ans);fill-opacity:.08;stroke:var(--ans);stroke-width:2}
+.totop{position:fixed;right:14px;bottom:14px;z-index:5;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--paper);
+  color:var(--deep);font-size:20px;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:var(--shadow)}
+main{max-width:1100px}
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+
+<!-- 明るい／暗い の 切りかえ（スマホでも 押せる ボタン）。選んだ ものは この サイト 全体で 覚える -->
+<script>
+(function(){
+  var d=document.documentElement;
+  try{ var t=localStorage.getItem('theme'); if(t) d.dataset.theme=t; }catch(e){}
+  function isDark(){ return d.dataset.theme ? d.dataset.theme==='dark' : matchMedia('(prefers-color-scheme: dark)').matches; }
+  window.toggleTheme=function(){ d.dataset.theme = isDark() ? 'light' : 'dark'; try{ localStorage.setItem('theme', d.dataset.theme); }catch(e){} paint(); };
+  function paint(){ var b=document.getElementById('themebtn'); if(b){ b.textContent = isDark() ? '☀' : '☾'; b.title = isDark() ? '明るくする' : '暗くする'; } }
+  document.addEventListener('DOMContentLoaded',function(){
+    var b=document.createElement('button'); b.id='themebtn';
+    b.addEventListener('click',function(e){ e.stopPropagation(); e.preventDefault(); toggleTheme(); });
+    document.body.appendChild(b); paint();
+  });
+})();
+</script>
+</head>
+<body>
+<main id="top">
+  <a class="toplink" href="index.html">← 複素数平面の スライドの 一覧へ</a><br>
+  <span class="kicker">数学C　複素数平面</span>
+  <h1>プリントの 解答</h1>
+  <p class="lead">プリント（複素数平面）の 解答です。番号を 選ぶと その 解答に 飛びます。<br>
+    <span style="color:var(--ans)">赤字</span>＝解答・赤枠＝ポイント、<span style="color:#c8642a">オレンジの 枠</span>＝授業の 板書から あとで 足した 説明</p>
+  <p class="ver">{{VER}}</p>
+  <nav class="toc">{{TOC}}</nav>
+  {{BODY}}
+</main>
+<a class="totop" href="#top" title="目次へ">↑</a>
+<script>
+/* 数式：<span class="m">TeX</span>（d は 大きい 形） */
+document.querySelectorAll('.m').forEach(e=>{
+  if(typeof katex==='undefined') return;
+  const t = (e.classList.contains('d') ? '\\displaystyle ' : '') + e.textContent;
+  try{ katex.render(t, e, {throwOnError:false, strict:false, macros:{'\\abs':'\\left|#1\\right|'}}); }catch(_){}
+});
+</script>
+</body>
+</html>
