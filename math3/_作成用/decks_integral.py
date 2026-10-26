@@ -314,7 +314,7 @@ const p3 = gridPage({no:NO, sec:SEC, title:'問3', q:'次の 不定積分を 求
   `${M`\cos x\to\sin x`}、${M`\frac{1}{\cos^2x}\to\tan x`}。`,
   `⑶ 展開すると ${M`\tan x\cos x=\frac{\sin x}{\cos x}\cdot\cos x=\sin x`}。（次の ページで くわしく）`,
   `${M`2\cos x\to2\sin x`}、${M`-\sin x\to\cos x`}。`,
-  `⑷ ${M`\tan^2x=\frac{1}{\cos^2x}-1`} を 使うと、${M`\frac{1}{\cos^2x}-1-\frac{2}{\cos^2x}=-\frac{1}{\cos^2x}-1`}。`,
+  `⑷ ${M`\tan^2x=\frac{1}{\cos^2x}-1`} を 使うと、${M`\frac{1}{\cos^2x}-1-\frac{2}{\cos^2x}=-\frac{1}{\cos^2x}-1`}。（⑶・⑷ は 次の ページから くわしく）`,
   `${M`-\frac{1}{\cos^2x}\to-\tan x`}、${M`-1\to-x`}。`
 ]});
 
@@ -341,13 +341,36 @@ const p3b = HD(NO, '問3　⑶　くわしく', SEC) + `<div class="bd">
   `③ ${M`2\cos x\to2\sin x`}。${M`\sin x`} の 積分は ${M`-\cos x`} なので、${M`-\sin x`} の 積分は ${M`+\cos x`}。`
 ]);
 
+/* 問3⑷ の くわしく（板書と 同じ 流れ） */
+const p3c = HD(NO, '問3　⑷　くわしく', SEC) + `<div class="bd">
+  <div class="l" style="gap:14px">
+    <div class="calc" style="font-size:32px;gap:16px">
+      <div>${D`\int\left(\on{1}{a}{\tan^2x}-\frac{2}{\cos^2x}\right)dx`}</div>
+      <div data-s="2">${D`=\int\left(\on{2}{a}{\frac{1}{\cos^2x}-1}-\frac{2}{\cos^2x}\right)dx`}</div>
+      <div data-s="3">${D`=\int\left(\on{3}{a}{-\frac{1}{\cos^2x}}-1\right)dx`}</div>
+      <div data-s="4">${D`=\DP{-\tan x-x+C}`}</div>
+    </div>
+  </div>
+  <div class="r bigpt" style="flex-direction:column;gap:14px;align-items:stretch;width:440px">
+    ${PT(1, '① tan²x の 直し方', `${D`1+\tan^2x=\frac{1}{\cos^2x}`}<div>${D`\tan^2x=\A{\frac{1}{\cos^2x}-1}`}</div>`)}
+    ${PT(3, '② 1/cos²x を まとめる', `${D`\frac{1}{\cos^2x}-\frac{2}{\cos^2x}=\A{-\frac{1}{\cos^2x}}`}`)}
+    ${PT(4, '③ 積分', `${M`\int\frac{dx}{\cos^2x}=\tan x`}　${M`\int1\,dx=x`}`)}
+  </div>
+</div>` + CAP([
+  `問3⑷ を くわしく 見ます。${M`\tan^2x`} の 積分の 公式は ありません。`,
+  `① 数学Ⅱ の 式 ${M`1+\tan^2x=\frac{1}{\cos^2x}`} から、${M`\tan^2x=\frac{1}{\cos^2x}-1`}（例⑵ と 同じ）。`,
+  `${M`\tan^2x`} を 置きかえます。`,
+  `② ${M`\frac{1}{\cos^2x}`} どうしを まとめます。${M`1-2=-1`} なので ${M`-\frac{1}{\cos^2x}`}。`,
+  `③ ${M`-\frac{1}{\cos^2x}\to-\tan x`}、${M`-1\to-x`}。`
+]);
+
 const p4 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:26px">
   ${BOX('公式', `${D`\int\sin x\,dx=-\cos x+C`}　　${D`\int\cos x\,dx=\sin x+C`}　　${D`\int\frac{dx}{\cos^2x}=\tan x+C`}`)}
   <div class="q" style="font-size:28px">${M`\tan^2x`} は ${D`\frac{1}{\cos^2x}-1`} に 直してから 積分する</div>
 </div>` + CAP([`①-4 では、指数関数の 不定積分を 学びます。`]);
 
 const DECK = {title:'①-3 三角関数の不定積分', pages:[
-  {name:'表紙', html:p0}, {name:'公式', html:p1}, {name:'例', html:p2}, {name:'問3', html:p3}, {name:'問3　⑶　くわしく', html:p3b}, {name:'まとめ', html:p4},
+  {name:'表紙', html:p0}, {name:'公式', html:p1}, {name:'例', html:p2}, {name:'問3', html:p3}, {name:'問3　⑶　くわしく', html:p3b}, {name:'問3　⑷　くわしく', html:p3c}, {name:'まとめ', html:p4},
 ]};
 ''')
 
