@@ -373,19 +373,21 @@ d6(Rx, 678, ['12', P('2'), ' − 4×4×9'], '144 − 144 = 0', '実数解の個�
 # 背景＝プリントの ページ（そのまま）、その上に 問題ごとの 答えの SVG を 同じ 位置で 重ねる
 import os, json
 os.makedirs(os.path.join(OUT, 'svg'), exist_ok=True)
-NP = max(g[0] for g in GROUPS) + 1
-pages = []
-for i in range(NP):
+# 答えの ある ページだけ 出す（No.7〜 の 解答を 足しても、ページ番号＝プリントの No. の まま）
+USED = sorted({g[0] for g in GROUPS})
+pages = {}
+for i in USED:
     p = src[i]
     open(os.path.join(OUT, 'svg', f'p{i + 1}.svg'), 'w', encoding='utf-8').write(p.get_svg_image())
-    pages.append({'w': p.rect.width, 'h': p.rect.height, 'g': []})
+    pages[i] = {'no': i + 1, 'w': p.rect.width, 'h': p.rect.height, 'g': []}
 for n, (i, label, k, pcs) in enumerate(GROUPS):
     a = ans[k]
     name = f'p{i + 1}_{n + 1:02d}.svg'
     open(os.path.join(OUT, 'svg', name), 'w', encoding='utf-8').write(a.get_svg_image())
     pages[i]['g'].append({'f': name, 'label': label, 'p': pcs})
     src[i].show_pdf_page(src[i].rect, ans, k)        # 答えを 書きこんだ pdf も 作る
-src.select(range(NP))
+pages = [pages[i] for i in USED]
+src.select(USED)
 src.subset_fonts()
 if len(sys.argv) > 5:      # 答えを 書きこんだ pdf は 非公開リポジトリへ（公開リポジトリに プリントの pdf は 置かない）
     src.save(sys.argv[5], garbage=3, deflate=True)

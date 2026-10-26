@@ -41,7 +41,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:"Hiragino Kaku G
   <button class="b" id="hide" type="button">答えを かくす</button>
   <button class="b" id="big" type="button">大きく</button>
 </div>
-<a class="top" href="../目次.html">← 期末考査の 目次へ</a>
+<a class="top" href="目次.html">← 解答の 目次へ</a>
 <p class="lead"><b>赤い 字</b>が 答えです。プリントと 同じ 場所に 書いて あるよ。<br>
 「答えを かくす」を 押すと、答えの 場所が <span style="color:#c97a1f;font-weight:700">？</span> の 枠に なります。自分で 解いてから 枠を タップすると、その 枠の 答えが 見られます（もう一度 タップで かくす）。</p>
 <div class="wrap" id="wrap"></div>
@@ -51,11 +51,11 @@ const V = '{{VER}}';
 const wrap = document.getElementById('wrap'), nos = document.getElementById('nos');
 const hits = [];
 PAGES.forEach((p, i) => {
-  const id = 'p' + (i + 1);
-  nos.insertAdjacentHTML('beforeend', `<a href="#${id}">No.${i + 1}</a> `);
+  const id = 'p' + p.no;
+  nos.insertAdjacentHTML('beforeend', `<a href="#${id}">No.${p.no}</a> `);
   const pct = (v, w) => (v / w * 100).toFixed(3) + '%';
-  let h = `<div class="no">No.${i + 1}</div><div class="sheet" id="${id}" style="aspect-ratio:${p.w}/${p.h}">`;
-  h += `<img src="svg/p${i + 1}.svg?v=${V}" alt="プリント No.${i + 1}" loading="${i ? 'lazy' : 'eager'}">`;
+  let h = `<div class="no">No.${p.no}</div><div class="sheet" id="${id}" style="aspect-ratio:${p.w}/${p.h}">`;
+  h += `<img src="svg/p${p.no}.svg?v=${V}" alt="プリント No.${p.no}" loading="${i ? 'lazy' : 'eager'}">`;
   // 答えは 枠（穴うめの 箱・書く 行）ごとに、問題の SVG を その 枠の 形に 切りぬいて 重ねる
   p.g.forEach(g => g.p.forEach(([x0, y0, x1, y1]) => {
     const pad = 2, L = x0 - pad, T = y0 - pad, R = x1 + pad, B = y1 + pad;
