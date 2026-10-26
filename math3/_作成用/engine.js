@@ -4,7 +4,13 @@
 const stage = document.getElementById('stage');
 const names = DECK.pages.map(p=>p.name);
 document.title = DECK.title;
-stage.innerHTML = DECK.pages.map(p=>`<section class="slide">${p.html}</section>`).join('');
+stage.innerHTML = DECK.pages.map(p=>`<section class="slide${p.add?' addp':''}">${p.html}</section>`).join('');
+/* 追加解説（授業の 板書から あとで 足した ページ）：{name, html, add:'10/26'} → 見出しの 横に 印 */
+stage.querySelectorAll('.slide').forEach((el,i)=>{
+  const a = DECK.pages[i].add; if(!a) return;
+  const h = el.querySelector('.hd h2');
+  if(h) h.insertAdjacentHTML('afterend', `<span class="addb">追加解説${a===true?'':`<small>${a}</small>`}</span>`);
+});
 
 /* 数式：<span class="m">TeX</span> を KaTeX で かく。\A{…}＝橙（変わる ところ）、\B{…}＝紫（置きかえ t）、\DP{…}＝深い青（答え）、\on{番}{a|b|dp}{…}＝その番で 色が つく */
 const KX = {throwOnError:false, trust:true, strict:false, macros:{
@@ -21,16 +27,53 @@ const nums = e => ['s','e','o','m'].map(k=>e.dataset[k]).filter(v=>v!==undefined
 const maxStep = els.map(el => Math.max(0, ...[...el.querySelectorAll('[data-s],[data-e],[data-o],[data-m]')].flatMap(nums)));
 
 const bar = document.getElementById('bar'), ui = document.getElementById('ui'), jump = document.getElementById('jump');
-jump.innerHTML = `<button id="themebtn" title="明るく／暗く（T）"></button><button class="tocbtn" title="目次">≡ 目次</button><span class="pgno"></span>
+jump.innerHTML = `<button id="fsbtn" title="全画面（F）"></button><button id="themebtn" title="明るく／暗く（T）"></button><button class="tocbtn" title="目次">≡ 目次</button><span class="pgno"></span>
   <div class="tocbg"></div><div class="tocp"><div class="toch"><b>${DECK.title}</b><button class="tocx" title="閉じる">✕</button></div>
   <a class="home" href="index.html">← スライドの 一覧へ</a>
-  <div class="tocl">${names.map((n,i)=>`<button class="ti" data-i="${i}">${n}</button>`).join('')}</div></div>`;
+  <div class="tocl">${names.map((n,i)=>`<button class="ti" data-i="${i}">${n}${DECK.pages[i].add?'<span class="tadd">追加</span>':''}</button>`).join('')}</div></div>`;
 window.paintTheme = () => { const b=document.getElementById('themebtn'); b.textContent = isDark() ? '☀' : '☾'; };
 paintTheme();
+
+/* ====== 全画面 ======
+   ボタン（右下）か F キーで 切りかえ。ブラウザの きまりで、ページを 移ったり 読み込み直したり すると 全画面は いったん 解除される。
+   そこで 全画面の まま 移った ことを 覚えておき（sessionStorage）、次の ページで 最初に 画面に ふれた ときに 自動で 全画面に 戻す。 */
+const FSD = document.documentElement;
+const fsOn = () => !!(document.fullscreenElement || document.webkitFullscreenElement);
+const fsCan = !!(FSD.requestFullscreen || FSD.webkitRequestFullscreen);
+let leaving = false;
+const fsSave = v => { try{ sessionStorage.setItem('fs', v ? '1' : '0'); }catch(_){} };
+const fsWanted = () => { try{ return sessionStorage.getItem('fs')==='1'; }catch(_){ return false; } };
+function fsReq(){ const f = FSD.requestFullscreen || FSD.webkitRequestFullscreen; try{ const p = f && f.call(FSD); if(p && p.catch) p.catch(()=>{}); }catch(_){} }
+function fsExit(){ const f = document.exitFullscreen || document.webkitExitFullscreen; try{ const p = f && f.call(document); if(p && p.catch) p.catch(()=>{}); }catch(_){} }
+function toggleFS(){ fsHint(false); if(fsOn()) fsExit(); else fsReq(); }
+function paintFS(){ const b = document.getElementById('fsbtn'); if(!b) return;
+  b.style.display = fsCan ? '' : 'none';
+  b.innerHTML = fsOn() ? '<svg viewBox="0 0 24 24"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>'
+                       : '<svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>';
+  b.title = fsOn() ? '全画面を やめる（F）' : '全画面（F）'; }
+['fullscreenchange','webkitfullscreenchange'].forEach(ev=>document.addEventListener(ev, ()=>{ if(!leaving) fsSave(fsOn()); paintFS(); setTimeout(fit, 50); }));
+/* ページを 離れる とき（次の プリント・一覧・読み込み直し）：全画面だったか どうかを 覚える */
+addEventListener('pagehide', ()=>{ leaving = true; });
+addEventListener('beforeunload', ()=>{ leaving = true; fsSave(fsOn()); });
+document.addEventListener('click', e=>{ if(e.target.closest('a[href]')){ leaving = true; fsSave(fsOn()); } }, true);
+/* 全画面の まま 来た ときは、最初の タップ・キーで 全画面に 戻す（ブラウザは 操作なしの 全画面を 許さない） */
+const fsh = document.createElement('div'); fsh.id = 'fshint'; fsh.textContent = '画面に ふれると 全画面に 戻ります'; document.body.appendChild(fsh);
+function fsHint(on){ fsh.classList.toggle('show', on); }
+if(fsCan && fsWanted() && !fsOn()){
+  fsHint(true);
+  let swallow = false;   // 戻す ための タップでは ページを 進めない
+  addEventListener('click', e=>{ if(swallow){ swallow = false; if(!e.target.closest('a,button')){ e.stopPropagation(); e.preventDefault(); } } }, true);
+  const back = e => { if(e.type==='pointerdown') swallow = true;
+    if(e.type==='keydown' && e.key==='Escape'){ fsSave(false); } else fsReq();
+    fsHint(false); ['pointerdown','keydown'].forEach(t=>removeEventListener(t, back, true)); };
+  ['pointerdown','keydown'].forEach(t=>addEventListener(t, back, true));
+}
+paintFS();
 const tocOpen = on => { jump.classList.toggle('open', on); if(on){ const c=jump.querySelector('.ti.on'); if(c) c.scrollIntoView({block:'center'}); } };
 jump.addEventListener('click', e=>{
   if(e.target.closest('a')) return;
   e.stopPropagation();
+  if(e.target.closest('#fsbtn')) return toggleFS();
   if(e.target.closest('#themebtn')) return toggleTheme();
   if(e.target.closest('.tocbtn')) return tocOpen(!jump.classList.contains('open'));
   if(e.target.closest('.tocx,.tocbg')) return tocOpen(false);
@@ -91,7 +134,7 @@ document.addEventListener('keydown', e=>{
   else if(k==='Home'){ stopAuto(); si=0; st=0; render(); }
   else if(k==='End'){ stopAuto(); si=els.length-1; st=maxStep[si]; render(); }
   else if(k==='p'||k==='P') toggleAuto();
-  else if(k==='f'||k==='F'){ try{ if(document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen(); }catch(_){} }
+  else if(k==='f'||k==='F') toggleFS();
   else if(k==='h'||k==='H'){ ui.classList.toggle('hide'); bar.classList.toggle('hide'); jump.classList.toggle('hide'); }
   else if(k==='t'||k==='T') toggleTheme();
   else if(k==='Escape'){ tocOpen(false); if(endOpen()) endShow(false); }

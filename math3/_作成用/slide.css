@@ -219,3 +219,15 @@ body.portrait #endp .eh{font-size:40px}
 .bigpt .pbox{font-size:27px;line-height:1.6} .bigpt .pbox .pl2{font-size:18px}
 .bigpt .pbox > div[data-s]{margin-top:10px}
 .bigpt .pbox > div:not([data-s]):not(.pl2){margin-top:8px}
+
+/* 全画面ボタン */
+#jump #fsbtn{width:38px;padding:0;justify-content:center}
+#jump #fsbtn svg{width:20px;height:20px;fill:none;stroke:var(--ink);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+#fshint{position:fixed;left:50%;top:14px;transform:translate(-50%,-10px);z-index:30;background:var(--deep);color:var(--paper);
+  font:500 15px "Noto Sans JP",sans-serif;padding:8px 18px;opacity:0;pointer-events:none;transition:opacity .3s,transform .3s}
+#fshint.show{opacity:.95;transform:translate(-50%,0)}
+/* 追加解説（授業の 板書から あとで 足した ページ）の 印 */
+.hd .addb{background:var(--a);color:#fff;font-size:16px;font-weight:700;letter-spacing:.12em;padding:3px 12px;white-space:nowrap}
+.hd .addb small{font-size:13px;font-weight:500;letter-spacing:.04em;margin-left:.6em;opacity:.9}
+.slide.addp .hd{border-bottom-color:var(--a)}
+#jump .ti .tadd{margin-left:.5em;font-size:12px;font-weight:700;color:#fff;background:var(--a);padding:1px 6px;vertical-align:1px}

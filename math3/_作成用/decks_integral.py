@@ -268,7 +268,7 @@ const p5 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:28px">
 
 const DECK = {title:'①-2 分子が多項式の場合', pages:[
   {name:'表紙', html:p0}, {name:'方針', html:p1}, {name:'例', html:p2},
-  {name:'問2　⑴・⑵', html:p3}, {name:'問2　⑵　くわしく', html:p3b}, {name:'問2　⑶・⑷', html:p4}, {name:'問2　⑶　くわしく', html:p4b}, {name:'問2　⑶　くわしく（積分する）', html:p4c}, {name:'問2　⑷　くわしく', html:p4d}, {name:'問2　⑷　くわしく（積分する）', html:p4e}, {name:'まとめ', html:p5},
+  {name:'問2　⑴・⑵', html:p3}, {name:'問2　⑵　くわしく', html:p3b, add:'10/26'}, {name:'問2　⑶・⑷', html:p4}, {name:'問2　⑶　くわしく', html:p4b, add:'10/26'}, {name:'問2　⑶　くわしく（積分する）', html:p4c, add:'10/26'}, {name:'問2　⑷　くわしく', html:p4d, add:'10/26'}, {name:'問2　⑷　くわしく（積分する）', html:p4e, add:'10/26'}, {name:'まとめ', html:p5},
 ]};
 ''')
 
@@ -370,7 +370,7 @@ const p4 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:26px">
 </div>` + CAP([`①-4 では、指数関数の 不定積分を 学びます。`]);
 
 const DECK = {title:'①-3 三角関数の不定積分', pages:[
-  {name:'表紙', html:p0}, {name:'公式', html:p1}, {name:'例', html:p2}, {name:'問3', html:p3}, {name:'問3　⑶　くわしく', html:p3b}, {name:'問3　⑷　くわしく', html:p3c}, {name:'まとめ', html:p4},
+  {name:'表紙', html:p0}, {name:'公式', html:p1}, {name:'例', html:p2}, {name:'問3', html:p3}, {name:'問3　⑶　くわしく', html:p3b, add:'10/26'}, {name:'問3　⑷　くわしく', html:p3c, add:'10/26'}, {name:'まとめ', html:p4},
 ]};
 ''')
 
