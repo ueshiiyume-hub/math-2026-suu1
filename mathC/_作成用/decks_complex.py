@@ -1285,3 +1285,92 @@ const DECK = {title:'③-2 1のn乗根', pages:[
   {name:'問17　1の4乗根', html:p3}, {name:'問18　図示と 図形', html:p4}, {name:'まとめ', html:p5},
 ]};
 ''')
+
+# ---------------------------------------------------------------- ③-3 【発展】回転の応用
+DECKS['3-3_回転の応用'] = ('③-3 【発展】回転の応用', r'''
+const NO = '③-3', SEC = '数学C　複素数平面';
+const IT = v => `<tspan class="it">${v}</tspan>`;
+const S3 = Math.sqrt(3);
+const POLY = (g, pts, n, cls) => `<polygon class="${cls||'tri'}" points="${pts.map(([a,b])=>`${g.X(a).toFixed(1)},${g.Y(b).toFixed(1)}`).join(' ')}"${n==null?'':` data-s="${n}"`}/>`;
+
+const p0 = coverSlide({kicker:'数学C　複素数平面', no:NO, title:'【発展】回転の応用', sub:'回転で 図形の 頂点を 求める'});
+
+/* 例：正三角形 OAB */
+const g1 = PL({x0:-2, x1:4, y0:-2, y1:4, u:62, ticks:false});
+const A = [2,2], B1 = [1-S3, 1+S3], B2 = [1+S3, 1-S3];
+const p1 = HD(NO, '例　正三角形の 頂点', SEC) + `<div class="bd">
+  <div class="l" style="gap:10px">
+    <div class="q" style="font-size:24px"><span class="tag">例</span>原点 O と 点 ${M`\mathrm{A}(2+2i)`} に 対して、<br>${M`\triangle\mathrm{OAB}`} が 正三角形と なる 点 B を 表す 複素数を 求めよ。</div>
+    <div class="calc" style="font-size:24px;gap:6px">
+      <div data-s="1">点 B は、点 A を 原点の まわりに ${M`\IM{60^\circ}`} または ${M`\IM{-60^\circ}`} 回転した 点</div>
+      <div data-s="2">${M`60^\circ`}：${M`(2+2i)\left(\tfrac{1}{2}+\tfrac{\sqrt{3}}{2}i\right)=\DP{(1-\sqrt{3})+(1+\sqrt{3})i}`}</div>
+      <div data-s="3">${M`-60^\circ`}：${M`(2+2i)\left(\tfrac{1}{2}-\tfrac{\sqrt{3}}{2}i\right)=\DP{(1+\sqrt{3})+(1-\sqrt{3})i}`}</div>
+    </div>
+    <div class="pbox" style="font-size:20px;line-height:1.7"><div class="pl2">Point</div>${M`\cos60^\circ=\tfrac{1}{2},\ \sin60^\circ=\tfrac{\sqrt{3}}{2}`}<br>${M`\cos(-\theta)=\cos\theta`}、${M`\sin(-\theta)=-\sin\theta`}</div>
+  </div>
+  <div class="r">${g1.svg(POLY(g1, [[0,0],A,B1], 4) + POLY(g1, [[0,0],A,B2], 4)
+    + g1.arr(0,0,...A,null) + g1.dot(...A, 'A', null, {given:true, pos:'ne'})
+    + g1.rot(...A, 60, 1) + g1.rot(...A, -60, 1)
+    + g1.ang(105, 2, {from:45, r:46, lab:'60°', lr:22, d:.2}) + g1.dot(...B1, 'B', 2, {pos:'nw'})
+    + g1.dot(...B2, 'B', 3, {pos:'se'}) + `<path class="arc dr" pathLength="1" d="M${(g1.X(0)+56*Math.cos(Math.PI/4)).toFixed(1)} ${(g1.Y(0)-56*Math.sin(Math.PI/4)).toFixed(1)} A56 56 0 0 1 ${(g1.X(0)+56*Math.cos(-Math.PI/12)).toFixed(1)} ${(g1.Y(0)-56*Math.sin(-Math.PI/12)).toFixed(1)}" data-s="3"/>`
+    + g1.text(1.25, 0.05, '−60°', 'dp', 3))}</div>
+</div>` + CAP([
+  `正三角形 OAB の 頂点 B を、回転を 使って 求めます。`,
+  `正三角形 なので ${M`\mathrm{OB}=\mathrm{OA}`}、${M`\angle\mathrm{AOB}=60^\circ`}。だから B は、A を ${M`60^\circ`} 回した 点です。向きは 左回りと 右回りの <b>2通り</b> あります。`,
+  `${M`60^\circ`} 回転：${M`\cos60^\circ+i\sin60^\circ=\tfrac{1}{2}+\tfrac{\sqrt{3}}{2}i`} を 掛けます。`,
+  `${M`-60^\circ`} 回転：${M`\cos(-60^\circ)=\tfrac{1}{2}`}、${M`\sin(-60^\circ)=-\tfrac{\sqrt{3}}{2}`} なので ${M`\tfrac{1}{2}-\tfrac{\sqrt{3}}{2}i`} を 掛けます。`,
+  `答えは 2つ。正三角形は、OA の 左側と 右側に 1つずつ できます。`
+]);
+
+/* 練習：正方形 OABC */
+const g2 = PL({x0:-2, x1:4, y0:-1, y1:5, u:62, ticks:false});
+const A2 = [3,1], C2 = [-1,3], B3 = [2,4];
+const QP = `<div class="q" style="font-size:23px"><span class="tag">練習</span>原点 O と 点 ${M`\mathrm{A}(3+i)`} に 対して、正方形 OABC を つくる。<br><span class="mu" style="font-size:20px">（頂点は O，A，B，C の 順に 反時計回り）</span></div>`;
+const FIGA = g2.arr(0,0,...A2,null) + g2.dot(...A2, 'A', null, {given:true, pos:'se'});
+const p2 = HD(NO, '練習 ⑴　点 C', SEC) + `<div class="bd">
+  <div class="l" style="gap:10px">${QP}
+    <div class="q" style="font-size:24px">⑴　点 C は、点 A を 原点の まわりに 何度 回転した 点か。また、点 C を 表す 複素数を 求めよ。</div>
+    <div class="calc" style="font-size:25px;gap:6px">
+      <div data-s="1">${FILL(1, M`90^\circ`, 2.6)} 回転した 点。</div>
+      <div data-s="2">${M`90^\circ`} 回転は ${M`\DP{i}`} を 掛ける ことだから</div>
+      <div data-s="2" style="--d:.5s">${M`(3+i)i=3i+i^2=\DP{-1+3i}`}</div>
+    </div>
+  </div>
+  <div class="r">${g2.svg(FIGA + g2.rot(...A2, 90, 1) + g2.ang(108.4, 1, {from:18.4, r:44, lab:'90°', lr:22, d:1.1})
+    + g2.arr(0,0,...C2,2,{c:'g', w:5}) + g2.dot(...C2, 'C', 2, {d:.5, pos:'nw'}))}</div>
+</div>` + CAP([
+  `正方形 OABC の 頂点を 求めます。O の となりの 頂点は A と C です。`,
+  `正方形 なので ${M`\mathrm{OC}=\mathrm{OA}`}、${M`\angle\mathrm{AOC}=90^\circ`}。反時計回りの 順 なので、C は A を 左回りに <b>${M`90^\circ`}</b> 回した 点です。`,
+  `${M`90^\circ`} 回転は ${M`i`} を 掛ける だけ（②-3）。${M`\mathrm{C}=-1+3i`}。`
+]);
+const p3 = HD(NO, '練習 ⑵　点 B', SEC) + `<div class="bd">
+  <div class="l" style="gap:10px">${QP}
+    <div class="q" style="font-size:24px">⑵　点 B を 表す 複素数を 求めよ。</div>
+    <div class="calc" style="font-size:25px;gap:6px">
+      <div data-s="1">${M`\overrightarrow{\mathrm{OB}}=\overrightarrow{\mathrm{OA}}+\overrightarrow{\mathrm{OC}}`} より</div>
+      <div data-s="2">${M`(3+i)+(-1+3i)=\DP{2+4i}`}</div>
+    </div>
+  </div>
+  <div class="r">${g2.svg(POLY(g2, [[0,0],A2,B3,C2], 3) + FIGA + g2.arr(0,0,...C2,null) + g2.dot(...C2, 'C', null, {given:true, pos:'nw'})
+    + g2.move(g2.arr(0,0,...C2,null,{c:'m', dash:true}), ...A2, 1)
+    + g2.arr(0,0,...B3,2,{c:'g', w:5}) + g2.dot(...B3, 'B', 2, {d:.5, pos:'ne'}))}</div>
+</div>` + CAP([
+  `残りの 頂点 B を 求めます。`,
+  `正方形は 平行四辺形の 仲間。B は、OC の 矢印を A の 先へ <b>平行移動</b> した 点です（①-2 の 和）。`,
+  `${M`\mathrm{B}=(3+i)+(-1+3i)=2+4i`}。`,
+  `O、A、B、C を 結ぶと 正方形に なります。`
+]);
+
+/* まとめ（アニメーション なし） */
+const p4 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:26px">
+  <div class="sum" style="font-size:29px">
+    <span>正三角形</span><span class="ar">→</span><span>${M`\pm60^\circ`} 回転（答えは 2通り）</span>
+    <span>正方形の となり</span><span class="ar">→</span><span>${M`90^\circ`} 回転 ＝ ${M`i`} を 掛ける</span>
+    <span>残りの 頂点</span><span class="ar">→</span><span>平行移動 ＝ 足し算</span>
+  </div>
+</div>` + CAP([`図形の 頂点は「回転（掛け算）」と「平行移動（足し算）」で 求められます。`]);
+
+const DECK = {title:'③-3 【発展】回転の応用', pages:[
+  {name:'表紙', html:p0}, {name:'例　正三角形の 頂点', html:p1}, {name:'練習 ⑴　点 C', html:p2}, {name:'練習 ⑵　点 B', html:p3}, {name:'まとめ', html:p4},
+]};
+''')
