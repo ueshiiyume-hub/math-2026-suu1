@@ -281,3 +281,7 @@ body.portrait #endp .eh{font-size:40px}
 .hd .addb small{font-size:13px;font-weight:500;letter-spacing:.04em;margin-left:.6em;opacity:.9}
 .slide.addp .hd{border-bottom-color:var(--im)}
 #jump .ti .tadd{margin-left:.5em;font-size:12px;font-weight:700;color:#fff;background:var(--im);padding:1px 6px;vertical-align:1px}
+/* ③-2 */
+.pl .tri{fill:var(--main);fill-opacity:.14;stroke:var(--deep);stroke-width:3;stroke-linejoin:round}
+.pl.rt{height:330px} body.portrait .pl.rt{width:380px;height:auto}
+.pl.sm3{height:220px;width:auto} body.portrait .pl.sm3{width:240px;height:auto}
