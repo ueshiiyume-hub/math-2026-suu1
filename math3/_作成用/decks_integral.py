@@ -127,8 +127,34 @@ const p3 = gridPage({no:NO, sec:SEC, title:'問2　⑴・⑵', q:'次の 不定�
   `⑴ ${M`\frac{1}{x^3}=x^{-3}`}。指数を 1 増やして ${M`-2`} で 割ります。`,
   `${M`x^{-2}`} を 分数に 戻して 答えます。`,
   `⑵ 分子の 3つの 項を、それぞれ ${M`x^2`} で 割ります。`,
-  `${M`2x\to x^2`}、${M`\frac{2}{x}\to2\log|x|`}、${M`-4x^{-2}\to-4\cdot\frac{1}{-1}x^{-1}=\frac{4}{x}`}。`
+  `${M`2x\to x^2`}、${M`\frac{2}{x}\to2\log|x|`}、${M`-4x^{-2}\to-4\cdot\frac{1}{-1}x^{-1}=\frac{4}{x}`}。符号は 次の ページで くわしく。`
 ]});
+/* 問2⑵ の くわしく：−4/x² の 項（板書と 同じ 流れ） */
+const p3b = HD(NO, '問2　⑵　くわしく', SEC) + `<div class="bd">
+  <div class="l" style="gap:14px">
+    <div class="q qline">${D`-\frac{4}{x^2}`} の 項だけ 取り出して 積分する</div>
+    <div class="calc" style="font-size:32px;gap:14px">
+      <div>${D`-\int4x^{\A{-2}}\,dx`}</div>
+      <div data-s="2">${D`=\frac{\on{4}{a}{-4}}{\on{2}{a}{-1}}x^{\on{2}{a}{-1}}+C`}</div>
+      <div data-s="4">${D`=\on{4}{a}{+}4x^{-1}+C`}</div>
+      <div data-s="5">${D`=\DP{+\frac{4}{x}+C}`}</div>
+    </div>
+  </div>
+  <div class="r" style="flex-direction:column;gap:16px;align-items:stretch;width:420px">
+    ${PT(1, '① 指数を 1 増やす', `${M`-2+1=\A{-1}`}`)}
+    ${PT(2, '② 増やした 指数で 割る', `${M`-1`} で 割る → 分母に ${M`-1`}`)}
+    ${PT(3, '③ 符号', `${M`\frac{-4}{-1}=+4`}（マイナス ÷ マイナス ＝ プラス）`)}
+    ${PT(5, '④ 分数に 戻す', `${M`x^{-1}=\frac{1}{x}`}`)}
+  </div>
+</div>` + CAP([
+  `問2⑵ の ${M`-\frac{4}{x^2}`} の 項は、まず ${M`-4x^{-2}`} と 指数で 表します。`,
+  `①-1 の 公式どおり、指数 ${M`-2`} を 1 増やすと ${M`-1`}。`,
+  `増やした 指数 ${M`-1`} で 割ります。前の ${M`-4`} は 分子に そのまま 残ります。`,
+  `${M`\frac{-4}{-1}`}：マイナス どうしの 割り算なので <b class="a">プラス</b> に なります。`,
+  `${M`+4x^{-1}`}。ここで 符号を まちがえやすいので 注意します。`,
+  `${M`x^{-1}=\frac{1}{x}`} と 分数に 戻して ${M`+\frac{4}{x}`}。これが 答えの 最後の 項です。`
+]);
+
 const p4 = gridPage({no:NO, sec:SEC, title:'問2　⑶・⑷', c1:true, items:[
   {tag:'⑶', q:String.raw`\int\frac{3x-2}{\sqrt{x}}\,dx`, o:1, lines:[
     [1, String.raw`=\int\left(3x^{\frac{1}{2}}-2x^{-\frac{1}{2}}\right)dx=2x^{\frac{3}{2}}-4x^{\frac{1}{2}}+C`],
@@ -151,7 +177,7 @@ const p5 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:28px">
 
 const DECK = {title:'①-2 分子が多項式の場合', pages:[
   {name:'表紙', html:p0}, {name:'方針', html:p1}, {name:'例', html:p2},
-  {name:'問2　⑴・⑵', html:p3}, {name:'問2　⑶・⑷', html:p4}, {name:'まとめ', html:p5},
+  {name:'問2　⑴・⑵', html:p3}, {name:'問2　⑵　くわしく', html:p3b}, {name:'問2　⑶・⑷', html:p4}, {name:'まとめ', html:p5},
 ]};
 ''')
 
