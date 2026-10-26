@@ -16,6 +16,10 @@ BODY = '<body>\n<div id="stage"></div>\n<div id="bar"></div>\n<div id="ui"></div
 def page(name, title, js):
     v = VERS.get(name, {'v': '1.0', 'date': ''})
     ver = f"const VER = 'ver {v['v']}　{v['date']}';\n"
+    # 最後の ページの 先（終わりの パネル）で 使う：この 単元の デッキの 並びと 今の デッキ
+    ser = [dict(f=n, no=t.split(' ', 1)[0], t=t.split(' ', 1)[-1],
+                v=VERS.get(n, {}).get('v', '') + '_' + VERS.get(n, {}).get('date', '')) for n, (t, _) in DECKS.items()]
+    ver += f"const SERIES = {json.dumps(ser, ensure_ascii=False)}, ME = {json.dumps(name, ensure_ascii=False)};\n"
     return (head.replace('{{TITLE}}', title) + BODY + ver + rd('parts.js')
             + '\n/* ====== このプリントの スライド ====== */\n' + js + '\n'
             + rd('engine.js') + '\n' + rd('ink.js') + '\n</script>\n</body>\n</html>\n')
