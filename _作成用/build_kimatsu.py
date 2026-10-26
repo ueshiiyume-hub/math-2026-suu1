@@ -24,12 +24,22 @@ TAIL_BODY = '''<body>
 import re, base64, warnings
 warnings.filterwarnings('ignore')
 import fitz
-PDF = fitz.open(os.path.join(B, 'print.pdf'))   # プリント（docx を PDF に したもの）
+# プリントの pdf は 非公開リポジトリ（2026_mathC_private の 数学Ⅰ/）に 置く。公開リポジトリには 置かない（2026-10-26）
+# 場所は 環境変数 PRINT_PDF で 指定できる。ふだんは この リポジトリと 同じ 階層に ある 非公開リポジトリを 見る
+PRINT_PDF = os.environ.get('PRINT_PDF') or os.path.join(B, '..', '..', '2026_mathc_private', '数学Ⅰ', '2学期期末考査まで.pdf')
+PDF = None
+def print_pdf():
+    global PDF
+    if PDF is None:
+        if not os.path.exists(PRINT_PDF):
+            sys.exit(f'プリントの pdf が ない：{PRINT_PDF}（非公開リポジトリを 横に クローンするか、PRINT_PDF で 場所を 指定する）')
+        PDF = fitz.open(PRINT_PDF)
+    return PDF
 def pgimg(m):
     """@@IMG:ページ:x1,y1,x2,y2@@ を プリントの その部分の 画像（data URI）に する"""
     pg = int(m.group(1)); x1,y1,x2,y2 = map(float, m.group(2).split(','))
     w, h = x2-x1, y2-y1; z = min(1150/w, 466/h, 2.6) * 1.7
-    pix = PDF[pg-1].get_pixmap(matrix=fitz.Matrix(z,z), clip=fitz.Rect(x1,y1,x2,y2))
+    pix = print_pdf()[pg-1].get_pixmap(matrix=fitz.Matrix(z,z), clip=fitz.Rect(x1,y1,x2,y2))
     return 'data:image/png;base64,' + base64.b64encode(pix.tobytes('png')).decode()
 
 def page(title, deck_js):

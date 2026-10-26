@@ -1,7 +1,7 @@
 import sys
 import pymupdf as fz
 
-# 使い方: python kaitou.py print.pdf ../期末考査/kaitou ページの名前 バージョン [解答pdfの 保存先（非公開リポジトリ）]
+# 使い方: python kaitou.py <プリントの pdf（非公開リポジトリの 数学Ⅰ/）> ../期末考査/kaitou ページの名前 バージョン [解答pdfの 保存先（非公開リポジトリ）]
 SRC, OUT = sys.argv[1], sys.argv[2]   # プリントの pdf、出力の フォルダ
 RED = (0.63, 0.11, 0.11)
 FONTS = {
