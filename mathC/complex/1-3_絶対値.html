@@ -303,6 +303,10 @@ body.portrait #endp .eh{font-size:40px}
 .hd .addb small{font-size:13px;font-weight:500;letter-spacing:.04em;margin-left:.6em;opacity:.9}
 .slide.addp .hd{border-bottom-color:var(--im)}
 #jump .ti .tadd{margin-left:.5em;font-size:12px;font-weight:700;color:#fff;background:var(--im);padding:1px 6px;vertical-align:1px}
+/* ③-2 */
+.pl .tri{fill:var(--main);fill-opacity:.14;stroke:var(--deep);stroke-width:3;stroke-linejoin:round}
+.pl.rt{height:330px} body.portrait .pl.rt{width:380px;height:auto}
+.pl.sm3{height:220px;width:auto} body.portrait .pl.sm3{width:240px;height:auto}
 
 </style>
 </head>
@@ -313,7 +317,7 @@ body.portrait #endp .eh{font-size:40px}
 <div id="jump"></div>
 <script>
 const VER = 'ver 1.1　2026-10-26';
-const SERIES = [{"f": "1-1_複素数平面", "no": "①-1", "t": "複素数平面", "v": "1.1_2026-10-26"}, {"f": "1-2_和差実数倍共役", "no": "①-2", "t": "和・差・実数倍・共役", "v": "1.1_2026-10-26"}, {"f": "1-3_絶対値", "no": "①-3", "t": "複素数の絶対値", "v": "1.1_2026-10-26"}, {"f": "1-4_極形式", "no": "①-4", "t": "複素数の極形式", "v": "1.3_2026-10-26"}, {"f": "1-4_極形式_練習編", "no": "①-4", "t": "極形式 練習編（問10）", "v": "1.1_2026-10-26"}, {"f": "2-1_掛け算と長さ向き", "no": "②-1", "t": "掛け算と長さ・向き", "v": "1.1_2026-10-26"}, {"f": "2-2_複素数の積", "no": "②-2", "t": "複素数の積", "v": "1.1_2026-10-26"}, {"f": "2-3_掛け算と回転", "no": "②-3", "t": "掛け算と回転", "v": "1.1_2026-10-26"}, {"f": "3-1_ド・モアブルの定理", "no": "③-1", "t": "ド・モアブルの定理", "v": "1.1_2026-10-26"}], ME = "1-3_絶対値";
+const SERIES = [{"f": "1-1_複素数平面", "no": "①-1", "t": "複素数平面", "v": "1.1_2026-10-26"}, {"f": "1-2_和差実数倍共役", "no": "①-2", "t": "和・差・実数倍・共役", "v": "1.1_2026-10-26"}, {"f": "1-3_絶対値", "no": "①-3", "t": "複素数の絶対値", "v": "1.1_2026-10-26"}, {"f": "1-4_極形式", "no": "①-4", "t": "複素数の極形式", "v": "1.3_2026-10-26"}, {"f": "1-4_極形式_練習編", "no": "①-4", "t": "極形式 練習編（問10）", "v": "1.1_2026-10-26"}, {"f": "2-1_掛け算と長さ向き", "no": "②-1", "t": "掛け算と長さ・向き", "v": "1.1_2026-10-26"}, {"f": "2-2_複素数の積", "no": "②-2", "t": "複素数の積", "v": "1.1_2026-10-26"}, {"f": "2-3_掛け算と回転", "no": "②-3", "t": "掛け算と回転", "v": "1.1_2026-10-26"}, {"f": "3-1_ド・モアブルの定理", "no": "③-1", "t": "ド・モアブルの定理", "v": "1.1_2026-10-26"}, {"f": "3-2_1のn乗根", "no": "③-2", "t": "1のn乗根", "v": "1.0_2026-10-26"}, {"f": "3-3_回転の応用", "no": "③-3", "t": "【発展】回転の応用", "v": "1.0_2026-10-26"}], ME = "1-3_絶対値";
 /* ====== 数学C の 部品 ====== */
 
 /* 数式：M`z = a + bi`（\ を そのまま 書ける）。KaTeX で かく */
@@ -463,6 +467,14 @@ function PL(o){
     return `<path class="arc rot${n!=null?' dr':''}" pathLength="1" d="M${f(x0)} ${f(y0)} A${R} ${R} 0 ${a1-a0>180?1:0} 0 ${f(x1)} ${f(y1)}"${at(d)}/>`
       + `<polygon class="roth" points="${hp}"${at(d+.5)}/>`
       + (op.lab ? `<text class="dp" x="${f(cx+lr*Math.cos(m))}" y="${f(cy-lr*Math.sin(m)+7)}" text-anchor="middle"${at(d+.3)}>${op.lab}</text>` : '');
+  };
+  /* 回る 矢印（点線の ゴースト）：原点からの 矢印 (a,b) が n 番で 出て、deg だけ 左回りに 回る（負なら 右回り） */
+  g.rot = (a, b, deg, n, op={}) => {
+    const L = Math.hypot(a, b)*u, t0 = Math.atan2(b, a)*180/Math.PI, hl = 14, hw = 7;
+    return `<g data-s="${n}"${op.e?` data-e="${op.e}"`:''}><g transform="translate(${X(0)} ${Y(0)}) rotate(${f(-t0)})">`
+      + `<g class="sweep" data-o="${n}" style="--rot:${-deg}deg">`
+      + `<line class="swl" x1="0" y1="0" x2="${f(L-hl*.8)}" y2="0"/><polygon class="roth" points="${f(L)},0 ${f(L-hl)},${-hw} ${f(L-hl)},${hw}"/>`
+      + `</g></g></g>`;
   };
   /* 文字 */
   g.text = (x, y, s, cls, n, anchor) => `<text class="${cls||''}" x="${X(x)}" y="${Y(y)}" text-anchor="${anchor||'middle'}"${n==null?'':` data-s="${n}"`}>${s}</text>`;

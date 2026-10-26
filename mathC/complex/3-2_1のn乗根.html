@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>③-2 1のn乗根</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<!-- 数式（KaTeX） -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<!-- 明るい／暗い：選んだ ものは この サイト 全体で 覚える（ボタンは engine.js が 目次の 横に 置く） -->
+<script>
+(function(){
+  var d=document.documentElement;
+  try{ var t=localStorage.getItem('theme'); if(t) d.dataset.theme=t; }catch(e){}
+  window.isDark=function(){ return d.dataset.theme ? d.dataset.theme==='dark' : matchMedia('(prefers-color-scheme: dark)').matches; };
+  window.toggleTheme=function(){ d.dataset.theme = isDark() ? 'light' : 'dark'; try{ localStorage.setItem('theme', d.dataset.theme); }catch(e){} if(window.paintTheme) paintTheme(); };
+})();
+</script>
+<style>
+/* ===== 数学C スライド（案A：薄い緑・ゴシック体・まっすぐな 枠） ===== */
+:root{
+  --bg:#eef3f0; --paper:#ffffff; --ink:#2d3833; --muted:#6b7a72;
+  --main:#8cc5a5; --deep:#3f7d5e; --pale:#eaf4ee; --line:#c6dfd0;
+  --grid:#e1ebe5; --axis:#4a5a52;
+  --re:#2f6db0; --im:#c0632b;            /* 実部＝青、虚部＝橙（全デッキ共通） */
+  --shadow:0 1px 2px rgba(40,70,55,.05),0 4px 14px rgba(40,70,55,.08);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#161b19; --paper:#222a26; --ink:#e6eee9; --muted:#a3b3aa;
+    --main:#7fb99a; --deep:#a8d8bd; --pale:#2c3a33; --line:#3d4f46;
+    --grid:#2e3a34; --axis:#c5d3cb; --re:#86b6ee; --im:#f2a775;
+    --shadow:0 1px 2px rgba(0,0,0,.2),0 4px 14px rgba(0,0,0,.3);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#161b19; --paper:#222a26; --ink:#e6eee9; --muted:#a3b3aa;
+  --main:#7fb99a; --deep:#a8d8bd; --pale:#2c3a33; --line:#3d4f46;
+  --grid:#2e3a34; --axis:#c5d3cb; --re:#86b6ee; --im:#f2a775;
+  --shadow:0 1px 2px rgba(0,0,0,.2),0 4px 14px rgba(0,0,0,.3);
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--ink);font-family:"Noto Sans JP","Hiragino Sans","Yu Gothic",Meiryo,sans-serif;font-weight:400;
+  -webkit-user-select:none;user-select:none}
+.katex{font-size:1.08em}
+
+/* 台紙：横長 1280×720、縦長（スマホ）720×1280 を 画面に 合わせて 拡大 */
+#stage{position:fixed;left:50%;top:50%;width:1280px;height:720px;transform:translate(-50%,-50%) scale(var(--s,1));
+  background:var(--paper);box-shadow:var(--shadow)}
+body.portrait #stage{width:720px;height:1280px}
+.slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s}
+.slide.active{opacity:1;visibility:visible}
+
+/* 見出し */
+.hd{position:absolute;left:48px;right:48px;top:26px;height:62px;display:flex;align-items:center;gap:18px;border-bottom:2px solid var(--main)}
+.hd .no{background:var(--deep);color:var(--paper);font-weight:700;font-size:22px;padding:2px 12px;letter-spacing:.04em}
+.hd h2{font-size:32px;font-weight:700;margin:0;letter-spacing:.04em}
+.hd .sec{margin-left:auto;margin-right:70px;font-size:17px;color:var(--muted);letter-spacing:.08em}
+/* 中身 */
+.bd{position:absolute;left:48px;right:48px;top:106px;bottom:122px;display:flex;gap:40px;align-items:center;justify-content:center}
+.bd.col{flex-direction:column;gap:22px}
+.bd > .l{flex:1;min-width:0;display:flex;flex-direction:column;gap:18px}
+.bd > .r{flex:none;display:flex;align-items:center;justify-content:center}
+/* 下の 説明欄（「なぜ」を 言葉で） */
+.cap{position:absolute;left:48px;right:230px;bottom:22px;height:82px;display:flex;align-items:center;
+  border-left:5px solid var(--main);background:var(--pale);padding:0 22px;font-size:24px;line-height:1.5}
+.cap p{display:none;margin:0} .cap p.cur{display:block}
+
+/* 縦長（スマホ） */
+body.portrait .hd{left:28px;right:28px;top:22px}
+body.portrait .hd .sec{display:none}
+body.portrait .bd{left:28px;right:28px;top:104px;bottom:236px;flex-direction:column;gap:26px;justify-content:flex-start}
+body.portrait .bd > .l{flex:none;width:100%}
+body.portrait .cap{left:28px;right:28px;bottom:84px;height:132px;font-size:27px}
+
+/* 枠（定義・記法 など） */
+.box{border:1.5px solid var(--main);background:var(--paper)}
+.box .bl{background:var(--pale);color:var(--deep);font-weight:700;font-size:18px;padding:4px 16px;border-bottom:1px solid var(--line);letter-spacing:.1em}
+.box .bc{padding:16px 22px;font-size:27px;line-height:2}
+.q{font-size:26px;line-height:1.6}
+.q .tag{display:inline-block;color:var(--deep);font-weight:700;margin-right:.6em}
+/* 空らん（プリントの 緑の 箱）：答えは あとから 出る */
+.fill{display:inline-block;min-width:4.6em;background:var(--pale);border-bottom:2px solid var(--main);text-align:center;padding:0 .35em;margin:0 .15em;line-height:1.45}
+.fill > span{color:var(--deep);font-weight:700}
+/* 問題の 並び（1行 1つ） */
+.rows{display:flex;flex-direction:column;gap:10px}
+.row{display:flex;align-items:center;gap:18px;font-size:32px;padding:6px 16px;border-left:5px solid transparent;transition:background .3s,border-color .3s}
+.row.cur{background:var(--pale);border-left-color:var(--main)}
+.row .nt{font-size:22px;color:var(--muted)}
+.row .ans{margin-left:auto}
+.re{color:var(--re)} .im{color:var(--im)} .dp{color:var(--deep)}
+.mu{color:var(--muted)}
+.big{font-size:44px}
+/* まとめ（アニメーション なし） */
+.sum{display:grid;grid-template-columns:auto auto 1fr;gap:14px 22px;align-items:center;font-size:30px}
+.sum .ar{color:var(--deep);font-weight:700}
+
+/* 出る・光る：data-s（その番で 出る）data-e（その番で 消える）data-o（その番で 色が つく） */
+[data-s]{opacity:0;transition:opacity .45s}
+[data-s].show{opacity:1;transition-delay:var(--d,0s)}
+[data-o]{transition:color .3s,background-color .3s;border-radius:4px}
+[data-o].on[data-c="re"]{color:var(--re)} [data-o].on[data-c="im"]{color:var(--im)} [data-o].on[data-c="dp"]{color:var(--deep)}
+[data-o].on.cur{background:color-mix(in srgb,var(--main) 22%,transparent)}
+
+/* 複素数平面（SVG） */
+.pl{display:block;height:478px;width:auto;overflow:visible}
+body.portrait .pl{height:auto;width:600px}
+.pl .gd{stroke:var(--grid);stroke-width:1.2}
+.pl .ax{stroke:var(--axis);stroke-width:2;fill:none}
+.pl .axh{fill:var(--axis)}
+.pl text{font-family:"KaTeX_Main","Times New Roman",serif;fill:var(--ink);font-size:22px}
+.pl text.it,.pl tspan.it{font-style:italic}
+.pl text.jp{font-family:"Noto Sans JP",sans-serif;font-weight:700;font-size:21px}
+.pl text.sm{font-size:19px;fill:var(--muted)}
+.pl .wk{stroke-width:4.5;stroke-linecap:round;fill:none}
+.pl .wk.re{stroke:var(--re)} .pl .wk.im{stroke:var(--im)}
+.pl .hd-re{fill:var(--re)} .pl .hd-im{fill:var(--im)}
+.pl text.re{fill:var(--re)} .pl text.im{fill:var(--im)} .pl text.dp{fill:var(--deep)}
+.pl .dot{fill:var(--deep);stroke:var(--paper);stroke-width:2.5}
+.pl .dot.given{fill:var(--ink)}
+.pl text.pn{font-weight:700;fill:var(--deep);font-size:24px}
+.pl text.pn.given{fill:var(--ink)}
+.pl .axl{stroke-width:9;stroke-linecap:round;stroke-opacity:.28}
+.pl .axl.re{stroke:var(--re)} .pl .axl.im{stroke:var(--im)}
+.pl .dash{stroke:var(--muted);stroke-width:1.8;stroke-dasharray:6 6;fill:none}
+/* 矢印（ベクトル）・直線・動かす・折り返す */
+.pl .vc{stroke-width:4;fill:none;stroke-linecap:round}
+.pl .vc.k{stroke:var(--ink)} .pl .vc.g{stroke:var(--deep)} .pl .vc.m{stroke:var(--muted)}
+.pl .vh.k{fill:var(--ink)} .pl .vh.g{fill:var(--deep)} .pl .vh.m{fill:var(--muted)}
+.pl .vc.dsh{stroke-dasharray:9 7;stroke-width:3}
+.pl .ln{stroke:var(--main);stroke-width:3}
+.pl .ln:not(.dr){stroke-dasharray:10 8}
+.pl .mv{transition:transform .9s ease-in-out .4s}
+.pl .mv.on{transform:translate(var(--tx),var(--ty))}
+.pl .fl{transition:transform .9s ease-in-out .4s}
+.pl .fl.on{transform:scale(1,-1)}
+/* 線を かく アニメーション（pathLength="1"） */
+.pl .dr{stroke-dasharray:1 1!important;stroke-dashoffset:1;transition:stroke-dashoffset .55s ease-in-out,opacity .1s}
+.pl .dr.show{stroke-dashoffset:0;transition-delay:var(--d,0s)}
+
+/* 表紙 */
+.cover{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.cover .k{font-size:20px;letter-spacing:.3em;color:var(--deep);font-weight:500}
+.cover .n{margin-top:26px;font-size:30px;font-weight:700;color:var(--paper);background:var(--deep);padding:2px 18px}
+.cover h1{font-size:68px;font-weight:700;letter-spacing:.08em;margin:18px 0 6px}
+.cover .sb{font-size:26px;color:var(--muted)}
+.cover .ln{width:120px;height:3px;background:var(--main);margin:30px 0 0}
+.cover .ver{position:absolute;left:48px;bottom:30px;font-size:17px;color:var(--muted)}
+body.portrait .cover h1{font-size:60px}
+
+/* 進み具合・操作の 案内 */
+#bar{position:fixed;left:0;bottom:0;height:4px;background:var(--main);transition:width .3s;z-index:20}
+#ui{position:fixed;left:12px;bottom:8px;font-size:12px;color:var(--muted);z-index:20;opacity:.8}
+body.portrait #ui{display:none}
+#bar.hide,#ui.hide,#jump.hide{opacity:0;pointer-events:none}
+/* 目次（右下） */
+#jump{position:fixed;right:14px;bottom:14px;z-index:24;display:flex;align-items:center;gap:8px}
+#jump > button,#jump .pgno{height:38px;border:1px solid var(--line);background:var(--paper);color:var(--ink);font:500 15px "Noto Sans JP",sans-serif;
+  padding:0 14px;display:flex;align-items:center;box-shadow:var(--shadow);cursor:pointer}
+#jump .pgno{cursor:default;color:var(--muted)}
+#jump #themebtn{width:38px;padding:0;justify-content:center;font-size:17px}
+#jump .tocp{position:fixed;top:0;right:0;bottom:0;width:min(360px,86vw);background:var(--paper);border-left:1px solid var(--line);
+  box-shadow:var(--shadow);transform:translateX(105%);transition:transform .3s;display:flex;flex-direction:column;z-index:2}
+#jump.open .tocp{transform:none}
+#jump .tocbg{position:fixed;inset:0;background:rgba(0,0,0,.18);display:none;z-index:1}
+#jump.open .tocbg{display:block}
+#jump .toch{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:2px solid var(--main);font-size:17px}
+#jump .tocx{border:none;background:none;color:var(--muted);font-size:20px;cursor:pointer}
+#jump .home{display:block;padding:10px 18px;font-size:14px;color:var(--deep);text-decoration:none;border-bottom:1px solid var(--line)}
+#jump .tocl{overflow:auto;padding:8px 0}
+#jump .ti{display:block;width:100%;text-align:left;border:none;background:none;color:var(--ink);font:400 16px "Noto Sans JP",sans-serif;padding:9px 18px;border-left:4px solid transparent;cursor:pointer}
+#jump .ti.on{border-left-color:var(--main);background:var(--pale);font-weight:700}
+
+/* ===== 手書き（ink.js） ===== */
+#ink{position:fixed;left:0;top:0;z-index:15;pointer-events:none;touch-action:none}
+body.inking #ink{pointer-events:auto;cursor:crosshair}
+body.pen-dev, body.pen-dev *{touch-action:none}
+#inkbar{position:fixed;z-index:25;right:12px;top:10px;display:flex;align-items:center;gap:6px;padding:5px;
+  background:color-mix(in srgb,var(--paper) 90%,transparent);border:1px solid var(--line);box-shadow:var(--shadow);transition:opacity .3s}
+#inkbar.hide{opacity:0;pointer-events:none}
+#inkbar button{font:500 15px "Noto Sans JP",sans-serif;height:34px;min-width:34px;padding:0 10px;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+#inkbar .ink-tg{font-size:17px}
+body.inking #inkbar .ink-tg{background:var(--deep);border-color:var(--deep);color:var(--paper)}
+#inkbar .ink-tools{display:none;gap:6px;align-items:center}
+body.inking #inkbar .ink-tools{display:flex}
+#inkbar .ink-c{width:34px;padding:0;background:var(--c);border-color:transparent}
+#inkbar .ink-c.sel{box-shadow:0 0 0 3px var(--paper),0 0 0 5px var(--c)}
+#inkbar .ink-er.sel{background:var(--pale)}
+#inkbar .ink-w{width:34px;padding:0;display:flex;align-items:center;justify-content:center}
+#inkbar .ink-w i{display:block;border-radius:50%;background:var(--ink)}
+#inkbar .ink-w.sel{border-color:var(--deep);background:var(--pale)}
+#inkbar .ink-sep{width:1px;height:24px;background:var(--line);margin:0 2px}
+body.portrait #inkbar .ink-tools{flex-wrap:wrap;max-width:calc(100vw - 70px)}
+body.portrait #inkbar{top:6px;right:6px}
+
+/* 撮影用：動きを 止めて 最後の 形 */
+body.final *, body.final *::before{transition:none!important;transition-delay:0s!important}
+
+/* 表（まとめ） */
+.tbl{display:grid;grid-template-columns:auto 1fr auto;border-top:2px solid var(--main);font-size:24px;width:100%}
+.tbl > div{padding:12px 16px;border-bottom:1px solid var(--line);line-height:1.7}
+body.portrait .tbl{font-size:23px} body.portrait .tbl > div{padding:12px 10px}
+.tbl > .th{background:var(--pale);color:var(--deep);font-weight:700;font-size:18px;letter-spacing:.1em;padding:6px 16px}
+.calc{display:flex;flex-direction:column;gap:6px;font-size:32px}
+.vnote{font-size:20px;color:var(--muted)}
+.op .box .bc{font-size:24px;line-height:1.9;padding:12px 18px}
+.pl .ram{fill:none;stroke:var(--axis);stroke-width:1.8}
+.pl .arc{fill:none;stroke:var(--deep);stroke-width:2.5}
+.pl text.dp{font-weight:700}
+.res4{display:grid;grid-template-columns:repeat(4,auto);gap:14px 40px;font-size:30px;white-space:nowrap}
+body.portrait .res4{grid-template-columns:repeat(2,auto)}
+/* Point の 枠（プリントの 緑の Point） */
+.pbox{border-left:5px solid var(--deep);background:var(--pale);padding:10px 20px 14px;font-size:24px;line-height:1.9}
+.pbox .pl2{color:var(--deep);font-weight:700;font-size:18px;letter-spacing:.08em}
+.tbl.rd{font-size:20px} .tbl.rd > div{padding:8px 8px}
+.tbl.rd .fill{min-width:0!important}
+.pl.pg{height:430px} .pl.uc{height:250px}
+body.portrait .pl.pg{width:520px;height:auto} body.portrait .pl.uc{width:300px;height:auto}
+.pl.sm2{height:330px}
+body.portrait .pl.sm2{width:400px;height:auto}
+/* 練習編 */
+.pl .qd{fill:var(--main);fill-opacity:.16}
+.pl.pr{height:440px} body.portrait .pl.pr{width:540px;height:auto}
+.ans16{display:grid;grid-template-columns:1fr 1fr;gap:8px 40px;font-size:21px;width:100%}
+.ans16 > div{white-space:nowrap;border-bottom:1px solid var(--line);padding:3px 0}
+body.portrait .ans16{grid-template-columns:1fr;font-size:19px;gap:4px}
+/* 強調：うすくする・光らせる・回す・波紋 */
+.dimo{transition:opacity .5s}
+.dimo.on{opacity:.3}
+.hl2{border-left:6px solid transparent;padding:8px 14px;transition:background-color .5s,border-color .5s,transform .5s}
+.hl2.show{background:var(--pale);border-left-color:var(--main);transform:scale(1.06);transform-origin:left center}
+.hl2.on{border-left-color:var(--deep)}
+.pl .swl{stroke:var(--deep);stroke-width:2.5;stroke-dasharray:8 6}
+.pl .sweep{transform:rotate(0deg);transition:transform 1.1s ease-in-out .15s}
+.pl .sweep.on{transform:rotate(var(--rot))}
+.pl .pulse{fill:none;stroke:var(--deep);stroke-width:3;transform-box:fill-box;transform-origin:center}
+.pl .pulse.show{animation:pulse 1.4s ease-out var(--d,0s) 2 both}
+@keyframes pulse{from{transform:scale(.4);opacity:.9}to{transform:scale(1.8);opacity:0}}
+body.final .pl .pulse{animation:none;opacity:0}
+.dimo.on.cur{background:none}
+/* ②-1 */
+.pl .ucirc{fill:none;stroke:var(--line);stroke-width:2}
+.pl .arc.rot{stroke:var(--deep);stroke-width:3}
+.pl .roth{fill:var(--deep)}
+.tbl.mt{font-size:21px} .tbl.mt > div{padding:7px 12px}
+body.portrait .tbl.mt{font-size:15px} body.portrait .tbl.mt > div{padding:6px 4px}
+.bd > .r > .pl{max-width:560px}
+.trig{display:grid;grid-template-columns:auto repeat(5,auto);border-top:1px solid var(--line);border-left:1px solid var(--line);font-size:22px;background:var(--paper)}
+.trig > div{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:4px 10px;text-align:center;line-height:1.5}
+.trig > .th{background:var(--pale)}
+body.portrait .trig{font-size:19px}
+.tbl.wt{font-size:21px} .tbl.wt > div{padding:6px 8px;text-align:center}
+body.portrait .tbl.wt{font-size:17px}
+
+/* 終わりの パネル（最後の ページの 先） */
+#endp{position:absolute;inset:0;z-index:5;background:var(--paper);display:flex;align-items:center;justify-content:center;
+  opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s}
+#endp.open{opacity:1;visibility:visible}
+#endp .ein{width:min(980px,90%);display:flex;flex-direction:column;align-items:center;gap:20px}
+#endp .ek{font-size:20px;letter-spacing:.2em;color:var(--deep);font-weight:500}
+#endp .eh{font-size:44px;font-weight:700;letter-spacing:.2em;margin-top:-8px;padding-bottom:10px;border-bottom:3px solid var(--main)}
+#endp a{color:inherit;text-decoration:none}
+#endp .enext{display:flex;align-items:center;gap:18px;width:100%;padding:18px 26px;background:var(--pale);border:1.5px solid var(--main);
+  border-left:8px solid var(--deep);font-size:28px;transition:background .2s}
+#endp .enext:hover{background:color-mix(in srgb,var(--main) 30%,var(--paper))}
+#endp .enext .el{font-size:18px;color:var(--muted);letter-spacing:.06em}
+#endp .enext .en{background:var(--deep);color:var(--paper);font-weight:700;padding:0 12px}
+#endp .enext .et{font-weight:700}
+#endp .enext .ea{margin-left:auto;color:var(--deep);font-size:34px;font-weight:700}
+#endp .elast{font-size:24px;color:var(--muted)}
+#endp .ebtns{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+#endp .ebtns > *{font:500 19px "Noto Sans JP",sans-serif;border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:9px 18px;cursor:pointer}
+#endp .ebtns > *:hover{background:var(--pale)}
+#endp .elist{display:grid;grid-template-columns:repeat(3,1fr);gap:6px 14px;width:100%;border-top:1px solid var(--line);padding-top:14px}
+#endp .elist a{font-size:16px;padding:5px 10px;border-left:4px solid transparent;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#endp .elist a b{color:var(--deep);margin-right:.5em}
+#endp .elist a:hover{background:var(--pale)}
+#endp .elist a.me{border-left-color:var(--main);background:var(--pale);font-weight:700}
+#endp .eback{border:none;background:none;color:var(--muted);font:400 16px "Noto Sans JP",sans-serif;cursor:pointer}
+body.portrait #endp .elist{grid-template-columns:1fr 1fr}
+body.portrait #endp .enext{flex-wrap:wrap;font-size:26px}
+body.portrait #endp .eh{font-size:40px}
+
+/* 「くわしく」の ページ：右の Point を 大きく */
+.bigpt .pbox{font-size:27px;line-height:1.6} .bigpt .pbox .pl2{font-size:18px}
+.bigpt .pbox > div[data-s]{margin-top:10px}
+.bigpt .pbox > div:not([data-s]):not(.pl2){margin-top:8px}
+
+
+/* 全画面ボタン */
+#jump #fsbtn{width:38px;padding:0;justify-content:center}
+#jump #fsbtn svg{width:20px;height:20px;fill:none;stroke:var(--ink);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+#fshint{position:fixed;left:50%;top:14px;transform:translate(-50%,-10px);z-index:30;background:var(--deep);color:var(--paper);
+  font:500 15px "Noto Sans JP",sans-serif;padding:8px 18px;opacity:0;pointer-events:none;transition:opacity .3s,transform .3s}
+#fshint.show{opacity:.95;transform:translate(-50%,0)}
+
+/* 追加解説（授業の 板書から あとで 足した ページ）の 印 */
+.hd .addb{background:var(--im);color:#fff;font-size:16px;font-weight:700;letter-spacing:.12em;padding:3px 12px;white-space:nowrap}
+.hd .addb small{font-size:13px;font-weight:500;letter-spacing:.04em;margin-left:.6em;opacity:.9}
+.slide.addp .hd{border-bottom-color:var(--im)}
+#jump .ti .tadd{margin-left:.5em;font-size:12px;font-weight:700;color:#fff;background:var(--im);padding:1px 6px;vertical-align:1px}
+/* ③-2 */
+.pl .tri{fill:var(--main);fill-opacity:.14;stroke:var(--deep);stroke-width:3;stroke-linejoin:round}
+.pl.rt{height:330px} body.portrait .pl.rt{width:380px;height:auto}
+.pl.sm3{height:220px;width:auto} body.portrait .pl.sm3{width:240px;height:auto}
+
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="bar"></div>
+<div id="ui"></div>
+<div id="jump"></div>
+<script>
+const VER = 'ver 1.0　2026-10-26';
+const SERIES = [{"f": "1-1_複素数平面", "no": "①-1", "t": "複素数平面", "v": "1.1_2026-10-26"}, {"f": "1-2_和差実数倍共役", "no": "①-2", "t": "和・差・実数倍・共役", "v": "1.1_2026-10-26"}, {"f": "1-3_絶対値", "no": "①-3", "t": "複素数の絶対値", "v": "1.1_2026-10-26"}, {"f": "1-4_極形式", "no": "①-4", "t": "複素数の極形式", "v": "1.3_2026-10-26"}, {"f": "1-4_極形式_練習編", "no": "①-4", "t": "極形式 練習編（問10）", "v": "1.1_2026-10-26"}, {"f": "2-1_掛け算と長さ向き", "no": "②-1", "t": "掛け算と長さ・向き", "v": "1.1_2026-10-26"}, {"f": "2-2_複素数の積", "no": "②-2", "t": "複素数の積", "v": "1.1_2026-10-26"}, {"f": "2-3_掛け算と回転", "no": "②-3", "t": "掛け算と回転", "v": "1.1_2026-10-26"}, {"f": "3-1_ド・モアブルの定理", "no": "③-1", "t": "ド・モアブルの定理", "v": "1.1_2026-10-26"}, {"f": "3-2_1のn乗根", "no": "③-2", "t": "1のn乗根", "v": "1.0_2026-10-26"}, {"f": "3-3_回転の応用", "no": "③-3", "t": "【発展】回転の応用", "v": "1.0_2026-10-26"}], ME = "3-2_1のn乗根";
+/* ====== 数学C の 部品 ====== */
+
+/* 数式：M`z = a + bi`（\ を そのまま 書ける）。KaTeX で かく */
+function M(s, ...v){
+  const t = typeof s==='string' ? s : String.raw(s, ...v);
+  return `<span class="m">${t.replace(/&/g,'&amp;').replace(/</g,'&lt;')}</span>`;
+}
+/* 出る番：S(番, html, 遅れ秒) */
+const S = (n, h, d) => `<span data-s="${n}"${d?` style="--d:${d}s"`:''}>${h}</span>`;
+/* 空らん（プリントの 緑の 箱）。答えは n 番で 出る */
+const FILL = (n, h, w) => `<span class="fill"${w?` style="min-width:${w}em"`:''}><span data-s="${n}">${h}</span></span>`;
+/* 説明欄：cm の i 番目が i 番で 出る（null は とばす） */
+const CAP = cm => `<div class="cap">${cm.map((c,i)=>c==null?'':`<p data-m="${i}">${c}</p>`).join('')}</div>`;
+/* 見出し */
+const HD = (no, title, sec) => `<header class="hd"><span class="no">${no}</span><h2>${title}</h2>${sec?`<span class="sec">${sec}</span>`:''}</header>`;
+/* 枠（定義・記法 など） */
+const BOX = (label, body) => `<div class="box"><div class="bl">${label}</div><div class="bc">${body}</div></div>`;
+
+/* 表紙 */
+function coverSlide(o){
+  return `<div class="cover"><div class="k">${o.kicker||'数学C'}</div><div class="n">${o.no}</div>
+    <h1>${o.title}</h1><div class="sb">${o.sub||''}</div><div class="ln"></div>
+    <div class="ver">${VER}</div></div>`;
+}
+
+/* ---- 複素数平面（SVG） ----
+   const g = PL({x0:-4,x1:4,y0:-4,y1:4});  g.svg( g.walk(2,2,1) + g.dot(2,2,'P',3) )
+   X(x)・Y(y) で 平面の 座標 → SVG の 座標 */
+function PL(o){
+  const u = o.u||56, pad = o.pad||36;
+  const W = (o.x1-o.x0)*u + 2*pad, H = (o.y1-o.y0)*u + 2*pad;
+  const X = x => pad + (x-o.x0)*u, Y = y => pad + (o.y1-y)*u;
+  const f = v => +v.toFixed(1);
+  let base = '';
+  if(o.polar){   // 同心円と 角の 線（極形式の 読み取り）：polar:{n:円の 数, rays:[角…], labels:[角…]}
+    for(let k=1; k<=o.polar.n; k++) base += `<circle class="gd" cx="${X(0)}" cy="${Y(0)}" r="${k*u}" fill="none"/>`;
+    const R = o.polar.n*u;
+    (o.polar.rays||[]).forEach(t=>{ const c=Math.cos(t*Math.PI/180), s=Math.sin(t*Math.PI/180);
+      base += `<line class="gd" x1="${X(0)}" y1="${Y(0)}" x2="${f(X(0)+R*c)}" y2="${f(Y(0)-R*s)}"/>`; });
+    (o.polar.labels||[]).forEach(t=>{ const c=Math.cos(t*Math.PI/180), s=Math.sin(t*Math.PI/180);
+      base += `<text class="sm" x="${f(X(0)+(R+24)*c)}" y="${f(Y(0)-(R+24)*s+7)}" text-anchor="middle">${t}°</text>`; });
+    for(let k=1; k<=o.polar.n; k++) base += `<text class="sm" x="${X(0)+k*u-5}" y="${Y(0)+22}" text-anchor="end">${k}</text>`;
+  }
+  else if(o.grid!==false){
+    for(let x=o.x0; x<=o.x1; x++) base += `<line class="gd" x1="${X(x)}" y1="${Y(o.y0)}" x2="${X(x)}" y2="${Y(o.y1)}"/>`;
+    for(let y=o.y0; y<=o.y1; y++) base += `<line class="gd" x1="${X(o.x0)}" y1="${Y(y)}" x2="${X(o.x1)}" y2="${Y(y)}"/>`;
+  }
+  const ax0 = X(o.x0)-10, ax1 = X(o.x1)+22, ay0 = Y(o.y0)+10, ay1 = Y(o.y1)-22;
+  base += `<line class="ax" x1="${ax0}" y1="${Y(0)}" x2="${ax1-8}" y2="${Y(0)}"/><polygon class="axh" points="${ax1},${Y(0)} ${ax1-14},${Y(0)-6} ${ax1-14},${Y(0)+6}"/>`;
+  base += `<line class="ax" x1="${X(0)}" y1="${ay0}" x2="${X(0)}" y2="${ay1+8}"/><polygon class="axh" points="${X(0)},${ay1} ${X(0)-6},${ay1+14} ${X(0)+6},${ay1+14}"/>`;
+  if(o.xl!==null) base += `<text class="${o.xl?'jp':'it'}" x="${ax1+6}" y="${Y(0)+7}">${o.xl||'x'}</text>`;
+  if(o.yl!==null) base += `<text class="${o.yl?'jp':'it'}" x="${X(0)+12}" y="${ay1+4}">${o.yl||'y'}</text>`;
+  base += `<text x="${X(0)-24}" y="${Y(0)+26}">O</text>`;
+  if(o.ticks!==false && !o.polar) base += `<text x="${X(1)-6}" y="${Y(0)+26}">1</text><text x="${X(0)-20}" y="${Y(1)+8}">1</text>`;
+  const g = {X, Y, u, W, H};
+  g.svg = (inner, cls) => `<svg class="pl ${cls||''}" viewBox="${-40} ${-10} ${W+90} ${H+20}">${base}${inner||''}</svg>`;
+  /* 点：dot(a, b, 名前, 番, {pos:'ne'|'nw'|'se'|'sw', d:遅れ, given:true}) */
+  g.dot = (a, b, name, n, op={}) => {
+    const p = op.pos||'ne', dx = p.includes('w') ? -14 : 12, dy = p.includes('s') ? 28 : -12;
+    const an = p.includes('w') ? 'end' : 'start', cls = op.given ? ' given' : '';
+    const at = n==null ? '' : ` data-s="${n}"${op.d?` style="--d:${op.d}s"`:''}`;
+    return `<g${at}><circle class="dot${cls}" cx="${X(a)}" cy="${Y(b)}" r="8"/>${name?`<text class="pn${cls}" x="${X(a)+dx}" y="${Y(b)+dy}" text-anchor="${an}">${name}</text>`:''}</g>`;
+  };
+  /* 原点から 横（実部・青）→ 縦（虚部・橙）に 進む。n 番で 出る。split:true なら 横 n 番・縦 n+1 番 */
+  g.walk = (a, b, n, op={}) => {
+    const d = op.d||0, nb = n==null ? null : op.split ? n+1 : n, db = op.split ? 0 : d + (a ? .6 : 0);
+    /* n が null なら 動かさない（まとめ用） */
+    const at = (nn, dd) => nn==null ? '' : ` data-s="${nn}"${op.e?` data-e="${op.e}"`:''} style="--d:${dd}s"`, dr = n==null ? '' : ' dr';
+    const neg = v => String(v).replace('-', '−');
+    const hd = (x, y, dir, c, nn, dd) => {   // 矢じり
+      if(op.plain) return '';   // plain：矢じり なし（三角形の 辺）
+      const s = 11, pts = dir==='r' ? `${x},${y} ${x-s},${y-s*.6} ${x-s},${y+s*.6}` : dir==='l' ? `${x},${y} ${x+s},${y-s*.6} ${x+s},${y+s*.6}`
+        : dir==='u' ? `${x},${y} ${x-s*.6},${y+s} ${x+s*.6},${y+s}` : `${x},${y} ${x-s*.6},${y-s} ${x+s*.6},${y-s}`;
+      return `<polygon class="hd-${c}" points="${pts}"${at(nn, dd+.5)}/>`;
+    };
+    let h = '';
+    if(a){
+      h += `<path class="wk re${dr}" pathLength="1" d="M${X(0)} ${Y(0)} H${X(a)}"${at(n, d)}/>` + hd(X(a), Y(0), a>0?'r':'l', 're', n, d);
+      if(op.lab!==false) h += `<text class="re" x="${f((X(0)+X(a))/2)}" y="${Y(0) + (op.below ? 28 : -12)}" text-anchor="middle"${at(n, d+.3)}>${op.la??neg(a)}</text>`;
+    }
+    if(b){
+      h += `<path class="wk im${dr}" pathLength="1" d="M${X(a)} ${Y(0)} V${Y(b)}"${at(nb, db)}/>` + hd(X(a), Y(b), b>0?'u':'d', 'im', nb, db);
+      if(op.lab!==false) h += `<text class="im" x="${X(a) + (a<0 ? -12 : 12)}" y="${f((Y(0)+Y(b))/2)+8}" text-anchor="${a<0?'end':'start'}"${at(nb, db+.3)}>${op.lb??neg(b)}</text>`;
+    }
+    return h;
+  };
+  /* 軸を 太く 光らせる（実軸 re／虚軸 im） */
+  g.axl = (which, n) => which==='re'
+    ? `<line class="axl re" x1="${X(o.x0)}" y1="${Y(0)}" x2="${X(o.x1)}" y2="${Y(0)}" data-s="${n}"/>`
+    : `<line class="axl im" x1="${X(0)}" y1="${Y(o.y0)}" x2="${X(0)}" y2="${Y(o.y1)}" data-s="${n}"/>`;
+  /* 矢印 (x0,y0)→(x1,y1)。n 番で かく。op: c（k＝黒・g＝深い緑・m＝灰）、dash（点線。かく 動きなし）、d（遅れ）、e（消える番）、w（太さ） */
+  g.arr = (x0, y0, x1, y1, n, op={}) => {
+    const ax = X(x0), ay = Y(y0), bx = X(x1), by = Y(y1), L = Math.hypot(bx-ax, by-ay) || 1;
+    const ux = (bx-ax)/L, uy = (by-ay)/L, hl = 15, hw = 7.5, c = op.c||'k', d = op.d||0;
+    const ex = bx - ux*hl*.8, ey = by - uy*hl*.8;
+    const at = (dd, ex='') => n==null ? (ex?` style="${ex}"`:'') : ` data-s="${n}"${op.e?` data-e="${op.e}"`:''} style="--d:${dd}s;${ex}"`;
+    const anim = n!=null && !op.dash;
+    const pts = `${f(bx)},${f(by)} ${f(bx-ux*hl-uy*hw)},${f(by-uy*hl+ux*hw)} ${f(bx-ux*hl+uy*hw)},${f(by-uy*hl-ux*hw)}`;
+    return `<path class="vc ${c}${op.dash?' dsh':''}${anim?' dr':''}" pathLength="1" d="M${f(ax)} ${f(ay)} L${f(ex)} ${f(ey)}"${at(d, op.w?`stroke-width:${op.w}`:'')}/>`
+      + `<polygon class="vh ${c}" points="${pts}"${at(anim ? d+.5 : d)}/>`;
+  };
+  /* 原点と (a,b) を 通る 直線（平面の 端まで） */
+  g.line = (a, b, n, op={}) => {
+    const ks = [o.x1/a, o.x0/a, o.y1/b, o.y0/b].filter(isFinite);
+    const k1 = Math.min(...ks.filter(v=>v>0)), k0 = Math.min(...ks.filter(v=>v<0).map(v=>-v));
+    return `<line class="ln${n!=null?' dr':''}" pathLength="1" x1="${f(X(-a*k0))}" y1="${f(Y(-b*k0))}" x2="${f(X(a*k1))}" y2="${f(Y(b*k1))}"${n==null?'':` data-s="${n}"`}${op.d?` style="--d:${op.d}s"`:''}/>`;
+  };
+  /* 動かす：n 番で 出て、少し 遅れて (dx,dy) だけ 平行移動 */
+  g.move = (inner, dx, dy, n, op={}) => `<g data-s="${n}"${op.e?` data-e="${op.e}"`:''}><g class="mv" data-o="${n}" style="--tx:${f(dx*u)}px;--ty:${f(-dy*u)}px">${inner}</g></g>`;
+  /* 実軸で 折り返す：n 番で 出て、実軸を 折り目に ひっくり返る */
+  g.flip = (inner, n, op={}) => `<g data-s="${n}"${op.e?` data-e="${op.e}"`:''}><g class="fl" data-o="${n}" style="transform-origin:0px ${Y(0)}px">${inner}</g></g>`;
+  /* 線分 (x0,y0)–(x1,y1)。n 番で かく。op: c（g・k・m）、lab（文字）、ls（文字が 出る 番。ふつうは n）、side（文字を 置く 側 1／−1）、d、e、w */
+  g.seg = (x0, y0, x1, y1, n, op={}) => {
+    const ax = X(x0), ay = Y(y0), bx = X(x1), by = Y(y1), L = Math.hypot(bx-ax, by-ay) || 1, d = op.d||0;
+    const at = (dd, nn=n, ex='') => nn==null ? (ex?` style="${ex}"`:'') : ` data-s="${nn}"${op.e?` data-e="${op.e}"`:''} style="--d:${dd}s;${ex}"`;
+    let h = `<path class="vc ${op.c||'g'}${n!=null?' dr':''}" pathLength="1" d="M${f(ax)} ${f(ay)} L${f(bx)} ${f(by)}"${at(d, n, op.w?`stroke-width:${op.w}`:'')}/>`;
+    if(op.lab){
+      const sd = op.side||1, nx = -(by-ay)/L*sd, ny = (bx-ax)/L*sd;   // 線に 垂直な 向き
+      h += `<text class="${op.lc||'dp'}" x="${f((ax+bx)/2 + nx*24)}" y="${f((ay+by)/2 + ny*24 + 8)}" text-anchor="middle"${op.ls!=null ? at(0, op.ls) : at(d+.4)}>${op.lab}</text>`;
+    }
+    return h;
+  };
+  /* 直角の 印：(a,0) の 角（原点 と (a,b) の 間） */
+  g.ra = (a, b, n) => {
+    const s = 14, sx = a>0 ? -s : s, sy = b>0 ? -s : s;
+    return `<path class="ram" d="M${X(a)+sx} ${Y(0)} V${Y(0)+sy} H${X(a)}"${n==null?'':` data-s="${n}"`}/>`;
+  };
+  /* 角の 弧：実軸の 正の 向き（または from）から deg まで 左回り。op: r（半径 px）、lab（文字。なければ deg°）、la（文字の 角）、from、d */
+  g.ang = (deg, n, op={}) => {
+    const s0 = op.from||0;   // from：始まりの 角（ふつうは 実軸の 0°）
+    const r = op.r||34, cx = X(0), cy = Y(0), t = deg*Math.PI/180, m = (op.la!=null ? op.la : (s0+deg)/2)*Math.PI/180;   // la：文字を 置く 角
+    const ex = cx + r*Math.cos(t), ey = cy - r*Math.sin(t), big = deg-s0>180 ? 1 : 0;
+    const sx = cx + r*Math.cos(s0*Math.PI/180), sy = cy - r*Math.sin(s0*Math.PI/180);
+    const at = (dd, ex='') => n==null ? (ex?` style="${ex}"`:'') : ` data-s="${n}"${op.e?` data-e="${op.e}"`:''} style="--d:${dd}s;${ex}"`;
+    const lr = r + (op.lr||22);
+    return `<path class="arc${n!=null?' dr':''}" pathLength="1" d="M${f(sx)} ${f(sy)} A${r} ${r} 0 ${big} 0 ${f(ex)} ${f(ey)}"${at(op.d||0)}/>`
+      + (op.lab===false ? '' : `<text class="dp" x="${f(cx+lr*Math.cos(m))}" y="${f(cy-lr*Math.sin(m)+7)}" text-anchor="middle"${at((op.d||0)+.4, `font-size:${op.fs||19}px`)}>${op.lab||deg+'°'}</text>`);
+  };
+  /* 原点の まわりを 回る 矢印：a0° → a1°（左回り）、半径 R（px）。op: lab（外側の 文字）、d（遅れ）、lr（文字の 半径の 足し） */
+  g.carc = (a0, a1, R, n, op={}) => {
+    const r = Math.PI/180, cx = X(0), cy = Y(0), d = op.d||0;
+    const x0 = cx+R*Math.cos(a0*r), y0 = cy-R*Math.sin(a0*r), t = a1*r, x1 = cx+R*Math.cos(t), y1 = cy-R*Math.sin(t);
+    const dx = -Math.sin(t), dy = -Math.cos(t), s = 13, w = 7;   // 左回りの 進む 向き
+    const hp = `${f(x1)},${f(y1)} ${f(x1-dx*s-dy*w)},${f(y1-dy*s+dx*w)} ${f(x1-dx*s+dy*w)},${f(y1-dy*s-dx*w)}`;
+    const m = (a0+a1)/2*r, lr = R + (op.lr||30);
+    const at = dd => n==null ? '' : ` data-s="${n}"${op.e?` data-e="${op.e}"`:''} style="--d:${dd}s"`;
+    return `<path class="arc rot${n!=null?' dr':''}" pathLength="1" d="M${f(x0)} ${f(y0)} A${R} ${R} 0 ${a1-a0>180?1:0} 0 ${f(x1)} ${f(y1)}"${at(d)}/>`
+      + `<polygon class="roth" points="${hp}"${at(d+.5)}/>`
+      + (op.lab ? `<text class="dp" x="${f(cx+lr*Math.cos(m))}" y="${f(cy-lr*Math.sin(m)+7)}" text-anchor="middle"${at(d+.3)}>${op.lab}</text>` : '');
+  };
+  /* 回る 矢印（点線の ゴースト）：原点からの 矢印 (a,b) が n 番で 出て、deg だけ 左回りに 回る（負なら 右回り） */
+  g.rot = (a, b, deg, n, op={}) => {
+    const L = Math.hypot(a, b)*u, t0 = Math.atan2(b, a)*180/Math.PI, hl = 14, hw = 7;
+    return `<g data-s="${n}"${op.e?` data-e="${op.e}"`:''}><g transform="translate(${X(0)} ${Y(0)}) rotate(${f(-t0)})">`
+      + `<g class="sweep" data-o="${n}" style="--rot:${-deg}deg">`
+      + `<line class="swl" x1="0" y1="0" x2="${f(L-hl*.8)}" y2="0"/><polygon class="roth" points="${f(L)},0 ${f(L-hl)},${-hw} ${f(L-hl)},${hw}"/>`
+      + `</g></g></g>`;
+  };
+  /* 文字 */
+  g.text = (x, y, s, cls, n, anchor) => `<text class="${cls||''}" x="${X(x)}" y="${Y(y)}" text-anchor="${anchor||'middle'}"${n==null?'':` data-s="${n}"`}>${s}</text>`;
+  return g;
+}
+
+/* ====== このプリントの スライド ====== */
+
+const NO = '③-2', SEC = '数学C　複素数平面';
+const IT = v => `<tspan class="it">${v}</tspan>`;
+const D = Math.PI/180;
+const UCIRC = g => `<circle class="ucirc" cx="${g.X(0)}" cy="${g.Y(0)}" r="${g.u}"/>`;
+const PT = t => [Math.cos(t*D), Math.sin(t*D)];
+
+const p0 = coverSlide({kicker:'数学C　複素数平面', no:NO, title:'1のn乗根', sub:'n 回 掛けると 1 に 戻る 数'});
+
+/* n 乗根：z³＝1 の 解 ＝ 3回 掛けると 1 に 戻る 数 */
+const g1 = PL({x0:-1.6, x1:1.6, y0:-1.6, y1:1.6, u:130, grid:false, ticks:false});
+const p1 = HD(NO, 'n 乗根', SEC) + `<div class="bd">
+  <div class="l" style="gap:18px">
+    ${BOX('n 乗根', `${M`n`} を 正の 整数、${M`\alpha`} を 複素数と する とき、<br>方程式 ${M`z^n=\alpha`} の 解を ${M`\alpha`} の ${FILL(1, M`n` + ' 乗根', 3.6)} という。`)}
+    <div class="q" data-s="2" style="font-size:26px;line-height:1.9">${M`z^3=1`} の 解 ＝ <b class="dp">3回 掛けると ${M`1`} に 戻る 数</b><br>
+      <span data-s="3">→ 1回で ${FILL(3, M`120^\circ`, 2.8)} 回転する 数（円周の ${M`3`} 等分点）</span></div>
+  </div>
+  <div class="r">${g1.svg(UCIRC(g1) + g1.dot(1, 0, '1', null, {pos:'se'})
+    + [0,1,2].map(k => g1.carc(120*k+4, 120*(k+1)-4, g1.u+18, 3, {d:k*.9, lab:k===0?'120°':''})).join('')
+    + [1,2].map(k => g1.dot(...PT(120*k), '', 3, {d:k*.9+.6})).join('')
+    + `<polygon class="tri" points="${[0,120,240].map(t=>`${g1.X(Math.cos(t*D)).toFixed(1)},${g1.Y(Math.sin(t*D)).toFixed(1)}`).join(' ')}" data-s="4"/>`)}</div>
+</div>` + CAP([
+  `③-1 とは 逆に、「${M`n`} 乗して ${M`\alpha`} に なる 数」を 考えます。`,
+  `方程式 ${M`z^n=\alpha`} の 解を、${M`\alpha`} の ${M`n`} <b>乗根</b> と いいます。`,
+  `たとえば ${M`z^3=1`} の 解は、「3回 掛けると ${M`1`} に 戻る 数」です。`,
+  `3回で ちょうど 1周（${M`360^\circ`}）する には、1回で ${M`360^\circ\div3=120^\circ`} 回れば よい。長さは ${M`1`} の まま です。`,
+  `だから 解は、円周を ${M`3`} 等分する 点に なります。`
+]);
+
+/* 解く ページ：z＝r(cosθ＋i sinθ) とおく → 長さと 偏角を 比べる → k を 動かす → 図形 */
+function rootPage(o){
+  const g = PL({x0:-1.6, x1:1.6, y0:-1.6, y1:1.6, u:122, grid:false, ticks:false});
+  const n = o.n, ks = [...Array(n).keys()], step = 360/n, KS = 5;   // 番 5 で k を 順に、最後の 番で 図形
+  const fig = UCIRC(g) + ks.map(k => g.seg(0, 0, ...PT(step*k), KS, {c:'m', d:k*.7}) + g.dot(...PT(step*k), `${IT('k')}=${k}`, KS, {d:k*.7+.4, pos:o.pos[k]})).join('')
+    + (o.shape ? `<polygon class="tri" points="${ks.map(k=>`${g.X(Math.cos(step*k*D)).toFixed(1)},${g.Y(Math.sin(step*k*D)).toFixed(1)}`).join(' ')}" data-s="${o.shape}"/>` : '');
+  return HD(NO, o.title, SEC) + `<div class="bd">
+    <div class="l" style="gap:10px">${o.top}
+      <div class="calc" style="font-size:23px;gap:3px">${o.lines.map(([t,s])=>`<div data-s="${s}">${t.startsWith('<')?t:M(t)}</div>`).join('')}</div>
+    </div>
+    <div class="r" style="flex-direction:column;gap:8px">
+      <div class="pbox" style="font-size:20px;line-height:1.7"><div class="pl2">Point</div>${M`(\cos\theta+i\sin\theta)^n=\cos n\theta+i\sin n\theta`}<br>偏角：${M`\DP{+360^\circ\times k}`}</div>
+      ${g.svg(fig, 'rt')}
+    </div>
+  </div>` + CAP(o.cm);
+}
+const p2 = rootPage({title:'例　z³＝1 を 解く', n:3, shape:7, pos:['se','nw','sw'],
+  top:`<div class="q" style="font-size:26px"><span class="tag">例</span>方程式 ${M`z^3=1`} を 解け。</div>`,
+  lines:[[String.raw`z=r(\cos\theta+i\sin\theta)\ \text{とおくと}\ \ z^3=\RE{r^3}(\cos\IM{3\theta}+i\sin\IM{3\theta})`,1],
+         [String.raw`1=\cos0^\circ+i\sin0^\circ\ \text{より}`,2],
+         [String.raw`\RE{r^3=1},\ \ \IM{3\theta=0^\circ+360^\circ\times k}\ (k\text{ は 整数})`,3],
+         [String.raw`r=1,\ \ \theta=120^\circ\times k`,4],
+         [String.raw`0^\circ\leqq\theta<360^\circ\ \text{より}\ \ k=0,\ 1,\ 2`,5],
+         [String.raw`z=\DP{1,\ -\tfrac{1}{2}+\tfrac{\sqrt{3}}{2}i,\ -\tfrac{1}{2}-\tfrac{\sqrt{3}}{2}i}`,6],
+         [`<span style="font-size:24px">解を 表す 点は、点 ${M`1`} を 頂点と する ${FILL(7,'正三角形',5)} の 頂点。</span>`,7]],
+  cm:[`${M`z^3=1`} を、極形式で 解きます。`,
+      `${M`z`} を 極形式で おくと、ド・モアブルの定理で ${M`z^3`} は 長さ ${M`r^3`}、向き ${M`3\theta`}。`,
+      `右辺の ${M`1`} も 極形式に します。長さ ${M`1`}、向き ${M`0^\circ`}。`,
+      `<b class="re">長さ</b> と <b class="im">向き</b> を 比べます。向きは 1周（${M`360^\circ`}）回ると 同じ なので、${M`0^\circ`} だけで なく ${M`360^\circ,\ 720^\circ,\ \cdots`} でも よい（<b>${M`+360^\circ\times k`}</b>）。`,
+      `${M`r`} は 正の 数 なので ${M`r=1`}。${M`\theta=120^\circ\times k`}。`,
+      `${M`k=0,1,2`} で ${M`0^\circ,\ 120^\circ,\ 240^\circ`}。${M`k=3`} は ${M`360^\circ`} で ${M`k=0`} と 同じ 点に 戻るので、ここまで です。`,
+      `${M`\cos120^\circ+i\sin120^\circ`}、${M`\cos240^\circ+i\sin240^\circ`} を 計算して、3つの 解。`,
+      `3つの 点は 円周を 3等分 する ので、<b>正三角形</b> の 頂点に なります。`]});
+
+const p3 = rootPage({title:'問17　1の4乗根', n:4, shape:null, pos:['se','ne','nw','se'],
+  top:`<div class="q" style="font-size:26px"><span class="tag">問17</span>${M`1`} の ${M`4`} 乗根を 求めよ。</div>`,
+  lines:[[String.raw`z=r(\cos\theta+i\sin\theta)\ \text{とおくと}\ \ z^4=\RE{r^4}(\cos\IM{4\theta}+i\sin\IM{4\theta})`,1],
+         [String.raw`1\ \text{を 極形式で 表すと}\ \ 1=\cos0^\circ+i\sin0^\circ`,2],
+         [String.raw`\text{絶対値と 偏角を 比較して}\ \ \RE{r^4=1},\ \IM{4\theta=0^\circ+360^\circ\times k}`,3],
+         [String.raw`\text{よって}\ \ r=1,\ \ \theta=90^\circ\times k`,4],
+         [String.raw`0^\circ\leqq\theta<360^\circ\ \text{より}\ \ k=0,\ 1,\ 2,\ 3\ \ (\theta=0^\circ,\ 90^\circ,\ 180^\circ,\ 270^\circ)`,5],
+         [String.raw`\text{したがって、}1\text{ の }4\text{ 乗根は}\ \ \DP{1,\ i,\ -1,\ -i}`,6]],
+  cm:[`${M`1`} の ${M`4`} 乗根 ＝ ${M`z^4=1`} の 解。例と 同じ 手順です。`, `ド・モアブルの定理で ${M`z^4`} は 長さ ${M`r^4`}、向き ${M`4\theta`}。`,
+      `${M`1`} は 長さ ${M`1`}、向き ${M`0^\circ`}。`, `長さと 偏角を 比べます。偏角は ${M`+360^\circ\times k`}。`, `${M`r=1`}、${M`\theta=360^\circ\div4\times k=90^\circ\times k`}。`,
+      `${M`k=0,1,2,3`}。1回で ${M`90^\circ`} 回る 数 ── ②-1 で 見た ${M`i`} の 仲間です。`, `${M`1,\ i,\ -1,\ -i`}。どれも 4回 掛けると ${M`1`} に 戻ります。`]});
+
+/* 問18：図示して 図形を 答える */
+const g4 = PL({x0:-1.6, x1:1.6, y0:-1.6, y1:1.6, u:130, grid:false, ticks:false});
+const P4 = [[1,0,'1','se'],[0,1,IT('i'),'ne'],[-1,0,'−1','nw'],[0,-1,'−'+IT('i'),'se']];
+const p4 = HD(NO, '問18', SEC) + `<div class="bd">
+  <div class="l" style="gap:18px">
+    <div class="q" style="font-size:25px"><span class="tag">問18</span>問17で 求めた ${M`1`} の ${M`4`} 乗根を 表す 点を、複素数平面上に 図示せよ。<br>また、それらの 点を 結んで できる 図形は 何か。</div>
+    <div class="q" data-s="2" style="font-size:27px">点 ${M`1`} を 1つの 頂点と する ${FILL(2,'正方形',4)}</div>
+  </div>
+  <div class="r">${g4.svg(UCIRC(g4) + P4.map(([a,b,l,p],i)=>g4.dot(a,b,l,1,{d:i*.4, pos:p})).join('')
+    + `<polygon class="tri" points="${P4.map(([a,b])=>`${g4.X(a)},${g4.Y(b)}`).join(' ')}" data-s="2"/>`)}</div>
+</div>` + CAP([
+  `問17の 4つの 点を、図に 打ちます。`,
+  `${M`1,\ i,\ -1,\ -i`}。円周を ${M`4`} 等分する 点です。`,
+  `結ぶと <b>正方形</b>。${M`z^n=1`} の 解は、点 ${M`1`} を 頂点と する <b>正 ${M`n`} 角形</b> の 頂点に なります。`
+]);
+
+/* まとめ（アニメーション なし） */
+const g5 = PL({x0:-1.4, x1:1.4, y0:-1.4, y1:1.4, u:90, grid:false, ticks:false});
+const SH = n => g5.svg(UCIRC(g5) + `<polygon class="tri" points="${[...Array(n).keys()].map(k=>`${g5.X(Math.cos(360/n*k*D)).toFixed(1)},${g5.Y(Math.sin(360/n*k*D)).toFixed(1)}`).join(' ')}"/>`
+  + [...Array(n).keys()].map(k=>g5.dot(...PT(360/n*k), '', null)).join(''), 'sm3');
+const p5 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:20px">
+  ${BOX('1 の n 乗根', `${M`z^n=1`} の 解 ＝ ${M`n`} 回 掛けると ${M`1`} に 戻る 数<br>${M`z=\cos\dfrac{360^\circ\times k}{n}+i\sin\dfrac{360^\circ\times k}{n}`}<br>（${M`k=0,1,\cdots,n-1`}）`)}
+  <div style="display:flex;gap:30px;align-items:center;justify-content:center">
+    <div style="text-align:center">${SH(3)}<div class="q" style="font-size:22px">${M`n=3`}：正三角形</div></div>
+    <div style="text-align:center">${SH(4)}<div class="q" style="font-size:22px">${M`n=4`}：正方形</div></div>
+  </div>
+</div>` + CAP([`解は 円周の ${M`n`} 等分点。点 ${M`1`} を 頂点と する 正 ${M`n`} 角形の 頂点に なります。`]);
+
+const DECK = {title:'③-2 1のn乗根', pages:[
+  {name:'表紙', html:p0}, {name:'n 乗根', html:p1}, {name:'例　z³＝1 を 解く', html:p2},
+  {name:'問17　1の4乗根', html:p3}, {name:'問18　図示と 図形', html:p4}, {name:'まとめ', html:p5},
+]};
+
+/* ====== 組み立て・操作（数学C） ======
+   DECK = {title, pages:[{name, html}]}。
+   data-s（その番で 出る）・data-e（その番で 消える）・data-o（その番で 色が つく）・cap の p[data-m]（その番の 説明）から 段数を 数える。 */
+const stage = document.getElementById('stage');
+const names = DECK.pages.map(p=>p.name);
+document.title = DECK.title;
+stage.innerHTML = DECK.pages.map(p=>`<section class="slide${p.add?' addp':''}">${p.html}</section>`).join('');
+/* 追加解説（授業の 板書から あとで 足した ページ）：{name, html, add:'10/26'} → 見出しの 横に 印 */
+stage.querySelectorAll('.slide').forEach((el,i)=>{
+  const a = DECK.pages[i].add; if(!a) return;
+  const h = el.querySelector('.hd h2');
+  if(h) h.insertAdjacentHTML('afterend', `<span class="addb">追加解説${a===true?'':`<small>${a}</small>`}</span>`);
+});
+
+/* 数式：<span class="m">TeX</span> を KaTeX で かく。\RE{…}＝実部の色、\IM{…}＝虚部の色、\on{番}{色}{…}＝その番で 色が つく */
+const KX = {throwOnError:false, trust:true, strict:false, macros:{
+  '\\RE':'\\htmlClass{re}{#1}', '\\IM':'\\htmlClass{im}{#1}', '\\DP':'\\htmlClass{dp}{#1}',
+  '\\on':'\\htmlData{o=#1, c=#2}{#3}'}};
+stage.querySelectorAll('.m').forEach(e=>{
+  if(typeof katex==='undefined') return;
+  try{ katex.render(e.textContent, e, KX); }catch(_){}
+});
+
+const els = [...stage.querySelectorAll('.slide')];
+const nums = e => ['s','e','o','m'].map(k=>e.dataset[k]).filter(v=>v!==undefined).map(Number);
+const maxStep = els.map(el => Math.max(0, ...[...el.querySelectorAll('[data-s],[data-e],[data-o],[data-m]')].flatMap(nums)));
+
+const bar = document.getElementById('bar'), ui = document.getElementById('ui'), jump = document.getElementById('jump');
+jump.innerHTML = `<button id="fsbtn" title="全画面（F）"></button><button id="themebtn" title="明るく／暗く（T）"></button><button class="tocbtn" title="目次">≡ 目次</button><span class="pgno"></span>
+  <div class="tocbg"></div><div class="tocp"><div class="toch"><b>${DECK.title}</b><button class="tocx" title="閉じる">✕</button></div>
+  <a class="home" href="index.html">← スライドの 一覧へ</a>
+  <div class="tocl">${names.map((n,i)=>`<button class="ti" data-i="${i}">${n}${DECK.pages[i].add?'<span class="tadd">追加</span>':''}</button>`).join('')}</div></div>`;
+window.paintTheme = () => { const b=document.getElementById('themebtn'); b.textContent = isDark() ? '☀' : '☾'; };
+paintTheme();
+
+/* ====== 全画面 ======
+   ボタン（右下）か F キーで 切りかえ。ブラウザの きまりで、ページを 移ったり 読み込み直したり すると 全画面は いったん 解除される。
+   そこで 全画面の まま 移った ことを 覚えておき（sessionStorage）、次の ページで 最初に 画面に ふれた ときに 自動で 全画面に 戻す。 */
+const FSD = document.documentElement;
+const fsOn = () => !!(document.fullscreenElement || document.webkitFullscreenElement);
+const fsCan = !!(FSD.requestFullscreen || FSD.webkitRequestFullscreen);
+let leaving = false;
+const fsSave = v => { try{ sessionStorage.setItem('fs', v ? '1' : '0'); }catch(_){} };
+const fsWanted = () => { try{ return sessionStorage.getItem('fs')==='1'; }catch(_){ return false; } };
+function fsReq(){ const f = FSD.requestFullscreen || FSD.webkitRequestFullscreen; try{ const p = f && f.call(FSD); if(p && p.catch) p.catch(()=>{}); }catch(_){} }
+function fsExit(){ const f = document.exitFullscreen || document.webkitExitFullscreen; try{ const p = f && f.call(document); if(p && p.catch) p.catch(()=>{}); }catch(_){} }
+function toggleFS(){ fsHint(false); if(fsOn()) fsExit(); else fsReq(); }
+function paintFS(){ const b = document.getElementById('fsbtn'); if(!b) return;
+  b.style.display = fsCan ? '' : 'none';
+  b.innerHTML = fsOn() ? '<svg viewBox="0 0 24 24"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>'
+                       : '<svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>';
+  b.title = fsOn() ? '全画面を やめる（F）' : '全画面（F）'; }
+['fullscreenchange','webkitfullscreenchange'].forEach(ev=>document.addEventListener(ev, ()=>{ if(!leaving) fsSave(fsOn()); paintFS(); setTimeout(fit, 50); }));
+/* ページを 離れる とき（次の プリント・一覧・読み込み直し）：全画面だったか どうかを 覚える */
+addEventListener('pagehide', ()=>{ leaving = true; });
+addEventListener('beforeunload', ()=>{ leaving = true; fsSave(fsOn()); });
+document.addEventListener('click', e=>{ if(e.target.closest('a[href]')){ leaving = true; fsSave(fsOn()); } }, true);
+/* 全画面の まま 来た ときは、最初の タップ・キーで 全画面に 戻す（ブラウザは 操作なしの 全画面を 許さない） */
+const fsh = document.createElement('div'); fsh.id = 'fshint'; fsh.textContent = '画面に ふれると 全画面に 戻ります'; document.body.appendChild(fsh);
+function fsHint(on){ fsh.classList.toggle('show', on); }
+if(fsCan && fsWanted() && !fsOn()){
+  fsHint(true);
+  let swallow = false;   // 戻す ための タップでは ページを 進めない
+  addEventListener('click', e=>{ if(swallow){ swallow = false; if(!e.target.closest('a,button')){ e.stopPropagation(); e.preventDefault(); } } }, true);
+  const back = e => { if(e.type==='pointerdown') swallow = true;
+    if(e.type==='keydown' && e.key==='Escape'){ fsSave(false); } else fsReq();
+    fsHint(false); ['pointerdown','keydown'].forEach(t=>removeEventListener(t, back, true)); };
+  ['pointerdown','keydown'].forEach(t=>addEventListener(t, back, true));
+}
+paintFS();
+const tocOpen = on => { jump.classList.toggle('open', on); if(on){ const c=jump.querySelector('.ti.on'); if(c) c.scrollIntoView({block:'center'}); } };
+jump.addEventListener('click', e=>{
+  if(e.target.closest('a')) return;
+  e.stopPropagation();
+  if(e.target.closest('#fsbtn')) return toggleFS();
+  if(e.target.closest('#themebtn')) return toggleTheme();
+  if(e.target.closest('.tocbtn')) return tocOpen(!jump.classList.contains('open'));
+  if(e.target.closest('.tocx,.tocbg')) return tocOpen(false);
+  const b = e.target.closest('.ti'); if(!b) return;
+  stopAuto(); si = +b.dataset.i; st = 0; render(); tocOpen(false);
+});
+
+let si = 0, st = 0, timer = null;
+function render(){
+  els.forEach((el,i)=>{
+    const now = i===si, t = now ? st : -1;   // ほかの ページは 何も 出ていない 状態に もどす（入った とき 動きが 見える）
+    el.classList.toggle('active', now);
+    el.querySelectorAll('[data-s],[data-e]').forEach(e=>{
+      const s = e.dataset.s===undefined ? 0 : +e.dataset.s, x = e.dataset.e===undefined ? 1e9 : +e.dataset.e;
+      e.classList.toggle('show', s<=t && t<x);
+    });
+    el.querySelectorAll('[data-o]').forEach(e=>{ e.classList.toggle('on', +e.dataset.o<=t); e.classList.toggle('cur', +e.dataset.o===t); });
+    /* 説明：今の 番 以下で いちばん 新しい もの */
+    const ps = [...el.querySelectorAll('.cap [data-m]')];
+    const best = ps.filter(p=>+p.dataset.m<=t).pop();
+    ps.forEach(p=>p.classList.toggle('cur', p===best));
+  });
+  const total = maxStep.reduce((a,m)=>a+m+1,0), done = maxStep.slice(0,si).reduce((a,m)=>a+m+1,0)+st+1;
+  bar.style.width = (done/total*100)+'%';
+  jump.querySelectorAll('.ti').forEach(b=>b.classList.toggle('on', +b.dataset.i===si));
+  jump.querySelector('.pgno').textContent = `${si+1} / ${els.length}`;
+  ui.textContent = '←→ 進む・戻る　P 自動再生　F 全画面　H 表示を隠す　T 明暗　W 書きこむ';
+}
+function next(){ if(endOpen()) return; if(st<maxStep[si]) st++; else if(si<els.length-1){ si++; st=0; } else { stopAuto(); return endShow(true); } render(); }
+function prev(){ if(endOpen()) return endShow(false); if(st>0) st--; else if(si>0){ si--; st=maxStep[si]; } render(); }
+
+/* 終わりの パネル：最後の ページの 先で 出す。次の プリント・もう一度・一覧 を 選ぶ */
+const endp = document.createElement('div'); endp.id = 'endp'; stage.appendChild(endp);
+(function(){
+  const i = SERIES.findIndex(d=>d.f===ME), nx = SERIES[i+1], pv = SERIES[i-1];
+  const url = d => `${d.f}.html?v=${encodeURIComponent(d.v)}`;
+  endp.innerHTML = `<div class="ein">
+    <div class="ek">${DECK.title}</div><div class="eh">おわり</div>
+    ${nx ? `<a class="enext" href="${url(nx)}"><span class="el">次の プリントへ</span><span class="en">${nx.no}</span><span class="et">${nx.t}</span><span class="ea">→</span></a>`
+         : `<div class="elast">この 単元の スライドは ここまで です</div>`}
+    <div class="ebtns"><button class="eagain">↺ もう一度 最初から</button>
+      ${pv ? `<a href="${url(pv)}">← 前の プリント（${pv.no}）</a>` : ''}<a href="index.html">≡ スライドの 一覧へ</a></div>
+    <div class="elist">${SERIES.map(d=>`<a class="${d.f===ME?'me':''}" href="${url(d)}"><b>${d.no}</b>${d.t}</a>`).join('')}</div>
+    <button class="eback">← 最後の ページに 戻る</button></div>`;
+  endp.querySelectorAll('.m').forEach(e=>{ try{ katex.render(e.textContent, e, KX); }catch(_){} });
+  endp.querySelector('.eagain').addEventListener('click', e=>{ e.stopPropagation(); endShow(false); si=0; st=0; render(); });
+  endp.querySelector('.eback').addEventListener('click', e=>{ e.stopPropagation(); endShow(false); });
+})();
+function endOpen(){ return endp.classList.contains('open'); }
+function endShow(on){ endp.classList.toggle('open', on); if(on){ bar.style.width='100%'; jump.querySelector('.pgno').textContent='おわり'; } else render(); }
+function stopAuto(){ if(timer){ clearInterval(timer); timer=null; } }
+function toggleAuto(){ if(timer) stopAuto(); else timer=setInterval(next,4000); }
+
+document.addEventListener('keydown', e=>{
+  const k = e.key;
+  if(['ArrowRight','ArrowDown',' ','Enter','PageDown'].includes(k)){ e.preventDefault(); stopAuto(); next(); }
+  else if(['ArrowLeft','ArrowUp','Backspace','PageUp'].includes(k)){ e.preventDefault(); stopAuto(); prev(); }
+  else if(k==='Home'){ stopAuto(); si=0; st=0; render(); }
+  else if(k==='End'){ stopAuto(); si=els.length-1; st=maxStep[si]; render(); }
+  else if(k==='p'||k==='P') toggleAuto();
+  else if(k==='f'||k==='F') toggleFS();
+  else if(k==='h'||k==='H'){ ui.classList.toggle('hide'); bar.classList.toggle('hide'); jump.classList.toggle('hide'); }
+  else if(k==='t'||k==='T') toggleTheme();
+  else if(k==='Escape'){ tocOpen(false); if(endOpen()) endShow(false); }
+});
+/* 画面の 左 1/3 を 押すと 戻る、それ以外は 進む */
+document.addEventListener('click', e=>{
+  if(e.target.closest('a,button,#jump,#inkbar,#endp')) return;
+  stopAuto(); if(e.clientX < document.documentElement.clientWidth/3) prev(); else next();
+});
+/* 画面に 合わせる：縦長（スマホ）なら 720×1280、横長なら 1280×720 */
+function fit(){
+  const vw = document.documentElement.clientWidth, vh = document.documentElement.clientHeight;
+  const portrait = vh > vw;
+  document.body.classList.toggle('portrait', portrait);
+  const W = portrait?720:1280, H = portrait?1280:720;
+  stage.style.setProperty('--s', Math.min(vw/W, vh/H));
+}
+addEventListener('resize', fit);
+/* URL の #3-2 で 4ページ目の 2番から 始める（撮影・リンク用）。#3-e は その ページの 最後。?final で 動きを 止める */
+(function(){
+  const m = location.hash.match(/^#(\d+)-(\d+|e)$/); if(!m) return;
+  si = Math.min(+m[1], els.length-1); st = m[2]==='e' ? maxStep[si] : Math.min(+m[2], maxStep[si]);
+})();
+/* 再読み込み したら、その ページ・その 番から 再開する（sessionStorage に デッキごとに 覚える。一覧から 開いた ときは 最初から） */
+const POSKEY = 'pos:' + location.pathname;
+(function(){
+  if(location.hash) return;
+  let nav = ''; try{ nav = (performance.getEntriesByType('navigation')[0]||{}).type || ''; }catch(_){}
+  if(nav !== 'reload' && nav !== 'back_forward') return;
+  try{ const p = JSON.parse(sessionStorage.getItem(POSKEY) || 'null'); if(!p) return;
+    si = Math.min(Math.max(0, p.si|0), els.length-1); st = Math.min(Math.max(0, p.st|0), maxStep[si]);
+    if(p.end) setTimeout(()=>endShow(true), 0);
+  }catch(_){}
+})();
+const posSave = () => { try{ sessionStorage.setItem(POSKEY, JSON.stringify({si, st, end:endOpen()})); }catch(_){} };
+const _render = render; render = function(){ _render(); posSave(); };
+const _endShow = endShow; endShow = function(on){ _endShow(on); posSave(); };
+if(/final/.test(location.search)) document.body.classList.add('final');
+fit(); render();
+if(location.hash==='#end') endShow(true);
+
+/* ====== 手書き（授業中に スライドの上から 書きこむ） ======
+   右上の ✏ ボタン か W キーで 書く／やめる。ペンの 後ろ（消しゴム側）で なぞると 消える。
+   ペン（Surface ペンなど）で 画面に さわると、自動で 書くモードに なる。
+   書いた線は スライドごとに 残る（ページを 開き直すと 消える）。
+   線は 台紙（1280×720 / 720×1280）の 座標で 覚えるので、画面の 大きさが 変わっても ずれない。 */
+var INK = {on:false, color:'#e0465e', tool:'pen', w:3.5, strokes:{}, cur:null};
+(function(){
+  const cv = document.createElement('canvas'); cv.id = 'ink'; document.body.appendChild(cv);
+  const ctx = cv.getContext('2d');
+  const bar = document.createElement('div'); bar.id = 'inkbar';
+  const COLORS = [['#e0465e','赤'],['#1f3f9e','青'],['#f07a12','オレンジ'],['#1f9a4a','緑'],['#33303d','黒']];
+  const SIZES = [[3.5,'細'],[5,'太']];   // 細 が 最初
+  bar.innerHTML = `<button class="ink-tg" title="書きこむ（W）">✏</button>
+    <span class="ink-tools">${COLORS.map(([c,n])=>`<button class="ink-c" data-c="${c}" title="${n}" style="--c:${c}"></button>`).join('')}
+    <span class="ink-sep"></span>${SIZES.map(([w,n])=>`<button class="ink-w" data-w="${w}" title="${n}"><i style="width:${w*2}px;height:${w*2}px"></i></button>`).join('')}<span class="ink-sep"></span>
+    <button class="ink-er" title="消しゴム（E）">消</button><button class="ink-un" title="1つ戻す（Ctrl+Z）">↶</button>
+    <button class="ink-cl" title="このページを 全部 消す">全消</button></span>`;
+  document.body.appendChild(bar);
+  const key = () => si + (document.body.classList.contains('portrait') ? 'p' : 'l');
+  const list = () => (INK.strokes[key()] ||= []);
+  /* 画面の点 ⇔ 台紙の点 */
+  const box = () => stage.getBoundingClientRect();
+  const sz  = () => document.body.classList.contains('portrait') ? [720,1280] : [1280,720];
+  const toStage = (x,y) => { const b=box(), [W,H]=sz(); return [(x-b.left)/b.width*W, (y-b.top)/b.height*H]; };
+  function size(){
+    const r = devicePixelRatio || 1;
+    cv.width = innerWidth * r; cv.height = innerHeight * r;
+    cv.style.width = innerWidth + 'px'; cv.style.height = innerHeight + 'px';
+    draw();
+  }
+  function draw(){
+    const r = devicePixelRatio || 1, b = box(), [W] = sz(), k = b.width / W;
+    ctx.setTransform(r,0,0,r,0,0); ctx.clearRect(0,0,innerWidth,innerHeight);
+    ctx.setTransform(r*k,0,0,r*k,r*b.left,r*b.top);
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    for(const s of list()){
+      ctx.strokeStyle = s.c; ctx.lineWidth = s.w; ctx.beginPath();
+      s.p.forEach(([x,y],i)=> i ? ctx.lineTo(x,y) : ctx.moveTo(x,y));
+      if(s.p.length===1) ctx.lineTo(s.p[0][0]+.1, s.p[0][1]);
+      ctx.stroke();
+    }
+  }
+  function erase(x,y){
+    const L = list(), n = L.length;
+    for(let i=L.length-1;i>=0;i--) if(L[i].p.some(([a,b])=>Math.hypot(a-x,b-y)<16)) L.splice(i,1);
+    if(L.length!==n) draw();
+  }
+  function setOn(v){
+    INK.on = v; document.body.classList.toggle('inking', v);
+    if(!v) INK.cur = null;
+  }
+  function setTool(t,c){
+    INK.tool = t; if(c) INK.color = c;
+    bar.querySelectorAll('.ink-c').forEach(b=>b.classList.toggle('sel', t==='pen' && b.dataset.c===INK.color));
+    bar.querySelector('.ink-er').classList.toggle('sel', t==='er');
+    bar.querySelectorAll('.ink-w').forEach(b=>b.classList.toggle('sel', +b.dataset.w===INK.w));
+  }
+  function start(e){
+    e.preventDefault(); try{ cv.setPointerCapture(e.pointerId); }catch(_){}
+    const p = toStage(e.clientX,e.clientY);
+    /* ペンの 後ろ（消しゴム側）で さわったら 消しゴム。Surface ペンなどは buttons に 32 が 入る */
+    const back = e.pointerType==='pen' && (e.button===5 || (e.buttons & 32));
+    if(INK.tool==='er' || back){ INK.cur = {er:true}; erase(...p); return; }
+    INK.cur = {c:INK.color, w:INK.w, p:[p]}; list().push(INK.cur); draw();
+  }
+  cv.addEventListener('pointerdown', e=>{ if(INK.on) start(e); });
+  /* ペンを 近づけた（さわる前の ホバー）時点で、ブラウザの スクロール・拡大の 判定を 止める。
+     止めないと、ペンで さわって すぐ 書き始めた線が 0.3秒ほどで 打ち切られる（pointercancel） */
+  const penSeen = e => { if(e.pointerType==='pen') document.body.classList.add('pen-dev'); };
+  ['pointerover','pointermove','pointerdown'].forEach(t=>document.addEventListener(t, penSeen, {capture:true, passive:true}));
+  /* ペンで 画面に さわったら、自動で 書くモードに する（ボタンや リンクは ふつうに 押せる） */
+  let skipClick = false;
+  document.addEventListener('pointerdown', e=>{
+    if(INK.on || e.pointerType!=='pen' || e.target.closest('#inkbar,#jump,a,button')) return;
+    setOn(true); if(INK.tool!=='er') setTool('pen'); skipClick = true; start(e);
+  }, true);
+  document.addEventListener('click', e=>{ if(skipClick){ skipClick = false; e.stopPropagation(); e.preventDefault(); } }, true);
+  cv.addEventListener('pointermove', e=>{
+    if(!INK.cur) return;
+    const evs = e.getCoalescedEvents ? e.getCoalescedEvents() : [e];
+    for(const ev of evs){
+      const p = toStage(ev.clientX,ev.clientY);
+      if(INK.cur.er) erase(...p); else INK.cur.p.push(p);
+    }
+    if(!INK.cur.er) draw();
+  });
+  const end = () => { INK.cur = null; };
+  cv.addEventListener('pointerup', end); cv.addEventListener('pointercancel', end);
+  cv.addEventListener('click', e=>e.stopPropagation());
+  bar.addEventListener('click', e=>{
+    e.stopPropagation();
+    const b = e.target.closest('button'); if(!b) return;
+    if(b.classList.contains('ink-tg')){ setOn(!INK.on); if(INK.on) setTool('pen'); }
+    else if(b.classList.contains('ink-c')) setTool('pen', b.dataset.c);
+    else if(b.classList.contains('ink-w')){ INK.w = +b.dataset.w; setTool('pen'); }
+    else if(b.classList.contains('ink-er')) setTool('er');
+    else if(b.classList.contains('ink-un')){ list().pop(); draw(); }
+    else if(b.classList.contains('ink-cl')){ INK.strokes[key()] = []; draw(); }
+    b.blur();
+  });
+  document.addEventListener('keydown', e=>{
+    const k = e.key;
+    if(k==='w'||k==='W'){ setOn(!INK.on); if(INK.on) setTool('pen'); }
+    else if(INK.on && (k==='e'||k==='E')) setTool(INK.tool==='er' ? 'pen' : 'er');
+    else if(INK.on && k==='Escape') setOn(false);
+    else if(k==='h'||k==='H') bar.classList.toggle('hide');
+    else if((e.ctrlKey||e.metaKey) && (k==='z'||k==='Z')){ e.preventDefault(); list().pop(); draw(); }
+  });
+  /* ページを めくったら、そのページの 線を かく */
+  const r0 = render; render = function(){ r0(); draw(); };
+  addEventListener('resize', size);
+  setTool('pen'); size();
+})();
+
+</script>
+</body>
+</html>
