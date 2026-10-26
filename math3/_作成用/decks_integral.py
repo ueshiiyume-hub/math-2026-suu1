@@ -140,7 +140,7 @@ const p3b = HD(NO, '問2　⑵　くわしく', SEC) + `<div class="bd">
       <div data-s="5">${D`=\DP{+\frac{4}{x}+C}`}</div>
     </div>
   </div>
-  <div class="r" style="flex-direction:column;gap:16px;align-items:stretch;width:420px">
+  <div class="r bigpt" style="flex-direction:column;gap:16px;align-items:stretch;width:420px">
     ${PT(1, '① 指数を 1 増やす', `${M`-2+1=\A{-1}`}`)}
     ${PT(2, '② 増やした 指数で 割る', `${M`-1`} で 割る → 分母に ${M`-1`}`)}
     ${PT(3, '③ 符号', `${M`\frac{-4}{-1}=+4`}（マイナス ÷ マイナス ＝ プラス）`)}
@@ -164,11 +164,34 @@ const p4 = gridPage({no:NO, sec:SEC, title:'問2　⑶・⑷', c1:true, items:[
     [4, String.raw`=\DP{x+8\sqrt{x}+4\log x+C}`]]},
 ], cm:[
   `根号が 分母に ある ときも、指数で 表せば 同じです。`,
-  `⑶ ${M`\frac{3x}{\sqrt{x}}=3x^{\frac{1}{2}}`}、${M`\frac{2}{\sqrt{x}}=2x^{-\frac{1}{2}}`}。${M`3\cdot\frac{2}{3}=2`}、${M`2\cdot2=4`}。`,
+  `⑶ ${M`\frac{3x}{\sqrt{x}}=3x^{\frac{1}{2}}`}、${M`\frac{2}{\sqrt{x}}=2x^{-\frac{1}{2}}`}。${M`3\cdot\frac{2}{3}=2`}、${M`2\cdot2=4`}。指数への 直し方は 次の ページで くわしく。`,
   `${M`x^{\frac{3}{2}}=x\sqrt{x}`}、${M`x^{\frac{1}{2}}=\sqrt{x}`} と 戻します。`,
   `⑷ まず 分子を 展開。${M`(\sqrt{x}+2)^2=x+4\sqrt{x}+4`} を ${M`x`} で 割ります。`,
   `${M`\frac{4}{\sqrt{x}}=4x^{-\frac{1}{2}}\to8\sqrt{x}`}。${M`\sqrt{x}`} が あるので ${M`x>0`}。だから ${M`\log|x|`} は ${M`\log x`} と 書けます。`
 ]});
+
+/* 問2⑶ の くわしく：x/√x を 指数に 直す（板書と 同じ 流れ） */
+const p4b = HD(NO, '問2　⑶　くわしく', SEC) + `<div class="bd">
+  <div class="l" style="gap:14px">
+    <div class="calc" style="font-size:32px;gap:14px">
+      <div>${D`\int\frac{3x-2}{\sqrt{x}}\,dx`}</div>
+      <div data-s="1">${D`=\int\left(\frac{3\on{3}{a}{x}}{\on{3}{a}{\sqrt{x}}}-\frac{2}{\on{4}{a}{\sqrt{x}}}\right)dx`}</div>
+      <div data-s="5">${D`=\DP{\int\left(3x^{\frac{1}{2}}-2x^{-\frac{1}{2}}\right)dx}`}</div>
+    </div>
+  </div>
+  <div class="r bigpt" style="flex-direction:column;gap:14px;align-items:stretch;width:440px">
+    ${PT(2, 'わり算は 指数の ひき算', `${D`\frac{x^3}{x^2}=x^{3-2}=x^{\A{1}}`}`)}
+    ${PT(3, '同じように', `${D`\frac{x}{\sqrt{x}}=\frac{x^{1}}{x^{\frac{1}{2}}}=x^{1-\frac{1}{2}}=x^{\A{\frac{1}{2}}}`}`)}
+    ${PT(4, '分母の √x', `${D`\frac{2}{\sqrt{x}}=\frac{2}{x^{\frac{1}{2}}}=2x^{\A{-\frac{1}{2}}}`}`)}
+  </div>
+</div>` + CAP([
+  `問2⑶ を、指数の 形に 直す ところまで くわしく 見ます。`,
+  `まず 分子の 各項を 分母 ${M`\sqrt{x}`} で 割り、2つの 分数に 分けます。`,
+  `わり算は 指数の ひき算です。たとえば ${M`\frac{x^3}{x^2}=x^{3-2}=x^1`}。`,
+  `${M`\sqrt{x}=x^{\frac{1}{2}}`} なので、${M`\frac{x}{\sqrt{x}}=x^{1-\frac{1}{2}}=x^{\frac{1}{2}}`}。`,
+  `分母に ある ${M`\sqrt{x}`} は、上に 上げると 指数が マイナス：${M`\frac{1}{\sqrt{x}}=x^{-\frac{1}{2}}`}。`,
+  `これで ${M`x^{\alpha}`} の 形に なりました。あとは ①-1 の 公式で 積分します（問2⑶ の ページ）。`
+]);
 
 const p5 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:28px">
   ${BOX('方針', `<span style="font-size:30px">分子の 各項を 分母で 割ってから、項ごとに 積分する。</span>`)}
@@ -177,7 +200,7 @@ const p5 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:28px">
 
 const DECK = {title:'①-2 分子が多項式の場合', pages:[
   {name:'表紙', html:p0}, {name:'方針', html:p1}, {name:'例', html:p2},
-  {name:'問2　⑴・⑵', html:p3}, {name:'問2　⑵　くわしく', html:p3b}, {name:'問2　⑶・⑷', html:p4}, {name:'まとめ', html:p5},
+  {name:'問2　⑴・⑵', html:p3}, {name:'問2　⑵　くわしく', html:p3b}, {name:'問2　⑶・⑷', html:p4}, {name:'問2　⑶　くわしく', html:p4b}, {name:'まとめ', html:p5},
 ]};
 ''')
 

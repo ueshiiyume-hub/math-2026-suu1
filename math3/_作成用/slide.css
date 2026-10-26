@@ -214,3 +214,6 @@ body.portrait .two{grid-template-columns:1fr;gap:18px}
 body.portrait #endp .elist{grid-template-columns:1fr 1fr}
 body.portrait #endp .enext{flex-wrap:wrap;font-size:26px}
 body.portrait #endp .eh{font-size:40px}
+
+/* 「くわしく」の ページ：右の Point を 大きく */
+.bigpt .pbox{font-size:27px;line-height:1.6} .bigpt .pbox .pl2{font-size:18px}
