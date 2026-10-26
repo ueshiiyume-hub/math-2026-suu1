@@ -158,6 +158,20 @@ addEventListener('resize', fit);
   const m = location.hash.match(/^#(\d+)-(\d+|e)$/); if(!m) return;
   si = Math.min(+m[1], els.length-1); st = m[2]==='e' ? maxStep[si] : Math.min(+m[2], maxStep[si]);
 })();
+/* 再読み込み したら、その ページ・その 番から 再開する（sessionStorage に デッキごとに 覚える。一覧から 開いた ときは 最初から） */
+const POSKEY = 'pos:' + location.pathname;
+(function(){
+  if(location.hash) return;
+  let nav = ''; try{ nav = (performance.getEntriesByType('navigation')[0]||{}).type || ''; }catch(_){}
+  if(nav !== 'reload' && nav !== 'back_forward') return;
+  try{ const p = JSON.parse(sessionStorage.getItem(POSKEY) || 'null'); if(!p) return;
+    si = Math.min(Math.max(0, p.si|0), els.length-1); st = Math.min(Math.max(0, p.st|0), maxStep[si]);
+    if(p.end) setTimeout(()=>endShow(true), 0);
+  }catch(_){}
+})();
+const posSave = () => { try{ sessionStorage.setItem(POSKEY, JSON.stringify({si, st, end:endOpen()})); }catch(_){} };
+const _render = render; render = function(){ _render(); posSave(); };
+const _endShow = endShow; endShow = function(on){ _endShow(on); posSave(); };
 if(/final/.test(location.search)) document.body.classList.add('final');
 fit(); render();
 if(location.hash==='#end') endShow(true);
