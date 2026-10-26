@@ -1061,6 +1061,22 @@ i.nv{font-style:normal;font-family:inherit}
 .p3sg.on{color:#e0465e;background:#fff0b3;box-shadow:0 0 0 3px #e0465e}
 .p3w .v2sub.lh{display:inline-block}
 
+/* ①-5 まとめ（プリントの 緑の 枠）。スマホでは 縦に 並べる */
+.smcard{left:48px;top:30px;width:1184px;height:490px;display:flex;align-items:center;justify-content:center}
+.smg{background:#5aca8f;border-radius:8px;padding:18px 26px 26px;width:1110px}
+.smt{font-family:"Zen Maru Gothic",sans-serif;font-weight:900;font-size:26px;color:#1d3a2a;margin-bottom:14px}
+.smr{display:flex;gap:36px}
+.smi{flex:1;display:flex;align-items:center;gap:.55em;background:#ebf1de;color:#33363b;padding:16px 20px;font-size:34px;font-family:"STIX Two Text","Zen Maru Gothic",serif}
+.smi .rts path{stroke:#33363b}
+.sma{display:inline-block;font-family:"Zen Maru Gothic",sans-serif;font-weight:900;color:#c8445f;margin-left:.3em}
+.smdone{left:1100px;top:390px}
+.portrait .smcard{left:20px;top:30px;width:680px;height:960px}
+.portrait .smg{width:620px;padding:26px 28px 32px}
+.portrait .smt{font-size:34px}
+.portrait .smr{flex-direction:column;gap:26px}
+.portrait .smi{font-size:46px;padding:22px 26px}
+.portrait .smdone{left:540px;top:840px}
+
 /* ===== 手書き ===== */
 #ink{position:fixed;left:0;top:0;z-index:15;pointer-events:none;touch-action:none}
 body.inking #ink{pointer-events:auto;cursor:crosshair}
@@ -1812,7 +1828,7 @@ const GARW = (x1,y1,x2,y2,s) => { const ym=(y1+y2)/2, hh=(y2-y1)*.28, hx=x2-(y2-
   return `<g class="gs" data-s="${s}"><polygon points="${x1},${ym-hh} ${hx},${ym-hh} ${hx},${y1} ${x2},${ym} ${hx},${y2} ${hx},${ym+hh} ${x1},${ym+hh}" fill="#c9dca6"/></g>`; };
 
 /* ====== このプリントのスライド ====== */
-const VER = '<i class="nv">ver</i> 1.2　2026-10-22';
+const VER = '<i class="nv">ver</i> 1.3　2026-10-26';
 
 const KK = KIMATSU + '　①-5';
 const POL = `<div class="fpol"><div class="fa math">${SQ('0')} → 重解</div><div class="fv">ルートの 中を 見る</div><div class="fb math" style="font-size:24px">${SQ('−11')} → 解なし</div></div>`;
@@ -1845,11 +1861,10 @@ const q1 = kfSlide({num:'⑴', y0:102.2, eq:`x${P2} ＋ 2x ＋ 1 ＝ 0`, abc:[1,
 
 const q2 = kfSlide({num:'⑵', y0:282.2, eq:`x${P2} ＋ 3x ＋ 5 ＝ 0`, abc:[1,ABC(1,3,5)],
   b4:[2,'2'], b1:[3,'−3'], b2:[4,'9'], calc:[5,`−4×1×5 ＝ <span data-k="c2">−20</span>`], b3:[6,fl('c2','− 20')],
-  lines:[[114.5,403.8,203.4],[231.5,403.8,320.5]],
-  row2:[{t:'＝', r:[91.8,392.7,110.6,412.6]}, {c:'kpb', r:[112.9,376.8,206.1,431.9], v:[7,KH(`−3 ± ${SQ('9 − 20')}`,'2')]},
-        {t:'＝', r:[208.8,392.7,227.7,412.6]}, {c:'kpb', r:[230.0,376.8,323.2,431.9], v:[8,KH(`−3 ± ${SQ('−11')}`,'2')]},
-        {t:'⇒', r:[326.3,395.5,349.7,413.5]}, {c:'kpl', r:[348.5,385.9,485.0,422.8], v:[9,'<span class="kjp">解なし</span>']}],
-  done:9,
+  lines:[[114.5,403.8,203.4]],
+  row2:[{t:'＝', r:[91.8,392.7,110.6,412.6]}, {c:'kpb', r:[112.9,376.8,206.1,431.9], v:[7,KH(`−3 ± ${SQ('−11')}`,'2')]},
+        {t:'⇒', r:[209.5,395.5,232.5,413.5]}, {c:'kpl', r:[234.1,385.9,370.6,422.8], v:[8,'<span class="kjp">解なし</span>']}],
+  done:8,
   cm:[
     `⑵ ${M('x² ＋ 3x ＋ 5 ＝ 0')} を <b>解の公式</b> で 解こう！`,
     `<b>a・b・c</b> を 読みとる。　a ＝ 1、b ＝ 3、c ＝ 5。`,
@@ -1858,14 +1873,25 @@ const q2 = kfSlide({num:'⑵', y0:282.2, eq:`x${P2} ＋ 3x ＋ 5 ＝ 0`, abc:[1,
     `${M('b² ＝ 3² ＝ 9')}`,
     `${M('−4 × 1 × 5 ＝ −20')}`,
     `計算した −20 を ルートの中へ。`,
-    `ルートの中を そのまま 書くと ${M('9 − 20')}。`,
-    `${M('9 − 20 ＝ −11')}。　<b>ルートの中が マイナス</b> に なった！`,
+    `ルートの中は ${M('9 − 20 ＝ −11')}。　<b>ルートの中が マイナス</b> に なった！`,
     `2乗して マイナスに なる 数は ない。　だから <b>解なし</b>。　ルートの中が <b>マイナス</b> → 解なし！　<b>完成！</b>`
   ]});
 
+/* まとめ（プリントの 緑の 枠）：ルートの中が ＋・0・− で 解が どう なるか
+   横長は プリントと 同じ 横並び、スマホ（縦長）は 縦に 並べる */
+const SMB = [['＋','解が 2つ'],['０','重解'],['−','解なし']];
+const sm = `<div class="card abs smcard"><div class="smg"><div class="smt">◎まとめ</div><div class="smr">
+  ${SMB.map(([c,a],k)=>`<div class="smi"><span class="math">${SQ(c)}</span><span>⇒</span><span class="sma lh" data-s="${k+1}">${a}</span></div>`).join('')}
+  </div></div></div>
+  <div class="abs r done smdone" data-s="3"><div class="seal">完成！</div></div>
+  ${cbar([`<b>まとめ</b>：解の公式の <b>ルートの中</b> を 見ると、解が どう なるか 分かる。`,
+      `ルートの中が <b>プラス</b> → ± で 2つに 分かれて <b>解が 2つ</b>。`,
+      `ルートの中が <b>0</b> → ＋0 も −0 も 同じで 解が 1つに 重なる → <b>重解</b>。`,
+      `ルートの中が <b>マイナス</b> → 2乗して マイナスに なる 数は ない → <b>解なし</b>。　<b>完成！</b>`])}`;
+
 const DECK = {title:'①-5 2次方程式の解', pages:[
   {name:'表紙', html:coverF(KK, '<span class="mk">ルートの中</span>に<br>注目！', '解の公式で 解く', '0 や マイナスに なったら？', POL, 'ルートの 中を 見る')},
-  {name:'⑴', html:q1}, {name:'⑵', html:q2},
+  {name:'⑴', html:q1}, {name:'⑵', html:q2}, {name:'まとめ', html:sm},
   {name:'終', html:endF(KK + '　2次方程式の解', POL)}
 ]};
 

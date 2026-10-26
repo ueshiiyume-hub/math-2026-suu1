@@ -1061,6 +1061,22 @@ i.nv{font-style:normal;font-family:inherit}
 .p3sg.on{color:#e0465e;background:#fff0b3;box-shadow:0 0 0 3px #e0465e}
 .p3w .v2sub.lh{display:inline-block}
 
+/* ①-5 まとめ（プリントの 緑の 枠）。スマホでは 縦に 並べる */
+.smcard{left:48px;top:30px;width:1184px;height:490px;display:flex;align-items:center;justify-content:center}
+.smg{background:#5aca8f;border-radius:8px;padding:18px 26px 26px;width:1110px}
+.smt{font-family:"Zen Maru Gothic",sans-serif;font-weight:900;font-size:26px;color:#1d3a2a;margin-bottom:14px}
+.smr{display:flex;gap:36px}
+.smi{flex:1;display:flex;align-items:center;gap:.55em;background:#ebf1de;color:#33363b;padding:16px 20px;font-size:34px;font-family:"STIX Two Text","Zen Maru Gothic",serif}
+.smi .rts path{stroke:#33363b}
+.sma{display:inline-block;font-family:"Zen Maru Gothic",sans-serif;font-weight:900;color:#c8445f;margin-left:.3em}
+.smdone{left:1100px;top:390px}
+.portrait .smcard{left:20px;top:30px;width:680px;height:960px}
+.portrait .smg{width:620px;padding:26px 28px 32px}
+.portrait .smt{font-size:34px}
+.portrait .smr{flex-direction:column;gap:26px}
+.portrait .smi{font-size:46px;padding:22px 26px}
+.portrait .smdone{left:540px;top:840px}
+
 /* ===== 手書き ===== */
 #ink{position:fixed;left:0;top:0;z-index:15;pointer-events:none;touch-action:none}
 body.inking #ink{pointer-events:auto;cursor:crosshair}
