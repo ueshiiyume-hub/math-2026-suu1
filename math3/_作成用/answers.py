@@ -1,57 +1,53 @@
-"""プリントの 解答（docx の 後ろの 解答セクション）を 画像に して、目次つきの HTML を 作る
-使い方: python math3/_作成用/answers.py <プリントの PDF> math3/integral
-  PDF は Word で「名前を付けて保存 → PDF」した もの（LibreOffice だと 数式の 赤字・枠の 中の 式が 出ない）
-  1ページ目から 順に 見て、タイトルに「【解答】」が ある ページから 新しい 節、「【作業記録】」で 終わり
-出力: <出力先>/解答.html と <出力先>/kaitou/NN.png
+"""プリント（２学期期末考査まで）の 解答を HTML に 書き出す（数式は KaTeX）
+使い方: python math3/_作成用/answers.py math3/integral   → math3/integral/解答.html
+中身は answers_data.py（プリントの 解答・赤枠コメント を 書き写した もの）。板書から 足した コメントは 追加の 日付つき
 """
-import os, sys, re, subprocess, json, shutil, html
-from PIL import Image
-
-PDF, OUT = sys.argv[1], sys.argv[2]
+import os, sys, re, json, html
 B = os.path.dirname(os.path.abspath(__file__))
-IMG = os.path.join(OUT, 'kaitou')
+sys.path.insert(0, B)
+from answers_data import SHEETS
+OUT = sys.argv[1]
 
-def page_text(i):
-    return subprocess.run(['pdftotext', '-f', str(i), '-l', str(i), '-layout', PDF, '-'], capture_output=True, text=True).stdout
+def tex(t, disp=True):
+    return f'<span class="m{" d" if disp else ""}">{html.escape(t)}</span>'
 
-n = int(re.search(r'Pages:\s+(\d+)', subprocess.run(['pdfinfo', PDF], capture_output=True, text=True).stdout).group(1))
-secs, cur = [], None   # [{no, title, pages:[ページ番号]}]
-for i in range(1, n + 1):
-    t = page_text(i)
-    if '【作業記録】' in t: break
-    head = '\n'.join(t.splitlines()[:5])
-    m = re.search(r'([①②③④⑤⑥⑦⑧⑨])\s*-\s*(\d+)\s*(.*?)\s*【解答】', head)
-    if m:
-        title = re.sub(r'\s+', ' ', m.group(3)).strip()
-        title = title.replace('x n', 'xⁿ')
-        cur = {'no': f'{m.group(1)}-{m.group(2)}', 'title': title, 'pages': []}
-        secs.append(cur)
-    if cur: cur['pages'].append(i)
-assert secs, '【解答】 の ページが 見つからない'
+def mixed(s):
+    """'文字 $TeX$ 文字' → html。[[…]] は 空らんの 答え"""
+    s = re.sub(r'\[\[(.*?)\]\]', lambda m: '\x00' + m.group(1) + '\x01', s)
+    out = []
+    for k, seg in enumerate(re.split(r'\$', s)):
+        if k % 2: out.append(tex(seg, False))
+        else: out.append(html.escape(seg))
+    h = ''.join(out)
+    return h.replace('\x00', '<span class="fill">').replace('\x01', '</span>')
 
-# 画像（色を 減らした PNG：文字が くっきり、軽い）
-if os.path.isdir(IMG): shutil.rmtree(IMG)
-os.makedirs(IMG)
-k = 0
-for s in secs:
-    s['imgs'] = []
-    for p in s['pages']:
-        k += 1
-        base = os.path.join(IMG, f'{k:02d}')
-        subprocess.run(['pdftoppm', '-r', '130', '-png', '-singlefile', '-f', str(p), '-l', str(p), PDF, base], check=True)
-        im = Image.open(base + '.png').convert('RGB').quantize(colors=48, method=Image.Quantize.MEDIANCUT)
-        im.save(base + '.png', optimize=True)
-        s['imgs'].append(f'kaitou/{k:02d}.png')
+def line(s):
+    return f'<div class="ln">{mixed(s) if "$" in s else tex(s)}</div>'
 
-# HTML（目次 → 節ごとに 画像を 縦に）
-VERS = json.load(open(os.path.join(B, 'versions.json'), encoding='utf-8')).get('解答', {'v': '1.0', 'date': ''})
-toc = ''.join(f'<a href="#s{i+1}"><b>{s["no"]}</b>{html.escape(s["title"])}</a>' for i, s in enumerate(secs))
-body = ''.join(
-    f'<section id="s{i+1}"><h2><span class="no">{s["no"]}</span>{html.escape(s["title"])}<a class="up" href="#top">↑ 目次</a></h2>'
-    + ''.join(f'<img src="{src}?v={VERS["v"]}" alt="{s["no"]} 解答 {j+1}ページ目" loading="lazy" width="1075" height="1520">' for j, src in enumerate(s['imgs']))
-    + '</section>' for i, s in enumerate(secs))
+def note(n):
+    title, lines, add = n
+    badge = f'<span class="nadd">追加 {add}</span>' if add else ''
+    return f'<div class="note{" add" if add else ""}"><div class="nt">{mixed(title)}{badge}</div>' + ''.join(f'<div>{mixed(l)}</div>' for l in lines) + '</div>'
+
+def item(it):
+    return (f'<div class="it"><div class="q"><span class="tag">{it["t"]}</span>{tex(it["q"])}</div>'
+            f'<div class="ans">{"".join(line(l) for l in it["a"])}</div>{"".join(note(n) for n in it["notes"])}</div>')
+
+secs, toc = [], []
+for i, s in enumerate(SHEETS):
+    sid = f's{i+1}'
+    toc.append(f'<a href="#{sid}"><b>{s["no"]}</b>{mixed(s["title"])}</a>')
+    h = f'<section id="{sid}"><h2><span class="no">{s["no"]}</span><span class="tt">{mixed(s["title"])}</span><a class="up" href="#top">↑ 目次</a></h2>'
+    for name, lines in s.get('boxes', []):
+        h += f'<div class="box"><div class="bl">{mixed(name)}</div><div class="bc">{"".join(f"<div>{mixed(l)}</div>" for l in lines)}</div></div>'
+    for name, lines in s.get('derive', []):
+        h += f'<h3>{html.escape(name)}</h3><div class="der">{"".join(f"<div>{mixed(l)}</div>" for l in lines)}</div>'
+    for name, items in s.get('groups', []):
+        h += f'<h3>{html.escape(name)}　<small>次の不定積分を求めよ。</small></h3><div class="grid">{"".join(item(x) for x in items)}</div>'
+    secs.append(h + '</section>')
+
+V = json.load(open(os.path.join(B, 'versions.json'), encoding='utf-8')).get('解答', {'v': '1.0', 'date': ''})
 tpl = open(os.path.join(B, 'answers.html'), encoding='utf-8').read()
-out = tpl.replace('{{TOC}}', toc).replace('{{BODY}}', body).replace('{{VER}}', f'ver {VERS["v"]}　{VERS["date"]}')
+out = tpl.replace('{{TOC}}', ''.join(toc)).replace('{{BODY}}', ''.join(secs)).replace('{{VER}}', f'ver {V["v"]}　{V["date"]}')
 open(os.path.join(OUT, '解答.html'), 'w', encoding='utf-8').write(out)
-print('ok', len(secs), '節', k, 'ページ')
-for s in secs: print(' ', s['no'], s['title'], s['pages'])
+print('ok', len(SHEETS), 'プリント')
