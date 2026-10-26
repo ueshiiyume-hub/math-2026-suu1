@@ -4,7 +4,13 @@
 const stage = document.getElementById('stage');
 const names = DECK.pages.map(p=>p.name);
 document.title = DECK.title;
-stage.innerHTML = DECK.pages.map(p=>`<section class="slide">${p.html}</section>`).join('');
+stage.innerHTML = DECK.pages.map(p=>`<section class="slide${p.add?' addp':''}">${p.html}</section>`).join('');
+/* 追加解説（授業の 板書から あとで 足した ページ）：{name, html, add:'10/26'} → 見出しの 横に 印 */
+stage.querySelectorAll('.slide').forEach((el,i)=>{
+  const a = DECK.pages[i].add; if(!a) return;
+  const h = el.querySelector('.hd h2');
+  if(h) h.insertAdjacentHTML('afterend', `<span class="addb">追加解説${a===true?'':`<small>${a}</small>`}</span>`);
+});
 
 /* 数式：<span class="m">TeX</span> を KaTeX で かく。\A{…}＝橙（変わる ところ）、\B{…}＝紫（置きかえ t）、\DP{…}＝深い青（答え）、\on{番}{a|b|dp}{…}＝その番で 色が つく */
 const KX = {throwOnError:false, trust:true, strict:false, macros:{
@@ -21,16 +27,53 @@ const nums = e => ['s','e','o','m'].map(k=>e.dataset[k]).filter(v=>v!==undefined
 const maxStep = els.map(el => Math.max(0, ...[...el.querySelectorAll('[data-s],[data-e],[data-o],[data-m]')].flatMap(nums)));
 
 const bar = document.getElementById('bar'), ui = document.getElementById('ui'), jump = document.getElementById('jump');
-jump.innerHTML = `<button id="themebtn" title="明るく／暗く（T）"></button><button class="tocbtn" title="目次">≡ 目次</button><span class="pgno"></span>
+jump.innerHTML = `<button id="fsbtn" title="全画面（F）"></button><button id="themebtn" title="明るく／暗く（T）"></button><button class="tocbtn" title="目次">≡ 目次</button><span class="pgno"></span>
   <div class="tocbg"></div><div class="tocp"><div class="toch"><b>${DECK.title}</b><button class="tocx" title="閉じる">✕</button></div>
   <a class="home" href="index.html">← スライドの 一覧へ</a>
-  <div class="tocl">${names.map((n,i)=>`<button class="ti" data-i="${i}">${n}</button>`).join('')}</div></div>`;
+  <div class="tocl">${names.map((n,i)=>`<button class="ti" data-i="${i}">${n}${DECK.pages[i].add?'<span class="tadd">追加</span>':''}</button>`).join('')}</div></div>`;
 window.paintTheme = () => { const b=document.getElementById('themebtn'); b.textContent = isDark() ? '☀' : '☾'; };
 paintTheme();
+
+/* ====== 全画面 ======
+   ボタン（右下）か F キーで 切りかえ。ブラウザの きまりで、ページを 移ったり 読み込み直したり すると 全画面は いったん 解除される。
+   そこで 全画面の まま 移った ことを 覚えておき（sessionStorage）、次の ページで 最初に 画面に ふれた ときに 自動で 全画面に 戻す。 */
+const FSD = document.documentElement;
+const fsOn = () => !!(document.fullscreenElement || document.webkitFullscreenElement);
+const fsCan = !!(FSD.requestFullscreen || FSD.webkitRequestFullscreen);
+let leaving = false;
+const fsSave = v => { try{ sessionStorage.setItem('fs', v ? '1' : '0'); }catch(_){} };
+const fsWanted = () => { try{ return sessionStorage.getItem('fs')==='1'; }catch(_){ return false; } };
+function fsReq(){ const f = FSD.requestFullscreen || FSD.webkitRequestFullscreen; try{ const p = f && f.call(FSD); if(p && p.catch) p.catch(()=>{}); }catch(_){} }
+function fsExit(){ const f = document.exitFullscreen || document.webkitExitFullscreen; try{ const p = f && f.call(document); if(p && p.catch) p.catch(()=>{}); }catch(_){} }
+function toggleFS(){ fsHint(false); if(fsOn()) fsExit(); else fsReq(); }
+function paintFS(){ const b = document.getElementById('fsbtn'); if(!b) return;
+  b.style.display = fsCan ? '' : 'none';
+  b.innerHTML = fsOn() ? '<svg viewBox="0 0 24 24"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>'
+                       : '<svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>';
+  b.title = fsOn() ? '全画面を やめる（F）' : '全画面（F）'; }
+['fullscreenchange','webkitfullscreenchange'].forEach(ev=>document.addEventListener(ev, ()=>{ if(!leaving) fsSave(fsOn()); paintFS(); setTimeout(fit, 50); }));
+/* ページを 離れる とき（次の プリント・一覧・読み込み直し）：全画面だったか どうかを 覚える */
+addEventListener('pagehide', ()=>{ leaving = true; });
+addEventListener('beforeunload', ()=>{ leaving = true; fsSave(fsOn()); });
+document.addEventListener('click', e=>{ if(e.target.closest('a[href]')){ leaving = true; fsSave(fsOn()); } }, true);
+/* 全画面の まま 来た ときは、最初の タップ・キーで 全画面に 戻す（ブラウザは 操作なしの 全画面を 許さない） */
+const fsh = document.createElement('div'); fsh.id = 'fshint'; fsh.textContent = '画面に ふれると 全画面に 戻ります'; document.body.appendChild(fsh);
+function fsHint(on){ fsh.classList.toggle('show', on); }
+if(fsCan && fsWanted() && !fsOn()){
+  fsHint(true);
+  let swallow = false;   // 戻す ための タップでは ページを 進めない
+  addEventListener('click', e=>{ if(swallow){ swallow = false; if(!e.target.closest('a,button')){ e.stopPropagation(); e.preventDefault(); } } }, true);
+  const back = e => { if(e.type==='pointerdown') swallow = true;
+    if(e.type==='keydown' && e.key==='Escape'){ fsSave(false); } else fsReq();
+    fsHint(false); ['pointerdown','keydown'].forEach(t=>removeEventListener(t, back, true)); };
+  ['pointerdown','keydown'].forEach(t=>addEventListener(t, back, true));
+}
+paintFS();
 const tocOpen = on => { jump.classList.toggle('open', on); if(on){ const c=jump.querySelector('.ti.on'); if(c) c.scrollIntoView({block:'center'}); } };
 jump.addEventListener('click', e=>{
   if(e.target.closest('a')) return;
   e.stopPropagation();
+  if(e.target.closest('#fsbtn')) return toggleFS();
   if(e.target.closest('#themebtn')) return toggleTheme();
   if(e.target.closest('.tocbtn')) return tocOpen(!jump.classList.contains('open'));
   if(e.target.closest('.tocx,.tocbg')) return tocOpen(false);
@@ -59,8 +102,28 @@ function render(){
   jump.querySelector('.pgno').textContent = `${si+1} / ${els.length}`;
   ui.textContent = '←→ 進む・戻る　P 自動再生　F 全画面　H 表示を隠す　T 明暗　W 書きこむ';
 }
-function next(){ if(st<maxStep[si]) st++; else if(si<els.length-1){ si++; st=0; } else stopAuto(); render(); }
-function prev(){ if(st>0) st--; else if(si>0){ si--; st=maxStep[si]; } render(); }
+function next(){ if(endOpen()) return; if(st<maxStep[si]) st++; else if(si<els.length-1){ si++; st=0; } else { stopAuto(); return endShow(true); } render(); }
+function prev(){ if(endOpen()) return endShow(false); if(st>0) st--; else if(si>0){ si--; st=maxStep[si]; } render(); }
+
+/* 終わりの パネル：最後の ページの 先で 出す。次の プリント・もう一度・一覧 を 選ぶ */
+const endp = document.createElement('div'); endp.id = 'endp'; stage.appendChild(endp);
+(function(){
+  const i = SERIES.findIndex(d=>d.f===ME), nx = SERIES[i+1], pv = SERIES[i-1];
+  const url = d => `${d.f}.html?v=${encodeURIComponent(d.v)}`;
+  endp.innerHTML = `<div class="ein">
+    <div class="ek">${DECK.title}</div><div class="eh">おわり</div>
+    ${nx ? `<a class="enext" href="${url(nx)}"><span class="el">次の プリントへ</span><span class="en">${nx.no}</span><span class="et">${nx.t}</span><span class="ea">→</span></a>`
+         : `<div class="elast">この 単元の スライドは ここまで です</div>`}
+    <div class="ebtns"><button class="eagain">↺ もう一度 最初から</button>
+      ${pv ? `<a href="${url(pv)}">← 前の プリント（${pv.no}）</a>` : ''}<a href="index.html">≡ スライドの 一覧へ</a></div>
+    <div class="elist">${SERIES.map(d=>`<a class="${d.f===ME?'me':''}" href="${url(d)}"><b>${d.no}</b>${d.t}</a>`).join('')}</div>
+    <button class="eback">← 最後の ページに 戻る</button></div>`;
+  endp.querySelectorAll('.m').forEach(e=>{ try{ katex.render(e.textContent, e, KX); }catch(_){} });
+  endp.querySelector('.eagain').addEventListener('click', e=>{ e.stopPropagation(); endShow(false); si=0; st=0; render(); });
+  endp.querySelector('.eback').addEventListener('click', e=>{ e.stopPropagation(); endShow(false); });
+})();
+function endOpen(){ return endp.classList.contains('open'); }
+function endShow(on){ endp.classList.toggle('open', on); if(on){ bar.style.width='100%'; jump.querySelector('.pgno').textContent='おわり'; } else render(); }
 function stopAuto(){ if(timer){ clearInterval(timer); timer=null; } }
 function toggleAuto(){ if(timer) stopAuto(); else timer=setInterval(next,4000); }
 
@@ -71,14 +134,14 @@ document.addEventListener('keydown', e=>{
   else if(k==='Home'){ stopAuto(); si=0; st=0; render(); }
   else if(k==='End'){ stopAuto(); si=els.length-1; st=maxStep[si]; render(); }
   else if(k==='p'||k==='P') toggleAuto();
-  else if(k==='f'||k==='F'){ try{ if(document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen(); }catch(_){} }
+  else if(k==='f'||k==='F') toggleFS();
   else if(k==='h'||k==='H'){ ui.classList.toggle('hide'); bar.classList.toggle('hide'); jump.classList.toggle('hide'); }
   else if(k==='t'||k==='T') toggleTheme();
-  else if(k==='Escape') tocOpen(false);
+  else if(k==='Escape'){ tocOpen(false); if(endOpen()) endShow(false); }
 });
 /* 画面の 左 1/3 を 押すと 戻る、それ以外は 進む */
 document.addEventListener('click', e=>{
-  if(e.target.closest('a,button,#jump,#inkbar')) return;
+  if(e.target.closest('a,button,#jump,#inkbar,#endp')) return;
   stopAuto(); if(e.clientX < document.documentElement.clientWidth/3) prev(); else next();
 });
 /* 画面に 合わせる：縦長（スマホ）なら 720×1280、横長なら 1280×720 */
@@ -95,5 +158,20 @@ addEventListener('resize', fit);
   const m = location.hash.match(/^#(\d+)-(\d+|e)$/); if(!m) return;
   si = Math.min(+m[1], els.length-1); st = m[2]==='e' ? maxStep[si] : Math.min(+m[2], maxStep[si]);
 })();
+/* 再読み込み したら、その ページ・その 番から 再開する（sessionStorage に デッキごとに 覚える。一覧から 開いた ときは 最初から） */
+const POSKEY = 'pos:' + location.pathname;
+(function(){
+  if(location.hash) return;
+  let nav = ''; try{ nav = (performance.getEntriesByType('navigation')[0]||{}).type || ''; }catch(_){}
+  if(nav !== 'reload' && nav !== 'back_forward') return;
+  try{ const p = JSON.parse(sessionStorage.getItem(POSKEY) || 'null'); if(!p) return;
+    si = Math.min(Math.max(0, p.si|0), els.length-1); st = Math.min(Math.max(0, p.st|0), maxStep[si]);
+    if(p.end) setTimeout(()=>endShow(true), 0);
+  }catch(_){}
+})();
+const posSave = () => { try{ sessionStorage.setItem(POSKEY, JSON.stringify({si, st, end:endOpen()})); }catch(_){} };
+const _render = render; render = function(){ _render(); posSave(); };
+const _endShow = endShow; endShow = function(on){ _endShow(on); posSave(); };
 if(/final/.test(location.search)) document.body.classList.add('final');
 fit(); render();
+if(location.hash==='#end') endShow(true);

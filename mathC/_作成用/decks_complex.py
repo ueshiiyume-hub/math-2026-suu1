@@ -1175,3 +1175,202 @@ const DECK = {title:'③-1 ド・モアブルの定理', pages:[
   {name:'問16 ⑴', html:p5}, {name:'問16 ⑵', html:p6}, {name:'まとめ', html:p7},
 ]};
 ''')
+
+# ---------------------------------------------------------------- ③-2 1のn乗根
+DECKS['3-2_1のn乗根'] = ('③-2 1のn乗根', r'''
+const NO = '③-2', SEC = '数学C　複素数平面';
+const IT = v => `<tspan class="it">${v}</tspan>`;
+const D = Math.PI/180;
+const UCIRC = g => `<circle class="ucirc" cx="${g.X(0)}" cy="${g.Y(0)}" r="${g.u}"/>`;
+const PT = t => [Math.cos(t*D), Math.sin(t*D)];
+
+const p0 = coverSlide({kicker:'数学C　複素数平面', no:NO, title:'1のn乗根', sub:'n 回 掛けると 1 に 戻る 数'});
+
+/* n 乗根：z³＝1 の 解 ＝ 3回 掛けると 1 に 戻る 数 */
+const g1 = PL({x0:-1.6, x1:1.6, y0:-1.6, y1:1.6, u:130, grid:false, ticks:false});
+const p1 = HD(NO, 'n 乗根', SEC) + `<div class="bd">
+  <div class="l" style="gap:18px">
+    ${BOX('n 乗根', `${M`n`} を 正の 整数、${M`\alpha`} を 複素数と する とき、<br>方程式 ${M`z^n=\alpha`} の 解を ${M`\alpha`} の ${FILL(1, M`n` + ' 乗根', 3.6)} という。`)}
+    <div class="q" data-s="2" style="font-size:26px;line-height:1.9">${M`z^3=1`} の 解 ＝ <b class="dp">3回 掛けると ${M`1`} に 戻る 数</b><br>
+      <span data-s="3">→ 1回で ${FILL(3, M`120^\circ`, 2.8)} 回転する 数（円周の ${M`3`} 等分点）</span></div>
+  </div>
+  <div class="r">${g1.svg(UCIRC(g1) + g1.dot(1, 0, '1', null, {pos:'se'})
+    + [0,1,2].map(k => g1.carc(120*k+4, 120*(k+1)-4, g1.u+18, 3, {d:k*.9, lab:k===0?'120°':''})).join('')
+    + [1,2].map(k => g1.dot(...PT(120*k), '', 3, {d:k*.9+.6})).join('')
+    + `<polygon class="tri" points="${[0,120,240].map(t=>`${g1.X(Math.cos(t*D)).toFixed(1)},${g1.Y(Math.sin(t*D)).toFixed(1)}`).join(' ')}" data-s="4"/>`)}</div>
+</div>` + CAP([
+  `③-1 とは 逆に、「${M`n`} 乗して ${M`\alpha`} に なる 数」を 考えます。`,
+  `方程式 ${M`z^n=\alpha`} の 解を、${M`\alpha`} の ${M`n`} <b>乗根</b> と いいます。`,
+  `たとえば ${M`z^3=1`} の 解は、「3回 掛けると ${M`1`} に 戻る 数」です。`,
+  `3回で ちょうど 1周（${M`360^\circ`}）する には、1回で ${M`360^\circ\div3=120^\circ`} 回れば よい。長さは ${M`1`} の まま です。`,
+  `だから 解は、円周を ${M`3`} 等分する 点に なります。`
+]);
+
+/* 解く ページ：z＝r(cosθ＋i sinθ) とおく → 長さと 偏角を 比べる → k を 動かす → 図形 */
+function rootPage(o){
+  const g = PL({x0:-1.6, x1:1.6, y0:-1.6, y1:1.6, u:122, grid:false, ticks:false});
+  const n = o.n, ks = [...Array(n).keys()], step = 360/n, KS = 5;   // 番 5 で k を 順に、最後の 番で 図形
+  const fig = UCIRC(g) + ks.map(k => g.seg(0, 0, ...PT(step*k), KS, {c:'m', d:k*.7}) + g.dot(...PT(step*k), `${IT('k')}=${k}`, KS, {d:k*.7+.4, pos:o.pos[k]})).join('')
+    + (o.shape ? `<polygon class="tri" points="${ks.map(k=>`${g.X(Math.cos(step*k*D)).toFixed(1)},${g.Y(Math.sin(step*k*D)).toFixed(1)}`).join(' ')}" data-s="${o.shape}"/>` : '');
+  return HD(NO, o.title, SEC) + `<div class="bd">
+    <div class="l" style="gap:10px">${o.top}
+      <div class="calc" style="font-size:23px;gap:3px">${o.lines.map(([t,s])=>`<div data-s="${s}">${t.startsWith('<')?t:M(t)}</div>`).join('')}</div>
+    </div>
+    <div class="r" style="flex-direction:column;gap:8px">
+      <div class="pbox" style="font-size:20px;line-height:1.7"><div class="pl2">Point</div>${M`(\cos\theta+i\sin\theta)^n=\cos n\theta+i\sin n\theta`}<br>偏角：${M`\DP{+360^\circ\times k}`}</div>
+      ${g.svg(fig, 'rt')}
+    </div>
+  </div>` + CAP(o.cm);
+}
+const p2 = rootPage({title:'例　z³＝1 を 解く', n:3, shape:7, pos:['se','nw','sw'],
+  top:`<div class="q" style="font-size:26px"><span class="tag">例</span>方程式 ${M`z^3=1`} を 解け。</div>`,
+  lines:[[String.raw`z=r(\cos\theta+i\sin\theta)\ \text{とおくと}\ \ z^3=\RE{r^3}(\cos\IM{3\theta}+i\sin\IM{3\theta})`,1],
+         [String.raw`1=\cos0^\circ+i\sin0^\circ\ \text{より}`,2],
+         [String.raw`\RE{r^3=1},\ \ \IM{3\theta=0^\circ+360^\circ\times k}\ (k\text{ は 整数})`,3],
+         [String.raw`r=1,\ \ \theta=120^\circ\times k`,4],
+         [String.raw`0^\circ\leqq\theta<360^\circ\ \text{より}\ \ k=0,\ 1,\ 2`,5],
+         [String.raw`z=\DP{1,\ -\tfrac{1}{2}+\tfrac{\sqrt{3}}{2}i,\ -\tfrac{1}{2}-\tfrac{\sqrt{3}}{2}i}`,6],
+         [`<span style="font-size:24px">解を 表す 点は、点 ${M`1`} を 頂点と する ${FILL(7,'正三角形',5)} の 頂点。</span>`,7]],
+  cm:[`${M`z^3=1`} を、極形式で 解きます。`,
+      `${M`z`} を 極形式で おくと、ド・モアブルの定理で ${M`z^3`} は 長さ ${M`r^3`}、向き ${M`3\theta`}。`,
+      `右辺の ${M`1`} も 極形式に します。長さ ${M`1`}、向き ${M`0^\circ`}。`,
+      `<b class="re">長さ</b> と <b class="im">向き</b> を 比べます。向きは 1周（${M`360^\circ`}）回ると 同じ なので、${M`0^\circ`} だけで なく ${M`360^\circ,\ 720^\circ,\ \cdots`} でも よい（<b>${M`+360^\circ\times k`}</b>）。`,
+      `${M`r`} は 正の 数 なので ${M`r=1`}。${M`\theta=120^\circ\times k`}。`,
+      `${M`k=0,1,2`} で ${M`0^\circ,\ 120^\circ,\ 240^\circ`}。${M`k=3`} は ${M`360^\circ`} で ${M`k=0`} と 同じ 点に 戻るので、ここまで です。`,
+      `${M`\cos120^\circ+i\sin120^\circ`}、${M`\cos240^\circ+i\sin240^\circ`} を 計算して、3つの 解。`,
+      `3つの 点は 円周を 3等分 する ので、<b>正三角形</b> の 頂点に なります。`]});
+
+const p3 = rootPage({title:'問17　1の4乗根', n:4, shape:null, pos:['se','ne','nw','se'],
+  top:`<div class="q" style="font-size:26px"><span class="tag">問17</span>${M`1`} の ${M`4`} 乗根を 求めよ。</div>`,
+  lines:[[String.raw`z=r(\cos\theta+i\sin\theta)\ \text{とおくと}\ \ z^4=\RE{r^4}(\cos\IM{4\theta}+i\sin\IM{4\theta})`,1],
+         [String.raw`1\ \text{を 極形式で 表すと}\ \ 1=\cos0^\circ+i\sin0^\circ`,2],
+         [String.raw`\text{絶対値と 偏角を 比較して}\ \ \RE{r^4=1},\ \IM{4\theta=0^\circ+360^\circ\times k}`,3],
+         [String.raw`\text{よって}\ \ r=1,\ \ \theta=90^\circ\times k`,4],
+         [String.raw`0^\circ\leqq\theta<360^\circ\ \text{より}\ \ k=0,\ 1,\ 2,\ 3\ \ (\theta=0^\circ,\ 90^\circ,\ 180^\circ,\ 270^\circ)`,5],
+         [String.raw`\text{したがって、}1\text{ の }4\text{ 乗根は}\ \ \DP{1,\ i,\ -1,\ -i}`,6]],
+  cm:[`${M`1`} の ${M`4`} 乗根 ＝ ${M`z^4=1`} の 解。例と 同じ 手順です。`, `ド・モアブルの定理で ${M`z^4`} は 長さ ${M`r^4`}、向き ${M`4\theta`}。`,
+      `${M`1`} は 長さ ${M`1`}、向き ${M`0^\circ`}。`, `長さと 偏角を 比べます。偏角は ${M`+360^\circ\times k`}。`, `${M`r=1`}、${M`\theta=360^\circ\div4\times k=90^\circ\times k`}。`,
+      `${M`k=0,1,2,3`}。1回で ${M`90^\circ`} 回る 数 ── ②-1 で 見た ${M`i`} の 仲間です。`, `${M`1,\ i,\ -1,\ -i`}。どれも 4回 掛けると ${M`1`} に 戻ります。`]});
+
+/* 問18：図示して 図形を 答える */
+const g4 = PL({x0:-1.6, x1:1.6, y0:-1.6, y1:1.6, u:130, grid:false, ticks:false});
+const P4 = [[1,0,'1','se'],[0,1,IT('i'),'ne'],[-1,0,'−1','nw'],[0,-1,'−'+IT('i'),'se']];
+const p4 = HD(NO, '問18', SEC) + `<div class="bd">
+  <div class="l" style="gap:18px">
+    <div class="q" style="font-size:25px"><span class="tag">問18</span>問17で 求めた ${M`1`} の ${M`4`} 乗根を 表す 点を、複素数平面上に 図示せよ。<br>また、それらの 点を 結んで できる 図形は 何か。</div>
+    <div class="q" data-s="2" style="font-size:27px">点 ${M`1`} を 1つの 頂点と する ${FILL(2,'正方形',4)}</div>
+  </div>
+  <div class="r">${g4.svg(UCIRC(g4) + P4.map(([a,b,l,p],i)=>g4.dot(a,b,l,1,{d:i*.4, pos:p})).join('')
+    + `<polygon class="tri" points="${P4.map(([a,b])=>`${g4.X(a)},${g4.Y(b)}`).join(' ')}" data-s="2"/>`)}</div>
+</div>` + CAP([
+  `問17の 4つの 点を、図に 打ちます。`,
+  `${M`1,\ i,\ -1,\ -i`}。円周を ${M`4`} 等分する 点です。`,
+  `結ぶと <b>正方形</b>。${M`z^n=1`} の 解は、点 ${M`1`} を 頂点と する <b>正 ${M`n`} 角形</b> の 頂点に なります。`
+]);
+
+/* まとめ（アニメーション なし） */
+const g5 = PL({x0:-1.4, x1:1.4, y0:-1.4, y1:1.4, u:90, grid:false, ticks:false});
+const SH = n => g5.svg(UCIRC(g5) + `<polygon class="tri" points="${[...Array(n).keys()].map(k=>`${g5.X(Math.cos(360/n*k*D)).toFixed(1)},${g5.Y(Math.sin(360/n*k*D)).toFixed(1)}`).join(' ')}"/>`
+  + [...Array(n).keys()].map(k=>g5.dot(...PT(360/n*k), '', null)).join(''), 'sm3');
+const p5 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:20px">
+  ${BOX('1 の n 乗根', `${M`z^n=1`} の 解 ＝ ${M`n`} 回 掛けると ${M`1`} に 戻る 数<br>${M`z=\cos\dfrac{360^\circ\times k}{n}+i\sin\dfrac{360^\circ\times k}{n}`}<br>（${M`k=0,1,\cdots,n-1`}）`)}
+  <div style="display:flex;gap:30px;align-items:center;justify-content:center">
+    <div style="text-align:center">${SH(3)}<div class="q" style="font-size:22px">${M`n=3`}：正三角形</div></div>
+    <div style="text-align:center">${SH(4)}<div class="q" style="font-size:22px">${M`n=4`}：正方形</div></div>
+  </div>
+</div>` + CAP([`解は 円周の ${M`n`} 等分点。点 ${M`1`} を 頂点と する 正 ${M`n`} 角形の 頂点に なります。`]);
+
+const DECK = {title:'③-2 1のn乗根', pages:[
+  {name:'表紙', html:p0}, {name:'n 乗根', html:p1}, {name:'例　z³＝1 を 解く', html:p2},
+  {name:'問17　1の4乗根', html:p3}, {name:'問18　図示と 図形', html:p4}, {name:'まとめ', html:p5},
+]};
+''')
+
+# ---------------------------------------------------------------- ③-3 【発展】回転の応用
+DECKS['3-3_回転の応用'] = ('③-3 【発展】回転の応用', r'''
+const NO = '③-3', SEC = '数学C　複素数平面';
+const IT = v => `<tspan class="it">${v}</tspan>`;
+const S3 = Math.sqrt(3);
+const POLY = (g, pts, n, cls) => `<polygon class="${cls||'tri'}" points="${pts.map(([a,b])=>`${g.X(a).toFixed(1)},${g.Y(b).toFixed(1)}`).join(' ')}"${n==null?'':` data-s="${n}"`}/>`;
+
+const p0 = coverSlide({kicker:'数学C　複素数平面', no:NO, title:'【発展】回転の応用', sub:'回転で 図形の 頂点を 求める'});
+
+/* 例：正三角形 OAB */
+const g1 = PL({x0:-2, x1:4, y0:-2, y1:4, u:62, ticks:false});
+const A = [2,2], B1 = [1-S3, 1+S3], B2 = [1+S3, 1-S3];
+const p1 = HD(NO, '例　正三角形の 頂点', SEC) + `<div class="bd">
+  <div class="l" style="gap:10px">
+    <div class="q" style="font-size:24px"><span class="tag">例</span>原点 O と 点 ${M`\mathrm{A}(2+2i)`} に 対して、<br>${M`\triangle\mathrm{OAB}`} が 正三角形と なる 点 B を 表す 複素数を 求めよ。</div>
+    <div class="calc" style="font-size:24px;gap:6px">
+      <div data-s="1">点 B は、点 A を 原点の まわりに ${M`\IM{60^\circ}`} または ${M`\IM{-60^\circ}`} 回転した 点</div>
+      <div data-s="2">${M`60^\circ`}：${M`(2+2i)\left(\tfrac{1}{2}+\tfrac{\sqrt{3}}{2}i\right)=\DP{(1-\sqrt{3})+(1+\sqrt{3})i}`}</div>
+      <div data-s="3">${M`-60^\circ`}：${M`(2+2i)\left(\tfrac{1}{2}-\tfrac{\sqrt{3}}{2}i\right)=\DP{(1+\sqrt{3})+(1-\sqrt{3})i}`}</div>
+    </div>
+    <div class="pbox" style="font-size:20px;line-height:1.7"><div class="pl2">Point</div>${M`\cos60^\circ=\tfrac{1}{2},\ \sin60^\circ=\tfrac{\sqrt{3}}{2}`}<br>${M`\cos(-\theta)=\cos\theta`}、${M`\sin(-\theta)=-\sin\theta`}</div>
+  </div>
+  <div class="r">${g1.svg(POLY(g1, [[0,0],A,B1], 4) + POLY(g1, [[0,0],A,B2], 4)
+    + g1.arr(0,0,...A,null) + g1.dot(...A, 'A', null, {given:true, pos:'ne'})
+    + g1.rot(...A, 60, 1) + g1.rot(...A, -60, 1)
+    + g1.ang(105, 2, {from:45, r:46, lab:'60°', lr:22, d:.2}) + g1.dot(...B1, 'B', 2, {pos:'nw'})
+    + g1.dot(...B2, 'B', 3, {pos:'se'}) + `<path class="arc dr" pathLength="1" d="M${(g1.X(0)+56*Math.cos(Math.PI/4)).toFixed(1)} ${(g1.Y(0)-56*Math.sin(Math.PI/4)).toFixed(1)} A56 56 0 0 1 ${(g1.X(0)+56*Math.cos(-Math.PI/12)).toFixed(1)} ${(g1.Y(0)-56*Math.sin(-Math.PI/12)).toFixed(1)}" data-s="3"/>`
+    + g1.text(1.25, 0.05, '−60°', 'dp', 3))}</div>
+</div>` + CAP([
+  `正三角形 OAB の 頂点 B を、回転を 使って 求めます。`,
+  `正三角形 なので ${M`\mathrm{OB}=\mathrm{OA}`}、${M`\angle\mathrm{AOB}=60^\circ`}。だから B は、A を ${M`60^\circ`} 回した 点です。向きは 左回りと 右回りの <b>2通り</b> あります。`,
+  `${M`60^\circ`} 回転：${M`\cos60^\circ+i\sin60^\circ=\tfrac{1}{2}+\tfrac{\sqrt{3}}{2}i`} を 掛けます。`,
+  `${M`-60^\circ`} 回転：${M`\cos(-60^\circ)=\tfrac{1}{2}`}、${M`\sin(-60^\circ)=-\tfrac{\sqrt{3}}{2}`} なので ${M`\tfrac{1}{2}-\tfrac{\sqrt{3}}{2}i`} を 掛けます。`,
+  `答えは 2つ。正三角形は、OA の 左側と 右側に 1つずつ できます。`
+]);
+
+/* 練習：正方形 OABC */
+const g2 = PL({x0:-2, x1:4, y0:-1, y1:5, u:62, ticks:false});
+const A2 = [3,1], C2 = [-1,3], B3 = [2,4];
+const QP = `<div class="q" style="font-size:23px"><span class="tag">練習</span>原点 O と 点 ${M`\mathrm{A}(3+i)`} に 対して、正方形 OABC を つくる。<br><span class="mu" style="font-size:20px">（頂点は O，A，B，C の 順に 反時計回り）</span></div>`;
+const FIGA = g2.arr(0,0,...A2,null) + g2.dot(...A2, 'A', null, {given:true, pos:'se'});
+const p2 = HD(NO, '練習 ⑴　点 C', SEC) + `<div class="bd">
+  <div class="l" style="gap:10px">${QP}
+    <div class="q" style="font-size:24px">⑴　点 C は、点 A を 原点の まわりに 何度 回転した 点か。また、点 C を 表す 複素数を 求めよ。</div>
+    <div class="calc" style="font-size:25px;gap:6px">
+      <div data-s="1">${FILL(1, M`90^\circ`, 2.6)} 回転した 点。</div>
+      <div data-s="2">${M`90^\circ`} 回転は ${M`\DP{i}`} を 掛ける ことだから</div>
+      <div data-s="2" style="--d:.5s">${M`(3+i)i=3i+i^2=\DP{-1+3i}`}</div>
+    </div>
+  </div>
+  <div class="r">${g2.svg(FIGA + g2.rot(...A2, 90, 1) + g2.ang(108.4, 1, {from:18.4, r:44, lab:'90°', lr:22, d:1.1})
+    + g2.arr(0,0,...C2,2,{c:'g', w:5}) + g2.dot(...C2, 'C', 2, {d:.5, pos:'nw'}))}</div>
+</div>` + CAP([
+  `正方形 OABC の 頂点を 求めます。O の となりの 頂点は A と C です。`,
+  `正方形 なので ${M`\mathrm{OC}=\mathrm{OA}`}、${M`\angle\mathrm{AOC}=90^\circ`}。反時計回りの 順 なので、C は A を 左回りに <b>${M`90^\circ`}</b> 回した 点です。`,
+  `${M`90^\circ`} 回転は ${M`i`} を 掛ける だけ（②-3）。${M`\mathrm{C}=-1+3i`}。`
+]);
+const p3 = HD(NO, '練習 ⑵　点 B', SEC) + `<div class="bd">
+  <div class="l" style="gap:10px">${QP}
+    <div class="q" style="font-size:24px">⑵　点 B を 表す 複素数を 求めよ。</div>
+    <div class="calc" style="font-size:25px;gap:6px">
+      <div data-s="1">${M`\overrightarrow{\mathrm{OB}}=\overrightarrow{\mathrm{OA}}+\overrightarrow{\mathrm{OC}}`} より</div>
+      <div data-s="2">${M`(3+i)+(-1+3i)=\DP{2+4i}`}</div>
+    </div>
+  </div>
+  <div class="r">${g2.svg(POLY(g2, [[0,0],A2,B3,C2], 3) + FIGA + g2.arr(0,0,...C2,null) + g2.dot(...C2, 'C', null, {given:true, pos:'nw'})
+    + g2.move(g2.arr(0,0,...C2,null,{c:'m', dash:true}), ...A2, 1)
+    + g2.arr(0,0,...B3,2,{c:'g', w:5}) + g2.dot(...B3, 'B', 2, {d:.5, pos:'ne'}))}</div>
+</div>` + CAP([
+  `残りの 頂点 B を 求めます。`,
+  `正方形は 平行四辺形の 仲間。B は、OC の 矢印を A の 先へ <b>平行移動</b> した 点です（①-2 の 和）。`,
+  `${M`\mathrm{B}=(3+i)+(-1+3i)=2+4i`}。`,
+  `O、A、B、C を 結ぶと 正方形に なります。`
+]);
+
+/* まとめ（アニメーション なし） */
+const p4 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:26px">
+  <div class="sum" style="font-size:29px">
+    <span>正三角形</span><span class="ar">→</span><span>${M`\pm60^\circ`} 回転（答えは 2通り）</span>
+    <span>正方形の となり</span><span class="ar">→</span><span>${M`90^\circ`} 回転 ＝ ${M`i`} を 掛ける</span>
+    <span>残りの 頂点</span><span class="ar">→</span><span>平行移動 ＝ 足し算</span>
+  </div>
+</div>` + CAP([`図形の 頂点は「回転（掛け算）」と「平行移動（足し算）」で 求められます。`]);
+
+const DECK = {title:'③-3 【発展】回転の応用', pages:[
+  {name:'表紙', html:p0}, {name:'例　正三角形の 頂点', html:p1}, {name:'練習 ⑴　点 C', html:p2}, {name:'練習 ⑵　点 B', html:p3}, {name:'まとめ', html:p4},
+]};
+''')

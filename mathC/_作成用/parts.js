@@ -148,6 +148,14 @@ function PL(o){
       + `<polygon class="roth" points="${hp}"${at(d+.5)}/>`
       + (op.lab ? `<text class="dp" x="${f(cx+lr*Math.cos(m))}" y="${f(cy-lr*Math.sin(m)+7)}" text-anchor="middle"${at(d+.3)}>${op.lab}</text>` : '');
   };
+  /* 回る 矢印（点線の ゴースト）：原点からの 矢印 (a,b) が n 番で 出て、deg だけ 左回りに 回る（負なら 右回り） */
+  g.rot = (a, b, deg, n, op={}) => {
+    const L = Math.hypot(a, b)*u, t0 = Math.atan2(b, a)*180/Math.PI, hl = 14, hw = 7;
+    return `<g data-s="${n}"${op.e?` data-e="${op.e}"`:''}><g transform="translate(${X(0)} ${Y(0)}) rotate(${f(-t0)})">`
+      + `<g class="sweep" data-o="${n}" style="--rot:${-deg}deg">`
+      + `<line class="swl" x1="0" y1="0" x2="${f(L-hl*.8)}" y2="0"/><polygon class="roth" points="${f(L)},0 ${f(L-hl)},${-hw} ${f(L-hl)},${hw}"/>`
+      + `</g></g></g>`;
+  };
   /* 文字 */
   g.text = (x, y, s, cls, n, anchor) => `<text class="${cls||''}" x="${X(x)}" y="${Y(y)}" text-anchor="${anchor||'middle'}"${n==null?'':` data-s="${n}"`}>${s}</text>`;
   return g;
