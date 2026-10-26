@@ -312,11 +312,34 @@ const p3 = gridPage({no:NO, sec:SEC, title:'問3', q:'次の 不定積分を 求
   `⑴ ${M`-\sin x`} の 積分は ${M`-(-\cos x)=\cos x`}。`,
   `⑵ 分子の 各項を ${M`\cos^2x`} で 割ります（①-2 と 同じ）。`,
   `${M`\cos x\to\sin x`}、${M`\frac{1}{\cos^2x}\to\tan x`}。`,
-  `⑶ 展開すると ${M`\tan x\cos x=\frac{\sin x}{\cos x}\cdot\cos x=\sin x`}。`,
+  `⑶ 展開すると ${M`\tan x\cos x=\frac{\sin x}{\cos x}\cdot\cos x=\sin x`}。（次の ページで くわしく）`,
   `${M`2\cos x\to2\sin x`}、${M`-\sin x\to\cos x`}。`,
   `⑷ ${M`\tan^2x=\frac{1}{\cos^2x}-1`} を 使うと、${M`\frac{1}{\cos^2x}-1-\frac{2}{\cos^2x}=-\frac{1}{\cos^2x}-1`}。`,
   `${M`-\frac{1}{\cos^2x}\to-\tan x`}、${M`-1\to-x`}。`
 ]});
+
+/* 問3⑶ の くわしく（板書と 同じ 流れ） */
+const p3b = HD(NO, '問3　⑶　くわしく', SEC) + `<div class="bd">
+  <div class="l" style="gap:14px">
+    <div class="calc" style="font-size:32px;gap:16px">
+      <div>${D`\int(2-\tan x)\cos x\,dx`}</div>
+      <div data-s="1">${D`=\int(2\cos x-\on{2}{a}{\tan x\cos x})\,dx`}</div>
+      <div data-s="3">${D`=\int(2\cos x-\on{3}{a}{\sin x})\,dx`}</div>
+      <div data-s="4">${D`=\DP{2\sin x+\cos x+C}`}</div>
+    </div>
+  </div>
+  <div class="r bigpt" style="flex-direction:column;gap:14px;align-items:stretch;width:440px">
+    ${PT(1, '① かっこを はずす', `${D`(2-\tan x)\cos x`}<div>${D`=2\cos x-\tan x\cos x`}</div>`)}
+    ${PT(2, '② tan x を sin x／cos x に', `${D`\tan x\cos x=\frac{\sin x}{\cos x}\times\cos x`}<div>${D`=\A{\sin x}`}</div>`)}
+    ${PT(4, '③ 積分（符号に 注意）', `${M`\int2\cos x\,dx=2\sin x`}<div>${M`\int(-\sin x)\,dx=+\cos x`}</div>`)}
+  </div>
+</div>` + CAP([
+  `問3⑶ を くわしく 見ます。${M`\tan x\cos x`} の まま では 積分できません。`,
+  `① かっこを はずします。${M`\cos x`} を それぞれに 掛けます。`,
+  `② ${M`\tan x=\frac{\sin x}{\cos x}`} です。${M`\cos x`} を 掛けると 分母の ${M`\cos x`} と 約分されます。`,
+  `${M`\tan x\cos x=\sin x`}。これで 公式が 使える 形に なりました。`,
+  `③ ${M`2\cos x\to2\sin x`}。${M`\sin x`} の 積分は ${M`-\cos x`} なので、${M`-\sin x`} の 積分は ${M`+\cos x`}。`
+]);
 
 const p4 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:26px">
   ${BOX('公式', `${D`\int\sin x\,dx=-\cos x+C`}　　${D`\int\cos x\,dx=\sin x+C`}　　${D`\int\frac{dx}{\cos^2x}=\tan x+C`}`)}
@@ -324,7 +347,7 @@ const p4 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:26px">
 </div>` + CAP([`①-4 では、指数関数の 不定積分を 学びます。`]);
 
 const DECK = {title:'①-3 三角関数の不定積分', pages:[
-  {name:'表紙', html:p0}, {name:'公式', html:p1}, {name:'例', html:p2}, {name:'問3', html:p3}, {name:'まとめ', html:p4},
+  {name:'表紙', html:p0}, {name:'公式', html:p1}, {name:'例', html:p2}, {name:'問3', html:p3}, {name:'問3　⑶　くわしく', html:p3b}, {name:'まとめ', html:p4},
 ]};
 ''')
 
