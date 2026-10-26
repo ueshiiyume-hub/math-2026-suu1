@@ -1,7 +1,7 @@
 import sys
 import pymupdf as fz
 
-# 使い方: python kaitou.py print.pdf ../期末考査/kaitou ページの名前 バージョン
+# 使い方: python kaitou.py print.pdf ../期末考査/kaitou ページの名前 バージョン [解答pdfの 保存先（非公開リポジトリ）]
 SRC, OUT = sys.argv[1], sys.argv[2]   # プリントの pdf、出力の フォルダ
 RED = (0.63, 0.11, 0.11)
 FONTS = {
@@ -383,7 +383,8 @@ for n, (i, label, k, pcs) in enumerate(GROUPS):
     src[i].show_pdf_page(src[i].rect, ans, k)        # 答えを 書きこんだ pdf も 作る
 src.select(range(NP))
 src.subset_fonts()
-src.save(os.path.join(OUT, '解答.pdf'), garbage=3, deflate=True)
+if len(sys.argv) > 5:      # 答えを 書きこんだ pdf は 非公開リポジトリへ（公開リポジトリに プリントの pdf は 置かない）
+    src.save(sys.argv[5], garbage=3, deflate=True)
 
 B = os.path.dirname(os.path.abspath(__file__))
 TITLE = sys.argv[3] if len(sys.argv) > 3 else '解答'
