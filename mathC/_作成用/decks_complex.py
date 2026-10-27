@@ -540,7 +540,33 @@ const p4 = HD(NO, '長さと 向きを 読み取る', SEC) + `<div class="bd">
   `C：長さ ${M`1`}、真左なので 向き ${M`180^\circ`}。`,
   `長さが ${M`1`} の ときは、前の ${M`1`} を 書きません。${M`\cos180^\circ=-1`} なので ${M`-1`}。`,
   `D：長さ ${M`2`}、${M`180^\circ`} より さらに ${M`45^\circ`} 回って ${M`225^\circ`}。`,
-  `${M`\cos225^\circ=\sin225^\circ=-\frac{1}{\sqrt{2}}`} なので ${M`-\sqrt{2}-\sqrt{2}i`}。`
+  `${M`\cos225^\circ=\sin225^\circ=-\frac{1}{\sqrt{2}}`} なので ${M`-\sqrt{2}-\sqrt{2}i`}。（次の ページで くわしく）`
+]);
+
+/* 長さと 向きを 読み取る D くわしく（10/27 の 板書）：cos225°・sin225° → 代入 → 有理化 */
+const g4b = PL({x0:-2, x1:1, y0:-2, y1:1, u:120, ticks:false});
+const H2 = 1/Math.SQRT2;
+const TRI4 = `<polygon class="utri" points="${g4b.X(0)},${g4b.Y(0)} ${g4b.X(-H2).toFixed(1)},${g4b.Y(0)} ${g4b.X(-H2).toFixed(1)},${g4b.Y(-H2).toFixed(1)}"/>`;
+const p4b = HD(NO, '読み取り　D　くわしく', SEC) + `<div class="bd">
+  <div class="l"><div class="calc" style="font-size:27px;gap:10px">
+    <div>${M`z=2(\cos\on{1}{re}{225^\circ}+i\sin\on{1}{im}{225^\circ})`}</div>
+    <div data-s="1" style="font-size:23px">${M`\cos225^\circ=\RE{-\tfrac{1}{\sqrt{2}}}`}、${M`\sin225^\circ=\IM{-\tfrac{1}{\sqrt{2}}}`}<span class="mu" style="font-size:19px">（第3象限、斜辺 ${M`1`}）</span></div>
+    <div data-s="2">${M`=2\left(\RE{-\dfrac{1}{\sqrt{2}}}\IM{-\dfrac{1}{\sqrt{2}}}i\right)=-\dfrac{2}{\sqrt{2}}-\dfrac{2}{\sqrt{2}}i`}</div>
+    <div data-s="3" class="pbox" style="font-size:23px;line-height:1.8"><div class="pl2">分母を 有理化</div>${M`\dfrac{2}{\sqrt{2}}=\dfrac{2\DP{\times\sqrt{2}}}{\sqrt{2}\DP{\times\sqrt{2}}}=\dfrac{2\sqrt{2}}{2}=\sqrt{2}`}</div>
+    <div data-s="4" class="hl2">${M`=\DP{-\sqrt{2}-\sqrt{2}i}`}</div>
+  </div></div>
+  <div class="r">${g4b.svg(`<circle class="ucirc" cx="${g4b.X(0)}" cy="${g4b.Y(0)}" r="${g4b.u}"/>`
+    + `<g data-s="1">${TRI4}</g>` + g4b.ang(225, 1, {r:24, lab:'225°', lr:20, fs:17, la:55})
+    + g4b.text(-.48, -.28, '1', 'dp', 1) + g4b.text(-H2/2, .12, '−1/√2', 're', 1) + g4b.text(-H2-.08, -H2/2-.05, '−1/√2', 'im', 1, 'end')
+    + `<g data-s="2"><g class="grow" data-o="2" style="--k:2;transform-origin:${g4b.X(0)}px ${g4b.Y(0)}px">${TRI4}</g></g>`
+    + g4b.text(-1.15, -.7, '× 2', 'dp', 2)
+    + g4b.dot(-Math.SQRT2, -Math.SQRT2, 'D', 4, {pos:'sw'}) + g4b.text(-Math.SQRT2, -1.83, '(−√2, −√2)', 'dp', 4))}</div>
+</div>` + CAP([
+  `D は 長さ ${M`2`}、向き ${M`225^\circ`}。極形式 ${M`2(\cos225^\circ+i\sin225^\circ)`} を ${M`a+bi`} の 形に 直します。`,
+  `${M`225^\circ`} は 第3象限。斜辺 ${M`1`} の 直角三角形の 横・縦は どちらも ${M`\tfrac{1}{\sqrt{2}}`} で、左・下 なので マイナス。${M`\cos225^\circ=\sin225^\circ=-\tfrac{1}{\sqrt{2}}`}。`,
+  `代入して、${M`2`} を かっこの 中に 掛けます。三角形を ${M`2`} 倍 した ことに なります。`,
+  `${M`\tfrac{2}{\sqrt{2}}`} は、分母と 分子に ${M`\sqrt{2}`} を 掛けて 有理化 すると ${M`\sqrt{2}`}。`,
+  `${M`-\sqrt{2}-\sqrt{2}i`}。図の 点 D の 位置 ${M`(-\sqrt{2},\ -\sqrt{2})`} と 一致します。`
 ]);
 
 /* 例：1＋i を 極形式で */
@@ -606,7 +632,7 @@ const p7 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:26px">
 
 const DECK = {title:'①-4 複素数の極形式', pages:[
   {name:'表紙', html:p0}, {name:'2通りの 表し方', html:p1}, {name:'長さ と 向き', html:p2}, {name:'極形式', html:p3}, {name:'極形式　くわしく', html:p3b, add:'10/27'},
-  {name:'長さと 向きを 読み取る', html:p4}, {name:'例　1＋i を 極形式で', html:p5}, {name:'特別な 角は「くくる」だけ', html:p6},
+  {name:'長さと 向きを 読み取る', html:p4}, {name:'長さと 向きを 読み取る　D　くわしく', html:p4b, add:'10/27'}, {name:'例　1＋i を 極形式で', html:p5}, {name:'特別な 角は「くくる」だけ', html:p6},
   {name:'まとめ', html:p7},
 ]};
 ''')

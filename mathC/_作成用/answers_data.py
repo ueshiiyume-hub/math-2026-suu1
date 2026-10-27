@@ -130,6 +130,10 @@ SHEETS.append(dict(no='①-4', title='複素数の極形式', blocks=[
     ['B', '[[$3$]]', '[[$90^\\circ$]]', '[[$3(\\cos90^\\circ+i\\sin90^\\circ)$]]', '[[$3i$]]'],
     ['C', '[[$1$]]', '[[$180^\\circ$]]', '[[$\\cos180^\\circ+i\\sin180^\\circ$]]', '[[$-1$]]'],
     ['D', '[[$2$]]', '[[$225^\\circ$]]', '[[$2(\\cos225^\\circ+i\\sin225^\\circ)$]]', '[[$-\\sqrt{2}-\\sqrt{2}i$]]']]),
+  ('note', '【D：$2(\\cos225^\\circ+i\\sin225^\\circ)$ を $a+bi$ に】', [
+    '$225^\\circ$ は第3象限。斜辺 $1$ の直角三角形の横・縦は $\\frac{1}{\\sqrt{2}}$ で，左・下なので　$\\cos225^\\circ=-\\frac{1}{\\sqrt{2}}$，$\\sin225^\\circ=-\\frac{1}{\\sqrt{2}}$',
+    '→ $2\\left(-\\frac{1}{\\sqrt{2}}-\\frac{1}{\\sqrt{2}}i\\right)=-\\frac{2}{\\sqrt{2}}-\\frac{2}{\\sqrt{2}}i$',
+    '→ 有理化：$\\frac{2}{\\sqrt{2}}=\\frac{2\\times\\sqrt{2}}{\\sqrt{2}\\times\\sqrt{2}}=\\frac{2\\sqrt{2}}{2}=\\sqrt{2}$　より　$-\\sqrt{2}-\\sqrt{2}i$'], '10/27'),
   ('group', '例', '偏角 $\\theta$ は $0^\\circ\\leqq\\theta<360^\\circ$ とする。', [
     it('', '$1+i$ を極形式で表せ。', [
       '$r=|1+i|=$ [[$\\sqrt{1^2+1^2}$]] $=$ [[$\\sqrt{2}$]]',
