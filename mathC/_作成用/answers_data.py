@@ -106,6 +106,10 @@ PR10 = [  # 問10：(番号, z, くくった 形, 極形式)
   ('⒁', r'1-\sqrt{3}i', r'2\left(\frac{1}{2}-\frac{\sqrt{3}}{2}i\right)', r'2(\cos300^\circ+i\sin300^\circ)'),
   ('⒂', r'3+\sqrt{3}i', r'2\sqrt{3}\left(\frac{\sqrt{3}}{2}+\frac{1}{2}i\right)', r'2\sqrt{3}(\cos30^\circ+i\sin30^\circ)'),
   ('⒃', r'-\sqrt{6}+\sqrt{2}i', r'2\sqrt{2}\left(-\frac{\sqrt{3}}{2}+\frac{1}{2}i\right)', r'2\sqrt{2}(\cos150^\circ+i\sin150^\circ)')]
+NOTE10 = {  # 問10 の 板書から 足した 説明
+  '⑹': [N('【まず $2$ でくくる】', ['$2+2i=2(1+i)$（実部も虚部も $2$）',
+        '→ $1+i=\\sqrt{2}\\left(\\frac{1}{\\sqrt{2}}+\\frac{1}{\\sqrt{2}}i\\right)$ より　$2\\times\\sqrt{2}\\left(\\frac{1}{\\sqrt{2}}+\\frac{1}{\\sqrt{2}}i\\right)$',
+        '→ $2\\times\\sqrt{2}=2\\sqrt{2}$ が長さ $r$'], '10/27')]}
 SHEETS.append(dict(no='①-4', title='複素数の極形式', blocks=[
   ('box', '複素数の2通りの表し方', [
     '点 P の位置は，次の 2 通りで表せる。',
@@ -150,7 +154,7 @@ SHEETS.append(dict(no='①-4', title='複素数の極形式', blocks=[
     ['$\\cos\\theta$', '$1$', '$\\frac{\\sqrt{3}}{2}$', '$\\frac{1}{\\sqrt{2}}$', '$\\frac{1}{2}$', '$0$'],
     ['$\\tan\\theta$', '$0$', '$\\frac{1}{\\sqrt{3}}$', '$1$', '$\\sqrt{3}$', 'なし']]),
   ('group', '問10', '次の複素数を極形式で表せ。ただし，偏角 $\\theta$ は $0^\\circ\\leqq\\theta<360^\\circ$ とする。', [
-    it(n, f'${z}$', ([f'={k}'] if k else []) + [f'={p}']) for n, z, k, p in PR10]),
+    it(n, f'${z}$', ([f'={k}'] if k else []) + [f'={p}'], notes=NOTE10.get(n, ())) for n, z, k, p in PR10]),
 ]))
 
 # ---------------------------------------------------------------- ②-1

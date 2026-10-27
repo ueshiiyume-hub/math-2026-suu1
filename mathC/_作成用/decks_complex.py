@@ -670,6 +670,8 @@ const PR = [
 const QTX = {1:(b,t)=>`第1象限 なので そのまま ${M(`\\theta=${t}^\\circ`)}`, 2:(b,t)=>`第2象限 なので ${M(`\\theta=180^\\circ-${b}^\\circ=${t}^\\circ`)}`,
              3:(b,t)=>`第3象限 なので ${M(`\\theta=180^\\circ+${b}^\\circ=${t}^\\circ`)}`, 4:(b,t)=>`第4象限 なので ${M(`\\theta=360^\\circ-${b}^\\circ=${t}^\\circ`)}`};
 
+/* 板書で くわしく した 問：元の ページの ② に 一言 */
+const MORE = {'⑹':'（次の ページで くわしく）'};
 function prPage([no, z, a, b, rc, rl, rt, base, t, axis]){
   const R = Math.ceil(Math.max(Math.abs(a), Math.abs(b))) + 1, g = PL({x0:-R, x1:R, y0:-R, y1:R, u:Math.floor(400/(2*R)), ticks:false});
   const q = base ? QN(a, b) : 0, ans = POLAR(rt, t), sa = 2;   // 番：1 長さ、2 くくる（軸は 向き）、3 象限・角、4 答え
@@ -683,7 +685,7 @@ function prPage([no, z, a, b, rc, rl, rt, base, t, axis]){
   const cm = base
     ? [`${M(z)} を 極形式に します。`,
        `① 長さ：${M(`r=${rc}`)}`,
-       `② ${M(rt)} で くくると、かっこの 中は（${M('\\cos')}，${M('\\sin')}）＝（${SG(a)}，${SG(b)}）で、大きさは ${M(`${base}^\\circ`)} の 形。`,
+       `② ${M(rt)} で くくると、かっこの 中は（${M('\\cos')}，${M('\\sin')}）＝（${SG(a)}，${SG(b)}）で、大きさは ${M(`${base}^\\circ`)} の 形。${MORE[no]||''}`,
        `③ 符号が（${SG(a)}，${SG(b)}）→ ${QTX[q](base, t)}。`,
        `${M(`${z}=${ans}`)}`]
     : [`${M(z)} を 極形式に します。`,
@@ -715,6 +717,27 @@ const p1 = HD(NO, '手順', SEC) + `<div class="bd">
 
 const pages = PR.map(prPage);
 
+/* ⑹ くわしく（10/27 の 板書）：2 で くくる → 1+i は √2(…) → 2×√2＝2√2 */
+const g6b = PL({x0:-1, x1:3, y0:-1, y1:3, u:96, ticks:false});
+const p6b = HD(NO, '問10 ⑹　くわしく', SEC) + `<div class="bd">
+  <div class="l"><div class="calc" style="font-size:30px;gap:12px">
+    <div>${M`2+2i`}</div>
+    <div data-s="1">${M`=\DP{2}(1+i)`}</div>
+    <div data-s="2">${M`=2\times\RE{\sqrt{2}}\left(\tfrac{1}{\sqrt{2}}+\tfrac{1}{\sqrt{2}}i\right)`}</div>
+    <div data-s="3">${M`=\DP{2\sqrt{2}}\left(\tfrac{1}{\sqrt{2}}+\tfrac{1}{\sqrt{2}}i\right)`}</div>
+    <div data-s="4" class="hl2">${M`=2\sqrt{2}(\cos45^\circ+i\sin45^\circ)`}</div>
+  </div></div>
+  <div class="r">${g6b.svg(g6b.dot(2, 2, `2 + 2${IT('i')}`, null, {given:true, pos:'nw'})
+    + g6b.arr(0, 0, 1, 1, 2, {c:'k'}) + g6b.dot(1, 1, `1 + ${IT('i')}`, 2, {pos:'se', d:.5}) + g6b.text(.35, .62, '√2', 're', 2) + g6b.ang(45, 2, {r:40, lr:20, d:.5})
+    + g6b.arr(0, 0, 2, 2, 3, {c:'g', w:5}) + g6b.text(1.05, 1.55, '× 2', 'dp', 3) + g6b.text(1.5, 1.1, '2√2', 'dp', 3, 'start'))}</div>
+</div>` + CAP([
+  `${M`2+2i`} を 極形式に します。長さを 計算する 前に、もっと 楽な 方法が あります。`,
+  `実部も 虚部も ${M`2`} なので、まず 共通の ${M`2`} で くくります。`,
+  `かっこの 中の ${M`1+i`} は、例で やった 形。${M`1+i=\sqrt{2}\left(\tfrac{1}{\sqrt{2}}+\tfrac{1}{\sqrt{2}}i\right)`}（長さ ${M`\sqrt{2}`}、向き ${M`45^\circ`}）。`,
+  `${M`2\times\sqrt{2}=2\sqrt{2}`}。これが 長さ ${M`r`}。図でも ${M`1+i`} を ${M`2`} 倍すると ${M`2+2i`} です（${M`r=\sqrt{2^2+2^2}=\sqrt{8}=2\sqrt{2}`} と 同じ）。`,
+  `かっこの 中は ${M`45^\circ`} の 形 なので、${M`2\sqrt{2}(\cos45^\circ+i\sin45^\circ)`}。`
+]);
+
 /* 答えの 一覧（アニメーション なし） */
 const pe = HD(NO, '答え（問10）', SEC) + `<div class="bd col"><div class="ans16">
   ${PR.map(([no,z,a,b,rc,rl,rt,base,t])=>`<div><span class="mu">${no}</span> ${M(`${z}=${POLAR(rt,t)}`)}</div>`).join('')}
@@ -722,7 +745,7 @@ const pe = HD(NO, '答え（問10）', SEC) + `<div class="bd col"><div class="a
 
 const DECK = {title:'①-4 極形式 練習編（問10）', pages:[
   {name:'表紙', html:p0}, {name:'手順', html:p1},
-  ...PR.map((p,i)=>({name:`${p[0]}　${p[1].replace(/\\sqrt\{(\d)\}/g,'√$1').replace(/-/g,'−')}`, html:pages[i]})),
+  ...PR.flatMap((p,i)=>[{name:`${p[0]}　${p[1].replace(/\\sqrt\{(\d)\}/g,'√$1').replace(/-/g,'−')}`, html:pages[i]}].concat(p[0]==='⑹' ? [{name:'⑹　くわしく', html:p6b, add:'10/27'}] : [])),
   {name:'答え（一覧）', html:pe},
 ]};
 ''')
