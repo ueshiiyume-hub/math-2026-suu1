@@ -80,17 +80,54 @@ const tocRows = (()=>{ let h='', g=null;
     if(m){ if(m[1]!==g){ g=m[1]; h+=`<div class="tg">${(DECK.groups&&DECK.groups[g])||g}</div>`; } h+=`<button class="ti in" data-i="${i}">${m[2]||n}</button>`; }
     else { g=null; h+=`<button class="ti" data-i="${i}">${n}</button>`; } });
   return h; })();
-jump.innerHTML = `<button class="tocbtn" title="目次">≡ 目次</button><span class="pgno"></span>
+jump.innerHTML = `<button id="fsbtn" title="全画面（F）"></button><button class="tocbtn" title="目次">≡ 目次</button><span class="pgno"></span>
   <div class="tocp"><div class="toch"><b>${DECK.title||''}</b><button class="tocx" title="閉じる">✕</button></div>
   <a class="home" href="目次.html">← ほかの プリントへ</a><div class="tocl">${tocRows}</div></div><div class="tocbg"></div>`;
+/* ====== 全画面（数学Ⅲ と 同じ しくみを この 科目用に 写した もの、2026-10-27） ======
+   ボタン（左下）か F キーで 切りかえ。ブラウザの きまりで、ページを 移ったり 読み込み直したり すると 全画面は いったん 解除される。
+   そこで 全画面の まま 移った ことを 覚えておき（sessionStorage）、次の ページで 最初に 画面に ふれた ときに 自動で 全画面に 戻す。
+   iPhone の Safari は 全画面に できないので ボタンは 出さない */
+const FSD = document.documentElement;
+const fsOn = () => !!(document.fullscreenElement || document.webkitFullscreenElement);
+const fsCan = !!(FSD.requestFullscreen || FSD.webkitRequestFullscreen);
+let leaving = false;
+const fsSave = v => { try{ sessionStorage.setItem('fs', v ? '1' : '0'); }catch(_){} };
+const fsWanted = () => { try{ return sessionStorage.getItem('fs')==='1'; }catch(_){ return false; } };
+function fsReq(){ const f = FSD.requestFullscreen || FSD.webkitRequestFullscreen; try{ const p = f && f.call(FSD); if(p && p.catch) p.catch(()=>{}); }catch(_){} }
+function fsExit(){ const f = document.exitFullscreen || document.webkitExitFullscreen; try{ const p = f && f.call(document); if(p && p.catch) p.catch(()=>{}); }catch(_){} }
+function toggleFS(){ fsHint(false); if(fsOn()) fsExit(); else fsReq(); }
+function paintFS(){ const b = document.getElementById('fsbtn'); if(!b) return;
+  b.style.display = fsCan ? '' : 'none';
+  b.innerHTML = fsOn() ? '<svg viewBox="0 0 24 24"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>'
+                       : '<svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>';
+  b.title = fsOn() ? '全画面を やめる（F）' : '全画面（F）'; }
+['fullscreenchange','webkitfullscreenchange'].forEach(ev=>document.addEventListener(ev, ()=>{ if(!leaving) fsSave(fsOn()); paintFS(); setTimeout(()=>{ fit(); portraitFit(); }, 50); }));
+/* ページを 離れる とき（次の プリント・目次・読み込み直し）：全画面だったか どうかを 覚える */
+addEventListener('pagehide', ()=>{ leaving = true; });
+addEventListener('beforeunload', ()=>{ leaving = true; fsSave(fsOn()); });
+document.addEventListener('click', e=>{ if(e.target.closest('a[href]')){ leaving = true; fsSave(fsOn()); } }, true);
+/* 全画面の まま 来た ときは、最初の タップ・キーで 全画面に 戻す（ブラウザは 操作なしの 全画面を 許さない） */
+const fsh = document.createElement('div'); fsh.id = 'fshint'; fsh.textContent = '画面に ふれると 全画面に 戻ります'; document.body.appendChild(fsh);
+function fsHint(on){ fsh.classList.toggle('show', on); }
+if(fsCan && fsWanted() && !fsOn()){
+  fsHint(true);
+  let swallow = false;   // 戻す ための タップでは ページを 進めない
+  addEventListener('click', e=>{ if(swallow){ swallow = false; if(!e.target.closest('a,button')){ e.stopPropagation(); e.stopImmediatePropagation(); e.preventDefault(); } } }, true);
+  const back = e => { if(e.type==='pointerdown') swallow = true;
+    if(e.type==='keydown' && e.key==='Escape'){ fsSave(false); } else fsReq();
+    fsHint(false); ['pointerdown','keydown'].forEach(t=>removeEventListener(t, back, true)); };
+  ['pointerdown','keydown'].forEach(t=>addEventListener(t, back, true));
+}
+paintFS();
 const tocOpen = on => { jump.classList.toggle('open', on); if(on){ const c=jump.querySelector('.ti.on'); if(c) c.scrollIntoView({block:'center'}); } };
 jump.addEventListener('click',e=>{
   if(e.target.closest('a')) return;
   e.stopPropagation();
+  if(e.target.closest('#fsbtn')) return toggleFS();
   if(e.target.closest('.tocbtn')) return tocOpen(!jump.classList.contains('open'));
   if(e.target.closest('.tocx,.tocbg')) return tocOpen(false);
   const b=e.target.closest('.ti'); if(!b) return;
-  stopAuto(); si=+b.dataset.i; st=0; render(); tocOpen(false);
+  stopAuto(); if(endOpen()) endShow(false); si=+b.dataset.i; st=0; render(); tocOpen(false);
 });
 /* 左上の 現在地（❶ 式 ／ ❷ 塗る ／ ❸ 答える）も 押すと 飛べる */
 document.addEventListener('click',e=>{
@@ -122,8 +159,28 @@ function render(){
   jump.querySelector('.pgno').textContent = `${si+1} / ${els.length}`;
   ui.textContent = `${si+1} / ${els.length}　←→ 進む・戻る　P 自動再生　Home 最初から　F 全画面　H 表示を隠す　T 明暗${typeof INK!=='undefined'?'　W 書きこむ':''}`;
 }
-function next(){ if(st<maxStep[si]) st++; else if(si<els.length-1){si++;st=0;} else stopAuto(); render(); }
-function prev(){ if(st>0) st--; else if(si>0){si--;st=maxStep[si];} render(); }
+function next(){ if(endOpen()) return; if(st<maxStep[si]) st++; else if(si<els.length-1){si++;st=0;} else { stopAuto(); return endShow(true); } render(); }
+function prev(){ if(endOpen()) return endShow(false); if(st>0) st--; else if(si>0){si--;st=maxStep[si];} render(); }
+
+/* 終わりの パネル：最後の ページの 先で 出す。次の プリント・もう一度・目次 を 選ぶ（並びは build_kimatsu.py の SERIES） */
+const endp = document.createElement('div'); endp.id = 'endp'; document.body.appendChild(endp);
+(function(){
+  const S = typeof SERIES!=='undefined' ? SERIES : [], me = typeof ME!=='undefined' ? ME : '';
+  const i = S.findIndex(d=>d.f===me), nx = i>=0 ? S[i+1] : null, pv = i>0 ? S[i-1] : null;
+  const url = d => `${d.f}.html?v=${encodeURIComponent(d.v)}`;
+  endp.innerHTML = `<div class="ein">
+    <div class="ek">${DECK.title||''}</div><div class="eh">おわり</div>
+    ${nx ? `<a class="enext" href="${url(nx)}"><span class="el">次の プリントへ</span><span class="en">${nx.no}</span><span class="et">${nx.t}</span><span class="ea">→</span></a>`
+         : `<div class="elast">${i>=0 ? 'いま ある スライドは ここまで です' : ''}</div>`}
+    <div class="ebtns"><button class="eagain">↺ もう一度 最初から</button>
+      ${pv ? `<a href="${url(pv)}">← 前の プリント（${pv.no}）</a>` : ''}<a href="目次.html">≡ スライドの 目次へ</a></div>
+    ${S.length ? `<div class="elist">${S.map(d=>`<a class="${d.f===me?'me':''}" href="${url(d)}"><b>${d.no}</b>${d.t}</a>`).join('')}</div>` : ''}
+    <button class="eback">← 最後の ページに 戻る</button></div>`;
+  endp.querySelector('.eagain').addEventListener('click', e=>{ e.stopPropagation(); endShow(false); si=0; st=0; render(); });
+  endp.querySelector('.eback').addEventListener('click', e=>{ e.stopPropagation(); endShow(false); });
+})();
+function endOpen(){ return endp.classList.contains('open'); }
+function endShow(on){ endp.classList.toggle('open', on); document.body.classList.toggle('ending', on); if(on){ bar.style.width='100%'; jump.querySelector('.pgno').textContent='おわり'; } else render(); }
 function stopAuto(){ if(timer){ clearInterval(timer); timer=null; } }
 function toggleAuto(){ if(timer) stopAuto(); else timer=setInterval(next,4000); }
 
@@ -131,10 +188,11 @@ document.addEventListener('keydown',e=>{
   const k=e.key;
   if(['ArrowRight','ArrowDown',' ','Enter','PageDown'].includes(k)){e.preventDefault();stopAuto();next();}
   else if(['ArrowLeft','ArrowUp','Backspace','PageUp'].includes(k)){e.preventDefault();stopAuto();prev();}
-  else if(k==='Home'){stopAuto();si=0;st=0;render();}
-  else if(k==='End'){stopAuto();si=els.length-1;st=maxStep[si];render();}
+  else if(k==='Home'){stopAuto();if(endOpen()) endShow(false);si=0;st=0;render();}
+  else if(k==='End'){stopAuto();if(endOpen()) endShow(false);si=els.length-1;st=maxStep[si];render();}
   else if(k==='p'||k==='P'){toggleAuto();}
-  else if(k==='f'||k==='F'){ try{ if(document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen(); }catch(_){} }
+  else if(k==='f'||k==='F') toggleFS();
+  else if(k==='Escape'){ tocOpen(false); if(endOpen()) endShow(false); }
   else if(k==='h'||k==='H'){ ui.classList.toggle('hide'); bar.classList.toggle('hide'); jump.classList.toggle('hide'); }
   else if(k==='t'||k==='T'){
     if(typeof toggleTheme==='function') toggleTheme();
@@ -143,7 +201,7 @@ document.addEventListener('keydown',e=>{
       d.dataset.theme = dark ? 'light' : 'dark'; }
   }
 });
-document.addEventListener('click',e=>{ if(e.target.closest('a,#jump,#inkbar,#themebtn')) return; stopAuto(); if(e.clientX < document.documentElement.clientWidth/3) prev(); else next(); });
+document.addEventListener('click',e=>{ if(e.target.closest('a,button,#jump,#inkbar,#themebtn,#endp')) return; stopAuto(); if(e.clientX < document.documentElement.clientWidth/3) prev(); else next(); });
 /* 画面に合わせる：縦長（スマホ）なら 720×1280、横長なら 1280×720 */
 function fit(){
   const vw = document.documentElement.clientWidth, vh = document.documentElement.clientHeight;   // スマホでは innerWidth がずれることがある
@@ -182,5 +240,25 @@ function portraitFit(){
     card.style.clipPath=`inset(${y0.toFixed(1)}px ${(card.offsetWidth-x1).toFixed(1)}px ${(card.offsetHeight-y1).toFixed(1)}px ${x0.toFixed(1)}px round 10px)`;
   });
 }
+/* URL の #3-2 で 4ページ目の 2番から 始める（撮影・リンク用）。#3-e は その ページの 最後。#end は 終わりの パネル */
+(function(){
+  const m = location.hash.match(/^#(\d+)-(\d+|e)$/); if(!m) return;
+  si = Math.min(+m[1], els.length-1); st = m[2]==='e' ? maxStep[si] : Math.min(+m[2], maxStep[si]);
+})();
+/* 再読み込み したら、その ページ・その 番から 再開する（sessionStorage に デッキごとに 覚える。目次から 開いた ときは 最初から） */
+const POSKEY = 'pos:' + location.pathname;
+(function(){
+  if(location.hash) return;
+  let nav = ''; try{ nav = (performance.getEntriesByType('navigation')[0]||{}).type || ''; }catch(_){}
+  if(nav !== 'reload' && nav !== 'back_forward') return;
+  try{ const p = JSON.parse(sessionStorage.getItem(POSKEY) || 'null'); if(!p) return;
+    si = Math.min(Math.max(0, p.si|0), els.length-1); st = Math.min(Math.max(0, p.st|0), maxStep[si]);
+    if(p.end) setTimeout(()=>endShow(true), 0);
+  }catch(_){}
+})();
+const posSave = () => { try{ sessionStorage.setItem(POSKEY, JSON.stringify({si, st, end:endOpen()})); }catch(_){} };
+const _render = render; render = function(){ _render(); posSave(); };
+const _endShow = endShow; endShow = function(on){ _endShow(on); posSave(); };
 addEventListener('resize',()=>setTimeout(portraitFit,50)); fit(); render(); portraitFit();
+if(location.hash==='#end') endShow(true);
 if(document.fonts&&document.fonts.ready) document.fonts.ready.then(portraitFit);

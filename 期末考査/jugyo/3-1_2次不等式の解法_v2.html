@@ -229,6 +229,36 @@ span.r{display:inline-block}
 #jump.hide{opacity:0;pointer-events:none}
 #jump.open{z-index:40}
 #jump .tocbtn{font:900 14px "Zen Maru Gothic",sans-serif;height:32px;padding:0 14px;border-radius:16px;border:2px solid var(--r-bd);background:var(--paper);color:var(--ink);cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.1)}
+/* 全画面ボタン（左下の 目次の 横） */
+#jump #fsbtn{width:32px;height:32px;padding:0;border-radius:50%;border:2px solid var(--r-bd);background:var(--paper);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.1)}
+#jump #fsbtn svg{width:17px;height:17px;fill:none;stroke:var(--ink);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+#fshint{position:fixed;left:50%;top:14px;transform:translate(-50%,-10px);z-index:45;background:var(--accent);color:#fff;border-radius:999px;
+  font:900 15px "Zen Maru Gothic",sans-serif;padding:8px 20px;opacity:0;pointer-events:none;transition:opacity .3s,transform .3s}
+#fshint.show{opacity:.95;transform:translate(-50%,0)}
+/* 終わりの パネル（最後の ページの 先） */
+#endp{position:fixed;inset:0;z-index:19;background:var(--bgimg);display:flex;align-items:center;justify-content:center;padding:20px 16px 64px;box-sizing:border-box;overflow-y:auto;
+  opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s;font-family:"Zen Maru Gothic",sans-serif;color:var(--ink)}
+#endp.open{opacity:1;visibility:visible}
+#endp .ein{width:min(900px,100%);display:flex;flex-direction:column;align-items:center;gap:18px;background:var(--paper);border-radius:18px;box-shadow:var(--shadow);padding:28px 28px 20px;box-sizing:border-box;margin:auto}
+#endp .ek{font-size:16px;font-weight:700;letter-spacing:.12em;color:var(--muted)}
+#endp .eh{font-size:40px;font-weight:900;letter-spacing:.2em;margin-top:-8px;padding:0 18px 4px;background:linear-gradient(transparent 60%,var(--r-bg) 60%)}
+#endp a{color:inherit;text-decoration:none}
+#endp .enext{display:flex;align-items:center;gap:14px;width:100%;box-sizing:border-box;padding:16px 22px;background:var(--r-bg);border:2px solid var(--r-bd);border-radius:14px;font-size:24px;font-weight:900;transition:transform .2s}
+#endp .enext:hover{transform:translateY(-2px)}
+#endp .enext .el{font-size:15px;color:var(--muted);font-weight:700}
+#endp .enext .en{background:var(--accent);color:#fff;padding:2px 12px;border-radius:999px;font-size:20px}
+#endp .enext .ea{margin-left:auto;color:var(--r-ink);font-size:30px}
+#endp .elast{font-size:20px;color:var(--muted);font-weight:700}
+#endp .ebtns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+#endp .ebtns > *{font:900 15px "Zen Maru Gothic",sans-serif;border:2px solid var(--b-bd);background:var(--b-bg);color:var(--b-ink);border-radius:999px;padding:7px 16px;cursor:pointer}
+#endp .elist{display:grid;grid-template-columns:repeat(3,1fr);gap:4px 10px;width:100%;border-top:2px dashed var(--r-bd);padding-top:12px}
+#endp .elist a{font-size:14px;font-weight:700;padding:5px 10px;border-radius:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#endp .elist a b{color:var(--accent);margin-right:.5em}
+#endp .elist a:hover{background:var(--b-bg)}
+#endp .elist a.me{background:var(--r-bg);color:var(--r-ink)}
+#endp .eback{border:none;background:none;color:var(--muted);font:700 14px "Zen Maru Gothic",sans-serif;cursor:pointer}
+@media (max-width:640px){ #endp .elist{grid-template-columns:1fr} #endp .enext{flex-wrap:wrap;font-size:20px} #endp .eh{font-size:32px} }
+body.ending #bar{width:100%!important}
 #jump .pgno{font:700 13px "Zen Maru Gothic",sans-serif;color:var(--muted)}
 #jump .tocp{position:fixed;z-index:31;left:0;top:0;bottom:0;width:min(340px,86vw);background:var(--paper);box-shadow:4px 0 24px rgba(0,0,0,.18);transform:translateX(-105%);transition:transform .3s ease;display:flex;flex-direction:column;padding:14px 14px 18px;box-sizing:border-box}
 #jump.open .tocp{transform:none}
@@ -1828,7 +1858,8 @@ const GARW = (x1,y1,x2,y2,s) => { const ym=(y1+y2)/2, hh=(y2-y1)*.28, hx=x2-(y2-
   return `<g class="gs" data-s="${s}"><polygon points="${x1},${ym-hh} ${hx},${ym-hh} ${hx},${y1} ${x2},${ym} ${hx},${y2} ${hx},${ym+hh} ${x1},${ym+hh}" fill="#c9dca6"/></g>`; };
 
 /* ====== このプリントのスライド ====== */
-const VER = '<i class="nv">ver</i> 2.17　2026-10-22';
+const SERIES = [{"f": "1-1_因数分解の復習", "no": "①-1", "t": "因数分解の 復習", "v": "1.3_2026-10-27"}, {"f": "1-2_2次方程式の解", "no": "①-2", "t": "2次方程式の 解", "v": "1.3_2026-10-27"}, {"f": "1-3_2次方程式の解", "no": "①-3", "t": "2次方程式の 解 ②", "v": "1.3_2026-10-27"}, {"f": "1-4_解の公式", "no": "①-4", "t": "解の公式", "v": "1.3_2026-10-27"}, {"f": "1-5_解の公式_重解と解なし", "no": "①-5", "t": "2次方程式の 解 ③", "v": "1.4_2026-10-27"}, {"f": "1-6_実数解の個数", "no": "①-6", "t": "実数解の 個数", "v": "1.3_2026-10-27"}, {"f": "2-1_x軸との共有点", "no": "②-1", "t": "x軸との 共有点", "v": "1.3_2026-10-27"}, {"f": "2-2_x軸との共有点", "no": "②-2", "t": "x軸との 共有点 ②", "v": "1.3_2026-10-27"}, {"f": "2-3_x軸との位置関係", "no": "②-3", "t": "x軸との 位置関係", "v": "1.3_2026-10-27"}, {"f": "3-1_2次不等式の解法_v2", "no": "③-1", "t": "2次不等式の 解き方", "v": "2.18_2026-10-27"}, {"f": "3-2_2次不等式_練習編_v2", "no": "③-2", "t": "2次不等式 練習編", "v": "2.6_2026-10-27"}, {"f": "3-3_2次不等式の解法", "no": "③-3", "t": "2次不等式 いろいろ", "v": "1.3_2026-10-27"}, {"f": "3-4_2次不等式の解法", "no": "③-4", "t": "x² の前が マイナス", "v": "1.3_2026-10-27"}], ME = "3-1_2次不等式の解法_v2";
+const VER = '<i class="nv">ver</i> 2.18　2026-10-27';
 /* ③-1 ver 2.0 の 土台：ver 1.4 の 部品の 写し（ver 1.4 を 直しても ver 2.0 は 変わらない） */
 
 const IMG = s => s;
@@ -2585,17 +2616,54 @@ const tocRows = (()=>{ let h='', g=null;
     if(m){ if(m[1]!==g){ g=m[1]; h+=`<div class="tg">${(DECK.groups&&DECK.groups[g])||g}</div>`; } h+=`<button class="ti in" data-i="${i}">${m[2]||n}</button>`; }
     else { g=null; h+=`<button class="ti" data-i="${i}">${n}</button>`; } });
   return h; })();
-jump.innerHTML = `<button class="tocbtn" title="目次">≡ 目次</button><span class="pgno"></span>
+jump.innerHTML = `<button id="fsbtn" title="全画面（F）"></button><button class="tocbtn" title="目次">≡ 目次</button><span class="pgno"></span>
   <div class="tocp"><div class="toch"><b>${DECK.title||''}</b><button class="tocx" title="閉じる">✕</button></div>
   <a class="home" href="目次.html">← ほかの プリントへ</a><div class="tocl">${tocRows}</div></div><div class="tocbg"></div>`;
+/* ====== 全画面（数学Ⅲ と 同じ しくみを この 科目用に 写した もの、2026-10-27） ======
+   ボタン（左下）か F キーで 切りかえ。ブラウザの きまりで、ページを 移ったり 読み込み直したり すると 全画面は いったん 解除される。
+   そこで 全画面の まま 移った ことを 覚えておき（sessionStorage）、次の ページで 最初に 画面に ふれた ときに 自動で 全画面に 戻す。
+   iPhone の Safari は 全画面に できないので ボタンは 出さない */
+const FSD = document.documentElement;
+const fsOn = () => !!(document.fullscreenElement || document.webkitFullscreenElement);
+const fsCan = !!(FSD.requestFullscreen || FSD.webkitRequestFullscreen);
+let leaving = false;
+const fsSave = v => { try{ sessionStorage.setItem('fs', v ? '1' : '0'); }catch(_){} };
+const fsWanted = () => { try{ return sessionStorage.getItem('fs')==='1'; }catch(_){ return false; } };
+function fsReq(){ const f = FSD.requestFullscreen || FSD.webkitRequestFullscreen; try{ const p = f && f.call(FSD); if(p && p.catch) p.catch(()=>{}); }catch(_){} }
+function fsExit(){ const f = document.exitFullscreen || document.webkitExitFullscreen; try{ const p = f && f.call(document); if(p && p.catch) p.catch(()=>{}); }catch(_){} }
+function toggleFS(){ fsHint(false); if(fsOn()) fsExit(); else fsReq(); }
+function paintFS(){ const b = document.getElementById('fsbtn'); if(!b) return;
+  b.style.display = fsCan ? '' : 'none';
+  b.innerHTML = fsOn() ? '<svg viewBox="0 0 24 24"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>'
+                       : '<svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>';
+  b.title = fsOn() ? '全画面を やめる（F）' : '全画面（F）'; }
+['fullscreenchange','webkitfullscreenchange'].forEach(ev=>document.addEventListener(ev, ()=>{ if(!leaving) fsSave(fsOn()); paintFS(); setTimeout(()=>{ fit(); portraitFit(); }, 50); }));
+/* ページを 離れる とき（次の プリント・目次・読み込み直し）：全画面だったか どうかを 覚える */
+addEventListener('pagehide', ()=>{ leaving = true; });
+addEventListener('beforeunload', ()=>{ leaving = true; fsSave(fsOn()); });
+document.addEventListener('click', e=>{ if(e.target.closest('a[href]')){ leaving = true; fsSave(fsOn()); } }, true);
+/* 全画面の まま 来た ときは、最初の タップ・キーで 全画面に 戻す（ブラウザは 操作なしの 全画面を 許さない） */
+const fsh = document.createElement('div'); fsh.id = 'fshint'; fsh.textContent = '画面に ふれると 全画面に 戻ります'; document.body.appendChild(fsh);
+function fsHint(on){ fsh.classList.toggle('show', on); }
+if(fsCan && fsWanted() && !fsOn()){
+  fsHint(true);
+  let swallow = false;   // 戻す ための タップでは ページを 進めない
+  addEventListener('click', e=>{ if(swallow){ swallow = false; if(!e.target.closest('a,button')){ e.stopPropagation(); e.stopImmediatePropagation(); e.preventDefault(); } } }, true);
+  const back = e => { if(e.type==='pointerdown') swallow = true;
+    if(e.type==='keydown' && e.key==='Escape'){ fsSave(false); } else fsReq();
+    fsHint(false); ['pointerdown','keydown'].forEach(t=>removeEventListener(t, back, true)); };
+  ['pointerdown','keydown'].forEach(t=>addEventListener(t, back, true));
+}
+paintFS();
 const tocOpen = on => { jump.classList.toggle('open', on); if(on){ const c=jump.querySelector('.ti.on'); if(c) c.scrollIntoView({block:'center'}); } };
 jump.addEventListener('click',e=>{
   if(e.target.closest('a')) return;
   e.stopPropagation();
+  if(e.target.closest('#fsbtn')) return toggleFS();
   if(e.target.closest('.tocbtn')) return tocOpen(!jump.classList.contains('open'));
   if(e.target.closest('.tocx,.tocbg')) return tocOpen(false);
   const b=e.target.closest('.ti'); if(!b) return;
-  stopAuto(); si=+b.dataset.i; st=0; render(); tocOpen(false);
+  stopAuto(); if(endOpen()) endShow(false); si=+b.dataset.i; st=0; render(); tocOpen(false);
 });
 /* 左上の 現在地（❶ 式 ／ ❷ 塗る ／ ❸ 答える）も 押すと 飛べる */
 document.addEventListener('click',e=>{
@@ -2627,8 +2695,28 @@ function render(){
   jump.querySelector('.pgno').textContent = `${si+1} / ${els.length}`;
   ui.textContent = `${si+1} / ${els.length}　←→ 進む・戻る　P 自動再生　Home 最初から　F 全画面　H 表示を隠す　T 明暗${typeof INK!=='undefined'?'　W 書きこむ':''}`;
 }
-function next(){ if(st<maxStep[si]) st++; else if(si<els.length-1){si++;st=0;} else stopAuto(); render(); }
-function prev(){ if(st>0) st--; else if(si>0){si--;st=maxStep[si];} render(); }
+function next(){ if(endOpen()) return; if(st<maxStep[si]) st++; else if(si<els.length-1){si++;st=0;} else { stopAuto(); return endShow(true); } render(); }
+function prev(){ if(endOpen()) return endShow(false); if(st>0) st--; else if(si>0){si--;st=maxStep[si];} render(); }
+
+/* 終わりの パネル：最後の ページの 先で 出す。次の プリント・もう一度・目次 を 選ぶ（並びは build_kimatsu.py の SERIES） */
+const endp = document.createElement('div'); endp.id = 'endp'; document.body.appendChild(endp);
+(function(){
+  const S = typeof SERIES!=='undefined' ? SERIES : [], me = typeof ME!=='undefined' ? ME : '';
+  const i = S.findIndex(d=>d.f===me), nx = i>=0 ? S[i+1] : null, pv = i>0 ? S[i-1] : null;
+  const url = d => `${d.f}.html?v=${encodeURIComponent(d.v)}`;
+  endp.innerHTML = `<div class="ein">
+    <div class="ek">${DECK.title||''}</div><div class="eh">おわり</div>
+    ${nx ? `<a class="enext" href="${url(nx)}"><span class="el">次の プリントへ</span><span class="en">${nx.no}</span><span class="et">${nx.t}</span><span class="ea">→</span></a>`
+         : `<div class="elast">${i>=0 ? 'いま ある スライドは ここまで です' : ''}</div>`}
+    <div class="ebtns"><button class="eagain">↺ もう一度 最初から</button>
+      ${pv ? `<a href="${url(pv)}">← 前の プリント（${pv.no}）</a>` : ''}<a href="目次.html">≡ スライドの 目次へ</a></div>
+    ${S.length ? `<div class="elist">${S.map(d=>`<a class="${d.f===me?'me':''}" href="${url(d)}"><b>${d.no}</b>${d.t}</a>`).join('')}</div>` : ''}
+    <button class="eback">← 最後の ページに 戻る</button></div>`;
+  endp.querySelector('.eagain').addEventListener('click', e=>{ e.stopPropagation(); endShow(false); si=0; st=0; render(); });
+  endp.querySelector('.eback').addEventListener('click', e=>{ e.stopPropagation(); endShow(false); });
+})();
+function endOpen(){ return endp.classList.contains('open'); }
+function endShow(on){ endp.classList.toggle('open', on); document.body.classList.toggle('ending', on); if(on){ bar.style.width='100%'; jump.querySelector('.pgno').textContent='おわり'; } else render(); }
 function stopAuto(){ if(timer){ clearInterval(timer); timer=null; } }
 function toggleAuto(){ if(timer) stopAuto(); else timer=setInterval(next,4000); }
 
@@ -2636,10 +2724,11 @@ document.addEventListener('keydown',e=>{
   const k=e.key;
   if(['ArrowRight','ArrowDown',' ','Enter','PageDown'].includes(k)){e.preventDefault();stopAuto();next();}
   else if(['ArrowLeft','ArrowUp','Backspace','PageUp'].includes(k)){e.preventDefault();stopAuto();prev();}
-  else if(k==='Home'){stopAuto();si=0;st=0;render();}
-  else if(k==='End'){stopAuto();si=els.length-1;st=maxStep[si];render();}
+  else if(k==='Home'){stopAuto();if(endOpen()) endShow(false);si=0;st=0;render();}
+  else if(k==='End'){stopAuto();if(endOpen()) endShow(false);si=els.length-1;st=maxStep[si];render();}
   else if(k==='p'||k==='P'){toggleAuto();}
-  else if(k==='f'||k==='F'){ try{ if(document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen(); }catch(_){} }
+  else if(k==='f'||k==='F') toggleFS();
+  else if(k==='Escape'){ tocOpen(false); if(endOpen()) endShow(false); }
   else if(k==='h'||k==='H'){ ui.classList.toggle('hide'); bar.classList.toggle('hide'); jump.classList.toggle('hide'); }
   else if(k==='t'||k==='T'){
     if(typeof toggleTheme==='function') toggleTheme();
@@ -2648,7 +2737,7 @@ document.addEventListener('keydown',e=>{
       d.dataset.theme = dark ? 'light' : 'dark'; }
   }
 });
-document.addEventListener('click',e=>{ if(e.target.closest('a,#jump,#inkbar,#themebtn')) return; stopAuto(); if(e.clientX < document.documentElement.clientWidth/3) prev(); else next(); });
+document.addEventListener('click',e=>{ if(e.target.closest('a,button,#jump,#inkbar,#themebtn,#endp')) return; stopAuto(); if(e.clientX < document.documentElement.clientWidth/3) prev(); else next(); });
 /* 画面に合わせる：縦長（スマホ）なら 720×1280、横長なら 1280×720 */
 function fit(){
   const vw = document.documentElement.clientWidth, vh = document.documentElement.clientHeight;   // スマホでは innerWidth がずれることがある
@@ -2687,7 +2776,27 @@ function portraitFit(){
     card.style.clipPath=`inset(${y0.toFixed(1)}px ${(card.offsetWidth-x1).toFixed(1)}px ${(card.offsetHeight-y1).toFixed(1)}px ${x0.toFixed(1)}px round 10px)`;
   });
 }
+/* URL の #3-2 で 4ページ目の 2番から 始める（撮影・リンク用）。#3-e は その ページの 最後。#end は 終わりの パネル */
+(function(){
+  const m = location.hash.match(/^#(\d+)-(\d+|e)$/); if(!m) return;
+  si = Math.min(+m[1], els.length-1); st = m[2]==='e' ? maxStep[si] : Math.min(+m[2], maxStep[si]);
+})();
+/* 再読み込み したら、その ページ・その 番から 再開する（sessionStorage に デッキごとに 覚える。目次から 開いた ときは 最初から） */
+const POSKEY = 'pos:' + location.pathname;
+(function(){
+  if(location.hash) return;
+  let nav = ''; try{ nav = (performance.getEntriesByType('navigation')[0]||{}).type || ''; }catch(_){}
+  if(nav !== 'reload' && nav !== 'back_forward') return;
+  try{ const p = JSON.parse(sessionStorage.getItem(POSKEY) || 'null'); if(!p) return;
+    si = Math.min(Math.max(0, p.si|0), els.length-1); st = Math.min(Math.max(0, p.st|0), maxStep[si]);
+    if(p.end) setTimeout(()=>endShow(true), 0);
+  }catch(_){}
+})();
+const posSave = () => { try{ sessionStorage.setItem(POSKEY, JSON.stringify({si, st, end:endOpen()})); }catch(_){} };
+const _render = render; render = function(){ _render(); posSave(); };
+const _endShow = endShow; endShow = function(on){ _endShow(on); posSave(); };
 addEventListener('resize',()=>setTimeout(portraitFit,50)); fit(); render(); portraitFit();
+if(location.hash==='#end') endShow(true);
 if(document.fonts&&document.fonts.ready) document.fonts.ready.then(portraitFit);
 
 /* ====== 手書き（授業中に スライドの上から 書きこむ） ======

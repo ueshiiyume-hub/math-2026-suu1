@@ -433,8 +433,18 @@ import decks_32; decks_32.add(decks)   # ③-2 ver 2
 import json
 VERS = json.load(open(os.path.join(B, 'versions.json'), encoding='utf-8'))
 os.makedirs(OUT, exist_ok=True)
+# 終わりの パネル（最後の ページの 先）で 使う：授業プリントの スライドの 並び（目次 jugyo/目次.html と 同じ 正式版だけ）
+SERIES_LIST = [('1-1_因数分解の復習','①-1','因数分解の 復習'), ('1-2_2次方程式の解','①-2','2次方程式の 解'),
+  ('1-3_2次方程式の解','①-3','2次方程式の 解 ②'), ('1-4_解の公式','①-4','解の公式'),
+  ('1-5_解の公式_重解と解なし','①-5','2次方程式の 解 ③'), ('1-6_実数解の個数','①-6','実数解の 個数'),
+  ('2-1_x軸との共有点','②-1','x軸との 共有点'), ('2-2_x軸との共有点','②-2','x軸との 共有点 ②'),
+  ('2-3_x軸との位置関係','②-3','x軸との 位置関係'), ('3-1_2次不等式の解法_v2','③-1','2次不等式の 解き方'),
+  ('3-2_2次不等式_練習編_v2','③-2','2次不等式 練習編'), ('3-3_2次不等式の解法','③-3','2次不等式 いろいろ'),
+  ('3-4_2次不等式の解法','③-4','x² の前が マイナス')]
+SER = [dict(f=f, no=no, t=tt, v=VERS.get(f, {}).get('v', '') + '_' + VERS.get(f, {}).get('date', '')) for f, no, tt in SERIES_LIST if f in decks]
 for fn, (title, js) in decks.items():
     vv = VERS.get(fn, {'v': '1.0', 'date': ''})
     js = "const VER = '<i class=\"nv\">ver</i> " + vv['v'] + "　" + vv['date'] + "';\n" + js
+    js = f"const SERIES = {json.dumps(SER, ensure_ascii=False)}, ME = {json.dumps(fn, ensure_ascii=False)};\n" + js
     open(os.path.join(OUT, fn + '.html'), 'w', encoding='utf-8').write(page(title, js))
 print('ok', len(decks), 'files')
