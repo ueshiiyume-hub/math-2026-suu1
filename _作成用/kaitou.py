@@ -4,6 +4,8 @@ import pymupdf as fz
 # 使い方: python kaitou.py <プリントの pdf（非公開リポジトリの 数学Ⅰ/）> ../期末考査/kaitou ページの名前 バージョン [解答pdfの 保存先（非公開リポジトリ）]
 SRC, OUT = sys.argv[1], sys.argv[2]   # プリントの pdf、出力の フォルダ
 RED = (0.63, 0.11, 0.11)
+PALE = (0.80, 0.52, 0.52)   # 小さな メモ（b² の 値 など）は 薄い 赤
+COL = [RED]
 FONTS = {
     'R': '/usr/share/fonts/truetype/liberation/LiberationSerif-Regular.ttf',
     'I': '/usr/share/fonts/truetype/liberation/LiberationSerif-Italic.ttf',
@@ -69,7 +71,7 @@ def draw(pg, e, x, y, s):
     for it in items(e):
         if isinstance(it, str):
             for k, t in runs(it):
-                pg.insert_text((x, y), t, fontsize=s, fontname='F' + k, color=RED)
+                pg.insert_text((x, y), t, fontsize=s, fontname='F' + k, color=COL[0])
                 x += FO[k].text_length(t, s) + (0.08 * s if k == 'I' else 0)
         elif isinstance(it, Frac):
             fs = s * 0.9
@@ -77,7 +79,7 @@ def draw(pg, e, x, y, s):
             dw, da, dd = measure(it.d, fs)
             W = max(nw, dw) + 0.4 * s
             ax = y - 0.3 * s
-            pg.draw_line((x + 0.05 * s, ax), (x + W - 0.05 * s, ax), color=RED, width=0.06 * s)
+            pg.draw_line((x + 0.05 * s, ax), (x + W - 0.05 * s, ax), color=COL[0], width=0.06 * s)
             draw(pg, it.n, x + (W - nw) / 2, ax - 0.12 * s - nd, fs)
             draw(pg, it.d, x + (W - dw) / 2, ax + 0.12 * s + da, fs)
             x += W
@@ -89,7 +91,7 @@ def draw(pg, e, x, y, s):
             p = [(x + 0.04 * s, y - 0.3 * s), (x + 0.16 * s, y - 0.36 * s),
                  (x + 0.3 * s, bot), (x + 0.5 * s, top), (x + 0.62 * s + iw, top)]
             for a_, b_ in zip(p, p[1:]):
-                pg.draw_line(a_, b_, color=RED, width=lw)
+                pg.draw_line(a_, b_, color=COL[0], width=lw)
             draw(pg, it.a, x + 0.58 * s, y, s)
             x += iw + 0.62 * s
         elif isinstance(it, Sup):
@@ -132,6 +134,15 @@ def stack(pg, es, r, s=12):
     for e, (w, a, d) in zip(es, ms):
         draw(pg, e, (x0 + x1 - w) / 2, y + a, s)
         y += a + d + 2
+
+def memo(pg, e, cx, y, s=7.5):
+    """枠の 近くに 小さく 薄い 字で 書く メモ（cx を 中心、y が 下の 端）"""
+    w, a, d = measure(e, s)
+    piece([cx - w / 2, y - a - d, cx + w / 2, y])
+    COL[0] = PALE
+    draw(pg, e, cx - w / 2, y - d, s)
+    COL[0] = RED
+
 
 def fracbox(pg, n, d, r, s=13):
     """box with a printed fraction bar in the middle."""
@@ -254,21 +265,22 @@ lines(pg, ['x(3x − 5) = 0', ['x = 0,  ', F('5', '3')]], Rx, 643)
 pen.page(2)
 def formula(dy, mb, b2, ac, a2, calc, s=13):
     center(pg, mb, [113.7, 241.7 + dy, 157.2, 268.7 + dy], s)
-    center(pg, b2, [186.5, 241.7 + dy, 229.9, 268.7 + dy], s)
+    center(pg, b2[0], [186.5, 241.7 + dy, 229.9, 268.7 + dy], s)
+    memo(pg, b2[1], 208.2, 235.5 + dy)
     center(pg, ac, [229.2, 241.7 + dy, 285.4, 268.7 + dy], s)
     center(pg, a2, [179.9, 273.7 + dy, 239.2, 300.6 + dy], s)
     center(pg, calc, [350.5, 240.6 + dy, 465.2, 267.5 + dy], 12)
 
 G('①-4 ⑴')
-formula(0, '5', ['(−5)', P('2')], '−12', '6', '−4×3×1 = −12')
+formula(0, '5', ('25', ['b', P('2'), ' = (−5)', P('2'), ' = 25']), '−12', '6', '−4×3×1 = −12')
 center(pg, F(['5 ± ', R('13')], '6'), [113.7, 304.9, 229.9, 359.9], 15)
 G('①-4 ⑵')
-formula(180, '−4', ['4', P('2')], '+12', '2', '−4×1×(−3) = 12')
+formula(180, '−4', ('16', ['b', P('2'), ' = 4', P('2'), ' = 16']), '+12', '2', '−4×1×(−3) = 12')
 fracbox(pg, ['−4 ± ', R('28')], '2', [113.7, 484.8, 206.9, 539.9])
 fracbox(pg, ['−4 ± 2', R('7')], '2', [230.7, 484.8, 323.9, 539.9])
 center(pg, ['−2 ± ', R('7')], [348.2, 484.8, 441.3, 539.9], 15)
 G('①-4 ⑶')
-formula(358.6, '−3', ['3', P('2')], '−8', '4', '−4×2×1 = −8')
+formula(358.6, '−3', ('9', ['b', P('2'), ' = 3', P('2'), ' = 9']), '−8', '4', '−4×2×1 = −8')
 fracbox(pg, ['−3 ± ', R('1')], '4', [113.7, 663.4, 206.9, 718.4])
 fracbox(pg, '−3 ± 1', '4', [230.7, 663.4, 323.9, 718.4])
 center(pg, [F('−3 + 1', '4'), ' = ', F('−2', '4'), ' = −', F('1', '2')], [350.5, 640.5, 500.6, 688.0], 14)
@@ -309,20 +321,21 @@ sol(Rx, 440, 3, 7, 2, [['   = ', F(['−7 ± ', R('25')], '6'), ' = ', F('−7 �
 pen.page(4)
 def formula5(dy, mb, b2, ac, a2, calc, s=13):
     center(pg, mb, [112.9, 133.7 + dy, 156.4, 160.7 + dy], s)
-    center(pg, b2, [185.7, 133.7 + dy, 229.2, 160.7 + dy], s)
+    center(pg, b2[0], [185.7, 133.7 + dy, 229.2, 160.7 + dy], s)
+    memo(pg, b2[1], 207.4, 128 + dy)
     center(pg, ac, [228.4, 133.7 + dy, 284.6, 160.7 + dy], s)
     center(pg, a2, [179.2, 165.7 + dy, 238.5, 192.6 + dy], s)
     center(pg, calc, [349.7, 132.6 + dy, 464.5, 159.5 + dy], 12)
 
 G('①-5 ⑴')
-formula5(0, '−2', ['2', P('2')], '−4', '2', '−4×1×1 = −4')
+formula5(0, '−2', ('4', ['b', P('2'), ' = 2', P('2'), ' = 4']), '−4', '2', '−4×1×1 = −4')
 fracbox(pg, ['−2 ± ', R('0')], '2', [112.9, 196.8, 206.1, 251.9])
 fracbox(pg, '−2 ± 0', '2', [230.0, 196.8, 323.2, 251.9])
 fracbox(pg, '−2', '2', [348.5, 196.8, 441.7, 251.9])
 center(pg, '−1', [472.0, 196.8, 531.5, 251.9], 16)
 center(pg, '重解', [470.0, 163.0, 531.8, 193.7], 13)
 G('①-5 ⑵')
-formula5(180, '−3', ['3', P('2')], '−20', '2', '−4×1×5 = −20')
+formula5(180, '−3', ('9', ['b', P('2'), ' = 3', P('2'), ' = 9']), '−20', '2', '−4×1×5 = −20')
 fracbox(pg, ['−3 ± ', R('−11')], '2', [112.9, 376.8, 206.1, 431.9])
 center(pg, '解なし', [234.1, 385.9, 370.6, 422.8], 15)
 G('①-5 まとめ')
