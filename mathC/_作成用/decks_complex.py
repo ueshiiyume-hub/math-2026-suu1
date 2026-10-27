@@ -671,7 +671,7 @@ const QTX = {1:(b,t)=>`第1象限 なので そのまま ${M(`\\theta=${t}^\\cir
              3:(b,t)=>`第3象限 なので ${M(`\\theta=180^\\circ+${b}^\\circ=${t}^\\circ`)}`, 4:(b,t)=>`第4象限 なので ${M(`\\theta=360^\\circ-${b}^\\circ=${t}^\\circ`)}`};
 
 /* 板書で くわしく した 問：元の ページの ② に 一言 */
-const MORE = {'⑹':'（次の ページで くわしく）'};
+const MORE = {'⑹':'（次の ページで くわしく）', '⑺':'（次の ページで くわしく）'};
 function prPage([no, z, a, b, rc, rl, rt, base, t, axis]){
   const R = Math.ceil(Math.max(Math.abs(a), Math.abs(b))) + 1, g = PL({x0:-R, x1:R, y0:-R, y1:R, u:Math.floor(400/(2*R)), ticks:false});
   const q = base ? QN(a, b) : 0, ans = POLAR(rt, t), sa = 2;   // 番：1 長さ、2 くくる（軸は 向き）、3 象限・角、4 答え
@@ -690,7 +690,7 @@ function prPage([no, z, a, b, rc, rl, rt, base, t, axis]){
        `${M(`${z}=${ans}`)}`]
     : [`${M(z)} を 極形式に します。`,
        `① 長さ：${M(`r=${rc}`)}`,
-       `② 点は ${axis}。だから 向きは ${M(`${t}^\\circ`)}。`,
+       `② 点は ${axis}。だから 向きは ${M(`${t}^\\circ`)}。${MORE[no]||''}`,
        `${M(`${z}=${ans}`)}${rt==='1' ? '（長さ 1 は 書かない）' : ''}`];
   return HD(NO, `問10 ${no}　${'<span class="m">'+z+'</span>'}`, SEC) + `<div class="bd">
     <div class="l">
@@ -717,6 +717,24 @@ const p1 = HD(NO, '手順', SEC) + `<div class="bd">
 
 const pages = PR.map(prPage);
 
+/* ⑺ くわしく（10/27 の 板書）：i ＝ 1・i で r＝1、真上で θ＝90°。別解：i＝0＋i で cosθ＝0、sinθ＝1 */
+const g7b = PL({x0:-2, x1:2, y0:-1, y1:2, u:110, ticks:false});
+const p7b = HD(NO, '問10 ⑺　くわしく', SEC) + `<div class="bd">
+  <div class="l"><div class="calc" style="font-size:29px;gap:10px">
+    <div>${M`i=\on{1}{dp}{1}\cdot i`}　→　${M`r=\DP{1}`}</div>
+    <div data-s="2">真上 なので　${M`\theta=\IM{90^\circ}`}</div>
+    <div data-s="2" style="--d:.5s">${M`i=\cos90^\circ+i\sin90^\circ`}</div>
+    <div data-s="3" class="pbox" style="font-size:24px;line-height:1.9"><div class="pl2">別解</div>${M`i=\RE{0}+\IM{1}\,i`}　より<br>${M`\cos\theta=\RE{0}`}、${M`\sin\theta=\IM{1}`}　→　${M`\theta=90^\circ`}</div>
+  </div></div>
+  <div class="r">${g7b.svg(g7b.seg(0, 0, 0, 1, 1, {lab:'1', side:-1}) + g7b.dot(0, 1, IT('i'), null, {pos:'ne'})
+    + g7b.ang(90, 2, {r:40, lr:22}))}</div>
+</div>` + CAP([
+  `${M`i`} を 極形式に します。前に 見えない ${M`1`} が ある と 考えます。`,
+  `${M`i=1\cdot i`}。点 ${M`i`} は 原点から 距離 ${M`1`} なので、${M`r=1`}。`,
+  `点 ${M`i`} は 虚軸の 上、真上。だから 向きは ${M`\theta=90^\circ`}。長さ ${M`1`} は 書かないので ${M`\cos90^\circ+i\sin90^\circ`}。`,
+  `別解：${M`i=0+1i`} と 見ると、${M`\cos\theta=0`}、${M`\sin\theta=1`}。Point の 表で この 値に なる 角は ${M`90^\circ`} です。`
+]);
+
 /* ⑹ くわしく（10/27 の 板書）：2 で くくる → 1+i は √2(…) → 2×√2＝2√2 */
 const g6b = PL({x0:-1, x1:3, y0:-1, y1:3, u:96, ticks:false});
 const p6b = HD(NO, '問10 ⑹　くわしく', SEC) + `<div class="bd">
@@ -737,6 +755,7 @@ const p6b = HD(NO, '問10 ⑹　くわしく', SEC) + `<div class="bd">
   `${M`2\times\sqrt{2}=2\sqrt{2}`}。これが 長さ ${M`r`}。図でも ${M`1+i`} を ${M`2`} 倍すると ${M`2+2i`} です（${M`r=\sqrt{2^2+2^2}=\sqrt{8}=2\sqrt{2}`} と 同じ）。`,
   `かっこの 中は ${M`45^\circ`} の 形 なので、${M`2\sqrt{2}(\cos45^\circ+i\sin45^\circ)`}。`
 ]);
+const DETAIL = {'⑹':p6b, '⑺':p7b};   // 板書で 足した「くわしく」の ページ
 
 /* 答えの 一覧（アニメーション なし） */
 const pe = HD(NO, '答え（問10）', SEC) + `<div class="bd col"><div class="ans16">
@@ -745,7 +764,7 @@ const pe = HD(NO, '答え（問10）', SEC) + `<div class="bd col"><div class="a
 
 const DECK = {title:'①-4 極形式 練習編（問10）', pages:[
   {name:'表紙', html:p0}, {name:'手順', html:p1},
-  ...PR.flatMap((p,i)=>[{name:`${p[0]}　${p[1].replace(/\\sqrt\{(\d)\}/g,'√$1').replace(/-/g,'−')}`, html:pages[i]}].concat(p[0]==='⑹' ? [{name:'⑹　くわしく', html:p6b, add:'10/27'}] : [])),
+  ...PR.flatMap((p,i)=>[{name:`${p[0]}　${p[1].replace(/\\sqrt\{(\d)\}/g,'√$1').replace(/-/g,'−')}`, html:pages[i]}].concat(DETAIL[p[0]] ? [{name:`${p[0]}　くわしく`, html:DETAIL[p[0]], add:'10/27'}] : [])),
   {name:'答え（一覧）', html:pe},
 ]};
 ''')
