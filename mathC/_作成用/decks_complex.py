@@ -671,7 +671,7 @@ const QTX = {1:(b,t)=>`第1象限 なので そのまま ${M(`\\theta=${t}^\\cir
              3:(b,t)=>`第3象限 なので ${M(`\\theta=180^\\circ+${b}^\\circ=${t}^\\circ`)}`, 4:(b,t)=>`第4象限 なので ${M(`\\theta=360^\\circ-${b}^\\circ=${t}^\\circ`)}`};
 
 /* 板書で くわしく した 問：元の ページの ② に 一言 */
-const MORE = {'⑹':'（次の ページで くわしく）', '⑺':'（次の ページで くわしく）'};
+const MORE = Object.fromEntries(['⑹','⑺','⑻','⑾','⑿'].map(n=>[n, '（次の ページで くわしく）']));
 function prPage([no, z, a, b, rc, rl, rt, base, t, axis]){
   const R = Math.ceil(Math.max(Math.abs(a), Math.abs(b))) + 1, g = PL({x0:-R, x1:R, y0:-R, y1:R, u:Math.floor(400/(2*R)), ticks:false});
   const q = base ? QN(a, b) : 0, ans = POLAR(rt, t), sa = 2;   // 番：1 長さ、2 くくる（軸は 向き）、3 象限・角、4 答え
@@ -755,7 +755,38 @@ const p6b = HD(NO, '問10 ⑹　くわしく', SEC) + `<div class="bd">
   `${M`2\times\sqrt{2}=2\sqrt{2}`}。これが 長さ ${M`r`}。図でも ${M`1+i`} を ${M`2`} 倍すると ${M`2+2i`} です（${M`r=\sqrt{2^2+2^2}=\sqrt{8}=2\sqrt{2}`} と 同じ）。`,
   `かっこの 中は ${M`45^\circ`} の 形 なので、${M`2\sqrt{2}(\cos45^\circ+i\sin45^\circ)`}。`
 ]);
-const DETAIL = {'⑹':p6b, '⑺':p7b};   // 板書で 足した「くわしく」の ページ
+/* ⑻ ⑾ ⑿ くわしく（10/27、⑺ と 同じ 説明）：z ＝ r・（1，−1，±i）で 長さ、軸の 向きで θ。別解：かっこの 中を cos，sin と 見る
+   [番, z, r, 単位（TeX）, 単位の 点, θ, 向きの 言葉, cos, sin, 図の 範囲] */
+function axDetail([no, z, r, un, [ua, ub], t, dir, c, sn, [x0, x1, y0, y1]]){
+  const g = PL({x0, x1, y0, y1, u:Math.min(110, Math.floor(480/(x1-x0)), Math.floor(380/(y1-y0))), ticks:false});
+  const a = ua*r, b = ub*r, C = ub ? '\\IM' : '\\RE', pos = (b<0?'s':'n')+(a<0?'w':'e');
+  const UN = un==='1' ? '1' : `(${un})`;
+  const TX = v => v.replace(/i/, IT('i')).replace(/-/, '−');
+  const fig = g.seg(0, 0, a, b, 1, {lab:String(r), side:ub<0 ? 1 : ub ? -1 : 1})
+    + g.dot(ua, ub, TX(un), 1, {pos:ub ? (ub<0?'se':'ne') : (ua<0?'sw':'se'), d:.5})
+    + g.dot(a, b, TX(z), null, {pos})
+    + (t ? g.ang(t, 2, {r:40, lr:22}) : g.text(.9, .45, '0°', 'dp', 2));
+  return HD(NO, `問10 ${no}　くわしく`, SEC) + `<div class="bd">
+  <div class="l"><div class="calc" style="font-size:29px;gap:10px">
+    <div>${M(`${z}=\\on{1}{dp}{${r}}\\cdot ${UN}`)}　→　${M(`r=\\DP{${r}}`)}</div>
+    <div data-s="2">${dir} なので　${M(`\\theta=${C}{${t}^\\circ}`)}</div>
+    <div data-s="2" style="--d:.5s">${M(`${z}=${POLAR(String(r), t)}`)}</div>
+    <div data-s="3" class="pbox" style="font-size:24px;line-height:1.9"><div class="pl2">別解</div>${M(`${z}=${r}(\\RE{${c}}${sn<0?'-':'+'}\\IM{${Math.abs(sn)}}\\,i)`)}　より<br>${M(`\\cos\\theta=\\RE{${c}}`)}、${M(`\\sin\\theta=\\IM{${sn}}`)}　→　${M(`\\theta=${t}^\\circ`)}</div>
+  </div></div>
+  <div class="r">${g.svg(fig)}</div>
+</div>` + CAP([
+  `${M(z)} を 極形式に します。⑺ の ${M`i=1\cdot i`} と 同じ ように、${M(`${r}\\cdot ${UN}`)} と 見ます。`,
+  `${M(un)} は 原点から 距離 ${M`1`} の 点。その ${M(String(r))} 倍 なので、${M(`r=${r}`)}。`,
+  `点 ${M(z)} は ${ub ? '虚軸' : '実軸'}の 上、${dir}。だから 向きは ${M(`\\theta=${t}^\\circ`)}。${M(`${z}=${POLAR(String(r), t)}`)}。`,
+  `別解：${M(`${z}=${r}(${c}${sn<0?'-':'+'}${Math.abs(sn)}i)`)} と 見ると、${M(`\\cos\\theta=${c}`)}、${M(`\\sin\\theta=${sn}`)}。Point の 表で この 値に なる 角は ${M(`${t}^\\circ`)} です。`
+]);
+}
+const AXD = [
+  ['⑻', '-3', 3, '-1', [-1, 0], 180, '真左', -1, 0, [-4, 1, -1, 2]],
+  ['⑾', '-2i', 2, '-i', [0, -1], 270, '真下', 0, -1, [-2, 2, -3, 1]],
+  ['⑿', '4', 4, '1', [1, 0], 0, '真右', 1, 0, [-1, 5, -1, 2]],
+];
+const DETAIL = {'⑹':p6b, '⑺':p7b, ...Object.fromEntries(AXD.map(d=>[d[0], axDetail(d)]))};   // 板書で 足した「くわしく」の ページ
 
 /* 答えの 一覧（アニメーション なし） */
 const pe = HD(NO, '答え（問10）', SEC) + `<div class="bd col"><div class="ans16">
