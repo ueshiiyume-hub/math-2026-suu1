@@ -477,11 +477,38 @@ const p3 = HD(NO, '極形式', SEC) + `<div class="bd">
     + g3.dot(3.4, 2.2, 'P', null))}</div>
 </div>` + CAP([
   `長さ ${M`r`} と 向き ${M`\theta`} から、${M`a`} と ${M`b`} を 求めて みます。`,
-  `三角比の 定義 ${M`\cos\theta=\dfrac{a}{r}`} より、横の 長さは ${M`a=r\cos\theta`}。`,
+  `三角比の 定義 ${M`\cos\theta=\dfrac{a}{r}`} より、横の 長さは ${M`a=r\cos\theta`}。（次の ページで くわしく）`,
   `${M`\sin\theta=\dfrac{b}{r}`} より、縦の 長さは ${M`b=r\sin\theta`}。`,
   `${M`z=a+bi`} に 入れて、${M`r`} で くくると ${M`r(\cos\theta+i\sin\theta)`}。`,
   `この 形を <b>極形式</b>、${M`\theta`} を <b>偏角</b> と いいます。`,
   `かっこの 中の ${M`\cos\theta+i\sin\theta`} が「向き」、前の ${M`r`} が「長さ」を 表して います。`
+]);
+
+/* 極形式 くわしく（10/27 の 板書）：斜辺 1 の 三角形を r 倍 */
+const g3b = PL({x0:-1, x1:4, y0:-1, y1:3, ticks:false});
+const TB = 32.9*Math.PI/180, RB = Math.hypot(3.4, 2.2), CB = Math.cos(TB), SB1 = Math.sin(TB);
+const TRI = k => `<polygon class="utri" points="${g3b.X(0)},${g3b.Y(0)} ${g3b.X(k*CB).toFixed(1)},${g3b.Y(0)} ${g3b.X(k*CB).toFixed(1)},${g3b.Y(k*SB1).toFixed(1)}"/>`;
+const p3b = HD(NO, '極形式　くわしく', SEC) + `<div class="bd">
+  <div class="l"><div class="q" style="font-size:25px;line-height:2.1">
+    <div data-s="1">斜辺が ${M`1`} の 直角三角形<br>　→ 横 ${M`\RE{\cos\theta}`}、縦 ${M`\IM{\sin\theta}`}<span class="mu" style="font-size:20px">（三角比の 定義）</span></div>
+    <div data-s="2"><b class="dp">全体を ${M`r`} 倍</b></div>
+    <div data-s="3">→ 斜辺 ${M`r`}、横 ${M`\RE{r\cos\theta}`}、縦 ${M`\IM{r\sin\theta}`}</div>
+    <div data-s="4" class="hl2">よって　${M`a=\RE{r\cos\theta}`}、${M`b=\IM{r\sin\theta}`}</div>
+  </div></div>
+  <div class="r">${g3b.svg(
+      `<g data-s="1">${TRI(1)}</g>`
+    + g3b.text(CB*.42, SB1*.5+.22, '1', 'dp', 1) + g3b.text(CB*.5, -.35, 'cos '+IT('θ'), 're', 1) + g3b.text(CB+.08, SB1*.45, 'sin '+IT('θ'), 'im', 1, 'start')
+    + g3b.ang(32.9, 1, {r:26, lab:IT('θ'), lr:14, fs:17})
+    + `<g data-s="2"><g class="grow" data-o="2" style="--k:${RB.toFixed(3)};transform-origin:${g3b.X(0)}px ${g3b.Y(0)}px">${TRI(1)}</g></g>`
+    + g3b.text(1.75, 2.0, '× '+IT('r'), 'dp', 2)
+    + g3b.text(1.45, 1.35, IT('r'), 'dp', 3) + g3b.text(1.7, -.42, IT('r')+' cos '+IT('θ'), 're', 3) + g3b.text(3.52, 1.1, IT('r')+' sin '+IT('θ'), 'im', 3, 'start')
+    + g3b.ra(3.4, 2.2, 3) + g3b.dot(3.4, 2.2, 'P(<tspan class="it">a</tspan>, <tspan class="it">b</tspan>)', 3, {d:.3}))}</div>
+</div>` + CAP([
+  `${M`a=r\cos\theta`}、${M`b=r\sin\theta`} に なる わけを、図で 見ます。`,
+  `まず、斜辺が ${M`1`} の 直角三角形。三角比の 定義から、横が ${M`\cos\theta`}、縦が ${M`\sin\theta`} です。`,
+  `この 三角形を、形を 変えずに ${M`r`} 倍に 拡大します。`,
+  `すべての 辺が ${M`r`} 倍に なり、斜辺 ${M`r`}、横 ${M`r\cos\theta`}、縦 ${M`r\sin\theta`}。`,
+  `横の 長さが ${M`a`}、縦の 長さが ${M`b`} なので、${M`a=r\cos\theta`}、${M`b=r\sin\theta`} です。`
 ]);
 
 /* 長さと 向きを 読み取る */
@@ -578,7 +605,7 @@ const p7 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:26px">
 </div>` + CAP([`この 手順で、練習編（問10）の 16問を 解いて いきます。`]);
 
 const DECK = {title:'①-4 複素数の極形式', pages:[
-  {name:'表紙', html:p0}, {name:'2通りの 表し方', html:p1}, {name:'長さ と 向き', html:p2}, {name:'極形式', html:p3},
+  {name:'表紙', html:p0}, {name:'2通りの 表し方', html:p1}, {name:'長さ と 向き', html:p2}, {name:'極形式', html:p3}, {name:'極形式　くわしく', html:p3b, add:'10/27'},
   {name:'長さと 向きを 読み取る', html:p4}, {name:'例　1＋i を 極形式で', html:p5}, {name:'特別な 角は「くくる」だけ', html:p6},
   {name:'まとめ', html:p7},
 ]};

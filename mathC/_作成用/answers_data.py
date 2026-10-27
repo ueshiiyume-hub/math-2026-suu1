@@ -121,6 +121,10 @@ SHEETS.append(dict(no='①-4', title='複素数の極形式', blocks=[
     'これを $z$ の [[極形式]] という。',
     '$\\theta$ を $z$ の [[偏角]] といい，$\\arg z$ で表す。',
     '（$\\cos\\theta+i\\sin\\theta$：長さ $1$，向き $\\theta$ の数）']),
+  ('note', '【$a=r\\cos\\theta$，$b=r\\sin\\theta$ になるわけ】', [
+    '斜辺が $1$ の直角三角形では，横が $\\cos\\theta$，縦が $\\sin\\theta$（三角比の定義）',
+    '→ 全体を $r$ 倍すると，斜辺 $r$，横 $r\\cos\\theta$，縦 $r\\sin\\theta$',
+    '→ よって 点 $\\mathrm{P}(a,\\ b)$ は　$a=r\\cos\\theta$，$b=r\\sin\\theta$'], '10/27'),
   ('tbl', '長さと向きを読み取る　<small>点 A〜D の長さと向きを読み取り，極形式と $a+bi$ の形で表せ。</small>', ['点', '長さ $r$', '向き $\\theta$', '極形式', '$a+bi$'], [
     ['A', '[[$2$]]', '[[$30^\\circ$]]', '[[$2(\\cos30^\\circ+i\\sin30^\\circ)$]]', '[[$\\sqrt{3}+i$]]'],
     ['B', '[[$3$]]', '[[$90^\\circ$]]', '[[$3(\\cos90^\\circ+i\\sin90^\\circ)$]]', '[[$3i$]]'],

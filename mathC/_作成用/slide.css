@@ -285,3 +285,7 @@ body.portrait #endp .eh{font-size:40px}
 .pl .tri{fill:var(--main);fill-opacity:.14;stroke:var(--deep);stroke-width:3;stroke-linejoin:round}
 .pl.rt{height:330px} body.portrait .pl.rt{width:380px;height:auto}
 .pl.sm3{height:220px;width:auto} body.portrait .pl.sm3{width:240px;height:auto}
+/* 拡大（①-4 くわしく）：三角形を 原点を 中心に k 倍 */
+.pl .utri{fill:var(--main);fill-opacity:.18;stroke:var(--deep);stroke-width:2.5;vector-effect:non-scaling-stroke}
+.pl .grow{transform:scale(1);transition:transform 1.2s ease-in-out .3s}
+.pl .grow.on{transform:scale(var(--k))}
