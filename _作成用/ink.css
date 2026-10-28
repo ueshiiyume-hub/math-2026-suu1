@@ -20,3 +20,11 @@ body.inking #inkbar .ink-tools{display:flex}
 #inkbar .ink-sep{width:1px;height:24px;background:var(--gline);margin:0 2px}
 body.portrait #inkbar .ink-tools{flex-wrap:wrap;max-width:calc(100vw - 70px)}
 body.portrait #inkbar{top:6px;right:6px}
+/* 書くモードの とき だけ 出る「スライドに 戻る」（大きく、右下に。押しやすい ように） */
+#inkback{display:none;position:fixed;z-index:27;right:18px;bottom:18px;align-items:center;gap:10px;height:60px;padding:0 26px 0 20px;border-radius:30px;
+  border:3px solid var(--paper);background:var(--accent);color:#fff;font:900 20px "Zen Maru Gothic",sans-serif;cursor:pointer;
+  box-shadow:0 4px 14px rgba(0,0,0,.25);touch-action:manipulation}
+#inkback .ib-i{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.25);font-size:15px}
+#inkback:active{transform:scale(.96)}
+body.inking #inkback{display:inline-flex}
+body.portrait #inkback{right:12px;bottom:64px;height:56px;font-size:19px}

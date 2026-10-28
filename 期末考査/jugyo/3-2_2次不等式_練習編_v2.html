@@ -1106,6 +1106,16 @@ i.nv{font-style:normal;font-family:inherit}
 .portrait .smr{flex-direction:column;gap:26px}
 .portrait .smi{font-size:46px;padding:22px 26px}
 .portrait .smdone{left:540px;top:840px}
+/* プリント問題：見出しの ページと 印（2026-10-28） */
+.phcard{justify-content:center;gap:14px}
+.ph-k{font-size:20px;font-weight:900;color:var(--muted);letter-spacing:.1em}
+.ph-h{font-size:40px;font-weight:900;color:var(--r-ink)}
+.ph-t{font-size:26px;font-weight:900}
+.ph-l{display:grid;grid-template-columns:repeat(2,minmax(0,auto));gap:10px 70px;font-size:32px;margin-top:10px}
+.portrait .phcard .ph-l{grid-template-columns:1fr;font-size:30px}
+.portrait .phcard .ph-h{font-size:34px}
+.ptag{position:absolute;left:84px;top:14px;z-index:5;font:900 16px "Zen Maru Gothic",sans-serif;color:#fff;background:var(--accent);border-radius:999px;padding:3px 14px;box-shadow:var(--shadow)}
+body.portrait .ptag{left:70px;top:8px}
 
 /* ===== 手書き ===== */
 #ink{position:fixed;left:0;top:0;z-index:15;pointer-events:none;touch-action:none}
@@ -1129,6 +1139,14 @@ body.inking #inkbar .ink-tools{display:flex}
 #inkbar .ink-sep{width:1px;height:24px;background:var(--gline);margin:0 2px}
 body.portrait #inkbar .ink-tools{flex-wrap:wrap;max-width:calc(100vw - 70px)}
 body.portrait #inkbar{top:6px;right:6px}
+/* 書くモードの とき だけ 出る「スライドに 戻る」（大きく、右下に。押しやすい ように） */
+#inkback{display:none;position:fixed;z-index:27;right:18px;bottom:18px;align-items:center;gap:10px;height:60px;padding:0 26px 0 20px;border-radius:30px;
+  border:3px solid var(--paper);background:var(--accent);color:#fff;font:900 20px "Zen Maru Gothic",sans-serif;cursor:pointer;
+  box-shadow:0 4px 14px rgba(0,0,0,.25);touch-action:manipulation}
+#inkback .ib-i{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.25);font-size:15px}
+#inkback:active{transform:scale(.96)}
+body.inking #inkback{display:inline-flex}
+body.portrait #inkback{right:12px;bottom:64px;height:56px;font-size:19px}
 
 </style>
 <!-- 明るい／暗い の 切りかえ（スマホでも 押せる ボタン）。選んだ ものは この サイト 全体で 覚える -->
@@ -1857,8 +1875,21 @@ function ptSlide(P){
 const GARW = (x1,y1,x2,y2,s) => { const ym=(y1+y2)/2, hh=(y2-y1)*.28, hx=x2-(y2-y1)*.55;
   return `<g class="gs" data-s="${s}"><polygon points="${x1},${ym-hh} ${hx},${ym-hh} ${hx},${y1} ${x2},${ym} ${hx},${y2} ${hx},${ym+hh} ${x1},${ym+hh}" fill="#c9dca6"/></g>`; };
 
+/* ====== プリント問題（例の あと）：見出しの ページと、問題の ページの 印（2026-10-28） ======
+   probHead('プリント問題①-4', '次の 2次方程式を 解け。', ['⑴ …', …])：問題の 一覧の ページ（アニメーション なし）
+   ptag('プリント問題①-4')：問題の ページの 左上（番号の 丸の 横）に 付ける 印 */
+const probHead = (title, lead, list, cap) => `
+  <div class="card abs ncard phcard">${EQTAPE}
+    <div class="ph-k">例の 次は</div>
+    <div class="ph-h">◎${title}</div>
+    <div class="ph-t">${lead}</div>
+    <div class="ph-l math">${list.map(x=>`<span>${x}</span>`).join('')}</div>
+  </div>
+  ${cbar([cap || `ここから <b>${title}</b>。　例と 同じ 手順で 解いて いこう！　まず 自分で 解いてから 見てね。`])}`;
+const ptag = t => `<div class="ptag">${t}</div>`;
+
 /* ====== このプリントのスライド ====== */
-const SERIES = [{"f": "1-1_因数分解の復習", "no": "①-1", "t": "因数分解の 復習", "v": "1.3_2026-10-27"}, {"f": "1-2_2次方程式の解", "no": "①-2", "t": "2次方程式の 解", "v": "1.3_2026-10-27"}, {"f": "1-3_2次方程式の解", "no": "①-3", "t": "2次方程式の 解 ②", "v": "1.3_2026-10-27"}, {"f": "1-4_解の公式", "no": "①-4", "t": "解の公式", "v": "1.3_2026-10-27"}, {"f": "1-5_解の公式_重解と解なし", "no": "①-5", "t": "2次方程式の 解 ③", "v": "1.4_2026-10-27"}, {"f": "1-6_実数解の個数", "no": "①-6", "t": "実数解の 個数", "v": "1.3_2026-10-27"}, {"f": "2-1_x軸との共有点", "no": "②-1", "t": "x軸との 共有点", "v": "1.3_2026-10-27"}, {"f": "2-2_x軸との共有点", "no": "②-2", "t": "x軸との 共有点 ②", "v": "1.3_2026-10-27"}, {"f": "2-3_x軸との位置関係", "no": "②-3", "t": "x軸との 位置関係", "v": "1.3_2026-10-27"}, {"f": "3-1_2次不等式の解法_v2", "no": "③-1", "t": "2次不等式の 解き方", "v": "2.18_2026-10-27"}, {"f": "3-2_2次不等式_練習編_v2", "no": "③-2", "t": "2次不等式 練習編", "v": "2.6_2026-10-27"}, {"f": "3-3_2次不等式の解法", "no": "③-3", "t": "2次不等式 いろいろ", "v": "1.3_2026-10-27"}, {"f": "3-4_2次不等式の解法", "no": "③-4", "t": "x² の前が マイナス", "v": "1.3_2026-10-27"}], ME = "3-2_2次不等式_練習編_v2";
+const SERIES = [{"f": "1-1_因数分解の復習", "no": "①-1", "t": "因数分解の 復習", "v": "1.3_2026-10-27"}, {"f": "1-2_2次方程式の解", "no": "①-2", "t": "2次方程式の 解", "v": "1.4_2026-10-28"}, {"f": "1-3_2次方程式の解", "no": "①-3", "t": "2次方程式の 解 ②", "v": "1.4_2026-10-28"}, {"f": "1-4_解の公式", "no": "①-4", "t": "解の公式", "v": "1.4_2026-10-28"}, {"f": "1-5_解の公式_重解と解なし", "no": "①-5", "t": "2次方程式の 解 ③", "v": "1.5_2026-10-28"}, {"f": "1-6_実数解の個数", "no": "①-6", "t": "実数解の 個数", "v": "1.4_2026-10-28"}, {"f": "2-1_x軸との共有点", "no": "②-1", "t": "x軸との 共有点", "v": "1.3_2026-10-27"}, {"f": "2-2_x軸との共有点", "no": "②-2", "t": "x軸との 共有点 ②", "v": "1.3_2026-10-27"}, {"f": "2-3_x軸との位置関係", "no": "②-3", "t": "x軸との 位置関係", "v": "1.3_2026-10-27"}, {"f": "3-1_2次不等式の解法_v2", "no": "③-1", "t": "2次不等式の 解き方", "v": "2.18_2026-10-27"}, {"f": "3-2_2次不等式_練習編_v2", "no": "③-2", "t": "2次不等式 練習編", "v": "2.6_2026-10-27"}, {"f": "3-3_2次不等式の解法", "no": "③-3", "t": "2次不等式 いろいろ", "v": "1.3_2026-10-27"}, {"f": "3-4_2次不等式の解法", "no": "③-4", "t": "x² の前が マイナス", "v": "1.3_2026-10-27"}], ME = "3-2_2次不等式_練習編_v2";
 const VER = '<i class="nv">ver</i> 2.6　2026-10-27';
 /* ③-1 ver 2.0 の 土台：ver 1.4 の 部品の 写し（ver 1.4 を 直しても ver 2.0 は 変わらない） */
 
@@ -2701,7 +2732,7 @@ if(location.hash==='#end') endShow(true);
 if(document.fonts&&document.fonts.ready) document.fonts.ready.then(portraitFit);
 
 /* ====== 手書き（授業中に スライドの上から 書きこむ） ======
-   右上の ✏ ボタン か W キーで 書く／やめる。ペンの 後ろ（消しゴム側）で なぞると 消える。
+   右上の ✏ ボタン か W キーで 書く。やめる ときは 右下の 大きな「スライドに 戻る」（または W・Esc）。ペンの 後ろ（消しゴム側）で なぞると 消える。
    ペン（Surface ペンなど）で 画面に さわると、自動で 書くモードに なる。
    書いた線は スライドごとに 残る（ページを 開き直すと 消える）。
    線は 台紙（1280×720 / 720×1280）の 座標で 覚えるので、画面の 大きさが 変わっても ずれない。 */
@@ -2718,6 +2749,12 @@ var INK = {on:false, color:'#e0465e', tool:'pen', w:3.5, strokes:{}, cur:null};
     <button class="ink-er" title="消しゴム（E）">消</button><button class="ink-un" title="1つ戻す（Ctrl+Z）">↶</button>
     <button class="ink-cl" title="このページを 全部 消す">全消</button></span>`;
   document.body.appendChild(bar);
+  /* 書くモードから スライドに 戻る：大きな ボタンを 右下に 出す（右上の ✏ は 小さくて 押しにくい ため、2026-10-28） */
+  const back = document.createElement('button'); back.id = 'inkback'; back.type = 'button';
+  back.innerHTML = '<span class="ib-i">▶</span>スライドに 戻る'; back.title = '書くのを やめて スライドを 進める（W・Esc）';
+  back.addEventListener('pointerdown', e=>e.stopPropagation());
+  back.addEventListener('click', e=>{ e.stopPropagation(); e.preventDefault(); setOn(false); back.blur(); });
+  document.body.appendChild(back);
   const key = () => si + (document.body.classList.contains('portrait') ? 'p' : 'l');
   const list = () => (INK.strokes[key()] ||= []);
   /* 画面の点 ⇔ 台紙の点 */

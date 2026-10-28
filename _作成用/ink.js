@@ -1,5 +1,5 @@
 /* ====== 手書き（授業中に スライドの上から 書きこむ） ======
-   右上の ✏ ボタン か W キーで 書く／やめる。ペンの 後ろ（消しゴム側）で なぞると 消える。
+   右上の ✏ ボタン か W キーで 書く。やめる ときは 右下の 大きな「スライドに 戻る」（または W・Esc）。ペンの 後ろ（消しゴム側）で なぞると 消える。
    ペン（Surface ペンなど）で 画面に さわると、自動で 書くモードに なる。
    書いた線は スライドごとに 残る（ページを 開き直すと 消える）。
    線は 台紙（1280×720 / 720×1280）の 座標で 覚えるので、画面の 大きさが 変わっても ずれない。 */
@@ -16,6 +16,12 @@ var INK = {on:false, color:'#e0465e', tool:'pen', w:3.5, strokes:{}, cur:null};
     <button class="ink-er" title="消しゴム（E）">消</button><button class="ink-un" title="1つ戻す（Ctrl+Z）">↶</button>
     <button class="ink-cl" title="このページを 全部 消す">全消</button></span>`;
   document.body.appendChild(bar);
+  /* 書くモードから スライドに 戻る：大きな ボタンを 右下に 出す（右上の ✏ は 小さくて 押しにくい ため、2026-10-28） */
+  const back = document.createElement('button'); back.id = 'inkback'; back.type = 'button';
+  back.innerHTML = '<span class="ib-i">▶</span>スライドに 戻る'; back.title = '書くのを やめて スライドを 進める（W・Esc）';
+  back.addEventListener('pointerdown', e=>e.stopPropagation());
+  back.addEventListener('click', e=>{ e.stopPropagation(); e.preventDefault(); setOn(false); back.blur(); });
+  document.body.appendChild(back);
   const key = () => si + (document.body.classList.contains('portrait') ? 'p' : 'l');
   const list = () => (INK.strokes[key()] ||= []);
   /* 画面の点 ⇔ 台紙の点 */

@@ -270,3 +270,16 @@ function ptSlide(P){
 /* プリントの 緑の 太い 矢印（pt） */
 const GARW = (x1,y1,x2,y2,s) => { const ym=(y1+y2)/2, hh=(y2-y1)*.28, hx=x2-(y2-y1)*.55;
   return `<g class="gs" data-s="${s}"><polygon points="${x1},${ym-hh} ${hx},${ym-hh} ${hx},${y1} ${x2},${ym} ${hx},${y2} ${hx},${ym+hh} ${x1},${ym+hh}" fill="#c9dca6"/></g>`; };
+
+/* ====== プリント問題（例の あと）：見出しの ページと、問題の ページの 印（2026-10-28） ======
+   probHead('プリント問題①-4', '次の 2次方程式を 解け。', ['⑴ …', …])：問題の 一覧の ページ（アニメーション なし）
+   ptag('プリント問題①-4')：問題の ページの 左上（番号の 丸の 横）に 付ける 印 */
+const probHead = (title, lead, list, cap) => `
+  <div class="card abs ncard phcard">${EQTAPE}
+    <div class="ph-k">例の 次は</div>
+    <div class="ph-h">◎${title}</div>
+    <div class="ph-t">${lead}</div>
+    <div class="ph-l math">${list.map(x=>`<span>${x}</span>`).join('')}</div>
+  </div>
+  ${cbar([cap || `ここから <b>${title}</b>。　例と 同じ 手順で 解いて いこう！　まず 自分で 解いてから 見てね。`])}`;
+const ptag = t => `<div class="ptag">${t}</div>`;
