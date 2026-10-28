@@ -1031,6 +1031,7 @@ i.nv{font-style:normal;font-family:inherit}
 .p3list{position:absolute;left:28px;top:60px;width:190px;display:flex;flex-direction:column;gap:10px}
 .p3i{display:flex;gap:10px;align-items:baseline;padding:8px 16px;border-radius:10px;background:var(--b-bg);color:var(--muted);font-size:24px;font-weight:900;opacity:.55}
 .p3i .math{font-size:26px}
+.p3i.sm{font-size:17px;padding:6px 10px;gap:6px} .p3i.sm .math{font-size:17px;white-space:nowrap}
 .p3i.done{opacity:.8} .p3i.done::after{content:"✓";color:var(--b-ink);margin-left:auto}
 .p3i.on{opacity:1;background:var(--r-bg);color:var(--r-ink);transform:translateX(8px);box-shadow:0 3px 0 var(--r-bd)}
 .p3q{position:absolute;left:24px;top:18px;font-size:46px;white-space:nowrap}
@@ -1889,8 +1890,8 @@ const probHead = (title, lead, list, cap) => `
 const ptag = t => `<div class="ptag">${t}</div>`;
 
 /* ====== このプリントのスライド ====== */
-const SERIES = [{"f": "1-1_因数分解の復習", "no": "①-1", "t": "因数分解の 復習", "v": "1.3_2026-10-27"}, {"f": "1-2_2次方程式の解", "no": "①-2", "t": "2次方程式の 解", "v": "1.4_2026-10-28"}, {"f": "1-3_2次方程式の解", "no": "①-3", "t": "2次方程式の 解 ②", "v": "1.4_2026-10-28"}, {"f": "1-4_解の公式", "no": "①-4", "t": "解の公式", "v": "1.4_2026-10-28"}, {"f": "1-5_解の公式_重解と解なし", "no": "①-5", "t": "2次方程式の 解 ③", "v": "1.5_2026-10-28"}, {"f": "1-6_実数解の個数", "no": "①-6", "t": "実数解の 個数", "v": "1.4_2026-10-28"}, {"f": "2-1_x軸との共有点", "no": "②-1", "t": "x軸との 共有点", "v": "1.4_2026-10-28"}, {"f": "2-2_x軸との共有点", "no": "②-2", "t": "x軸との 共有点 ②", "v": "1.4_2026-10-28"}, {"f": "2-3_x軸との位置関係", "no": "②-3", "t": "x軸との 位置関係", "v": "1.4_2026-10-28"}, {"f": "3-1_2次不等式の解法_v2", "no": "③-1", "t": "2次不等式の 解き方", "v": "2.18_2026-10-27"}, {"f": "3-2_2次不等式_練習編_v2", "no": "③-2", "t": "2次不等式 練習編", "v": "2.6_2026-10-27"}, {"f": "3-3_2次不等式の解法", "no": "③-3", "t": "2次不等式 いろいろ", "v": "1.3_2026-10-27"}, {"f": "3-4_2次不等式の解法", "no": "③-4", "t": "x² の前が マイナス", "v": "1.3_2026-10-27"}], ME = "3-2_2次不等式_練習編_v2";
-const VER = '<i class="nv">ver</i> 2.6　2026-10-27';
+const SERIES = [{"f": "1-1_因数分解の復習", "no": "①-1", "t": "因数分解の 復習", "v": "1.3_2026-10-27"}, {"f": "1-2_2次方程式の解", "no": "①-2", "t": "2次方程式の 解", "v": "1.4_2026-10-28"}, {"f": "1-3_2次方程式の解", "no": "①-3", "t": "2次方程式の 解 ②", "v": "1.4_2026-10-28"}, {"f": "1-4_解の公式", "no": "①-4", "t": "解の公式", "v": "1.4_2026-10-28"}, {"f": "1-5_解の公式_重解と解なし", "no": "①-5", "t": "2次方程式の 解 ③", "v": "1.5_2026-10-28"}, {"f": "1-6_実数解の個数", "no": "①-6", "t": "実数解の 個数", "v": "1.4_2026-10-28"}, {"f": "2-1_x軸との共有点", "no": "②-1", "t": "x軸との 共有点", "v": "1.4_2026-10-28"}, {"f": "2-2_x軸との共有点", "no": "②-2", "t": "x軸との 共有点 ②", "v": "1.4_2026-10-28"}, {"f": "2-3_x軸との位置関係", "no": "②-3", "t": "x軸との 位置関係", "v": "1.4_2026-10-28"}, {"f": "3-1_2次不等式の解法_v2", "no": "③-1", "t": "2次不等式の 解き方", "v": "2.18_2026-10-27"}, {"f": "3-2_2次不等式_練習編_v2", "no": "③-2", "t": "2次不等式 練習編", "v": "2.7_2026-10-28"}, {"f": "3-3_2次不等式の解法", "no": "③-3", "t": "2次不等式 いろいろ", "v": "1.3_2026-10-27"}, {"f": "3-4_2次不等式の解法", "no": "③-4", "t": "x² の前が マイナス", "v": "1.3_2026-10-27"}], ME = "3-2_2次不等式_練習編_v2";
+const VER = '<i class="nv">ver</i> 2.7　2026-10-28';
 /* ③-1 ver 2.0 の 土台：ver 1.4 の 部品の 写し（ver 1.4 を 直しても ver 2.0 は 変わらない） */
 
 const IMG = s => s;
@@ -2457,13 +2458,104 @@ const SUM3 = `
   <div class="dsum p3sum">${SUMC('全部 塗れた','すべての実数')}${SUMC('塗れる ところが ない','解なし')}${SUMC('1点 だけ 塗れた','x ＝ その 数')}${SUMC('1点 だけ 塗れない','その 数 以外の<br>すべての実数')}</div>
   ${cbar([`塗ったら、塗れた 形を 見て 答える。　範囲 だけで なく「すべての実数」「解なし」「x ＝ □」「□ 以外の すべての実数」も ある。`])}`;
 
+/* ====== プリント問題③-2（No.12 の ⑴〜⒇）：Q3 と 同じ 流れを、根と 不等号から 作る（2026-10-28）
+   P = {no, f, s:不等号の 番号（0 ＞・1 ＜・2 ≧・3 ≦）, roots:[小, 大] か [接点] か [], lab:根の 文字, ans, list:[[番号, 式]…], cur} */
+function GQ(P){
+  const up = P.s%2===0, eq = P.s>=2, sg = SIGN3[P.s], kind = P.roots.length===2 ? 0 : P.roots.length===1 ? 1 : 2;
+  const [a, b] = P.roots, m = kind===0 ? (a+b)/2 : kind===1 ? a : 0, lab = P.lab || P.roots.map(x=>x<0?'−'+(-x):''+x);
+  const o = kind===0 ? {xv:m, k:1, c:-(((b-a)/2)**2), sc:160/(b-a), vs:80/(((b-a)/2)**2), ay:170, top:10, H:316}
+          : kind===1 ? {xv:m, k:1, c:0, sc:40, vs:20, ay:250, top:10} : {xv:0, k:1, c:2, sc:40, vs:20, ay:272, top:10};
+  const g = SG(o), u = 1/o.sc*40;                                  // u：1目もり 40px ぶんの x
+  const any = !(kind===1 && !up) && !(kind===2 && !up);
+  const off = i => P.roots.length>1 ? (i?1:-1)*(lab[i].length>3?62:20) : 0;   // 長い 数（⒇）は 外へ ずらす
+  const nums = P.roots.map((x,i)=>`<text class="inum" x="${f1(g.X(x)+off(i))}" y="${g.ay+42}" text-anchor="middle">${lab[i]}</text>`).join('');
+  const dots = P.roots.map(x=>DOT3(g, x, eq, 4)).join('');
+  const NL = (x,i) => [g.X(x)+off(i), g.ay+32];
+  const le = eq, s2 = le ? '≦' : '＜';
+  let back='', x3='', w4='';
+  if(kind===0 && up){
+    const L=[g.X(a)-110, g.ay-48], R=[g.X(b)+110, g.ay-48], c1=CMP3(L, NL(a,0), le), c2=CMP3(NL(b,1), R, le);
+    back = `<g class="gs" data-s="6">${c1.band}${c2.band}</g>`;
+    x3 = XB3(L,[g.X(a-0.4*u),g.Y(a-0.4*u)]) + XB3(R,[g.X(b+0.4*u),g.Y(b+0.4*u)]);
+    w4 = c1.sign + c2.sign + WR3(g.X(a)-200, g.ay+80, `x ${s2} ${lab[0]}`) + WR3(g.X(b)+200, g.ay+80, `${lab[1]} ${s2} x`);
+  } else if(kind===0){
+    const X=[g.X(m), g.Y(m)+42], c1=CMP3(NL(a,0), X, le), c2=CMP3(X, NL(b,1), le);
+    back = `<g class="gs" data-s="6">${c1.band}${c2.band}</g>`;
+    x3 = XB3(X,[g.X(m),g.Y(m)]);
+    w4 = c1.sign + c2.sign + WR3(g.X(a)-170, g.ay+90, `${lab[0]} ${s2} x`) + WR3(g.X(b)+170, g.ay+90, `x ${s2} ${lab[1]}`);
+  } else if(kind===1 && P.s===0){
+    const L=[g.X(m)-150, g.ay-80], R=[g.X(m)+150, g.ay-80], N=[g.X(m), g.ay+34], c1=CMP3(L, N, false), c2=CMP3(N, R, false);
+    back = `<g class="gs" data-s="6">${c1.band}${c2.band}</g>`;
+    x3 = XB3(L,[g.X(m-1.5),g.Y(m-1.5)]) + XB3(R,[g.X(m+1.5),g.Y(m+1.5)]);
+    w4 = c1.sign + c2.sign + WR3(g.X(m)-250, g.ay+20, `x ＜ ${lab[0]}`) + WR3(g.X(m)+250, g.ay+20, `${lab[0]} ＜ x`);
+  } else if(kind===1 && P.s===3){
+    const A=[g.X(m)+110, g.ay-60];
+    x3 = XB3(A,[g.X(m),g.ay]); w4 = WR3(g.X(m)+220, g.ay-50, `x ＝ ${lab[0]}`);
+  } else if(up){
+    const A=[g.X(o.xv+1.4)+100, g.Y(o.xv+1.4)];
+    x3 = XB3(A,[g.X(o.xv+1.4),g.Y(o.xv+1.4)]);
+    w4 = `<text class="iwr p3wr" x="${f1(g.X(o.xv+1.4)+140)}" y="${f1(g.Y(o.xv+1.4)+10)}">どこでも OK</text>`;
+  } else {
+    x3 = `<text class="iwr p3wr" x="${f1(g.X(o.xv+2.2))}" y="${f1(g.ay-120)}" style="fill:var(--muted)">x を 置く ところが ない</text>`;
+  }
+  const why = kind===0 ? [['外側 2か所が 塗れた','内側が 塗れた'],['外側 ＋ x軸上','内側 ＋ x軸上']][eq?1:0][up?0:1]
+            : kind===1 ? [`${lab[0]} だけ 塗れない`, '塗れる ところが ない', '全部 塗れた', `${lab[0]} の 点 だけ 塗れた`][P.s]
+            : (up ? '全部 塗れた' : '塗れる ところが ない');
+  const w2 = P.roots.length ? (eq ? 'x軸上も 塗る' : 'x軸上は 塗らない') : 'x軸上に グラフは ない';
+  const am = MATHY(P.ans.replace(/[√()/]/g,'1'));
+  const same = P.list.every(q=>q[2]===P.list[0][2]);             // 4問とも 同じ 式 → 不等号 だけ、ちがう 式 → 小さく 式も
+  const list = `<div class="p3list">${P.list.map(([n,sgn,f],k)=>`<div class="p3i${same?'':' sm'}${k===P.cur?' on':''}${k<P.cur?' done':''}"><span>${n}</span><span class="math">${same?'':f+' '}${sgn} 0</span></div>`).join('')}</div>`;
+  return `
+  <div class="card abs dcard v2 p3">${EQTAPE}
+    ${list}
+    <div class="v2c">
+      <div class="p3q math">${P.no}　${P.f} <span class="p3sg" data-o="1">${sg} 0</span></div>
+      <div class="p3w lh" data-s="2" data-o="4"><span class="v2mk">${up?'0より 大きい':'0より 小さい'}</span><span class="v2sub lh" data-s="3">（${up?'上':'下'}を 塗る）</span></div>
+      <div class="p3w lh" data-s="4" data-o="5"><span class="v2mk">${w2}</span></div>
+      <div class="p3w lh" data-s="5" data-o="6"><span class="v2mk">${any?'塗れた ところに x を 置く':'塗れた ところは？'}</span></div>
+      <div class="p3w p3a lh" data-s="6"><span class="p3why">${why} →</span><span class="v2mk ${am?'math':''}">${P.ans}</span></div>
+      <div class="p3g"><svg class="isv" width="${g.W}" height="${g.H}" viewBox="0 0 ${g.W} ${g.H}">
+        ${TINT3(g, up, 3)}${back}${AX3(g)}${nums}<path class="icv" d="${g.d}"/>
+        ${any ? PAINT3(g, up, false, 3) : ''}${eq && P.roots.length ? `<g class="gs" data-s="4">${PAINT3(g, up, true)}</g>` : ''}${dots}<g class="gs" data-s="5">${x3}</g><g class="gs" data-s="6">${w4}</g></svg></div>
+    </div>
+  </div>
+  ${ptag('プリント問題③-2')}
+  ${cbar([
+    `${P.no} ${M(`${P.f.replace(/<sup>2<\/sup>/,'²')} ${sg} 0`)}${P.c0 ? '　' + P.c0 : ''}`,
+    `右側の「${sg} 0」に 注目。`,
+    `${up?'0より 大きい':'0より 小さい'}。`,
+    `${up?'0より 大きい → x軸より <b>上</b> を 塗る。':'0より 小さい → x軸より <b>下</b> を 塗る。'}${any?'':'　…でも グラフは x軸より 下に ない！'}`,
+    P.roots.length ? (eq ? `＝ が ある → x軸上も 塗る → <b>黒丸</b>。` : `＝ が ない → x軸上は 塗らない → <b>白丸</b>。`) : `x軸と 交わらない ので、x軸上の 点は ない。`,
+    any ? `塗れた ところに <b>x</b> を 置く。` : `塗れた ところが ない ので、x を 置けない。`,
+    `${why} → 答え <b>${P.ans}</b>。`])}`;
+}
+/* No.12 の 20問（4問 ずつ 左の 一覧に 出す） */
+const R5 = `${FR('1 − √5',2)}`, R5b = `${FR('1 ＋ √5',2)}`;
+const PQ = [
+  ['⑴',`x${P2} − x − 2`,0,[-1,2],'x ＜ −1, 2 ＜ x'], ['⑵',`x${P2} − x − 2`,1,[-1,2],'−1 ＜ x ＜ 2'],
+  ['⑶',`x${P2} − x − 2`,2,[-1,2],'x ≦ −1, 2 ≦ x'], ['⑷',`x${P2} − x − 2`,3,[-1,2],'−1 ≦ x ≦ 2'],
+  ['⑸',`x${P2} − 4x ＋ 4`,0,[2],'2以外の すべての実数'], ['⑹',`x${P2} − 4x ＋ 4`,1,[2],'解なし'],
+  ['⑺',`x${P2} − 4x ＋ 4`,2,[2],'すべての実数'], ['⑻',`x${P2} − 4x ＋ 4`,3,[2],'x ＝ 2'],
+  ['⑼',`x${P2} − 3x ＋ 4`,0,[],'すべての実数'], ['⑽',`x${P2} − 3x ＋ 4`,1,[],'解なし'],
+  ['⑾',`x${P2} − 3x ＋ 4`,2,[],'すべての実数'], ['⑿',`x${P2} − 3x ＋ 4`,3,[],'解なし'],
+  ['⒀',`x${P2} − 5x ＋ 6`,2,[2,3],'x ≦ 2, 3 ≦ x'], ['⒁',`x${P2} ＋ 4x ＋ 4`,1,[-2],'解なし'],
+  ['⒂',`x${P2} − x ＋ 5`,2,[],'すべての実数'], ['⒃',`x${P2} − 2x`,3,[0,2],'0 ≦ x ≦ 2'],
+  ['⒄',`x${P2} ＋ 4x ＋ 4`,0,[-2],'−2以外の すべての実数'], ['⒅',`x${P2} ＋ 2`,1,[],'解なし'],
+  ['⒆',`x${P2} − 6x ＋ 9`,2,[3],'すべての実数'],
+  ['⒇',`x${P2} − x − 1`,3,[-0.618,1.618],`${R5} ≦ x ≦ ${R5b}`, ['(1−√5)/2','(1＋√5)/2'], `図の 交点は ${M(`${R5}`)} と ${M(`${R5b}`)}。`]];
+const PROB12 = PQ.map(([no,f,s,roots,ans,lab,c0],i)=>{ const g0 = Math.floor(i/4)*4;
+  return {name:`問 ${no}`, html:GQ({no, f, s, roots, ans, lab, c0, cur:i-g0,
+    list:PQ.slice(g0,g0+4).map(q=>[q[0], SIGN3[q[2]], q[1]])})}; });
+const PH12 = probHead('プリント問題③-2', '次の 2次不等式を、図を 参考に 解け。', ['⑴〜⑷　x² − x − 2', '⑸〜⑻　x² − 4x ＋ 4', '⑼〜⑿　x² − 3x ＋ 4', '⒀〜⒇　いろいろ'],
+  `ここから <b>プリント問題③-2</b>（No.12）。　練習編と 同じ「塗って 答える」で 20問！`);
+
 const PG = [{name:'表紙', html:coverF(KK3, '<span class="mk">2次不等式</span><br>練習編', '塗って 答える', 'テンポよく 12問', POL3, '塗って 答える')}];
 for(let r=0;r<3;r++){
   PG.push({name:`${['1','2','3'][r]}段目`, html:ROWHEAD(r)});
   for(let j=0;j<4;j++) PG.push({name:`${NO3[r*4+j]} ${SIGN3[j]} 0`, html:Q3(r,j)});
   PG.push({name:`${['1','2','3'][r]}段目 書きこみ`, html:WRITE(r)});
 }
-PG.push({name:'まとめ', html:SUM3}, {name:'終', html:endF(KK3 + '　2次不等式 練習編', POL3)});
+PG.push({name:'まとめ', html:SUM3}, {name:'プリント問題', html:PH12}, ...PROB12, {name:'終', html:endF(KK3 + '　2次不等式 練習編', POL3)});
 const DECK = {title:'③-2 2次不等式 練習編', pages:PG};
 
 /* ====== 組み立て・操作 ====== */

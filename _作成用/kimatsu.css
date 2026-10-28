@@ -586,6 +586,7 @@ i.nv{font-style:normal;font-family:inherit}
 .p3list{position:absolute;left:28px;top:60px;width:190px;display:flex;flex-direction:column;gap:10px}
 .p3i{display:flex;gap:10px;align-items:baseline;padding:8px 16px;border-radius:10px;background:var(--b-bg);color:var(--muted);font-size:24px;font-weight:900;opacity:.55}
 .p3i .math{font-size:26px}
+.p3i.sm{font-size:17px;padding:6px 10px;gap:6px} .p3i.sm .math{font-size:17px;white-space:nowrap}
 .p3i.done{opacity:.8} .p3i.done::after{content:"✓";color:var(--b-ink);margin-left:auto}
 .p3i.on{opacity:1;background:var(--r-bg);color:var(--r-ink);transform:translateX(8px);box-shadow:0 3px 0 var(--r-bd)}
 .p3q{position:absolute;left:24px;top:18px;font-size:46px;white-space:nowrap}
