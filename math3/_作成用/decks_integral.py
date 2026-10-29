@@ -724,8 +724,8 @@ const p3b = HD(NO, '例　⑵　くわしく', SEC) + `<div class="bd">
 const p3c = HD(NO, '例　⑵　くわしく（置きかえて 積分）', SEC) + `<div class="bd">
   <div class="l" style="gap:10px">
     <div style="display:grid;grid-template-columns:repeat(4,auto);justify-content:start;justify-items:center;align-items:center;column-gap:14px;row-gap:2px;font-size:30px">
-      <div>${D`\int`}</div><div>${M`\on{2}{a}{x}`}</div><div>${M`\on{1}{b}{(2x+1)^3}`}</div><div>${M`\on{3}{a}{dx}`}</div>
-      <div></div><div data-s="2" style="font-size:24px">${D`\A{\tfrac{1}{2}(t-1)}`}</div><div data-s="1" style="font-size:24px">${M`\B{t^3}`}</div><div data-s="3" style="font-size:24px">${D`\A{\tfrac{1}{2}dt}`}</div>
+      <div>${D`\int`}</div><div>${M`\on{1}{a}{x}`}</div><div>${M`\on{2}{b}{(2x+1)^3}`}</div><div>${M`\on{3}{a}{dx}`}</div>
+      <div></div><div data-s="1" style="font-size:24px">${D`\A{\tfrac{1}{2}(t-1)}`}</div><div data-s="2" style="font-size:24px">${M`\B{t^3}`}</div><div data-s="3" style="font-size:24px">${D`\A{\tfrac{1}{2}dt}`}</div>
     </div>
     <div class="calc" style="font-size:26px;gap:6px">
       <div data-s="4">${D`=\int\A{\frac{1}{4}}t^3(t-1)\,dt=\frac{1}{4}\int\left(t^4-t^3\right)dt`}</div>
@@ -736,15 +736,15 @@ const p3c = HD(NO, '例　⑵　くわしく（置きかえて 積分）', SEC) 
     </div>
   </div>
   <div class="r bigpt" style="flex-direction:column;gap:12px;align-items:stretch;width:400px">
-    ${PT(2, `${M`x`} を ${M`t`} の 式に`, `${M`2x+1=t`}<div>${M`2x=t-1`}</div><div>${D`x=\frac{t-1}{2}=\frac{1}{2}(t-1)`}</div>`)}
+    ${PT(1, `${M`x`} を ${M`t`} の 式に`, `${M`2x+1=t`}<div>${M`2x=t-1`}</div><div>${D`x=\frac{t-1}{2}=\frac{1}{2}(t-1)`}</div>`)}
     ${PT(4, '定数を まとめる', `${M`\frac{1}{2}\times\frac{1}{2}=\frac{1}{4}`} を 前に 出し、${M`t^3`} を 分配`)}
     ${PT(6, '( ) の 中で 通分', `${M`\frac{1}{5}=\frac{4}{20}`}、${M`\frac{1}{4}=\frac{5}{20}`}<div>${M`\frac{1}{4}\times\frac{1}{20}t^4=\frac{t^4}{80}`} で くくる</div>`)}
   </div>
 </div>` + CAP([
   `例⑵ の ③・④ を くわしく 見ます。${M`x`}、${M`(2x+1)^3`}、${M`dx`} の 3つを それぞれ ${M`t`} の 式に します。`,
-  `かたまり ${M`(2x+1)^3`} は ${M`t^3`}。`,
-  `前の ${M`x`} は、${M`2x+1=t`} を ${M`x`} に ついて 解いて ${M`\frac{1}{2}(t-1)`}。`,
-  `${M`dx`} は、前の ページで 求めた ${M`\frac{1}{2}dt`}。`,
+  `左から 順に 置きかえます。まず ${M`x`}。${M`2x+1=t`} を ${M`x`} に ついて 解いて ${M`x=\frac{1}{2}(t-1)`}。`,
+  `次に かたまり ${M`(2x+1)^3`} は ${M`t^3`}。`,
+  `最後に ${M`dx`} は、前の ページで 求めた ${M`\frac{1}{2}dt`}。`,
   `定数 ${M`\frac{1}{2}\times\frac{1}{2}=\frac{1}{4}`} を 前に 出し、${M`t^3(t-1)=t^4-t^3`} と 展開します。`,
   `${M`t`} で 積分します。`,
   `( ) の 中の 分母を ${M`20`} に そろえます。`,
