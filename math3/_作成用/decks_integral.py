@@ -682,13 +682,43 @@ const p3 = subPage({no:NO, sec:SEC, title:'例　⑵', tag:'⑵', q:String.raw`\
   cm:[
     `${M`x`} の 係数が ${M`2`} の ときです。`,
     `① ${M`2x+1=t`} から ${M`x=\frac{t-1}{2}=\frac{1}{2}t-\frac{1}{2}`}。`,
-    `② ${M`t`} で 微分すると ${M`\frac{dx}{dt}=\frac{1}{2}`}。だから ${M`dx=\frac{1}{2}dt`}。`,
+    `② ${M`t`} で 微分すると ${M`\frac{dx}{dt}=\frac{1}{2}`}。だから ${M`dx=\frac{1}{2}dt`}。（次の ページで くわしく）`,
     `③ ${M`x\to\frac{t-1}{2}`}、${M`(2x+1)^3\to t^3`}、${M`dx\to\frac{1}{2}dt`}。定数 ${M`\frac{1}{2}\cdot\frac{1}{2}=\frac{1}{4}`} を 前に 出します。`,
     `④ ${M`t`} で 積分します。`,
     `${M`20`} と ${M`16`} の 最小公倍数 ${M`80`} に 通分して、${M`\frac{1}{80}t^4`} で くくります。`,
     `${M`t`} を ${M`2x+1`} に 戻します。`,
     `${M`\{\ \}`} の 中：${M`4(2x+1)-5=8x-1`}。`
   ]});
+
+/* 例⑵ の くわしく（10/29 の 板書）：2x+1=t の 各項を そのまま t で 微分する */
+const p3b = HD(NO, '例　⑵　くわしく', SEC) + `<div class="bd">
+  <div class="l" style="gap:18px">
+    <div style="display:grid;grid-template-columns:repeat(5,auto);justify-content:start;justify-items:center;align-items:center;column-gap:22px;row-gap:10px;font-size:36px">
+      <div>${M`2x`}</div><div>${M`+`}</div><div>${M`1`}</div><div>${M`=`}</div><div>${M`\B{t}`}</div>
+      <div data-s="1" style="color:var(--a)">↓</div><div></div><div data-s="1" style="color:var(--a)">↓</div><div></div><div data-s="1" style="color:var(--a)">↓</div>
+      <div data-s="2">${D`2\A{\frac{dx}{dt}}`}</div><div data-s="3">${M`+`}</div><div data-s="3">${M`\A{0}`}</div><div data-s="4">${M`=`}</div><div data-s="4">${M`\A{1}`}</div>
+    </div>
+    <div data-s="1" style="font-size:22px;color:var(--a)">↑ それぞれの 項を ${M`t`} で 微分</div>
+    <div class="calc" style="font-size:32px;gap:14px">
+      <div data-s="5">${D`2\,\frac{dx}{dt}=1`}</div>
+      <div data-s="6">${D`\text{よって}\quad \DP{dx=\frac{1}{2}\,dt}`}</div>
+    </div>
+  </div>
+  <div class="r bigpt" style="flex-direction:column;gap:12px;align-items:stretch;width:400px">
+    ${PT(2, `${M`2x`} を ${M`t`} で 微分`, `${D`2\,\frac{dx}{dt}`}<div>（係数 ${M`2`} は そのまま 前に）</div>`)}
+    ${PT(3, '定数を 微分', `${M`1\to0`}`)}
+    ${PT(4, `${M`t`} を ${M`t`} で 微分`, `${M`t\to1`}`)}
+    ${PT(6, `${M`dx`} に する`, `両辺を ${M`2`} で 割って、${M`dt`} を 掛ける`)}
+  </div>
+</div>` + CAP([
+  `例⑵ の ② を くわしく 見ます。例⑴ と 同じ ように、${M`2x+1=t`} の まま 両辺を ${M`t`} で 微分します。`,
+  `それぞれの 項を ${M`t`} で 微分します。`,
+  `${M`2x`} を ${M`t`} で 微分すると ${M`2\frac{dx}{dt}`}。係数の ${M`2`} は そのまま 残ります。`,
+  `${M`1`} は 定数なので、微分すると ${M`0`}。`,
+  `右辺の ${M`t`} を ${M`t`} で 微分すると ${M`1`}。`,
+  `${M`2\frac{dx}{dt}+0=1`} なので ${M`2\frac{dx}{dt}=1`}。`,
+  `両辺を ${M`2`} で 割ると ${M`\frac{dx}{dt}=\frac{1}{2}`}。${M`dt`} を 掛けて ${M`dx=\frac{1}{2}dt`}。${M`dx=dt`} では ない ことに 注意。`
+]);
 
 const p4 = subPage({no:NO, sec:SEC, title:'問6　⑴', tag:'⑴', q:String.raw`\int x(x-4)^3\,dx`,
   top:`<div class="q qline">次の 不定積分を、置換積分法を 利用して 求めよ。</div>`,
@@ -724,7 +754,7 @@ const p6 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:24px">
 </div>` + CAP([`②-2 では、根号 ${M`\sqrt{\ }`} を まるごと ${M`t`} と おきます。`]);
 
 const DECK = {title:'②-1 置換積分（1次式を t に）', pages:[
-  {name:'表紙', html:p0}, {name:'置換積分法の 手順', html:p1}, {name:'例　⑴', html:p2}, {name:'例　⑴　くわしく', html:p2b, add:'10/29'}, {name:'例　⑴　くわしく（置きかえる）', html:p2c, add:'10/29'}, {name:'例　⑵', html:p3},
+  {name:'表紙', html:p0}, {name:'置換積分法の 手順', html:p1}, {name:'例　⑴', html:p2}, {name:'例　⑴　くわしく', html:p2b, add:'10/29'}, {name:'例　⑴　くわしく（置きかえる）', html:p2c, add:'10/29'}, {name:'例　⑵', html:p3}, {name:'例　⑵　くわしく', html:p3b, add:'10/29'},
   {name:'問6　⑴', html:p4}, {name:'問6　⑵', html:p5}, {name:'まとめ', html:p6},
 ]};
 ''')

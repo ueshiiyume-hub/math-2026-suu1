@@ -110,6 +110,7 @@ SHEETS.append(dict(no='②-1', title='置換積分の不定積分', boxes=[('置
         r'=\int\frac{t-1}{2}\cdot t^3\cdot\frac{1}{2}dt=\frac{1}{4}\int(t^4-t^3)dt', r'=\frac{1}{4}\left(\frac{1}{5}t^5-\frac{1}{4}t^4\right)+C=\frac{1}{20}t^5-\frac{1}{16}t^4+C',
         r'=\frac{4}{80}t^5-\frac{5}{80}t^4+C=\frac{1}{80}t^4(4t-5)+C', r'=\frac{1}{80}(2x+1)^4\{4(2x+1)-5\}+C', r'=\frac{1}{80}(8x-1)(2x+1)^4+C'],
        N('【$dx$ の求め方】', ['$x=\\frac{1}{2}t-\\frac{1}{2}$ を $t$ で微分すると $\\frac{dx}{dt}=\\frac{1}{2}$ → $dx=\\frac{1}{2}dt$', '※ $dx=dt$ ではないので注意！']),
+       N('【$2x+1=t$ を そのまま $t$ で微分】', ['各項を $t$ で微分：$2x\\to2\\frac{dx}{dt}$，$1\\to0$，$t\\to1$', '→ $2\\frac{dx}{dt}=1$ より $dx=\\frac{1}{2}dt$'], '10/29'),
        N('【通分してからくくる】', ['20 と 16 の最小公倍数は 80 → $\\frac{1}{20}=\\frac{4}{80}$，$\\frac{1}{16}=\\frac{5}{80}$', '{ } の中：$4(2x+1)-5=8x-1$']))]),
    ('問6（ノート）', [
     it('⑴', r'\int x(x-4)^3dx', [r'x-4=t\ \text{とおくと}\ \ x=t+4', r'\frac{dx}{dt}=1\ \ \text{よって}\ \ dx=dt', r'=\int(t+4)t^3dt=\int(t^4+4t^3)dt',
