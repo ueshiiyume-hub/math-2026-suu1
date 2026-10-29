@@ -90,7 +90,9 @@ SHEETS.append(dict(no='①-5', title='合成関数の不定積分', boxes=[('帳
     it('⑶', r'\int\sin(3x+4)\,dx', [r'=\frac{1}{3}\cdot\{-\cos(3x+4)\}+C', r'=-\frac{1}{3}\cos(3x+4)+C']),
     it('⑷', r'\int\cos\left(4x-\frac{\pi}{3}\right)dx', [r'=\frac{1}{4}\sin\left(4x-\frac{\pi}{3}\right)+C']),
     it('⑸', r'\int\sqrt{1-2x}\,dx', [r'=\left(-\frac{1}{2}\right)\cdot\frac{2}{3}(1-2x)^{\frac{3}{2}}+C=-\frac{1}{3}(1-2x)\sqrt{1-2x}+C']),
-    it('⑹', r'\int\frac{dx}{3x+5}', [r'=\frac{1}{3}\log|3x+5|+C'])])]))
+    it('⑹', r'\int\frac{dx}{3x+5}', [r'=\frac{1}{3}\log|3x+5|+C'],
+       N('【帳尻合わせ】', [r'当たり：$\log|3x+5|$　→　微分すると $\frac{1}{3x+5}\times3$（3 倍 大きく 出る）',
+                         r'→ $\frac{1}{3}$ を掛けて消す：$\frac{1}{3}\times\frac{1}{3x+5}\times3=\frac{1}{3x+5}$', r'→ 元の式も $\frac{1}{3}$ 倍'], '10/29'))])]))
 
 # ---------------------------------------------------------------- ②-1
 T = lambda s: r'\text{' + s + '}'

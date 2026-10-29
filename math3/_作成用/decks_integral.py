@@ -497,7 +497,7 @@ const p5 = gridPage({no:NO, sec:SEC, title:'問5　⑴〜⑶', q:'次の 不定�
   `当たりを つけて、${M`x`} の 係数で 割ります。`,
   `⑴ 当たり ${M`\frac{1}{4}(3x+1)^4`}。中身の 微分で ${M`\times3`} が 出るので ${M`\frac{1}{3}`} を 掛けます。`,
   `⑵ ${M`e^x`} の 積分は ${M`e^x`}。中身の 微分で ${M`\times2`} が 出るので ${M`\frac{1}{2}`} を 掛けます。`,
-  `⑶ 当たり ${M`-\cos(3x+4)`}。${M`\times3`} が 出るので ${M`\frac{1}{3}`} を 掛けます。`
+  `⑶ 当たり ${M`-\cos(3x+4)`}。${M`\times3`} が 出るので ${M`\frac{1}{3}`} を 掛けます。（次の ページから 1問ずつ くわしく）`
 ]});
 const p6 = gridPage({no:NO, sec:SEC, title:'問5　⑷〜⑹', c1:true, items:[
   {tag:'⑷', q:String.raw`\int\cos\left(4x-\frac{\pi}{3}\right)dx`, o:1, lines:[[1, String.raw`=\DP{\A{\frac{1}{4}}\sin\left(4x-\frac{\pi}{3}\right)+C}`]]},
@@ -507,8 +507,61 @@ const p6 = gridPage({no:NO, sec:SEC, title:'問5　⑷〜⑹', c1:true, items:[
   `中身の ${M`x`} の 係数が 負の ときも、同じように 割ります。`,
   `⑷ 当たり ${M`\sin\left(4x-\frac{\pi}{3}\right)`}。${M`\times4`} が 出るので ${M`\frac{1}{4}`}。`,
   `⑸ ${M`x`} の 係数は ${M`-2`}。だから ${M`-\frac{1}{2}`} を 掛けます。符号に 注意。`,
-  `⑹ ${M`\frac{1}{x}\to\log|x|`} と 同じで、当たり ${M`\log|3x+5|`}。${M`\times3`} が 出るので ${M`\frac{1}{3}`}。`
+  `⑹ ${M`\frac{1}{x}\to\log|x|`} と 同じで、当たり ${M`\log|3x+5|`}。${M`\times3`} が 出るので ${M`\frac{1}{3}`}。（次の ページから 1問ずつ くわしく）`
 ]});
+
+/* 問5 の くわしく（10/29 の 板書）：当たり → 微分してみる → k 倍 大きく 出る → 1/k を 掛けて 消す → 元の 式も 1/k 倍
+   o = {tag, q, hint（使う 公式）, inner（中身）, guess（当たり）, gd（微分した 形。k の 前まで）, k, kc（消した k）,
+        fix（1/k）, fixc（消した 1/k）, f（元の 中身の 式）, ans（1/k・当たり）, fin（整理した 答え。なければ ans まで）} */
+function adjDetail(o){
+  const R = (n, k, t, e) => `<div class="dr"${n!=null?` data-s="${n}"`:''}${e?` data-e="${e}"`:''}><span class="k">${k}</span>${D(t)}</div>`;
+  return HD(NO, `問5　${o.tag}　くわしく`, SEC) + `<div class="bd">
+  <div class="l" style="gap:10px">
+    ${PQ(o.tag, o.q)}
+    <div class="adr">
+      ${R(1, '当たり', o.guess)}
+      ${R(2, '微分すると', String.raw`\left(${o.guess}\right)'=${o.gd}\times\A{${o.k}}`)}
+      <div class="swap">${R(4, '帳尻', String.raw`\left(\A{${o.fix}}\cdot ${o.guess}\right)'=\A{${o.fix}}\times ${o.gd}\times\A{${o.k}}`, 5)}
+      ${R(5, '帳尻', String.raw`\left(\A{${o.fix}}\cdot ${o.guess}\right)'=\A{${o.fixc}}\times ${o.gd}\times\A{${o.kc}}=${o.f}`)}</div>
+    </div>
+    <div class="calc main" style="font-size:27px">
+      <div data-s="6">${D(String.raw`${o.q}=\A{${o.fix}}\cdot ${o.guess}+C`)}</div>
+      ${o.fin ? `<div data-s="7">${D(String.raw`=\DP{${o.fin}}`)}</div>` : ''}
+    </div>
+  </div>
+  <div class="r bigpt" style="flex-direction:column;gap:12px;align-items:stretch;width:340px">
+    ${PT(null, '使う 公式', `<span style="font-size:22px;white-space:nowrap">${D(o.hint)}</span>`)}
+    ${PT(3, `${M(o.k)} 倍 大きく 出る`, `中身 ${M(o.inner)} を 微分した ${M(String.raw`\A{${o.k}}`)} が 掛かる`)}
+    ${PT(5, `${M(o.fix)} を 掛けて 消す`, `${M(String.raw`\A{${o.fix}}\times\A{${o.k}}=1`)}　→ 元の 式に 戻る`)}
+    ${PT(6, '元の 式も', `当たりを ${M(String.raw`\A{${o.fix}}`)} 倍 する`)}
+  </div>
+</div>` + CAP([
+    `中身 ${M(o.inner)} を ひとかたまりと 見て、右上の 公式の 形で 考えます。`,
+    `まず <b>当たり</b> を つけて、答えの 式の 形を 書きます。`,
+    `本当に 合って いるか、実際に 微分して みます。中身 ${M(o.inner)} の 微分 ${M(o.k)} が 後ろに 出て きます。`,
+    `元の 式より <b class="a">${M(o.k)} 倍</b> 大きく 出て しまいました。`,
+    `帳尻を 合わせる ため、<b class="a">${M(o.fix)}</b> を 掛けて みます。`,
+    `${M(o.fix)} と ${M(o.k)} が 打ち消し合って、元の 式に ぴったり 戻りました。`,
+    `だから、当たりの 式も <b class="a">${M(o.fix)} 倍</b> した ものが 答えです。`,
+    o.fin ? `整理して 答えます。` : null
+  ].filter((c,i)=>i<7||o.fin));
+}
+const q1 = adjDetail({tag:'⑴', q:String.raw`\int(3x+1)^3\,dx`, hint:String.raw`\int x^3dx=\frac{1}{4}x^4+C`, inner:'3x+1',
+  guess:String.raw`\frac{1}{4}(3x+1)^4`, gd:'(3x+1)^3', k:'3', kc:String.raw`\cancel{3}`, fix:String.raw`\frac{1}{3}`, fixc:String.raw`\frac{1}{\cancel{3}}`,
+  f:'(3x+1)^3', fin:String.raw`\frac{1}{12}(3x+1)^4+C`});
+const q2 = adjDetail({tag:'⑵', q:String.raw`\int e^{2x-3}\,dx`, hint:String.raw`\int e^xdx=e^x+C`, inner:'2x-3',
+  guess:'e^{2x-3}', gd:'e^{2x-3}', k:'2', kc:String.raw`\cancel{2}`, fix:String.raw`\frac{1}{2}`, fixc:String.raw`\frac{1}{\cancel{2}}`, f:'e^{2x-3}'});
+const q3 = adjDetail({tag:'⑶', q:String.raw`\int\sin(3x+4)\,dx`, hint:String.raw`\int\sin x\,dx=-\cos x+C`, inner:'3x+4',
+  guess:String.raw`\{-\cos(3x+4)\}`, gd:String.raw`\sin(3x+4)`, k:'3', kc:String.raw`\cancel{3}`, fix:String.raw`\frac{1}{3}`, fixc:String.raw`\frac{1}{\cancel{3}}`,
+  f:String.raw`\sin(3x+4)`, fin:String.raw`-\frac{1}{3}\cos(3x+4)+C`});
+const q4 = adjDetail({tag:'⑷', q:String.raw`\int\cos\left(4x-\frac{\pi}{3}\right)dx`, hint:String.raw`\int\cos x\,dx=\sin x+C`, inner:String.raw`4x-\frac{\pi}{3}`,
+  guess:String.raw`\sin\left(4x-\frac{\pi}{3}\right)`, gd:String.raw`\cos\left(4x-\frac{\pi}{3}\right)`, k:'4', kc:String.raw`\cancel{4}`, fix:String.raw`\frac{1}{4}`, fixc:String.raw`\frac{1}{\cancel{4}}`,
+  f:String.raw`\cos\left(4x-\frac{\pi}{3}\right)`});
+const q5 = adjDetail({tag:'⑸', q:String.raw`\int(1-2x)^{\frac{1}{2}}\,dx`, hint:String.raw`\int x^{\frac{1}{2}}dx=\frac{2}{3}x^{\frac{3}{2}}+C`, inner:'1-2x',
+  guess:String.raw`\frac{2}{3}(1-2x)^{\frac{3}{2}}`, gd:String.raw`(1-2x)^{\frac{1}{2}}`, k:'(-2)', kc:String.raw`(-\cancel{2})`, fix:String.raw`\left(-\frac{1}{2}\right)`, fixc:String.raw`\left(-\frac{1}{\cancel{2}}\right)`,
+  f:String.raw`(1-2x)^{\frac{1}{2}}`, fin:String.raw`-\frac{1}{3}(1-2x)\sqrt{1-2x}+C`});
+const q6 = adjDetail({tag:'⑹', q:String.raw`\int\frac{dx}{3x+5}`, hint:String.raw`\int\frac{1}{x}dx=\log|x|+C`, inner:'3x+5',
+  guess:String.raw`\log|3x+5|`, gd:String.raw`\frac{1}{3x+5}`, k:'3', kc:String.raw`\cancel{3}`, fix:String.raw`\frac{1}{3}`, fixc:String.raw`\frac{1}{\cancel{3}}`, f:String.raw`\frac{1}{3x+5}`});
 
 const p7 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:26px">
   ${BOX('合成関数の 不定積分', `${D`\int f(ax+b)\,dx=\frac{1}{a}F(ax+b)+C`}`)}
@@ -520,7 +573,8 @@ const p7 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:26px">
 
 const DECK = {title:'①-5 合成関数の不定積分', pages:[
   {name:'表紙', html:p0}, {name:'例　⑴', html:p1}, {name:'例　⑵', html:p2}, {name:'例　⑶', html:p3},
-  {name:'公式に まとめる', html:p4}, {name:'問5　⑴〜⑶', html:p5}, {name:'問5　⑷〜⑹', html:p6}, {name:'まとめ', html:p7},
+  {name:'公式に まとめる', html:p4}, {name:'問5　⑴〜⑶', html:p5}, {name:'問5　⑴　くわしく', html:q1, add:'10/29'}, {name:'問5　⑵　くわしく', html:q2, add:'10/29'}, {name:'問5　⑶　くわしく', html:q3, add:'10/29'},
+  {name:'問5　⑷〜⑹', html:p6}, {name:'問5　⑷　くわしく', html:q4, add:'10/29'}, {name:'問5　⑸　くわしく', html:q5, add:'10/29'}, {name:'問5　⑹　くわしく', html:q6, add:'10/29'}, {name:'まとめ', html:p7},
 ]};
 ''')
 
