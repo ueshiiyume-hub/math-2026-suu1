@@ -683,7 +683,7 @@ const p3 = subPage({no:NO, sec:SEC, title:'例　⑵', tag:'⑵', q:String.raw`\
     `${M`x`} の 係数が ${M`2`} の ときです。`,
     `① ${M`2x+1=t`} から ${M`x=\frac{t-1}{2}=\frac{1}{2}t-\frac{1}{2}`}。`,
     `② ${M`t`} で 微分すると ${M`\frac{dx}{dt}=\frac{1}{2}`}。だから ${M`dx=\frac{1}{2}dt`}。（次の ページで くわしく）`,
-    `③ ${M`x\to\frac{t-1}{2}`}、${M`(2x+1)^3\to t^3`}、${M`dx\to\frac{1}{2}dt`}。定数 ${M`\frac{1}{2}\cdot\frac{1}{2}=\frac{1}{4}`} を 前に 出します。`,
+    `③ ${M`x\to\frac{t-1}{2}`}、${M`(2x+1)^3\to t^3`}、${M`dx\to\frac{1}{2}dt`}。定数 ${M`\frac{1}{2}\cdot\frac{1}{2}=\frac{1}{4}`} を 前に 出します。（⑵ の くわしくは 次の 2ページ）`,
     `④ ${M`t`} で 積分します。`,
     `${M`20`} と ${M`16`} の 最小公倍数 ${M`80`} に 通分して、${M`\frac{1}{80}t^4`} で くくります。`,
     `${M`t`} を ${M`2x+1`} に 戻します。`,
@@ -720,6 +720,38 @@ const p3b = HD(NO, '例　⑵　くわしく', SEC) + `<div class="bd">
   `両辺を ${M`2`} で 割ると ${M`\frac{dx}{dt}=\frac{1}{2}`}。${M`dt`} を 掛けて ${M`dx=\frac{1}{2}dt`}。${M`dx=dt`} では ない ことに 注意。`
 ]);
 
+/* 例⑵ の くわしく（2）（10/29 の 板書）：x・(2x+1)^3・dx を それぞれ 置きかえ → 1/4 を 前に → ( ) の 中で 通分して くくる */
+const p3c = HD(NO, '例　⑵　くわしく（置きかえて 積分）', SEC) + `<div class="bd">
+  <div class="l" style="gap:10px">
+    <div style="display:grid;grid-template-columns:repeat(4,auto);justify-content:start;justify-items:center;align-items:center;column-gap:14px;row-gap:2px;font-size:30px">
+      <div>${D`\int`}</div><div>${M`\on{2}{a}{x}`}</div><div>${M`\on{1}{b}{(2x+1)^3}`}</div><div>${M`\on{3}{a}{dx}`}</div>
+      <div></div><div data-s="2" style="font-size:24px">${D`\A{\tfrac{1}{2}(t-1)}`}</div><div data-s="1" style="font-size:24px">${M`\B{t^3}`}</div><div data-s="3" style="font-size:24px">${D`\A{\tfrac{1}{2}dt}`}</div>
+    </div>
+    <div class="calc" style="font-size:26px;gap:6px">
+      <div data-s="4">${D`=\int\A{\frac{1}{4}}t^3(t-1)\,dt=\frac{1}{4}\int\left(t^4-t^3\right)dt`}</div>
+      <div data-s="5">${D`=\frac{1}{4}\left(\frac{1}{5}t^5-\frac{1}{4}t^4\right)+C`}</div>
+      <div data-s="6">${D`=\frac{1}{4}\left(\A{\frac{4}{20}}t^5-\A{\frac{5}{20}}t^4\right)+C`}</div>
+      <div data-s="7">${D`=\frac{t^4}{80}(4t-5)+C`}</div>
+      <div data-s="8">${D`=\DP{\frac{1}{80}(8x-1)(2x+1)^4+C}`}</div>
+    </div>
+  </div>
+  <div class="r bigpt" style="flex-direction:column;gap:12px;align-items:stretch;width:400px">
+    ${PT(2, `${M`x`} を ${M`t`} の 式に`, `${M`2x+1=t`}<div>${M`2x=t-1`}</div><div>${D`x=\frac{t-1}{2}=\frac{1}{2}(t-1)`}</div>`)}
+    ${PT(4, '定数を まとめる', `${M`\frac{1}{2}\times\frac{1}{2}=\frac{1}{4}`} を 前に 出し、${M`t^3`} を 分配`)}
+    ${PT(6, '( ) の 中で 通分', `${M`\frac{1}{5}=\frac{4}{20}`}、${M`\frac{1}{4}=\frac{5}{20}`}<div>${M`\frac{1}{4}\times\frac{1}{20}t^4=\frac{t^4}{80}`} で くくる</div>`)}
+  </div>
+</div>` + CAP([
+  `例⑵ の ③・④ を くわしく 見ます。${M`x`}、${M`(2x+1)^3`}、${M`dx`} の 3つを それぞれ ${M`t`} の 式に します。`,
+  `かたまり ${M`(2x+1)^3`} は ${M`t^3`}。`,
+  `前の ${M`x`} は、${M`2x+1=t`} を ${M`x`} に ついて 解いて ${M`\frac{1}{2}(t-1)`}。`,
+  `${M`dx`} は、前の ページで 求めた ${M`\frac{1}{2}dt`}。`,
+  `定数 ${M`\frac{1}{2}\times\frac{1}{2}=\frac{1}{4}`} を 前に 出し、${M`t^3(t-1)=t^4-t^3`} と 展開します。`,
+  `${M`t`} で 積分します。`,
+  `( ) の 中の 分母を ${M`20`} に そろえます。`,
+  `${M`\frac{1}{4}\times\frac{1}{20}=\frac{1}{80}`}。共通な ${M`t^4`} で くくります。`,
+  `${M`t=2x+1`} を 戻して、${M`4(2x+1)-5=8x-1`}。`
+]);
+
 const p4 = subPage({no:NO, sec:SEC, title:'問6　⑴', tag:'⑴', q:String.raw`\int x(x-4)^3\,dx`,
   top:`<div class="q qline">次の 不定積分を、置換積分法を 利用して 求めよ。</div>`,
   prep:[[1, String.raw`x-4=\B{t}\ \text{とおくと}\ \ x=t+4`], [2, String.raw`\frac{dx}{dt}=1\quad\text{よって}\quad dx=dt`]],
@@ -754,7 +786,7 @@ const p6 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:24px">
 </div>` + CAP([`②-2 では、根号 ${M`\sqrt{\ }`} を まるごと ${M`t`} と おきます。`]);
 
 const DECK = {title:'②-1 置換積分（1次式を t に）', pages:[
-  {name:'表紙', html:p0}, {name:'置換積分法の 手順', html:p1}, {name:'例　⑴', html:p2}, {name:'例　⑴　くわしく', html:p2b, add:'10/29'}, {name:'例　⑴　くわしく（置きかえる）', html:p2c, add:'10/29'}, {name:'例　⑵', html:p3}, {name:'例　⑵　くわしく', html:p3b, add:'10/29'},
+  {name:'表紙', html:p0}, {name:'置換積分法の 手順', html:p1}, {name:'例　⑴', html:p2}, {name:'例　⑴　くわしく', html:p2b, add:'10/29'}, {name:'例　⑴　くわしく（置きかえる）', html:p2c, add:'10/29'}, {name:'例　⑵', html:p3}, {name:'例　⑵　くわしく', html:p3b, add:'10/29'}, {name:'例　⑵　くわしく（置きかえて 積分）', html:p3c, add:'10/29'},
   {name:'問6　⑴', html:p4}, {name:'問6　⑵', html:p5}, {name:'まとめ', html:p6},
 ]};
 ''')
