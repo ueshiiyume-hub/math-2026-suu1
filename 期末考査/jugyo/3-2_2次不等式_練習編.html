@@ -1890,8 +1890,8 @@ const probHead = (title, lead, list, cap) => `
 const ptag = t => `<div class="ptag">${t}</div>`;
 
 /* ====== このプリントのスライド ====== */
-const SERIES = [{"f": "1-1_因数分解の復習", "no": "①-1", "t": "因数分解の 復習", "v": "1.4_2026-10-28"}, {"f": "1-2_2次方程式の解", "no": "①-2", "t": "2次方程式の 解", "v": "1.4_2026-10-28"}, {"f": "1-3_2次方程式の解", "no": "①-3", "t": "2次方程式の 解 ②", "v": "1.4_2026-10-28"}, {"f": "1-4_解の公式", "no": "①-4", "t": "解の公式", "v": "1.4_2026-10-28"}, {"f": "1-5_解の公式_重解と解なし", "no": "①-5", "t": "2次方程式の 解 ③", "v": "1.5_2026-10-28"}, {"f": "1-6_実数解の個数", "no": "①-6", "t": "実数解の 個数", "v": "1.4_2026-10-28"}, {"f": "2-1_x軸との共有点", "no": "②-1", "t": "x軸との 共有点", "v": "1.4_2026-10-28"}, {"f": "2-2_x軸との共有点", "no": "②-2", "t": "x軸との 共有点 ②", "v": "1.4_2026-10-28"}, {"f": "2-3_x軸との位置関係", "no": "②-3", "t": "x軸との 位置関係", "v": "1.4_2026-10-28"}, {"f": "3-1_2次不等式の解法_v2", "no": "③-1", "t": "2次不等式の 解き方", "v": "2.19_2026-10-28"}, {"f": "3-2_2次不等式_練習編_v2", "no": "③-2", "t": "2次不等式 練習編", "v": "2.7_2026-10-28"}, {"f": "3-3_2次不等式の解法", "no": "③-3", "t": "2次不等式 いろいろ", "v": "1.4_2026-10-28"}, {"f": "3-4_2次不等式の解法", "no": "③-4", "t": "x² の前が マイナス", "v": "1.4_2026-10-28"}], ME = "3-2_2次不等式_練習編";
-const VER = '<i class="nv">ver</i> 1.4　2026-10-28';
+const SERIES = [{"f": "1-1_因数分解の復習", "no": "①-1", "t": "因数分解の 復習", "v": "1.5_2026-10-29"}, {"f": "1-2_2次方程式の解", "no": "①-2", "t": "2次方程式の 解", "v": "1.5_2026-10-29"}, {"f": "1-3_2次方程式の解", "no": "①-3", "t": "2次方程式の 解 ②", "v": "1.5_2026-10-29"}, {"f": "1-4_解の公式", "no": "①-4", "t": "解の公式", "v": "1.5_2026-10-29"}, {"f": "1-5_解の公式_重解と解なし", "no": "①-5", "t": "2次方程式の 解 ③", "v": "1.6_2026-10-29"}, {"f": "1-6_実数解の個数", "no": "①-6", "t": "実数解の 個数", "v": "1.5_2026-10-29"}, {"f": "2-1_x軸との共有点", "no": "②-1", "t": "x軸との 共有点", "v": "1.5_2026-10-29"}, {"f": "2-2_x軸との共有点", "no": "②-2", "t": "x軸との 共有点 ②", "v": "1.5_2026-10-29"}, {"f": "2-3_x軸との位置関係", "no": "②-3", "t": "x軸との 位置関係", "v": "1.5_2026-10-29"}, {"f": "3-1_2次不等式の解法_v2", "no": "③-1", "t": "2次不等式の 解き方", "v": "2.20_2026-10-29"}, {"f": "3-2_2次不等式_練習編_v2", "no": "③-2", "t": "2次不等式 練習編", "v": "2.8_2026-10-29"}, {"f": "3-3_2次不等式の解法", "no": "③-3", "t": "2次不等式 いろいろ", "v": "1.5_2026-10-29"}, {"f": "3-4_2次不等式の解法", "no": "③-4", "t": "x² の前が マイナス", "v": "1.5_2026-10-29"}], ME = "3-2_2次不等式_練習編";
+const VER = '<i class="nv">ver</i> 1.5　2026-10-29';
 
 const IMG = s => s;
 const A = (s,r,h,fs,al) => ({s,r,h,fs,al});
@@ -2217,7 +2217,13 @@ var INK = {on:false, color:'#e0465e', tool:'pen', w:3.5, strokes:{}, cur:null};
   /* 書くモードから スライドに 戻る：大きな ボタンを 右下に 出す（右上の ✏ は 小さくて 押しにくい ため、2026-10-28） */
   const back = document.createElement('button'); back.id = 'inkback'; back.type = 'button';
   back.innerHTML = '<span class="ib-i">▶</span>スライドに 戻る'; back.title = '書くのを やめて スライドを 進める（W・Esc）';
-  back.addEventListener('pointerdown', e=>e.stopPropagation());
+  /* 指・ペンで 押した とき は 離した 時点で 戻す（少し 動くと click が 来ない ことが ある ため）。マウス・キーボードは click */
+  let backDown = null;
+  back.addEventListener('pointerdown', e=>{ e.stopPropagation(); backDown = e.pointerId; try{ back.setPointerCapture(e.pointerId); }catch(_){} });
+  back.addEventListener('pointerup', e=>{ e.stopPropagation();
+    if(backDown===e.pointerId && e.pointerType!=='mouse'){ setOn(false); back.blur(); }
+    backDown = null; });
+  back.addEventListener('pointercancel', ()=>{ backDown = null; });
   back.addEventListener('click', e=>{ e.stopPropagation(); e.preventDefault(); setOn(false); back.blur(); });
   document.body.appendChild(back);
   const key = () => si + (document.body.classList.contains('portrait') ? 'p' : 'l');
@@ -2272,13 +2278,21 @@ var INK = {on:false, color:'#e0465e', tool:'pen', w:3.5, strokes:{}, cur:null};
      止めないと、ペンで さわって すぐ 書き始めた線が 0.3秒ほどで 打ち切られる（pointercancel） */
   const penSeen = e => { if(e.pointerType==='pen') document.body.classList.add('pen-dev'); };
   ['pointerover','pointermove','pointerdown'].forEach(t=>document.addEventListener(t, penSeen, {capture:true, passive:true}));
-  /* ペンで 画面に さわったら、自動で 書くモードに する（ボタンや リンクは ふつうに 押せる） */
-  let skipClick = false;
+  /* ペンで 画面に さわったら、自動で 書くモードに する（ボタンや リンクは ふつうに 押せる）。
+     その ペンの さわりで 来る click だけ 止める（スライドが 進まない ように）。
+     線を 書いて ペンが 動いた ときは click が 来ないので、止める 印が 残って 次の「スライドに 戻る」が 効かなかった（2026-10-29 直した）：
+     止めるのは 0.8秒 以内・ボタン以外 だけ、次に さわったら 印は 消す */
+  let skipClick = 0;
   document.addEventListener('pointerdown', e=>{
-    if(INK.on || e.pointerType!=='pen' || e.target.closest('#inkbar,#jump,a,button')) return;
-    setOn(true); if(INK.tool!=='er') setTool('pen'); skipClick = true; start(e);
+    skipClick = 0;
+    if(INK.on || e.pointerType!=='pen' || e.target.closest('#inkbar,#jump,#inkback,a,button')) return;
+    setOn(true); if(INK.tool!=='er') setTool('pen'); skipClick = performance.now(); start(e);
   }, true);
-  document.addEventListener('click', e=>{ if(skipClick){ skipClick = false; e.stopPropagation(); e.preventDefault(); } }, true);
+  document.addEventListener('click', e=>{
+    const hit = skipClick && performance.now() - skipClick < 800 && !e.target.closest('a,button');
+    skipClick = 0;
+    if(hit){ e.stopPropagation(); e.preventDefault(); }
+  }, true);
   cv.addEventListener('pointermove', e=>{
     if(!INK.cur) return;
     const evs = e.getCoalescedEvents ? e.getCoalescedEvents() : [e];
