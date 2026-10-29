@@ -103,6 +103,8 @@ SHEETS.append(dict(no='②-1', title='置換積分の不定積分', boxes=[('置
         r'=\int(t+5)t^4dt=\int(t^5+5t^4)dt', r'=\frac{1}{6}t^6+t^5+C=\frac{1}{6}t^6+\frac{6}{6}t^5+C', r'=\frac{1}{6}t^5(t+6)+C',
         r'=\frac{1}{6}(x-5)^5\{(x-5)+6\}+C=\frac{1}{6}(x+1)(x-5)^5+C'],
        N('【$dx$ の求め方】', ['① $x$ を $t$ の式で表す：$x=t+5$', '② 両辺を $t$ で微分：$\\frac{dx}{dt}=1$', '③ 両辺に $dt$ をかけて：$dx=dt$']),
+       N('【$x-5=t$ を そのまま $t$ で微分】', ['各項を $t$ で微分：$x\\to\\frac{dx}{dt}$，$5\\to0$，$t\\to1$', '→ $\\frac{dx}{dt}-0=1$ より $\\frac{dx}{dt}=1$，$dx=dt$'], '10/29'),
+       N('【置き換え方】', ['① かたまり：$(x-5)^4\\to t^4$（$\\int x\\,t^4\\,dx$）', '② 前の $x$：$x=t+5$ を使う', '③ $dx$：$dx=dt$ を使う → $\\int(t+5)t^4dt$'], '10/29'),
        N('【分数でくくるコツ】', ['$t^5$ を $\\frac{6}{6}t^5$ と書きかえると', '→ $\\frac{1}{6}t^6+\\frac{6}{6}t^5=\\frac{1}{6}t^5(t+6)$', '$t$ を $x-5$ に戻すときは { } の中も！'])),
     it('⑵', r'\int x(2x+1)^3dx', [r'2x+1=t\ \text{とおくと}\ \ x=\frac{t-1}{2}=\frac{1}{2}t-\frac{1}{2}', r'\text{両辺を}\ t\ \text{で微分すると}\ \ \frac{dx}{dt}=\frac{1}{2}\ \ \text{よって}\ \ dx=\frac{1}{2}dt',
         r'=\int\frac{t-1}{2}\cdot t^3\cdot\frac{1}{2}dt=\frac{1}{4}\int(t^4-t^3)dt', r'=\frac{1}{4}\left(\frac{1}{5}t^5-\frac{1}{4}t^4\right)+C=\frac{1}{20}t^5-\frac{1}{16}t^4+C',

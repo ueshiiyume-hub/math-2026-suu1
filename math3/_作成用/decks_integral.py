@@ -607,14 +607,69 @@ const p2 = subPage({no:NO, sec:SEC, title:'例　⑴', tag:'⑴', q:String.raw`\
   cm:[
     `手順どおりに 進めます。`,
     `① かたまり ${M`x-5`} を ${M`t`} と おきます。前の ${M`x`} も ${M`t`} の 式に したいので、${M`x=t+5`} と 表します。`,
-    `② ${M`x=t+5`} の 両辺を ${M`t`} で 微分すると ${M`\frac{dx}{dt}=1`}。両辺に ${M`dt`} を 掛けて ${M`dx=dt`}。`,
-    `③ ${M`x\to t+5`}、${M`(x-5)^4\to t^4`}、${M`dx\to dt`} と 置きかえ、展開します。`,
+    `② ${M`x=t+5`} の 両辺を ${M`t`} で 微分すると ${M`\frac{dx}{dt}=1`}。両辺に ${M`dt`} を 掛けて ${M`dx=dt`}。（次の ページで くわしく）`,
+    `③ ${M`x\to t+5`}、${M`(x-5)^4\to t^4`}、${M`dx\to dt`} と 置きかえ、展開します。（次の ページで くわしく）`,
     `④ ${M`t`} で 積分します。`,
     `答えを 整理するため、${M`\frac{1}{6}t^5`} で くくります。`,
     `${M`t^5=\frac{6}{6}t^5`} と 分母を そろえるのが コツです。`,
     `${M`t`} を ${M`x-5`} に 戻します。${M`\{\ \}`} の 中の ${M`t`} も 忘れずに。`,
     `${M`(x-5)+6=x+1`}。`
   ]});
+
+/* 例⑴ の くわしく（10/29 の 板書）：x−5=t の 各項を そのまま t で 微分する */
+const p2b = HD(NO, '例　⑴　くわしく', SEC) + `<div class="bd">
+  <div class="l" style="gap:18px">
+    <div class="dtg" style="display:grid;grid-template-columns:repeat(5,auto);justify-content:start;justify-items:center;align-items:center;column-gap:22px;row-gap:10px;font-size:36px">
+      <div>${M`x`}</div><div>${M`-`}</div><div>${M`5`}</div><div>${M`=`}</div><div>${M`\B{t}`}</div>
+      <div data-s="1" style="color:var(--a)">↓</div><div></div><div data-s="1" style="color:var(--a)">↓</div><div></div><div data-s="1" style="color:var(--a)">↓</div>
+      <div data-s="2">${D`\A{\frac{dx}{dt}}`}</div><div data-s="3">${M`-`}</div><div data-s="3">${M`\A{0}`}</div><div data-s="4">${M`=`}</div><div data-s="4">${M`\A{1}`}</div>
+    </div>
+    <div data-s="1" style="font-size:22px;color:var(--a)">↑ それぞれの 項を ${M`t`} で 微分</div>
+    <div class="calc" style="font-size:32px;gap:14px">
+      <div data-s="5">${D`\frac{dx}{dt}=1`}</div>
+      <div data-s="6">${D`\text{よって}\quad \DP{dx=dt}`}</div>
+    </div>
+  </div>
+  <div class="r bigpt" style="flex-direction:column;gap:12px;align-items:stretch;width:400px">
+    ${PT(2, `${M`x`} を ${M`t`} で 微分`, `${D`\frac{dx}{dt}`}<div>（${M`x`} が ${M`t`} で どう 変わるか）</div>`)}
+    ${PT(3, '定数を 微分', `${M`5\to0`}`)}
+    ${PT(4, `${M`t`} を ${M`t`} で 微分`, `${M`t\to1`}`)}
+    ${PT(6, `${M`dx`} に する`, `両辺に ${M`dt`} を 掛ける`)}
+  </div>
+</div>` + CAP([
+  `例⑴ の ② を くわしく 見ます。${M`x-5=t`} の まま、両辺を ${M`t`} で 微分しても ${M`dx`} が 求められます。`,
+  `それぞれの 項を ${M`t`} で 微分します。`,
+  `${M`x`} を ${M`t`} で 微分した ものは ${M`\frac{dx}{dt}`} と 書きます。`,
+  `${M`5`} は 定数なので、微分すると ${M`0`}。`,
+  `右辺の ${M`t`} を ${M`t`} で 微分すると ${M`1`}。`,
+  `${M`\frac{dx}{dt}-0=1`} なので ${M`\frac{dx}{dt}=1`}。${M`x=t+5`} を 微分しても 同じ 答えに なります。`,
+  `両辺に ${M`dt`} を 掛けて ${M`dx=dt`}。これで ${M`dx`} を ${M`dt`} に 置きかえられます。`
+]);
+
+/* 例⑴ の くわしく（2）（10/29 の 板書）：かたまりを t に → x を t+5 に → dx を dt に */
+const p2c = HD(NO, '例　⑴　くわしく（置きかえる）', SEC) + `<div class="bd">
+  <div class="l" style="gap:18px">
+    <div class="calc" style="font-size:32px;gap:14px">
+      <div>${D`\int x(x-5)^4\,dx`}</div>
+      <div data-s="1">${D`=\int \on{2}{a}{x}\,\B{t}^4\,\on{3}{a}{dx}`}</div>
+      <div data-s="4">${D`=\int(\A{t+5})\,\B{t}^4\,\A{dt}`}</div>
+      <div data-s="5">${D`=\int\left(t^5+5t^4\right)dt`}</div>
+    </div>
+  </div>
+  <div class="r bigpt" style="flex-direction:column;gap:12px;align-items:stretch;width:420px">
+    ${BOX('置きかえ', CALC([[null, String.raw`x-5=\B{t}\ \text{とおくと}\ \ \on{2}{a}{x=t+5}`], [null, String.raw`\on{3}{a}{dx=dt}`]]))}
+    ${PT(1, '① かたまりを t に', `${M`(x-5)^4\to\B{t}^4`}`)}
+    ${PT(2, `② ${M`x`} を ${M`t`} の 式に`, `${M`x\to\A{t+5}`}`)}
+    ${PT(3, `③ ${M`dx`} も 置きかえる`, `${M`dx\to\A{dt}`}`)}
+  </div>
+</div>` + CAP([
+  `例⑴ の ③ 置きかえる ところを くわしく 見ます。`,
+  `まず かたまり ${M`x-5`} を ${M`t`} に します。${M`(x-5)^4=t^4`}。前の ${M`x`} と ${M`dx`} が まだ 残って います。`,
+  `前の ${M`x`} は、${M`x=t+5`} を 使って ${M`t+5`} に します。`,
+  `${M`dx`} は、${M`dx=dt`} を 使って ${M`dt`} に します。`,
+  `これで すべて ${M`t`} の 式に なりました（${M`x`} が 1つも 残って いない）。${M`x`} が 残って いたら ${M`t`} で 積分できません。`,
+  `展開して、${M`t`} で 積分します（④）。`
+]);
 
 const p3 = subPage({no:NO, sec:SEC, title:'例　⑵', tag:'⑵', q:String.raw`\int x(2x+1)^3\,dx`,
   prep:[[1, String.raw`2x+1=\B{t}\ \text{とおくと}\ \ x=\frac{1}{2}t-\frac{1}{2}`], [2, String.raw`\frac{dx}{dt}=\frac{1}{2}\quad\text{よって}\quad dx=\A{\frac{1}{2}}dt`]],
@@ -669,7 +724,7 @@ const p6 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:24px">
 </div>` + CAP([`②-2 では、根号 ${M`\sqrt{\ }`} を まるごと ${M`t`} と おきます。`]);
 
 const DECK = {title:'②-1 置換積分（1次式を t に）', pages:[
-  {name:'表紙', html:p0}, {name:'置換積分法の 手順', html:p1}, {name:'例　⑴', html:p2}, {name:'例　⑵', html:p3},
+  {name:'表紙', html:p0}, {name:'置換積分法の 手順', html:p1}, {name:'例　⑴', html:p2}, {name:'例　⑴　くわしく', html:p2b, add:'10/29'}, {name:'例　⑴　くわしく（置きかえる）', html:p2c, add:'10/29'}, {name:'例　⑵', html:p3},
   {name:'問6　⑴', html:p4}, {name:'問6　⑵', html:p5}, {name:'まとめ', html:p6},
 ]};
 ''')
