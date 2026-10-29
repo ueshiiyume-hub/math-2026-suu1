@@ -289,3 +289,12 @@ body.portrait #endp .eh{font-size:40px}
 .pl .utri{fill:var(--main);fill-opacity:.18;stroke:var(--deep);stroke-width:2.5;vector-effect:non-scaling-stroke}
 .pl .grow{transform:scale(1);transition:transform 1.2s ease-in-out .3s}
 .pl .grow.on{transform:scale(var(--k))}
+
+/* 書くモードの とき だけ 出る「スライドに 戻る」（大きく、左下に。右下の 目次・ボタンと 重ならない ように。数学Ⅰ と 同じ しくみ、2026-10-29） */
+#inkback{display:none;position:fixed;z-index:27;left:18px;bottom:18px;align-items:center;gap:10px;height:58px;padding:0 24px 0 18px;
+  border:2px solid var(--paper);background:var(--deep);color:var(--paper);font:700 19px "Noto Sans JP",sans-serif;cursor:pointer;
+  box-shadow:0 4px 14px rgba(0,0,0,.22);touch-action:manipulation}
+#inkback .ib-i{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;background:rgba(255,255,255,.22);font-size:14px}
+#inkback:active{transform:scale(.96)}
+body.inking #inkback{display:inline-flex}
+body.portrait #inkback{left:12px;bottom:14px;height:54px;font-size:18px}

@@ -240,3 +240,12 @@ body.portrait #endp .eh{font-size:40px}
 .adr .dr .k{min-width:5em;font-size:17px}
 body.portrait .adr{font-size:19px} body.portrait .adr .dr{white-space:normal;flex-wrap:wrap}
 body.portrait .bigpt .pbox{font-size:21px;padding:4px 12px 6px;line-height:1.45} body.portrait .bigpt{gap:8px!important}
+
+/* 書くモードの とき だけ 出る「スライドに 戻る」（大きく、左下に。右下の 目次・ボタンと 重ならない ように。数学Ⅰ と 同じ しくみ、2026-10-29） */
+#inkback{display:none;position:fixed;z-index:27;left:18px;bottom:18px;align-items:center;gap:10px;height:58px;padding:0 24px 0 18px;
+  border:2px solid var(--paper);background:var(--deep);color:var(--paper);font:700 19px "Noto Sans JP",sans-serif;cursor:pointer;
+  box-shadow:0 4px 14px rgba(0,0,0,.22);touch-action:manipulation}
+#inkback .ib-i{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;background:rgba(255,255,255,.22);font-size:14px}
+#inkback:active{transform:scale(.96)}
+body.inking #inkback{display:inline-flex}
+body.portrait #inkback{left:12px;bottom:14px;height:54px;font-size:18px}

@@ -1,5 +1,5 @@
-/* ====== 手書き（授業中に スライドの上から 書きこむ） ======
-   右上の ✏ ボタン か W キーで 書く／やめる。ペンの 後ろ（消しゴム側）で なぞると 消える。
+/* ====== 手書き（授業中に スライドの上から 書きこむ。数学Ⅰ の ink.js から コピー、2026-10-29 に「スライドに 戻る」の ボタンと 直しを 写した） ======
+   右上の ✏ ボタン か W キーで 書く。やめる ときは 左下の 大きな「スライドに 戻る」（または W・Esc）。ペンの 後ろ（消しゴム側）で なぞると 消える。
    ペン（Surface ペンなど）で 画面に さわると、自動で 書くモードに なる。
    書いた線は スライドごとに 残る（ページを 開き直すと 消える）。
    線は 台紙（1280×720 / 720×1280）の 座標で 覚えるので、画面の 大きさが 変わっても ずれない。 */
@@ -16,6 +16,18 @@ var INK = {on:false, color:'#e0465e', tool:'pen', w:3.5, strokes:{}, cur:null};
     <button class="ink-er" title="消しゴム（E）">消</button><button class="ink-un" title="1つ戻す（Ctrl+Z）">↶</button>
     <button class="ink-cl" title="このページを 全部 消す">全消</button></span>`;
   document.body.appendChild(bar);
+  /* 書くモードから スライドに 戻る：大きな ボタンを 右下に 出す（右上の ✏ は 小さくて 押しにくい ため、2026-10-28） */
+  const back = document.createElement('button'); back.id = 'inkback'; back.type = 'button';
+  back.innerHTML = '<span class="ib-i">▶</span>スライドに 戻る'; back.title = '書くのを やめて スライドを 進める（W・Esc）';
+  /* 指・ペンで 押した とき は 離した 時点で 戻す（少し 動くと click が 来ない ことが ある ため）。マウス・キーボードは click */
+  let backDown = null;
+  back.addEventListener('pointerdown', e=>{ e.stopPropagation(); backDown = e.pointerId; try{ back.setPointerCapture(e.pointerId); }catch(_){} });
+  back.addEventListener('pointerup', e=>{ e.stopPropagation();
+    if(backDown===e.pointerId && e.pointerType!=='mouse'){ setOn(false); back.blur(); }
+    backDown = null; });
+  back.addEventListener('pointercancel', ()=>{ backDown = null; });
+  back.addEventListener('click', e=>{ e.stopPropagation(); e.preventDefault(); setOn(false); back.blur(); });
+  document.body.appendChild(back);
   const key = () => si + (document.body.classList.contains('portrait') ? 'p' : 'l');
   const list = () => (INK.strokes[key()] ||= []);
   /* 画面の点 ⇔ 台紙の点 */
@@ -68,13 +80,21 @@ var INK = {on:false, color:'#e0465e', tool:'pen', w:3.5, strokes:{}, cur:null};
      止めないと、ペンで さわって すぐ 書き始めた線が 0.3秒ほどで 打ち切られる（pointercancel） */
   const penSeen = e => { if(e.pointerType==='pen') document.body.classList.add('pen-dev'); };
   ['pointerover','pointermove','pointerdown'].forEach(t=>document.addEventListener(t, penSeen, {capture:true, passive:true}));
-  /* ペンで 画面に さわったら、自動で 書くモードに する（ボタンや リンクは ふつうに 押せる） */
-  let skipClick = false;
+  /* ペンで 画面に さわったら、自動で 書くモードに する（ボタンや リンクは ふつうに 押せる）。
+     その ペンの さわりで 来る click だけ 止める（スライドが 進まない ように）。
+     線を 書いて ペンが 動いた ときは click が 来ないので、止める 印が 残って 次の「スライドに 戻る」が 効かなかった（2026-10-29 直した）：
+     止めるのは 0.8秒 以内・ボタン以外 だけ、次に さわったら 印は 消す */
+  let skipClick = 0;
   document.addEventListener('pointerdown', e=>{
-    if(INK.on || e.pointerType!=='pen' || e.target.closest('#inkbar,#jump,a,button')) return;
-    setOn(true); if(INK.tool!=='er') setTool('pen'); skipClick = true; start(e);
+    skipClick = 0;
+    if(INK.on || e.pointerType!=='pen' || e.target.closest('#inkbar,#jump,#inkback,a,button')) return;
+    setOn(true); if(INK.tool!=='er') setTool('pen'); skipClick = performance.now(); start(e);
   }, true);
-  document.addEventListener('click', e=>{ if(skipClick){ skipClick = false; e.stopPropagation(); e.preventDefault(); } }, true);
+  document.addEventListener('click', e=>{
+    const hit = skipClick && performance.now() - skipClick < 800 && !e.target.closest('a,button');
+    skipClick = 0;
+    if(hit){ e.stopPropagation(); e.preventDefault(); }
+  }, true);
   cv.addEventListener('pointermove', e=>{
     if(!INK.cur) return;
     const evs = e.getCoalescedEvents ? e.getCoalescedEvents() : [e];
