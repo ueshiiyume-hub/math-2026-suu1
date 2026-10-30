@@ -682,8 +682,10 @@ body.portrait .ptag{left:70px;top:8px}
 .sdb{display:flex;flex-direction:column}
 .sdr{display:flex;align-items:flex-end}
 .sdp{width:1.5em;text-align:right;padding-right:.18em}
-.sdn{border-left:.07em solid var(--ink);border-bottom:.07em solid var(--ink);padding:0 .35em 0 .3em;min-width:1.6em}
-.sdr.last .sdn{border:none;padding-left:.37em}
+.sdn{position:relative;border-bottom:.07em solid var(--ink);padding:0 .35em 0 .62em;min-width:1.6em}
+.sdk{position:absolute;left:0;top:0;width:.5em;height:100%;overflow:visible}
+.sdk path{fill:none;stroke:var(--ink);stroke-width:1.6;vector-effect:non-scaling-stroke;stroke-linecap:round}
+.sdr.last .sdn{border:none;padding-left:.62em}
 .sud i{font-style:normal;display:inline-block;padding:0 .12em}
 .sud i.c{border-radius:50%;box-shadow:0 0 0 .08em #e0465e}
 .sud i.b{box-shadow:0 0 0 .08em #f07a12}

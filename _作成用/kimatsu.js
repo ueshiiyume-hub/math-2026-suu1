@@ -296,7 +296,9 @@ function SUDARE(n, s){
   const used = {}; let out = 1, inn = 1;
   Object.keys(cnt).forEach(p=>{ out *= Math.pow(+p, Math.floor(cnt[p]/2)); if(cnt[p]%2) inn *= +p; });
   const mark = p => { used[p]=(used[p]||0)+1; return used[p] <= 2*Math.floor(cnt[p]/2) ? 'c' : 'b'; };
-  const body = rows.map(([p,q])=>`<div class="sdr"><span class="sdp"><i class="${mark(p)}">${p}</i></span><span class="sdn">${q}</span></div>`).join('')
+  /* 割り算の「)」：丸く 曲がった 線（縦線では なく）。下の 横線に つながる */
+  const BK = '<svg class="sdk" viewBox="0 0 10 40" preserveAspectRatio="none"><path d="M1.5 1 C8 10 8 30 2 39.3"/></svg>';
+  const body = rows.map(([p,q])=>`<div class="sdr"><span class="sdp"><i class="${mark(p)}">${p}</i></span><span class="sdn">${BK}${q}</span></div>`).join('')
     + (m>1 ? `<div class="sdr last"><span class="sdp"></span><span class="sdn"><i class="${mark(m)}">${m}</i></span></div>` : '');
   const res = `${SQ(n)} ＝ ${out>1?out:''}${inn>1?SQ(inn):''}`;
   return `<div class="sud math${s!==undefined?' lh':''}"${s!==undefined?` data-s="${s}"`:''}><div class="sdb">${body}</div><div class="sdres">${res}</div></div>`;

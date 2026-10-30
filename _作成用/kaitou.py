@@ -186,13 +186,14 @@ def sudare(pg, n, x, y, s=7.5):
         yb = y + (i + 1) * h
         draw(pg, str(q), x, yb - s * 0.25, s)
         mark(q, x + s * 0.25, yb - s * 0.55)
-        draw(pg, str(v), x + s * 1.1, yb - s * 0.25, s)
-        pg.draw_line((x + s * 0.85, yb - h + s * 0.1), (x + s * 0.85, yb), color=PALE, width=0.4)
-        pg.draw_line((x + s * 0.85, yb), (x + s * 3.2, yb), color=PALE, width=0.4)
+        draw(pg, str(v), x + s * 1.5, yb - s * 0.25, s)
+        bx, top = x + s * 0.98, yb - h + s * 0.1      # 割り算の「)」：丸く 曲げて、下の 横線に つなぐ
+        pg.draw_bezier((bx, top), (bx + s * 0.38, top + h * 0.25), (bx + s * 0.38, yb - h * 0.25), (bx + s * 0.08, yb), color=PALE, width=0.45)
+        pg.draw_line((bx + s * 0.08, yb), (x + s * 3.5, yb), color=PALE, width=0.4)
     yb = y + (len(rows) + 1) * h
     if m > 1:
-        draw(pg, str(m), x + s * 1.1, yb - s * 0.25, s)
-        mark(m, x + s * 1.1 + measure(str(m), s)[0] / 2, yb - s * 0.55)
+        draw(pg, str(m), x + s * 1.5, yb - s * 0.25, s)
+        mark(m, x + s * 1.5 + measure(str(m), s)[0] / 2, yb - s * 0.55)
     res = [R(str(n)), ' = ' + (str(out) if out > 1 else '')] + ([R(str(inn))] if inn > 1 else [])
     draw(pg, res, x - s * 0.2, yb + s * 1.3, s)
     COL[0] = RED
@@ -242,6 +243,9 @@ class Pen:
 
     def draw_rect(self, *a, **k):
         self.cur.draw_rect(*a, **k)
+
+    def draw_bezier(self, *a, **k):
+        self.cur.draw_bezier(*a, **k)
 
 
 pen = Pen()

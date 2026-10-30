@@ -1127,8 +1127,10 @@ body.portrait .ptag{left:70px;top:8px}
 .sdb{display:flex;flex-direction:column}
 .sdr{display:flex;align-items:flex-end}
 .sdp{width:1.5em;text-align:right;padding-right:.18em}
-.sdn{border-left:.07em solid var(--ink);border-bottom:.07em solid var(--ink);padding:0 .35em 0 .3em;min-width:1.6em}
-.sdr.last .sdn{border:none;padding-left:.37em}
+.sdn{position:relative;border-bottom:.07em solid var(--ink);padding:0 .35em 0 .62em;min-width:1.6em}
+.sdk{position:absolute;left:0;top:0;width:.5em;height:100%;overflow:visible}
+.sdk path{fill:none;stroke:var(--ink);stroke-width:1.6;vector-effect:non-scaling-stroke;stroke-linecap:round}
+.sdr.last .sdn{border:none;padding-left:.62em}
 .sud i{font-style:normal;display:inline-block;padding:0 .12em}
 .sud i.c{border-radius:50%;box-shadow:0 0 0 .08em #e0465e}
 .sud i.b{box-shadow:0 0 0 .08em #f07a12}
@@ -1925,7 +1927,9 @@ function SUDARE(n, s){
   const used = {}; let out = 1, inn = 1;
   Object.keys(cnt).forEach(p=>{ out *= Math.pow(+p, Math.floor(cnt[p]/2)); if(cnt[p]%2) inn *= +p; });
   const mark = p => { used[p]=(used[p]||0)+1; return used[p] <= 2*Math.floor(cnt[p]/2) ? 'c' : 'b'; };
-  const body = rows.map(([p,q])=>`<div class="sdr"><span class="sdp"><i class="${mark(p)}">${p}</i></span><span class="sdn">${q}</span></div>`).join('')
+  /* 割り算の「)」：丸く 曲がった 線（縦線では なく）。下の 横線に つながる */
+  const BK = '<svg class="sdk" viewBox="0 0 10 40" preserveAspectRatio="none"><path d="M1.5 1 C8 10 8 30 2 39.3"/></svg>';
+  const body = rows.map(([p,q])=>`<div class="sdr"><span class="sdp"><i class="${mark(p)}">${p}</i></span><span class="sdn">${BK}${q}</span></div>`).join('')
     + (m>1 ? `<div class="sdr last"><span class="sdp"></span><span class="sdn"><i class="${mark(m)}">${m}</i></span></div>` : '');
   const res = `${SQ(n)} ＝ ${out>1?out:''}${inn>1?SQ(inn):''}`;
   return `<div class="sud math${s!==undefined?' lh':''}"${s!==undefined?` data-s="${s}"`:''}><div class="sdb">${body}</div><div class="sdres">${res}</div></div>`;
@@ -1933,7 +1937,7 @@ function SUDARE(n, s){
 const RDX = (t, r, s, dn) => `<span class="rdx">${t}<i class="rdl lh" data-s="${s}"></i><span class="rdn${dn?' dn':''} lh" data-s="${s}">${r}</span></span>`;
 
 /* ====== このプリントのスライド ====== */
-const SERIES = [{"f": "1-1_因数分解の復習", "no": "①-1", "t": "因数分解の 復習", "v": "1.5_2026-10-29"}, {"f": "1-2_2次方程式の解", "no": "①-2", "t": "2次方程式の 解", "v": "1.5_2026-10-29"}, {"f": "1-3_2次方程式の解", "no": "①-3", "t": "2次方程式の 解 ②", "v": "1.5_2026-10-29"}, {"f": "1-4_解の公式", "no": "①-4", "t": "解の公式", "v": "1.6_2026-10-30"}, {"f": "1-5_解の公式_重解と解なし", "no": "①-5", "t": "2次方程式の 解 ③", "v": "1.7_2026-10-30"}, {"f": "1-6_実数解の個数", "no": "①-6", "t": "実数解の 個数", "v": "1.6_2026-10-30"}, {"f": "2-1_x軸との共有点", "no": "②-1", "t": "x軸との 共有点", "v": "1.5_2026-10-29"}, {"f": "2-2_x軸との共有点", "no": "②-2", "t": "x軸との 共有点 ②", "v": "1.5_2026-10-29"}, {"f": "2-3_x軸との位置関係", "no": "②-3", "t": "x軸との 位置関係", "v": "1.6_2026-10-30"}, {"f": "3-1_2次不等式の解法_v2", "no": "③-1", "t": "2次不等式の 解き方", "v": "2.20_2026-10-29"}, {"f": "3-2_2次不等式_練習編_v2", "no": "③-2", "t": "2次不等式 練習編", "v": "2.8_2026-10-29"}, {"f": "3-3_2次不等式の解法", "no": "③-3", "t": "2次不等式 いろいろ", "v": "1.6_2026-10-30"}, {"f": "3-4_2次不等式の解法", "no": "③-4", "t": "x² の前が マイナス", "v": "1.6_2026-10-30"}], ME = "2-1_x軸との共有点";
+const SERIES = [{"f": "1-1_因数分解の復習", "no": "①-1", "t": "因数分解の 復習", "v": "1.5_2026-10-29"}, {"f": "1-2_2次方程式の解", "no": "①-2", "t": "2次方程式の 解", "v": "1.5_2026-10-29"}, {"f": "1-3_2次方程式の解", "no": "①-3", "t": "2次方程式の 解 ②", "v": "1.5_2026-10-29"}, {"f": "1-4_解の公式", "no": "①-4", "t": "解の公式", "v": "1.7_2026-10-30"}, {"f": "1-5_解の公式_重解と解なし", "no": "①-5", "t": "2次方程式の 解 ③", "v": "1.7_2026-10-30"}, {"f": "1-6_実数解の個数", "no": "①-6", "t": "実数解の 個数", "v": "1.7_2026-10-30"}, {"f": "2-1_x軸との共有点", "no": "②-1", "t": "x軸との 共有点", "v": "1.5_2026-10-29"}, {"f": "2-2_x軸との共有点", "no": "②-2", "t": "x軸との 共有点 ②", "v": "1.5_2026-10-29"}, {"f": "2-3_x軸との位置関係", "no": "②-3", "t": "x軸との 位置関係", "v": "1.7_2026-10-30"}, {"f": "3-1_2次不等式の解法_v2", "no": "③-1", "t": "2次不等式の 解き方", "v": "2.20_2026-10-29"}, {"f": "3-2_2次不等式_練習編_v2", "no": "③-2", "t": "2次不等式 練習編", "v": "2.8_2026-10-29"}, {"f": "3-3_2次不等式の解法", "no": "③-3", "t": "2次不等式 いろいろ", "v": "1.7_2026-10-30"}, {"f": "3-4_2次不等式の解法", "no": "③-4", "t": "x² の前が マイナス", "v": "1.7_2026-10-30"}], ME = "2-1_x軸との共有点";
 const VER = '<i class="nv">ver</i> 1.5　2026-10-29';
 
 const IMG = s => s;
