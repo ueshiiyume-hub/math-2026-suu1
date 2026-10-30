@@ -37,13 +37,15 @@ def print_pdf():
     return PDF
 def pgimg(m):
     """@@IMG:ページ:x1,y1,x2,y2@@ を プリントの その部分の 画像（data URI）に する"""
-    pg = int(m.group(1)); x1,y1,x2,y2 = map(float, m.group(2).split(','))
+    k = m.group(1)                            # ページの 番号、または その ページに ある 文字（プリントの 並べかえに 強い。2026-10-30）
+    pg = int(k) if k.isdigit() else next(i + 1 for i, p in enumerate(print_pdf()) if k in p.get_text())
+    x1,y1,x2,y2 = map(float, m.group(2).split(','))
     w, h = x2-x1, y2-y1; z = min(1150/w, 466/h, 2.6) * 1.7
     pix = print_pdf()[pg-1].get_pixmap(matrix=fitz.Matrix(z,z), clip=fitz.Rect(x1,y1,x2,y2))
     return 'data:image/png;base64,' + base64.b64encode(pix.tobytes('png')).decode()
 
 def page(title, deck_js):
-    deck_js = re.sub(r'@@IMG:(\d+):([\d.,]+)@@', pgimg, deck_js)
+    deck_js = re.sub(r'@@IMG:([^:@]+):([\d.,]+)@@', pgimg, deck_js)
     h = head.replace('<title>2次関数のグラフ</title>', f'<title>{title}</title>')
     return h + TAIL_BODY + core + '\n/* ====== このプリントのスライド ====== */\n' + deck_js + '\n' + engine + '\n</script>\n</body>\n</html>\n'
 
@@ -594,8 +596,8 @@ SERIES_LIST = [('1-1_因数分解の復習','①-1','因数分解の 復習'), (
   ('1-3_2次方程式の解','①-3','2次方程式の 解 ②'), ('1-4_解の公式','①-4','解の公式'),
   ('1-5_解の公式_重解と解なし','①-5','2次方程式の 解 ③'), ('1-6_実数解の個数','①-6','実数解の 個数'),
   ('2-1_x軸との共有点','②-1','x軸との 共有点'), ('2-2_x軸との共有点','②-2','x軸との 共有点 ②'),
-  ('2-3_x軸との位置関係','②-3','x軸との 位置関係'), ('3-1_2次不等式の解法_v2','③-1','2次不等式の 解き方'),
-  ('3-2_2次不等式_練習編_v2','③-2','2次不等式 練習編'), ('3-3_2次不等式の解法','③-3','2次不等式 いろいろ'),
+  ('2-3_x軸との位置関係','②-3','x軸との 位置関係'), ('3-2_2次不等式_練習編_v2','③-1','2次不等式 練習編'),
+  ('3-1_2次不等式の解法_v2','③-2','2次不等式の 解き方'), ('3-3_2次不等式の解法','③-3','2次不等式 いろいろ'),
   ('3-4_2次不等式の解法','③-4','x² の前が マイナス')]
 SER = [dict(f=f, no=no, t=tt, v=VERS.get(f, {}).get('v', '') + '_' + VERS.get(f, {}).get('date', '')) for f, no, tt in SERIES_LIST if f in decks]
 for fn, (title, js) in decks.items():

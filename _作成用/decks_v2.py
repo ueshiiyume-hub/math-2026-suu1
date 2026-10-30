@@ -1,10 +1,10 @@
-"""③-1 2次不等式の解法 ver 2.0（作り直し）。ver 1.4（3-1_2次不等式の解法.html）は そのまま 残す。
+"""③-2 2次不等式の解法 ver 2.0（2026-10-30 の プリントの 並べかえで ③-1 → ③-2。ファイル名・URL は そのまま）（作り直し）。ver 1.4（3-1_2次不等式の解法.html）は そのまま 残す。
 土台の 部品は v2_base_3-1.js（ver 1.4 の 写し）。この ファイルの 画面は 1画面に 主役 1つ、言葉は 短く。"""
 import os
 B = os.path.dirname(os.path.abspath(__file__))
 
 V2 = r'''
-const KK2 = KIMATSU + '　③-1';
+const KK2 = KIMATSU + '　③-2';
 /* 左の 現在地（❶ 式 ／ ❷ 塗る ／ ❸ 答える） */
 const NAV = (on) => `<div class="v2nav">${['❶ 式','❷ 塗る','❸ 答える'].map((t,i)=>`<div class="v2n${i+1===on?' on':''}${i+1<on?' done':''}">${t}</div>`).join('')}</div>`;
 /* 小さい 一言 ＋ 大きい 主役（mk：マーカー、sub：かっこ書き） */
@@ -300,7 +300,7 @@ const w5b = AFTER2(PR({...P2_, phase:2, cm:[
   `書き直して ${M('x ≦ −1')}。`,
   `2つを まとめて、<i class="nv">Step</i>❸ の 枠に ${M('−2 ≦ x ≦ −1')}。　<b>完成！</b>`]}));
 
-const DECK = {title:'③-1 2次不等式の解法', groups:{'⑴':`⑴ ${EQ1}`, '⑵':`⑵ ${EQ2}`}, pages:[
+const DECK = {title:'③-2 2次不等式の解法', groups:{'⑴':`⑴ ${EQ1}`, '⑵':`⑵ ${EQ2}`}, pages:[
   {name:'表紙', html:coverF(KK2, '<span class="mk">2次不等式</span><br>の 解き方', '塗って 答える', '', POL, '3つの Step')},
   {name:'やること', html:v1}, {name:'⑴ ❶ ＝0 に', html:va}, {name:'⑴ ❶ 解く', html:vb}, {name:'⑴ ❶ プリント', html:s2v}, {name:'⑴ ❷ 上を塗る', html:v3}, {name:'⑴ ❷ x軸上', html:v4}, {name:'⑴ ❷ プリント', html:s5a},
   {name:'⑴ ❸ 答える', html:v5}, {name:'⑴ 書きこみ', html:s5b},
@@ -313,4 +313,4 @@ const DECK = {title:'③-1 2次不等式の解法', groups:{'⑴':`⑴ ${EQ1}`, 
 
 def add(decks):
     base = open(os.path.join(B, 'v2_base_3-1.js'), encoding='utf-8').read()
-    decks['3-1_2次不等式の解法_v2'] = ('③-1 2次不等式の解法 ver 2', base + V2)
+    decks['3-1_2次不等式の解法_v2'] = ('③-2 2次不等式の解法 ver 2', base + V2)

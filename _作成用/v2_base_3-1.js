@@ -24,7 +24,7 @@ const AX = (ay) => `<line x1="410" y1="${ay}" x2="499" y2="${ay}" stroke="#555" 
 
 
 const WB = r => `<rect x="${r[0]}" y="${r[1]}" width="${(r[2]-r[0]).toFixed(1)}" height="${(r[3]-r[1]).toFixed(1)}" fill="#fff"/>`;
-const KK = KIMATSU + '　③-1';
+const KK = KIMATSU + '　③-2';
 const POL = `<div class="fpol"><div class="fa math">x${P2} − 2x − 3 ＞ 0</div><div class="fv">グラフを 塗る</div><div class="fb math">x ＜ −1, 3 ＜ x</div></div>`;
 
 /* ===== 大きい グラフ（px）。y ＝ k(x − r1)(x − r2) を 下に凸で かく。x軸 ＝ 水面 ===== */
