@@ -283,3 +283,22 @@ const probHead = (title, lead, list, cap) => `
   </div>
   ${cbar([cap || `ここから <b>${title}</b>。　例と 同じ 手順で 解いて いこう！　まず 自分で 解いてから 見てね。`])}`;
 const ptag = t => `<div class="ptag">${t}</div>`;
+
+/* ====== ルートを 簡単に する（板書、2026-10-30） ======
+   SUDARE(44)：すだれ算（素因数分解）。2 ) 44 → 2 ) 22 → 11。2つ そろった 数は 赤い 丸（ルートの 外へ）、のこりは オレンジの 四角（ルートの 中に 残る）。
+   下に「√44 ＝ 2√11」。s を 渡すと その 番で 出る。
+   RDX('6','3', 番)：約分の 斜線と 小さな 数（上に。dn＝true で 下に）。板書の「−6̸ → 3」 */
+function SUDARE(n, s){
+  let m = n; const rows = [];
+  for(let p=2; p*p<=m; ){ if(m%p===0){ rows.push([p,m]); m/=p; } else p++; }
+  const ps = [...rows.map(r=>r[0]), ...(m>1?[m]:[])], cnt = {};
+  ps.forEach(p=>cnt[p]=(cnt[p]||0)+1);
+  const used = {}; let out = 1, inn = 1;
+  Object.keys(cnt).forEach(p=>{ out *= Math.pow(+p, Math.floor(cnt[p]/2)); if(cnt[p]%2) inn *= +p; });
+  const mark = p => { used[p]=(used[p]||0)+1; return used[p] <= 2*Math.floor(cnt[p]/2) ? 'c' : 'b'; };
+  const body = rows.map(([p,q])=>`<div class="sdr"><span class="sdp"><i class="${mark(p)}">${p}</i></span><span class="sdn">${q}</span></div>`).join('')
+    + (m>1 ? `<div class="sdr last"><span class="sdp"></span><span class="sdn"><i class="${mark(m)}">${m}</i></span></div>` : '');
+  const res = `${SQ(n)} ＝ ${out>1?out:''}${inn>1?SQ(inn):''}`;
+  return `<div class="sud math${s!==undefined?' lh':''}"${s!==undefined?` data-s="${s}"`:''}><div class="sdb">${body}</div><div class="sdres">${res}</div></div>`;
+}
+const RDX = (t, r, s, dn) => `<span class="rdx">${t}<i class="rdl lh" data-s="${s}"></i><span class="rdn${dn?' dn':''} lh" data-s="${s}">${r}</span></span>`;

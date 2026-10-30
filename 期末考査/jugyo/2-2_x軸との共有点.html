@@ -1122,6 +1122,25 @@ body.portrait .ptag{left:70px;top:8px}
 .kz{position:relative;display:inline-block}
 .kzs{position:absolute;left:-6%;right:-6%;top:50%;height:3px;margin-top:-1.5px;background:#f07a12;border-radius:2px;transform:rotate(-28deg)}
 .kzs.lh{transform:rotate(-28deg) translateY(6px)} .kzs.lh.show{transform:rotate(-28deg)}
+/* すだれ算（素因数分解）と 約分の 斜線（板書、2026-10-30） */
+.sud{display:inline-flex;flex-direction:column;align-items:flex-start;gap:.15em;font-size:1.3em;line-height:1.15;color:var(--ink)}
+.sdb{display:flex;flex-direction:column}
+.sdr{display:flex;align-items:flex-end}
+.sdp{width:1.5em;text-align:right;padding-right:.18em}
+.sdn{border-left:.07em solid var(--ink);border-bottom:.07em solid var(--ink);padding:0 .35em 0 .3em;min-width:1.6em}
+.sdr.last .sdn{border:none;padding-left:.37em}
+.sud i{font-style:normal;display:inline-block;padding:0 .12em}
+.sud i.c{border-radius:50%;box-shadow:0 0 0 .08em #e0465e}
+.sud i.b{box-shadow:0 0 0 .08em #f07a12}
+.sdres{margin-top:.2em;color:var(--r-ink);white-space:nowrap}
+.rdx{position:relative;display:inline-block}
+.rdl{position:absolute;left:-10%;right:-10%;top:50%;height:.13em;margin-top:-.065em;background:#f07a12;border-radius:.05em;transform:rotate(-55deg)}
+.rdl.lh{transform:rotate(-55deg) translateY(.2em)} .rdl.lh.show{transform:rotate(-55deg)}
+.rdn{position:absolute;right:-.4em;top:-.95em;font-size:.72em;color:#f07a12;font-weight:700}
+.rdn.dn{top:auto;bottom:-.85em}
+.dsud{position:absolute;left:560px;top:300px;font-size:17px}
+.nw9{font-size:.88em;white-space:nowrap}
+.vm{display:inline-block;vertical-align:middle}
 
 /* ===== 手書き ===== */
 #ink{position:fixed;left:0;top:0;z-index:15;pointer-events:none;touch-action:none}
@@ -1894,8 +1913,27 @@ const probHead = (title, lead, list, cap) => `
   ${cbar([cap || `ここから <b>${title}</b>。　例と 同じ 手順で 解いて いこう！　まず 自分で 解いてから 見てね。`])}`;
 const ptag = t => `<div class="ptag">${t}</div>`;
 
+/* ====== ルートを 簡単に する（板書、2026-10-30） ======
+   SUDARE(44)：すだれ算（素因数分解）。2 ) 44 → 2 ) 22 → 11。2つ そろった 数は 赤い 丸（ルートの 外へ）、のこりは オレンジの 四角（ルートの 中に 残る）。
+   下に「√44 ＝ 2√11」。s を 渡すと その 番で 出る。
+   RDX('6','3', 番)：約分の 斜線と 小さな 数（上に。dn＝true で 下に）。板書の「−6̸ → 3」 */
+function SUDARE(n, s){
+  let m = n; const rows = [];
+  for(let p=2; p*p<=m; ){ if(m%p===0){ rows.push([p,m]); m/=p; } else p++; }
+  const ps = [...rows.map(r=>r[0]), ...(m>1?[m]:[])], cnt = {};
+  ps.forEach(p=>cnt[p]=(cnt[p]||0)+1);
+  const used = {}; let out = 1, inn = 1;
+  Object.keys(cnt).forEach(p=>{ out *= Math.pow(+p, Math.floor(cnt[p]/2)); if(cnt[p]%2) inn *= +p; });
+  const mark = p => { used[p]=(used[p]||0)+1; return used[p] <= 2*Math.floor(cnt[p]/2) ? 'c' : 'b'; };
+  const body = rows.map(([p,q])=>`<div class="sdr"><span class="sdp"><i class="${mark(p)}">${p}</i></span><span class="sdn">${q}</span></div>`).join('')
+    + (m>1 ? `<div class="sdr last"><span class="sdp"></span><span class="sdn"><i class="${mark(m)}">${m}</i></span></div>` : '');
+  const res = `${SQ(n)} ＝ ${out>1?out:''}${inn>1?SQ(inn):''}`;
+  return `<div class="sud math${s!==undefined?' lh':''}"${s!==undefined?` data-s="${s}"`:''}><div class="sdb">${body}</div><div class="sdres">${res}</div></div>`;
+}
+const RDX = (t, r, s, dn) => `<span class="rdx">${t}<i class="rdl lh" data-s="${s}"></i><span class="rdn${dn?' dn':''} lh" data-s="${s}">${r}</span></span>`;
+
 /* ====== このプリントのスライド ====== */
-const SERIES = [{"f": "1-1_因数分解の復習", "no": "①-1", "t": "因数分解の 復習", "v": "1.5_2026-10-29"}, {"f": "1-2_2次方程式の解", "no": "①-2", "t": "2次方程式の 解", "v": "1.5_2026-10-29"}, {"f": "1-3_2次方程式の解", "no": "①-3", "t": "2次方程式の 解 ②", "v": "1.5_2026-10-29"}, {"f": "1-4_解の公式", "no": "①-4", "t": "解の公式", "v": "1.5_2026-10-29"}, {"f": "1-5_解の公式_重解と解なし", "no": "①-5", "t": "2次方程式の 解 ③", "v": "1.7_2026-10-30"}, {"f": "1-6_実数解の個数", "no": "①-6", "t": "実数解の 個数", "v": "1.5_2026-10-29"}, {"f": "2-1_x軸との共有点", "no": "②-1", "t": "x軸との 共有点", "v": "1.5_2026-10-29"}, {"f": "2-2_x軸との共有点", "no": "②-2", "t": "x軸との 共有点 ②", "v": "1.5_2026-10-29"}, {"f": "2-3_x軸との位置関係", "no": "②-3", "t": "x軸との 位置関係", "v": "1.5_2026-10-29"}, {"f": "3-1_2次不等式の解法_v2", "no": "③-1", "t": "2次不等式の 解き方", "v": "2.20_2026-10-29"}, {"f": "3-2_2次不等式_練習編_v2", "no": "③-2", "t": "2次不等式 練習編", "v": "2.8_2026-10-29"}, {"f": "3-3_2次不等式の解法", "no": "③-3", "t": "2次不等式 いろいろ", "v": "1.5_2026-10-29"}, {"f": "3-4_2次不等式の解法", "no": "③-4", "t": "x² の前が マイナス", "v": "1.5_2026-10-29"}], ME = "2-2_x軸との共有点";
+const SERIES = [{"f": "1-1_因数分解の復習", "no": "①-1", "t": "因数分解の 復習", "v": "1.5_2026-10-29"}, {"f": "1-2_2次方程式の解", "no": "①-2", "t": "2次方程式の 解", "v": "1.5_2026-10-29"}, {"f": "1-3_2次方程式の解", "no": "①-3", "t": "2次方程式の 解 ②", "v": "1.5_2026-10-29"}, {"f": "1-4_解の公式", "no": "①-4", "t": "解の公式", "v": "1.6_2026-10-30"}, {"f": "1-5_解の公式_重解と解なし", "no": "①-5", "t": "2次方程式の 解 ③", "v": "1.7_2026-10-30"}, {"f": "1-6_実数解の個数", "no": "①-6", "t": "実数解の 個数", "v": "1.6_2026-10-30"}, {"f": "2-1_x軸との共有点", "no": "②-1", "t": "x軸との 共有点", "v": "1.5_2026-10-29"}, {"f": "2-2_x軸との共有点", "no": "②-2", "t": "x軸との 共有点 ②", "v": "1.5_2026-10-29"}, {"f": "2-3_x軸との位置関係", "no": "②-3", "t": "x軸との 位置関係", "v": "1.6_2026-10-30"}, {"f": "3-1_2次不等式の解法_v2", "no": "③-1", "t": "2次不等式の 解き方", "v": "2.20_2026-10-29"}, {"f": "3-2_2次不等式_練習編_v2", "no": "③-2", "t": "2次不等式 練習編", "v": "2.8_2026-10-29"}, {"f": "3-3_2次不等式の解法", "no": "③-3", "t": "2次不等式 いろいろ", "v": "1.6_2026-10-30"}, {"f": "3-4_2次不等式の解法", "no": "③-4", "t": "x² の前が マイナス", "v": "1.6_2026-10-30"}], ME = "2-2_x軸との共有点";
 const VER = '<i class="nv">ver</i> 1.5　2026-10-29';
 
 const IMG = s => s;
@@ -1962,7 +2000,8 @@ const XQQ = P => { const rr = Math.sqrt((513-491.1)/0.0352);
     {s:1, r:[201,376.8,294,399.5], h:`<span class="ytag">y ＝ 0 と する</span>`, fs:10.5, cls:'xyt'},
     XA(2,[154.8,375.4,197.1,400.9],'＝ 0',12,'xan xeq0'),
     XA(3,[73.2,403.4,109.8,454.2],'x',12,'xan xr'), XA(3,[118.5,403.4,211.7,454.2],KF(`${P.mb} ± ${SQ(P.in1)}`,P.den),11,'xan xl'),
-    XA(4,[118.5,456.6,211.7,507.4],P.x2,11,'xan xl'),
+    XA(4,[118.5,456.6,211.7,507.4],P.x2b||P.x2,P.x2b?9:11,'xan xl'),
+    ...(P.sud ? [{s:4, r:[214,452,300,508], h:SUDARE(P.sud), fs:6.5}] : []),
     XA(5,[435.7,350.8,505.6,394.1],P.x2,11), XA(6,[435.7,399.1,505.7,427.9],'2 個',13),
     {s:9, r:[(455-rr)-22,493,(455-rr)+6,512], h:P.rl, fs:6.5, cls:'xgl', al:'c'},
     {s:9, r:[(455+rr)-6,493,(455+rr)+22,512], h:P.rr, fs:6.5, cls:'xgl', al:'c'}],

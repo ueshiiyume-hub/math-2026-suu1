@@ -155,6 +155,51 @@ def memo(pg, e, cx, y, s=7.5):
     COL[0] = RED
 
 
+def sudare(pg, n, x, y, s=7.5):
+    """すだれ算（素因数分解）を 薄い 字で：2 ) 44 → 2 ) 22 → 11、その 下に √44 ＝ 2√11（板書、2026-10-30）。
+    x, y：左上。2つ そろった 数は 赤い 丸、のこりは オレンジの 四角"""
+    m, rows = n, []
+    p = 2
+    while p * p <= m:
+        if m % p == 0:
+            rows.append((p, m)); m //= p
+        else:
+            p += 1
+    ps = [r[0] for r in rows] + ([m] if m > 1 else [])
+    cnt = {}
+    for q in ps:
+        cnt[q] = cnt.get(q, 0) + 1
+    out = inn = 1
+    for q, c in cnt.items():
+        out *= q ** (c // 2)
+        inn *= q ** (c % 2)
+    used = {}
+    def mark(q, cx, cy):
+        used[q] = used.get(q, 0) + 1
+        if used[q] <= 2 * (cnt[q] // 2):
+            pg.draw_circle((cx, cy), s * 0.62, color=(0.88, 0.45, 0.5), width=0.5)
+        else:
+            pg.draw_rect(fz.Rect(cx - s * 0.6, cy - s * 0.62, cx + s * 0.6, cy + s * 0.62), color=(0.94, 0.6, 0.3), width=0.5)
+    h = s * 1.35
+    COL[0] = PALE
+    for i, (q, v) in enumerate(rows):
+        yb = y + (i + 1) * h
+        draw(pg, str(q), x, yb - s * 0.25, s)
+        mark(q, x + s * 0.25, yb - s * 0.55)
+        draw(pg, str(v), x + s * 1.1, yb - s * 0.25, s)
+        pg.draw_line((x + s * 0.85, yb - h + s * 0.1), (x + s * 0.85, yb), color=PALE, width=0.4)
+        pg.draw_line((x + s * 0.85, yb), (x + s * 3.2, yb), color=PALE, width=0.4)
+    yb = y + (len(rows) + 1) * h
+    if m > 1:
+        draw(pg, str(m), x + s * 1.1, yb - s * 0.25, s)
+        mark(m, x + s * 1.1 + measure(str(m), s)[0] / 2, yb - s * 0.55)
+    res = [R(str(n)), ' = ' + (str(out) if out > 1 else '')] + ([R(str(inn))] if inn > 1 else [])
+    draw(pg, res, x - s * 0.2, yb + s * 1.3, s)
+    COL[0] = RED
+    w = max(s * 3.4, measure(res, s)[0])
+    piece([x - s * 0.4, y, x + w, yb + s * 1.6])
+
+
 def fracbox(pg, n, d, r, s=13):
     """box with a printed fraction bar in the middle."""
     x0, y0, x1, y1 = r
@@ -191,6 +236,12 @@ class Pen:
 
     def draw_line(self, *a, **k):
         self.cur.draw_line(*a, **k)
+
+    def draw_circle(self, *a, **k):
+        self.cur.draw_circle(*a, **k)
+
+    def draw_rect(self, *a, **k):
+        self.cur.draw_rect(*a, **k)
 
 
 pen = Pen()
@@ -290,6 +341,7 @@ formula(180, '−4', ('16', ['b', P('2'), ' = 4', P('2'), ' = 16']), '+12', '2',
 fracbox(pg, ['−4 ± ', R('28')], '2', [113.7, 484.8, 206.9, 539.9])
 fracbox(pg, ['−4 ± 2', R('7')], '2', [230.7, 484.8, 323.9, 539.9])
 center(pg, ['−2 ± ', R('7')], [348.2, 484.8, 441.3, 539.9], 15)
+sudare(pg, 28, 462, 480)
 G('①-4 ⑶')
 formula(358.6, '−3', ('9', ['b', P('2'), ' = 3', P('2'), ' = 9']), '−8', '4', '−4×2×1 = −8')
 fracbox(pg, ['−3 ± ', R('1')], '4', [113.7, 663.4, 206.9, 718.4])
@@ -316,9 +368,11 @@ sol(Rx, 98, 3, -5, -1, [['   = ', F(['5 ± ', R('37')], '6')]])
 G('プリント問題①-4 ⑶')
 sol(L, 260, 1, 6, -2, [['   = ', F(['−6 ± ', R('44')], '2'), ' = ', F(['−6 ± 2', R('11')], '2')],
                        ['   = −3 ± ', R('11')]])
+sudare(pg, 44, 200, 350)
 G('プリント問題①-4 ⑷')
 sol(Rx, 260, 1, -2, -5, [['   = ', F(['2 ± ', R('24')], '2'), ' = ', F(['2 ± 2', R('6')], '2')],
                         ['   = 1 ± ', R('6')]])
+sudare(pg, 24, 440, 345)
 G('プリント問題①-4 ⑸')
 sol(L, 440, 2, 5, 2, [['   = ', F(['−5 ± ', R('9')], '4'), ' = ', F('−5 ± 3', '4')],
                       ['x = ', F('−5 + 3', '4'), ',  ', F('−5 − 3', '4')],
