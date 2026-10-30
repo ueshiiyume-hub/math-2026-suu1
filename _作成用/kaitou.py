@@ -21,6 +21,10 @@ class Sqrt:
     def __init__(s, a): s.a = a
 class Sup:
     def __init__(s, a): s.a = a
+class Strike:
+    """斜線で 消す（ルートの中が 0 の とき の「± 0」。板書と 同じ、2026-10-30）"""
+    def __init__(s, a): s.a = a
+ORANGE = (0.94, 0.48, 0.07)
 
 def runs(text):
     out = []
@@ -60,6 +64,9 @@ def measure(e, s):
             iw, ia, idd = measure(it.a, s)
             w += iw + 0.62 * s
             a, d = max(a, ia + 0.14 * s), max(d, idd + 0.04 * s)
+        elif isinstance(it, Strike):
+            sw, sa, sd = measure(it.a, s)
+            w += sw; a, d = max(a, sa), max(d, sd)
         elif isinstance(it, Sup):
             sw, sa, sd = measure(it.a, s * 0.62)
             w += sw + 0.05 * s
@@ -94,6 +101,10 @@ def draw(pg, e, x, y, s):
                 pg.draw_line(a_, b_, color=COL[0], width=lw)
             draw(pg, it.a, x + 0.58 * s, y, s)
             x += iw + 0.62 * s
+        elif isinstance(it, Strike):
+            x1 = draw(pg, it.a, x, y, s)
+            pg.draw_line((x - 0.1 * s, y + 0.12 * s), (x1 + 0.1 * s, y - 0.62 * s), color=ORANGE, width=0.09 * s)
+            x = x1
         elif isinstance(it, Sup):
             x = draw(pg, it.a, x + 0.03 * s, y - 0.42 * s, s * 0.62) + 0.02 * s
     return x
@@ -330,7 +341,9 @@ def formula5(dy, mb, b2, ac, a2, calc, s=13):
 G('①-5 ⑴')
 formula5(0, '−2', ('4', ['b', P('2'), ' = 2', P('2'), ' = 4']), '−4', '2', '−4×1×1 = −4')
 fracbox(pg, ['−2 ± ', R('0')], '2', [112.9, 196.8, 206.1, 251.9])
-fracbox(pg, '−2 ± 0', '2', [230.0, 196.8, 323.2, 251.9])
+fracbox(pg, ['−2 ', Strike('± 0')], '2', [230.0, 196.8, 323.2, 251.9])
+memo(pg, [R('0'), ' = 0'], 159.5, 266)
+memo(pg, ['因数分解でも (x + 1)', P('2'), ' = 0 → x = −1'], 336, 266)
 fracbox(pg, '−2', '2', [348.5, 196.8, 441.7, 251.9])
 center(pg, '−1', [472.0, 196.8, 531.5, 251.9], 16)
 center(pg, '重解', [470.0, 163.0, 531.8, 193.7], 13)
@@ -351,9 +364,9 @@ def sol5(x, y, a, b, c, mid, last):
     return lines(pg, [first] + last, x, y, 12, gap=8)
 
 G('プリント問題①-5 ⑴')
-sol5(L, 552, 1, 4, 4, F(['−4 ± ', R('0')], '2'), ['   = −2', 'x = −2（重解）'])
+sol5(L, 552, 1, 4, 4, F(['−4 ± ', R('0')], '2'), [['   = ', F(['−4 ', Strike('± 0')], '2'), ' = ', F('−4', '2'), ' = −2'], 'x = −2（重解）'])
 G('プリント問題①-5 ⑵')
-sol5(Rx, 552, 9, -6, 1, F(['6 ± ', R('0')], '18'), [['   = ', F('6', '18'), ' = ', F('1', '3')],
+sol5(Rx, 552, 9, -6, 1, F(['6 ± ', R('0')], '18'), [['   = ', F(['6 ', Strike('± 0')], '18'), ' = ', F('6', '18'), ' = ', F('1', '3')],
                                                       ['x = ', F('1', '3'), '（重解）']])
 G('プリント問題①-5 ⑶')
 sol5(L, 678, 1, -1, 3, F(['1 ± ', R('−11')], '2'), ['√ の中がマイナスなので', '解なし'])

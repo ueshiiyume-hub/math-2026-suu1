@@ -672,3 +672,8 @@ i.nv{font-style:normal;font-family:inherit}
 .portrait .phcard .ph-h{font-size:34px}
 .ptag{position:absolute;left:84px;top:14px;z-index:5;font:900 16px "Zen Maru Gothic",sans-serif;color:#fff;background:var(--accent);border-radius:999px;padding:3px 14px;box-shadow:var(--shadow)}
 body.portrait .ptag{left:70px;top:8px}
+
+/* ルートの中が 0：「± 0」に 斜線（板書と 同じ、2026-10-30） */
+.kz{position:relative;display:inline-block}
+.kzs{position:absolute;left:-6%;right:-6%;top:50%;height:3px;margin-top:-1.5px;background:#f07a12;border-radius:2px;transform:rotate(-28deg)}
+.kzs.lh{transform:rotate(-28deg) translateY(6px)} .kzs.lh.show{transform:rotate(-28deg)}
