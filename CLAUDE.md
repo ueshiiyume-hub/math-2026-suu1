@@ -22,7 +22,8 @@
 ```
 python _作成用/build_kimatsu.py 期末考査/jugyo   # 授業プリントのスライドを作る
 python _作成用/menus.py .                         # 目次ページを作る（カードは menus.py に書く）
-cd _作成用 && python kaitou.py ../../2026_mathc_private/数学Ⅰ/2学期期末考査まで.pdf ../期末考査/kaitou "２学期期末考査まで No.1〜6 解答" 1.6_2026-10-30   # 解答ページ（答えは kaitou.py に 書く。版を 上げたら menus.py の ?v= も 合わせる）
+cd _作成用 && python kaitou.py 1-6 ../../2026_mathc_private/数学Ⅰ/2学期期末考査まで.pdf ../期末考査/kaitou "２学期期末考査まで No.1〜6 解答" 1.6_2026-10-30   # 解答ページ（答えは kaitou_no1-6.py に 書く。版を 上げたら menus.py の ?v= も 合わせる）
+cd _作成用 && python kaitou.py 7-9 ../../2026_mathc_private/数学Ⅰ/2学期期末考査まで.pdf ../期末考査/kaitou "２学期期末考査まで No.7〜9 解答" 1.0_2026-10-30 ../../2026_mathc_private/数学Ⅰ/数学Ⅰ_2学期期末考査まで_No7-9_解答.pdf   # No.7〜9（答えは kaitou_no7-9.py）。次の まとまりは kaitou_no◯-◯.py を 足して menus.py に カード
 ```
 
 ## 決まり

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>２学期期末考査まで No.7〜9 解答</title>
+<!-- プリントの 解答（kaitou.py が 作る）。プリントの ページを そのまま 背景に して、答えを 同じ 場所に 重ねる -->
+<style>
+:root{--bg:#eef1f4;--paper:#fff;--ink:#22303c;--muted:#5f6d7a;--r-bd:#c9d2db;--red:#a01c1c;--chip:#fff}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#171c22;--paper:#232a32;--ink:#e6ebf0;--muted:#9aa7b4;--r-bd:#3a4552;--red:#ff8a80;--chip:#2b333c}}
+:root[data-theme="dark"]{--bg:#171c22;--paper:#232a32;--ink:#e6ebf0;--muted:#9aa7b4;--r-bd:#3a4552;--red:#ff8a80;--chip:#2b333c}
+*{box-sizing:border-box}
+html{scroll-padding-top:70px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif}
+#jump{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--r-bd);box-shadow:0 2px 6px rgba(0,0,0,.06);padding:8px 16px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+#jump .ttl{font-weight:700;font-size:15px;margin-right:auto}
+#jump a,#jump button.b{font:inherit;font-size:14px;border:1.5px solid var(--r-bd);background:var(--chip);color:var(--ink);border-radius:999px;padding:5px 12px;text-decoration:none;cursor:pointer;white-space:nowrap}
+#jump button.b.on{background:var(--red);border-color:var(--red);color:#fff}
+.lead{max-width:900px;margin:14px auto 0;padding:0 16px;font-size:14px;color:var(--muted);line-height:1.7}
+.lead b{color:var(--red)}
+.top{display:block;max-width:900px;margin:6px auto 0;padding:0 16px;font-size:14px;color:var(--muted)}
+.wrap{max-width:900px;margin:0 auto;padding:12px 16px 40px}
+.zoom .wrap{max-width:none;overflow-x:auto}
+.sheet{position:relative;width:100%;margin:0 auto 22px;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.15);border-radius:2px}
+.zoom .sheet{width:200%;max-width:1700px}
+.sheet img{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;user-select:none}
+.sheet img.ans{transition:opacity .15s}
+.hit{position:absolute;border:0;background:transparent;padding:0;margin:0;cursor:pointer;border-radius:4px}
+.hit:focus-visible{outline:2px solid #3b78c2}
+/* かくした 答え：場所が 分かるように 点線の 枠だけ 出す */
+.hit.shut{background:rgba(255,250,240,.88);border:1.5px dashed #c97a1f}
+.hit.shut::after{content:"？";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#c97a1f;font-weight:700;font-size:clamp(10px,2.2vw,18px)}
+.no{font-size:13px;color:var(--muted);margin:0 0 4px 2px}
+</style>
+<!-- 明るい／暗い の 切りかえ（スマホでも 押せる ボタン）。選んだ ものは この サイト 全体で 覚える -->
+<style>
+#themebtn{position:fixed;z-index:26;top:10px;width:40px;height:40px;border-radius:50%;border:2px solid var(--r-bd);background:var(--paper);color:var(--ink);font-size:20px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;box-shadow:0 2px 6px rgba(0,0,0,.12)}
+#themebtn.l{left:12px} #themebtn.r{right:12px}
+#themebtn.inj{position:static;width:32px;height:32px;font-size:16px;box-shadow:0 2px 6px rgba(0,0,0,.1)}
+</style>
+<script>
+(function(){
+  var d=document.documentElement;
+  try{ var t=localStorage.getItem('theme'); if(t) d.dataset.theme=t; }catch(e){}
+  function isDark(){ return d.dataset.theme ? d.dataset.theme==='dark' : matchMedia('(prefers-color-scheme: dark)').matches; }
+  window.toggleTheme=function(){ d.dataset.theme = isDark() ? 'light' : 'dark'; try{ localStorage.setItem('theme', d.dataset.theme); }catch(e){} paint(); };
+  function paint(){ var b=document.getElementById('themebtn'); if(b){ b.textContent = isDark() ? '☀' : '🌙'; b.title = isDark() ? '明るく する' : '暗く する'; } }
+  document.addEventListener('DOMContentLoaded',function(){
+    var b=document.createElement('button'); b.id='themebtn'; b.className=window.THEME_BTN_SIDE||'l';
+    b.addEventListener('click',function(e){ e.stopPropagation(); e.preventDefault(); toggleTheme(); });
+    var j=document.getElementById('jump');   // スライドでは 左下の「目次」の 横に 置く
+    if(j){ b.className='inj'; j.insertBefore(b, j.querySelector('.tocp')); } else document.body.appendChild(b);
+    paint();
+  });
+})();
+</script>
+
+</head>
+<body>
+<div id="jump">
+  <span class="ttl">２学期期末考査まで No.7〜9 解答</span>
+  <span id="nos"></span>
+  <button class="b" id="hide" type="button">答えを かくす</button>
+  <button class="b" id="big" type="button">大きく</button>
+</div>
+<a class="top" href="目次.html">← 解答の 目次へ</a>
+<p class="lead"><b>赤い 字</b>が 答えです。プリントと 同じ 場所に 書いて あるよ。<br>
+「答えを かくす」を 押すと、答えの 場所が <span style="color:#c97a1f;font-weight:700">？</span> の 枠に なります。自分で 解いてから 枠を タップすると、その 枠の 答えが 見られます（もう一度 タップで かくす）。</p>
+<div class="wrap" id="wrap"></div>
+<script>
+const PAGES = [{"no": 7, "w": 595.3200073242188, "h": 841.9200439453125, "g": [{"f": "p7_01.svg", "label": "②-1 x軸の共有点は", "p": [[266.3, 100.6, 325.5, 129.0]]}, {"f": "p7_02.svg", "label": "②-1 例⑴", "p": [[154.8, 179.1, 197.1, 204.6], [73.2, 207.1, 157.2, 232.6], [165.1, 207.1, 197.1, 232.6], [128.3, 235.3, 157.2, 260.9], [165.1, 235.3, 227.2, 260.9], [435.7, 169.0, 505.7, 197.8], [435.7, 202.8, 505.7, 231.6], [404.9, 237.3, 505.6, 328.6]]}, {"f": "p7_03.svg", "label": "②-1 例⑵", "p": [[154.8, 375.4, 197.1, 400.9], [73.2, 403.4, 109.8, 454.2], [118.5, 403.4, 211.7, 454.2], [118.5, 456.6, 211.7, 507.4], [435.7, 350.8, 505.6, 394.1], [435.7, 399.1, 505.7, 427.9], [404.9, 433.5, 505.6, 524.9]]}, {"f": "p7_04.svg", "label": "プリント問題②-1 ⑴", "p": [[76, 566, 134.7, 576.3], [76, 581.3, 143.1, 593.3], [76, 598.3, 153.8, 608.6], [76, 613.6, 122.4, 624.0], [103.3, 696.4, 173.3, 727.5], [103.3, 730.1, 173.3, 761.2], [179.9, 667.5, 290.5, 758.8]]}, {"f": "p7_05.svg", "label": "プリント問題②-1 ⑵", "p": [[313, 566, 371.7, 576.3], [313, 581.3, 380.1, 593.3], [313, 598.3, 430.5, 621.3], [340.4, 696.4, 410.4, 727.5], [340.4, 730.1, 410.4, 761.2], [416.9, 667.5, 527.5, 758.8]]}]}, {"no": 8, "w": 595.3200073242188, "h": 841.9200439453125, "g": [{"f": "p8_06.svg", "label": "②-2 例⑴", "p": [[154.8, 107.1, 197.1, 132.6], [73.2, 135.1, 157.2, 160.6], [165.1, 135.1, 197.1, 160.6], [128.3, 163.3, 157.2, 188.9], [165.1, 163.3, 227.2, 188.9], [181.2, 192.5, 246.4, 218.0], [435.7, 97.0, 505.7, 125.8], [435.7, 130.8, 505.7, 159.6], [404.9, 165.3, 505.6, 256.6]]}, {"f": "p8_07.svg", "label": "②-2 例⑵", "p": [[154.8, 305.7, 197.1, 331.2], [73.2, 333.7, 109.8, 384.5], [118.5, 333.7, 211.7, 384.5], [118.5, 386.9, 211.7, 437.7], [181.2, 442.5, 246.4, 468.0], [435.7, 281.1, 505.6, 324.5], [435.7, 329.4, 505.7, 358.2], [404.9, 363.9, 505.6, 455.2]]}, {"f": "p8_08.svg", "label": "プリント問題②-2 ⑴", "p": [[76, 530, 134.7, 540.3], [76, 545.3, 143.1, 557.3], [76, 562.3, 127.5, 574.2], [76, 579.2, 149.2, 589.6], [103.3, 660.4, 173.3, 691.5], [103.3, 694.1, 173.3, 725.2], [179.9, 631.5, 290.5, 722.8]]}, {"f": "p8_09.svg", "label": "プリント問題②-2 ⑵", "p": [[313, 530, 371.7, 540.3], [313, 545.3, 380.1, 557.3], [313, 562.3, 445.9, 585.3], [313, 590.3, 467.5, 600.7], [340.4, 660.4, 410.4, 691.5], [340.4, 694.1, 410.4, 725.2], [416.9, 631.5, 527.5, 722.8]]}]}, {"no": 9, "w": 595.3200073242188, "h": 841.9200439453125, "g": [{"f": "p9_10.svg", "label": "②-3 交わる", "p": [[210.8, 123.2, 244.7, 151.5], [319.7, 123.2, 395.4, 151.5], [412.2, 114.5, 487.8, 159.9]]}, {"f": "p9_11.svg", "label": "②-3 接する", "p": [[210.8, 200.7, 244.7, 229.0], [319.7, 200.7, 395.4, 229.0], [412.2, 192.0, 487.8, 237.3]]}, {"f": "p9_12.svg", "label": "②-3 共有点なし", "p": [[210.8, 281.8, 244.7, 310.1], [319.7, 281.8, 395.4, 310.1], [412.2, 273.1, 487.8, 318.4]]}, {"f": "p9_13.svg", "label": "プリント問題②-3 ⑴", "p": [[74, 392, 221.8, 404.0], [74, 410.0, 191.5, 433.0], [74, 439.0, 179.8, 462.0], [318, 447.2, 375.5, 456.6], [243.0, 404, 274.5, 446.4], [396, 406.4, 500, 482.4]]}, {"f": "p9_14.svg", "label": "プリント問題②-3 ⑵", "p": [[74, 518, 221.8, 530.0], [74, 536.0, 125.5, 547.9], [74, 553.9, 147.2, 564.2], [318, 573.2, 375.5, 582.6], [396, 532.4, 500, 608.4]]}, {"f": "p9_15.svg", "label": "プリント問題②-3 ⑶", "p": [[74, 644, 221.8, 656.0], [74, 662.0, 197.0, 685.0], [74, 691.0, 228.5, 701.3], [318, 699.2, 368.0, 708.6], [396, 658.4, 500, 734.4]]}]}];
+const V = '1.0_2026-10-30';
+const wrap = document.getElementById('wrap'), nos = document.getElementById('nos');
+const hits = [];
+PAGES.forEach((p, i) => {
+  const id = 'p' + p.no;
+  nos.insertAdjacentHTML('beforeend', `<a href="#${id}">No.${p.no}</a> `);
+  const pct = (v, w) => (v / w * 100).toFixed(3) + '%';
+  let h = `<div class="no">No.${p.no}</div><div class="sheet" id="${id}" style="aspect-ratio:${p.w}/${p.h}">`;
+  h += `<img src="svg/p${p.no}.svg?v=${V}" alt="プリント No.${p.no}" loading="${i ? 'lazy' : 'eager'}">`;
+  // 答えは 枠（穴うめの 箱・書く 行）ごとに、問題の SVG を その 枠の 形に 切りぬいて 重ねる
+  p.g.forEach(g => g.p.forEach(([x0, y0, x1, y1]) => {
+    const pad = 2, L = x0 - pad, T = y0 - pad, R = x1 + pad, B = y1 + pad;
+    h += `<img class="ans" src="svg/${g.f}?v=${V}" alt="" style="clip-path:inset(${pct(T, p.h)} ${pct(p.w - R, p.w)} ${pct(p.h - B, p.h)} ${pct(L, p.w)})">`;
+    h += `<button class="hit" type="button" aria-label="${g.label} の 答え" title="${g.label}" style="left:${pct(L, p.w)};top:${pct(T, p.h)};width:${pct(R - L, p.w)};height:${pct(B - T, p.h)}"></button>`;
+  }));
+  wrap.insertAdjacentHTML('beforeend', h + '</div>');
+});
+// 答えの 画像と、その 場所の ボタンを 組に する
+document.querySelectorAll('.sheet').forEach(s => {
+  const im = s.querySelectorAll('img.ans'), bt = s.querySelectorAll('.hit');
+  bt.forEach((b, k) => { hits.push({ b, im: im[k] }); });
+});
+function show(o, on) { o.im.style.opacity = on ? 1 : 0; o.b.classList.toggle('shut', !on); }
+hits.forEach(o => o.b.addEventListener('click', () => show(o, o.b.classList.contains('shut'))));
+const hideBtn = document.getElementById('hide');
+let hidden = false;
+function setHidden(v) {
+  hidden = v; hits.forEach(o => show(o, !v));
+  hideBtn.textContent = v ? '答えを 全部 見せる' : '答えを かくす';
+  hideBtn.classList.toggle('on', v);
+}
+hideBtn.addEventListener('click', () => setHidden(!hidden));
+const bigBtn = document.getElementById('big');
+function setBig(v) {
+  document.body.classList.toggle('zoom', v);
+  bigBtn.textContent = v ? 'もとの 大きさ' : '大きく';
+  bigBtn.classList.toggle('on', v);
+  try { localStorage.setItem('kaitou-big', v ? '1' : ''); } catch (e) {}
+}
+bigBtn.addEventListener('click', () => setBig(!document.body.classList.contains('zoom')));
+try { if (localStorage.getItem('kaitou-big')) setBig(true); } catch (e) {}
+</script>
+</body>
+</html>
