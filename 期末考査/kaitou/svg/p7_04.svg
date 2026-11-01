@@ -84,8 +84,8 @@
 <path transform="matrix(1,0,0,-1,0,841.92007)" stroke-width="1" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#a11c1c" d="M214.1 116.92004C214.1 115.87073 214.95066 115.02002 216 115.02002 217.04935 115.02002 217.9 115.87073 217.9 116.92004 217.9 117.96936 217.04935 118.82007 216 118.82007 214.95066 118.82007 214.1 117.96936 214.1 116.92004Z"/>
 <path transform="matrix(1,0,0,-1,0,841.92007)" d="M254.1 116.92004C254.1 115.87073 254.95066 115.02002 256 115.02002 257.04936 115.02002 257.9 115.87073 257.9 116.92004 257.9 117.96936 257.04936 118.82007 256 118.82007 254.95066 118.82007 254.1 117.96936 254.1 116.92004Z" fill="#a11c1c"/>
 <path transform="matrix(1,0,0,-1,0,841.92007)" stroke-width="1" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#a11c1c" d="M254.1 116.92004C254.1 115.87073 254.95066 115.02002 256 115.02002 257.04936 115.02002 257.9 115.87073 257.9 116.92004 257.9 117.96936 257.04936 118.82007 256 118.82007 254.95066 118.82007 254.1 117.96936 254.1 116.92004Z"/>
-<use data-text="&#x2212;" xlink:href="#font_2_2128" transform="matrix(7,0,0,-7,207.55225,733.04)" fill="#a11c1c"/>
-<use data-text="2" xlink:href="#font_2_21" transform="matrix(7,0,0,-7,211.49324,733.04)" fill="#a11c1c"/>
-<use data-text="&#x2212;" xlink:href="#font_2_2128" transform="matrix(7,0,0,-7,257,733.04)" fill="#a11c1c"/>
-<use data-text="1" xlink:href="#font_2_20" transform="matrix(7,0,0,-7,260.941,733.04)" fill="#a11c1c"/>
+<use data-text="&#x2212;" xlink:href="#font_2_2128" transform="matrix(7,0,0,-7,205.55225,734.04)" fill="#a11c1c"/>
+<use data-text="2" xlink:href="#font_2_21" transform="matrix(7,0,0,-7,209.49324,734.04)" fill="#a11c1c"/>
+<use data-text="&#x2212;" xlink:href="#font_2_2128" transform="matrix(7,0,0,-7,259,734.04)" fill="#a11c1c"/>
+<use data-text="1" xlink:href="#font_2_20" transform="matrix(7,0,0,-7,262.941,734.04)" fill="#a11c1c"/>
 </svg>

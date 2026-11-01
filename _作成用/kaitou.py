@@ -203,8 +203,9 @@ def sudare(pg, n, x, y, s=7.5):
     piece([x - s * 0.4, y, x + w, yb + s * 1.6])
 
 
-def parab(pg, xv, yv, q, ay, top, roots=(), labs=(), s=7, box=None, mid=False):
-    """グラフの 概形：下に凸の 放物線 y ＝ yv − q (x − xv)²（pt）。roots の x に 点、その 下に labs（放物線の 外がわ。mid＝True で 点の 真下）"""
+def parab(pg, xv, yv, q, ay, top, roots=(), labs=(), s=7, box=None):
+    """グラフの 概形：下に凸の 放物線 y ＝ yv − q (x − xv)²（pt）。roots の x に 点、その 下に labs。
+    点が 2つ の ときは、数を 放物線の 外がわ（左の 点は 左、右の 点は 右）に 置いて 線に 重ねない（2026-11-01）"""
     hw = ((yv - top) / q) ** 0.5
     pts = [(xv - hw + 2 * hw * i / 60, yv - q * (2 * hw * i / 60 - hw) ** 2) for i in range(61)]
     pg.draw_polyline(pts, color=RED, width=1.2)
@@ -212,8 +213,8 @@ def parab(pg, xv, yv, q, ay, top, roots=(), labs=(), s=7, box=None, mid=False):
         pg.draw_circle((x, ay), 1.9, color=RED, fill=RED)
     for x, e in zip(roots, labs):
         w, a, d = measure(e, s)
-        lx = x - w / 2 if len(roots) == 1 or mid else (x - w - 1 if x < xv else x + 1)
-        draw(pg, e, lx, ay + 3 + a, s)
+        lx = x - w / 2 if len(roots) == 1 else (x - w - 3 if x < xv else x + 3)
+        draw(pg, e, lx, ay + 4 + a, s)
     piece(box or [xv - hw - 2, top - 2, xv + hw + 2, ay + 16])
 
 
