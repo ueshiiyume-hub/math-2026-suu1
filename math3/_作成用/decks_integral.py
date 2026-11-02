@@ -995,7 +995,40 @@ const p4 = subPage({no:NO, sec:SEC, title:'問8　⑵', tag:'⑵', q:String.raw`
   pt:PT(4, 'ポイント', `${M`t^{\frac{3}{2}}=t\cdot t^{\frac{1}{2}}=t\sqrt{t}`}`),
   calc:[[3, String.raw`=\int\sqrt{t}\,dt=\int t^{\frac{1}{2}}\,dt`], [4, String.raw`=\frac{2}{3}t^{\frac{3}{2}}+C=\frac{2}{3}t\sqrt{t}+C`], [5, String.raw`=\DP{\frac{2}{3}\left(x^3+1\right)\sqrt{x^3+1}+C}`]],
   cm:[`根号の 中 ${M`x^3+1`} を 微分すると ${M`3x^2`}。前に ある ${M`3x^2`} と 同じです。`, `${M`x^3+1=t`} と おきます。`, `${M`x`} で 微分して ${M`3x^2\,dx=dt`}。`,
-      `${M`\sqrt{x^3+1}\to\sqrt{t}`}、${M`3x^2\,dx\to dt`}。`, `${M`t`} で 積分し、${M`t^{\frac{3}{2}}=t\sqrt{t}`} と 直します。`, `${M`t=x^3+1`} を 戻します。`]});
+      `${M`\sqrt{x^3+1}\to\sqrt{t}`}、${M`3x^2\,dx\to dt`}。`, `${M`t`} で 積分し、${M`t^{\frac{3}{2}}=t\sqrt{t}`} と 直します。`, `${M`t=x^3+1`} を 戻します。次の ページで くわしく（${M`\sqrt{x^3+1}=t`} と おく 方法）。`]});
+/* 問8⑵ の くわしく（11/2 の 板書）：√ を まるごと t と おく → 2乗して そのまま t で 微分 → 3x² dx = 2t dt */
+const p4b = HD(NO, '問8　⑵　くわしく（√ を t と おく）', SEC) + `<div class="bd">
+  <div class="l" style="gap:10px">
+    <div class="calc" style="font-size:27px;gap:8px">
+      <div>${D`\sqrt{x^3+1}=\B{t}`}</div>
+      <div data-s="1">${D`x^3+1=t^2`}<span style="font-size:19px;margin-left:10px;color:var(--a)">← 両辺を 2乗</span></div>
+      <div data-s="2">${D`\left(3x^2+0\right)\cdot\A{\frac{dx}{dt}}=2t`}</div>
+      <div data-s="3">${D`3x^2\,\frac{dx}{dt}=2t`}</div>
+      <div data-s="4">${D`\DP{3x^2\,dx=2t\,dt}`}</div>
+    </div>
+  </div>
+  <div class="r" style="flex-direction:column;gap:10px;align-items:stretch;width:470px">
+    <div class="calc" style="font-size:25px;gap:10px">
+      <div data-s="5">${D`\int\B{\underbrace{\sqrt{x^3+1}}_{t}}\cdot\A{\underbrace{3x^2\,dx}_{2t\,dt}}`}</div>
+      <div data-s="6">${D`=\int t\cdot2t\,dt=\int2t^2\,dt`}</div>
+      <div data-s="7">${D`=\frac{2}{3}t^3+C`}</div>
+      <div data-s="8">${D`=\DP{\frac{2}{3}\left(x^3+1\right)\sqrt{x^3+1}+C}`}</div>
+    </div>
+    ${PT(2, '左辺を t で 微分', `${M`x`} で 微分して ${M`3x^2+0`}、それに ${M`\frac{dx}{dt}`} を 掛ける`)}
+    ${PT(8, '前の ページと 同じ 答え', `${M`t^3=t^2\cdot t=(x^3+1)\sqrt{x^3+1}`}`)}
+  </div>
+</div>` + CAP([
+  `問8⑵ を、根号を まるごと ${M`t`} と おく 方法で 解きます（②-2 と 同じ おき方）。`,
+  `両辺を 2乗すると 根号が 消えて ${M`x^3+1=t^2`}。`,
+  `この 式の まま 両辺を ${M`t`} で 微分します。左辺は ${M`x`} で 微分した ${M`3x^2+0`} に ${M`\frac{dx}{dt}`} を 掛けます。右辺は ${M`2t`}。`,
+  `${M`0`} を 消して ${M`3x^2\frac{dx}{dt}=2t`}。`,
+  `両辺に ${M`dt`} を 掛けて ${M`3x^2\,dx=2t\,dt`}。かたまり ${M`3x^2\,dx`} が まるごと 置きかえられます。`,
+  `式の 中の ${M`\sqrt{x^3+1}`} は ${M`t`}、${M`3x^2\,dx`} は ${M`2t\,dt`} に なります。`,
+  `${M`t\cdot2t=2t^2`}。根号の ない 式に なりました。`,
+  `${M`t`} で 積分します。`,
+  `${M`t^3=t^2\cdot t=(x^3+1)\sqrt{x^3+1}`} と して 戻します。前の ページ（${M`x^3+1=t`} と おく 方法）と 同じ 答えです。`
+]);
+
 const p5 = subPage({no:NO, sec:SEC, title:'問8　⑶', tag:'⑶', q:String.raw`\int\A{e^x}\left(e^x+1\right)^2\,dx`, plabel:XP,
   prep:[[1, String.raw`e^x+1=\B{t}\ \text{とおくと}`], [2, String.raw`e^x=\frac{dt}{dx}\quad\text{よって}\quad\A{e^x\,dx}=dt`]],
   pt:PT(3, '展開しなくて よい', `${M`(e^x)'=e^x`} なので ${M`e^x\,dx`} が まるごと ${M`dt`} に なる`),
@@ -1020,7 +1053,7 @@ const p7 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:26px">
 
 const DECK = {title:'②-3 置換積分（x で 微分する 型）', pages:[
   {name:'表紙', html:p0}, {name:'例　⑴', html:p1}, {name:'例　⑵', html:p2}, {name:'問8　⑴', html:p3},
-  {name:'問8　⑵', html:p4}, {name:'問8　⑶', html:p5}, {name:'問8　⑷', html:p6}, {name:'まとめ', html:p7},
+  {name:'問8　⑵', html:p4}, {name:'問8　⑵　くわしく（√ を t と おく）', html:p4b, add:'11/2'}, {name:'問8　⑶', html:p5}, {name:'問8　⑷', html:p6}, {name:'まとめ', html:p7},
 ]};
 ''')
 
