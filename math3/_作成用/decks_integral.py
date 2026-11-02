@@ -859,13 +859,45 @@ const p1 = subPage({no:NO, sec:SEC, title:'例', tag:'⑴', q:String.raw`\int x\
     `根号が ある ときは、<b>根号を まるごと</b> ${M`t`} と おくと 計算が 楽です。`,
     `① ${M`\sqrt{x-1}=t`} と おきます。`,
     `両辺を 2乗して ${M`x-1=t^2`}。${M`x=t^2+1`} と ${M`x`} を ${M`t`} で 表します。`,
-    `② ${M`t`} で 微分して ${M`\frac{dx}{dt}=2t`}、${M`dx=2t\,dt`}。`,
+    `② ${M`t`} で 微分して ${M`\frac{dx}{dt}=2t`}、${M`dx=2t\,dt`}。（次の ページで くわしく）`,
     `③ ${M`x\to t^2+1`}、${M`\sqrt{x-1}\to t`}、${M`dx\to2t\,dt`}。根号が 消えました。`,
     `④ ${M`t`} で 積分します。`,
     `分母を ${M`15`} に そろえて、${M`\frac{2}{15}t^3`} で くくります。`,
     `${M`t^3=(x-1)\sqrt{x-1}`}、${M`t^2=x-1`} として ${M`x`} に 戻します。`,
     `${M`3(x-1)+5=3x+2`}。（${M`x-1=t`} と おいても 解けますが、${M`t^{\frac{1}{2}}`} の 計算に なります）`
   ]});
+
+/* 例⑴ の くわしく（11/2 の 板書）：2乗した 式 x−1=t² を そのまま t で 微分 → dx=2t dt。同じ 式から x=t²+1 */
+const p1b = HD(NO, '例　⑴　くわしく', SEC) + `<div class="bd">
+  <div class="l" style="gap:12px">
+    <div class="calc" style="font-size:30px;gap:6px">
+      <div>${D`\sqrt{x-1}=\B{t}`}</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(6,auto);justify-content:start;justify-items:center;align-items:center;column-gap:22px;row-gap:6px;font-size:32px">
+      <div data-s="1">${M`x`}</div><div data-s="1">${M`-`}</div><div data-s="1">${M`1`}</div><div data-s="1">${M`=`}</div><div data-s="1">${M`t^2`}</div><div data-s="1" style="font-size:20px;color:var(--a);justify-self:start">← 両辺を 2乗</div>
+      <div data-s="2" style="color:var(--a)">↓</div><div></div><div data-s="2" style="color:var(--a)">↓</div><div></div><div data-s="2" style="color:var(--a)">↓</div><div></div>
+      <div data-s="3">${D`\A{\frac{dx}{dt}}`}</div><div data-s="4">${M`-`}</div><div data-s="4">${M`\A{0}`}</div><div data-s="5">${M`=`}</div><div data-s="5">${M`\A{2t}`}</div><div></div>
+    </div>
+    <div class="calc" style="font-size:30px;gap:10px">
+      <div data-s="6">${D`\text{よって}\quad \DP{dx=2t\,dt}`}</div>
+      <div data-s="7">${D`x-1=t^2\ \ \text{より}\ \ \DP{x=t^2+1}`}</div>
+    </div>
+  </div>
+  <div class="r bigpt" style="flex-direction:column;gap:12px;align-items:stretch;width:400px">
+    ${PT(1, '根号を 消す', `両辺を 2乗：${M`(\sqrt{x-1})^2=x-1`}`)}
+    ${PT(3, '項ごとに t で 微分', `${M`x\to\frac{dx}{dt}`}、${M`1\to0`}、${M`t^2\to2t`}`)}
+    ${PT(7, '同じ 式の 2つの 使い道', `${M`dx=2t\,dt`} → ${M`dx`} を 置きかえる<div>${M`x=t^2+1`} → 前の ${M`x`} を 置きかえる</div>`)}
+  </div>
+</div>` + CAP([
+  `例⑴ の ①・② を くわしく 見ます。根号を まるごと ${M`t`} と おきます。`,
+  `両辺を 2乗すると 根号が 消えて ${M`x-1=t^2`}。`,
+  `この 式の まま、それぞれの 項を ${M`t`} で 微分します。`,
+  `${M`x`} を ${M`t`} で 微分した ものは ${M`\frac{dx}{dt}`}。`,
+  `${M`1`} は 定数なので、微分すると ${M`0`}。`,
+  `右辺の ${M`t^2`} を ${M`t`} で 微分すると ${M`2t`}。${M`\frac{dx}{dt}-0=2t`}。`,
+  `両辺に ${M`dt`} を 掛けて ${M`dx=2t\,dt`}。これで ${M`dx`} を 置きかえられます。`,
+  `同じ ${M`x-1=t^2`} から ${M`x=t^2+1`}。前に ある ${M`x`} は こちらで 置きかえます。`
+]);
 
 /* 問7（1問 1ページ） */
 const Q7 = `<div class="q qline">次の 不定積分を 求めよ。</div>`;
@@ -914,7 +946,7 @@ const p6 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:26px">
 </div>` + CAP([`②-3 では、${M`x`} を ${M`t`} の 式に 直しにくい ときの 置換を 学びます。`]);
 
 const DECK = {title:'②-2 置換積分（√ を t に）', pages:[
-  {name:'表紙', html:p0}, {name:'例', html:p1}, {name:'問7　⑴', html:p2}, {name:'問7　⑵', html:p3},
+  {name:'表紙', html:p0}, {name:'例', html:p1}, {name:'例　⑴　くわしく', html:p1b, add:'11/2'}, {name:'問7　⑴', html:p2}, {name:'問7　⑵', html:p3},
   {name:'問7　⑶', html:p4}, {name:'問7　⑷', html:p5}, {name:'まとめ', html:p6},
 ]};
 ''')
