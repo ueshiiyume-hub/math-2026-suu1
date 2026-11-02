@@ -760,7 +760,7 @@ const p4 = subPage({no:NO, sec:SEC, title:'問6　⑴', tag:'⑴', q:String.raw`
         [5, String.raw`=\frac{1}{5}t^5+\frac{5}{5}t^4+C=\frac{1}{5}t^4(t+5)+C`], [6, String.raw`=\frac{1}{5}(x-4)^4\left\{(x-4)+5\right\}+C`],
         [7, String.raw`=\DP{\frac{1}{5}(x+1)(x-4)^4+C}`]],
   cm:[`例⑴ と 同じ 形です。`, `① ${M`x-4=t`}、${M`x=t+4`}。`, `② ${M`dx=dt`}。`, `③ 置きかえて 展開します。`, `④ ${M`t`} で 積分します。`,
-      `${M`\frac{5}{5}t^4`} と 書きかえて、${M`\frac{1}{5}t^4`} で くくります。`, `${M`t`} を ${M`x-4`} に 戻します。`, `${M`(x-4)+5=x+1`}。`]});
+      `${M`\frac{5}{5}t^4`} と 書きかえて、${M`\frac{1}{5}t^4`} で くくります。`, `${M`t`} を ${M`x-4`} に 戻します。`, `${M`(x-4)+5=x+1`}。次の ページは 別解（瞬間積分法）。`]});
 
 const p5 = subPage({no:NO, sec:SEC, title:'問6　⑵', tag:'⑵', q:String.raw`\int(x-1)(2x+3)^4\,dx`,
   prep:[[1, String.raw`2x+3=\B{t}\ \text{とおくと}\ \ x=\frac{1}{2}t-\frac{3}{2}`], [2, String.raw`\frac{dx}{dt}=\frac{1}{2}\quad\text{よって}\quad dx=\frac{1}{2}dt`],
@@ -774,7 +774,59 @@ const p5 = subPage({no:NO, sec:SEC, title:'問6　⑵', tag:'⑵', q:String.raw`
   cm:[`前が ${M`x`} では なく ${M`x-1`} です。`, `① ${M`2x+3=t`} から ${M`x=\frac{t-3}{2}`}。`, `② ${M`dx=\frac{1}{2}dt`}。`,
       `${M`x-1`} も ${M`t`} の 式に します。${M`\frac{t-3}{2}-1=\frac{t-5}{2}`}。`,
       `③ 置きかえます。${M`\frac{1}{2}\cdot\frac{1}{2}=\frac{1}{4}`} を 前に 出します。`, `④ ${M`t`} で 積分します。`,
-      `${M`\frac{1}{4}=\frac{6}{24}`} と 分母を ${M`24`} に そろえ、${M`\frac{1}{24}t^5`} で くくります。`, `${M`t`} を ${M`2x+3`} に 戻します。`, `${M`(2x+3)-6=2x-3`}。`]});
+      `${M`\frac{1}{4}=\frac{6}{24}`} と 分母を ${M`24`} に そろえ、${M`\frac{1}{24}t^5`} で くくります。`, `${M`t`} を ${M`2x+3`} に 戻します。`, `${M`(2x+3)-6=2x-3`}。次の ページは 別解（瞬間積分法）。`]});
+
+/* 問6 の 別解：瞬間積分法（11/2 の 板書）。かたまりの 累乗 だけ 積分 → 微分して 余分を 見つけ → その 積分を 引く。まねしない 方が よい */
+const MANE = PT(8, '⚠ まねしない 方が よい', `速いが まちがえやすい。解答は <b>置換積分</b> で 書こう。`);
+const quick = o => HD(NO, o.title, SEC) + `<div class="bd">
+  <div class="l" style="gap:8px">
+    <div class="q qline" style="font-size:26px">${D`${o.q}`}</div>
+    <div class="calc" style="font-size:25px;gap:6px">
+      <div data-s="1">${D`\approx\A{${o.g}}`}<span style="font-size:19px;margin-left:10px;color:var(--muted)">（${o.gt}）</span></div>
+      <div data-s="2" style="font-size:22px">${D`\left(${o.g}\right)'=${o.f}+\A{${o.ex}}`}<span style="font-size:19px;margin-left:8px;color:var(--muted)">← 余分</span></div>
+      <div data-s="3">${D`=${o.g}-\A{${o.sub}}+C`}</div>
+      ${o.rest.map((r,i)=>`<div data-s="${4+i}">${D`${r}`}</div>`).join('')}
+    </div>
+  </div>
+  <div class="r" style="flex-direction:column;gap:10px;align-items:stretch;width:380px;font-size:19px">
+    ${PT(1, '① かたまりの 累乗 だけ 積分', o.p1)}
+    ${PT(2, '② 微分して 確かめる', `余分な ${M`${o.ex}`} が 出る`)}
+    ${PT(3, '③ 余分の 積分を 引く', o.p3)}
+    ${MANE}
+  </div>
+</div>` + CAP(o.cm);
+
+const p4q = quick({title:'問6　⑴　別解（瞬間積分法）', q:String.raw`\int x(x-4)^3\,dx`,
+  g:String.raw`\frac{1}{4}x(x-4)^4`, gt:`${M`x`} は そのまま、${M`(x-4)^3`} だけ 積分`,
+  f:String.raw`x(x-4)^3`, ex:String.raw`\frac{1}{4}(x-4)^4`, sub:String.raw`\frac{1}{5}\cdot\frac{1}{4}(x-4)^5`,
+  rest:[String.raw`=\frac{1}{20}(x-4)^4\left\{5x-(x-4)\right\}+C`, String.raw`=\frac{1}{20}(x-4)^4(4x+4)+C`, String.raw`=\DP{\frac{1}{5}(x+1)(x-4)^4+C}`],
+  p1:`前の ${M`x`} は 残して ${M`(x-4)^3\to\frac{1}{4}(x-4)^4`}`,
+  p3:`積分して 引くと、微分した とき 打ち消し合う`,
+  cm:[`問6⑴ の 別解（瞬間積分法）です。置換積分を 使わず、頭の 中で 一気に 積分します。`,
+      `前の ${M`x`} は そのまま に して、${M`(x-4)^3`} だけ 積分して みます。`,
+      `微分して 確かめると、積の 微分で ${M`x(x-4)^3`} の ほかに 余分な ${M`\frac{1}{4}(x-4)^4`} が 出て しまいます。`,
+      `余分な 項の 積分 ${M`\frac{1}{5}\cdot\frac{1}{4}(x-4)^5`} を 引きます。微分すると 余分が 打ち消し合い、${M`x(x-4)^3`} だけ 残ります。`,
+      `${M`\frac{1}{20}(x-4)^4`} で くくります。${M`\frac{1}{4}x=\frac{5x}{20}`}、${M`\frac{1}{20}(x-4)`} が 残ります。`,
+      `${M`5x-(x-4)=4x+4`}。`,
+      `${M`4x+4=4(x+1)`}、${M`\frac{4}{20}=\frac{1}{5}`}。置換積分と 同じ 答えに なりました。`,
+      null,
+      `ただし この 方法は、符号や 係数を まちがえやすく、途中も 伝わりにくい ので <b>まねしない 方が よい</b>。解答は 置換積分で 書きましょう。`]});
+
+const p5q = quick({title:'問6　⑵　別解（瞬間積分法）', q:String.raw`\int(x-1)(2x+3)^4\,dx`,
+  g:String.raw`\frac{1}{10}(x-1)(2x+3)^5`, gt:`${M`x-1`} は そのまま、${M`(2x+3)^4`} だけ 積分`,
+  f:String.raw`(x-1)(2x+3)^4`, ex:String.raw`\frac{1}{10}(2x+3)^5`, sub:String.raw`\frac{1}{6}\cdot\frac{1}{2}\cdot\frac{1}{10}(2x+3)^6`,
+  rest:[String.raw`=\frac{1}{120}(2x+3)^5\left\{12(x-1)-(2x+3)\right\}+C`, String.raw`=\frac{1}{120}(2x+3)^5(10x-15)+C`, String.raw`=\DP{\frac{1}{24}(2x-3)(2x+3)^5+C}`],
+  p1:`前の ${M`x-1`} は 残して ${M`(2x+3)^4\to\frac{1}{10}(2x+3)^5`}（${M`\frac{1}{2}`} は 帳尻）`,
+  p3:`${M`\frac{1}{6}\cdot\frac{1}{2}\cdot\frac{1}{10}=\frac{1}{120}`}。引くと 打ち消し合う`,
+  cm:[`問6⑵ を、⑴ と 同じ 瞬間積分法で 解きます。`,
+      `前の ${M`x-1`} は そのまま に して、${M`(2x+3)^4`} だけ 積分します。中が ${M`2x`} なので ${M`\frac{1}{2}`} も つけて ${M`\frac{1}{5}\cdot\frac{1}{2}=\frac{1}{10}`}。`,
+      `微分して 確かめると、${M`(x-1)`} を 微分した ところから 余分な ${M`\frac{1}{10}(2x+3)^5`} が 出ます。`,
+      `余分な 項の 積分を 引きます。${M`(2x+3)^5`} を 積分すると ${M`\frac{1}{6}\cdot\frac{1}{2}(2x+3)^6`}。`,
+      `${M`\frac{1}{120}(2x+3)^5`} で くくります。${M`\frac{1}{10}=\frac{12}{120}`}。`,
+      `${M`12(x-1)-(2x+3)=10x-15`}。`,
+      `${M`10x-15=5(2x-3)`}、${M`\frac{5}{120}=\frac{1}{24}`}。置換積分と 同じ 答えです。`,
+      null,
+      `この 方法も <b>まねしない 方が よい</b>。係数（${M`\frac{1}{2}`} の 帳尻 など）を まちがえやすい ので、解答は 置換積分で 書きましょう。`]});
 
 const p6 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:24px">
   ${BOX('置換積分法', `① ${M`t=`}（かたまり）と おく　② ${M`dx=`}（　）${M`dt`}<br>③ すべて ${M`t`} に 置きかえる　④ 積分して ${M`x`} に 戻す`)}
@@ -787,7 +839,7 @@ const p6 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:24px">
 
 const DECK = {title:'②-1 置換積分（1次式を t に）', pages:[
   {name:'表紙', html:p0}, {name:'置換積分法の 手順', html:p1}, {name:'例　⑴', html:p2}, {name:'例　⑴　くわしく', html:p2b, add:'10/29'}, {name:'例　⑴　くわしく（置きかえる）', html:p2c, add:'10/29'}, {name:'例　⑵', html:p3}, {name:'例　⑵　くわしく', html:p3b, add:'10/29'}, {name:'例　⑵　くわしく（置きかえて 積分）', html:p3c, add:'10/29'},
-  {name:'問6　⑴', html:p4}, {name:'問6　⑵', html:p5}, {name:'まとめ', html:p6},
+  {name:'問6　⑴', html:p4}, {name:'問6　⑴　別解（瞬間積分法）', html:p4q, add:'11/2'}, {name:'問6　⑵', html:p5}, {name:'問6　⑵　別解（瞬間積分法）', html:p5q, add:'11/2'}, {name:'まとめ', html:p6},
 ]};
 ''')
 
