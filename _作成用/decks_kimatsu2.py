@@ -610,7 +610,8 @@ const QG = P => {
     items:[T([61.6,370,250,386],`${P.num}<span class="xsp"></span>${P.eq}`,10.5),
       ...P.lines.map((h,i)=>({s:i+1, r:[74,390+i*31,300,416+i*31], h, fs:10, al:'l'})),
       ...(P.sud ? [{s:3, r:[300,392,380,450], h:SUDARE(P.sud), fs:6.5}] : []),
-      {s:4, r:[300,450,395,470], h:`<span class="ytag">${P.rel}</span>`, fs:9, cls:'xyt'}],
+      {s:4, r:[300,450,395,470], h:`<span class="ytag">${P.rel}</span>`, fs:9, cls:'xyt'},
+      {s:5, r:[396,382,500,476], h:'', cls:'tcov'}],          // グラフの 枠（タップで 放物線を 出す）
     done:5, cm:[`${P.num} ${M(P.eqm)} の グラフの 概形を かこう。　まず <b>x軸との 共有点</b> を 調べる。`, ...P.cm]}) + ptag('プリント問題②-3');
 };
 const p1 = QG({num:'⑴', eq:`y ＝ x${P2} ＋ 2x − 1`, eqm:'y ＝ x² ＋ 2x − 1', k:'two', lab:['−1−√2','−1+√2'], sud:8, rel:'2点で 交わる',
@@ -637,6 +638,34 @@ const p3 = QG({num:'⑶', eq:`y ＝ x${P2} ＋ 2x ＋ 2`, eqm:'y ＝ x² ＋ 2x 
       `下に凸で、x軸より <b>上に 浮いている</b> ように かく。　<b>完成！</b>`]});
 const ph = probHead('プリント問題②-3', '次の 2次関数の グラフの 概形を 書きなさい。', ['⑴ y ＝ x² ＋ 2x − 1', '⑵ y ＝ x² ＋ 2x ＋ 1', '⑶ y ＝ x² ＋ 2x ＋ 2'],
   `ここから <b>プリント問題②-3</b>。　グラフの 概形は、まず <b>x軸との 共有点</b>（交わる・接する・共有点なし）を 調べて から かく！`);
+
+/* ====== タップで 開く（解答ページと 同じ、2026-11-02 先生の 指示）======
+   まだ 出て いない 答え（.pte.lh）は 点線の「？」の 枠。タップすると その 枠だけ 開く（もう一度 タップで かくす）。ページは 進まない。
+   いつもの クリック・→ で 進めると、順に 開いて いく（今まで どおり）。.tcov は グラフの 枠：開くと 同じ 番の 放物線・点・数を 出す */
+(function(){
+  const st = document.createElement('style');
+  st.textContent = `
+.tapopen .slide.active .pte.lh:not(.show),.tapopen .slide.active .pte.opened{pointer-events:auto}
+.tapopen .pte.lh:not(.show){opacity:1;transform:none;cursor:pointer;background:rgba(255,250,240,.92);border:1.5px dashed #c97a1f;border-radius:6px;justify-content:center}
+.tapopen .pte.lh:not(.show)>*{visibility:hidden}
+.tapopen .pte.lh:not(.show)::after{content:"？";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#c97a1f;font:700 22px "Zen Maru Gothic",sans-serif}
+.tapopen .pte.tcov.show{pointer-events:none}
+.tapopen .pte.opened{cursor:pointer}`;
+  document.head.appendChild(st);
+  document.body.classList.add('tapopen');
+  const slideOf = e => e.closest('.slide') || document.body;
+  function reopen(){ document.querySelectorAll('.opened').forEach(e=>e.classList.add('show')); }
+  window.addEventListener('load', ()=>{ const r0 = render; render = function(){ r0(); reopen(); }; render(); });
+  document.addEventListener('click', e=>{
+    const b = e.target.closest('.pte.lh'); if(!b) return;
+    if(b.classList.contains('show') && !b.classList.contains('opened')) return;   // 順に 出た ものは そのまま（クリックで 進む）
+    e.stopPropagation(); e.preventDefault();
+    const on = !b.classList.contains('opened');
+    const grp = b.classList.contains('tcov') ? [...b.closest('.card').querySelectorAll(`[data-s="${b.dataset.s}"]`)] : [b];
+    grp.forEach(x=>{ x.classList.toggle('opened', on); if(on) x.classList.add('show'); });
+    if(!on) render();
+  }, true);
+})();
 
 const DECK = {title:'②-3 x軸との位置関係', pages:[
   {name:'表紙', html:coverF(KK, '<span class="mk">x軸</span>との<br>位置関係', '交わる・接する・共有点なし', '解の 個数で わかる！', POL, '解の 個数 と グラフ')},
