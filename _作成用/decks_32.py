@@ -1,4 +1,5 @@
-"""③-1 2次不等式の解法〜練習編 ver 2（2026-10-30 の プリントの 並べかえで ③-2 → ③-1。ファイル名・URL は そのまま。プリント問題は プリントの まま ③-2）（テンポよく「塗る → 答える」を くり返す）。
+"""③-1 2次不等式の解法〜練習編 ver 2（2026-10-30 の プリントの 並べかえで ③-2 → ③-1。ファイル名・URL は そのまま。2026-11-04 の プリントで プリント問題も ③-2 → ③-1）（テンポよく「塗る → 答える」を くり返す）。
+2026-11-04：プリントの いちばん上に 足された 枠（x² − 2x − 3 ＞ 0 ⇒ □ を塗る ×4）の ページを 表紙の 次に（BOX3）。
 前の 版（3-2_2次不等式_練習編.html、プリント画像の 下書き）は ファイルだけ 残す。
 1問 1ページ：式 → ❶ 塗る（上／下）→ ❷ x軸上（白丸／黒丸）→ ❸ 答え。段の 終わりに プリントの 配置で 答えを 書きこむ。"""
 import os
@@ -203,7 +204,7 @@ const SUM3 = `
   <div class="dsum p3sum">${SUMC('全部 塗れた','すべての実数')}${SUMC('塗れる ところが ない','解なし')}${SUMC('1点 だけ 塗れた','x ＝ その 数')}${SUMC('1点 だけ 塗れない','その 数 以外の<br>すべての実数')}</div>
   ${cbar([`塗ったら、塗れた 形を 見て 答える。　範囲 だけで なく「すべての実数」「解なし」「x ＝ □」「□ 以外の すべての実数」も ある。`])}`;
 
-/* ====== プリント問題③-2（No.11 の ⑴〜⒇）：Q3 と 同じ 流れを、根と 不等号から 作る（2026-10-28）
+/* ====== プリント問題③-1（No.11。2026-11-04 の プリントで ③-2 → ③-1 の ⑴〜⒇）：Q3 と 同じ 流れを、根と 不等号から 作る（2026-10-28）
    P = {no, f, s:不等号の 番号（0 ＞・1 ＜・2 ≧・3 ≦）, roots:[小, 大] か [接点] か [], lab:根の 文字, ans, list:[[番号, 式]…], cur} */
 function GQ(P){
   const up = P.s%2===0, eq = P.s>=2, sg = SIGN3[P.s], kind = P.roots.length===2 ? 0 : P.roots.length===1 ? 1 : 2;
@@ -264,7 +265,7 @@ function GQ(P){
         ${any ? PAINT3(g, up, false, 3) : ''}${eq && P.roots.length ? `<g class="gs" data-s="4">${PAINT3(g, up, true)}</g>` : ''}${dots}<g class="gs" data-s="5">${x3}</g><g class="gs" data-s="6">${w4}</g></svg></div>
     </div>
   </div>
-  ${ptag('プリント問題③-2')}
+  ${ptag('プリント問題③-1')}
   ${cbar([
     `${P.no} ${M(`${P.f.replace(/<sup>2<\/sup>/,'²')} ${sg} 0`)}${P.c0 ? '　' + P.c0 : ''}`,
     `右側の「${sg} 0」に 注目。`,
@@ -291,10 +292,25 @@ const PQ = [
 const PROB12 = PQ.map(([no,f,s,roots,ans,lab,c0],i)=>{ const g0 = Math.floor(i/4)*4;
   return {name:`問 ${no}`, html:GQ({no, f, s, roots, ans, lab, c0, cur:i-g0,
     list:PQ.slice(g0,g0+4).map(q=>[q[0], SIGN3[q[2]], q[1]])})}; });
-const PH12 = probHead('プリント問題③-2', '次の 2次不等式を、図を 参考に 解け。', ['⑴〜⑷　x² − x − 2', '⑸〜⑻　x² − 4x ＋ 4', '⑼〜⑿　x² − 3x ＋ 4', '⒀〜⒇　いろいろ'],
-  `ここから <b>プリント問題③-2</b>（No.11）。　練習編と 同じ「塗って 答える」で 20問！`);
+const PH12 = probHead('プリント問題③-1', '次の 2次不等式を、図を 参考に 解け。', ['⑴〜⑷　x² − x − 2', '⑸〜⑻　x² − 4x ＋ 4', '⑼〜⑿　x² − 3x ＋ 4', '⒀〜⒇　いろいろ'],
+  `ここから <b>プリント問題③-1</b>。　練習編と 同じ「塗って 答える」で 20問！`);
 
-const PG = [{name:'表紙', html:coverF(KK3, '<span class="mk">2次不等式</span><br>練習編', '塗って 答える', 'テンポよく 12問', POL3, '塗って 答える')}];
+/* プリントの いちばん上の 枠（2026-11-04）：緑の 行 ×4、オレンジの 式 ⇒ 白い 枠 を塗る。1番ずつ 答えが 入る */
+const BXA = ['x軸より 上', 'x軸より 下', 'x軸より 上 <span class="p3bxe">と x軸上</span>', 'x軸より 下 <span class="p3bxe">と x軸上</span>'];
+const BOX3 = `
+  <div class="card abs dcard v2 p3">${EQTAPE}
+    <div class="p3bx">${SIGN3.map((sg,k)=>`<div class="p3bxr">
+      <span class="p3bxq math">x${P2} − 2x − 3 <span class="p3sg" data-o="${k+1}">${sg} 0</span></span><span class="p3bxt">⇒</span>
+      <span class="p3bxb${k>=2?' w':''}"><span class="lh" data-s="${k+1}">${BXA[k].replace(/x軸/g,'<i class="math">x</i>軸')}</span></span><span class="p3bxt">を塗る</span></div>`).join('')}</div>
+  </div>
+  ${cbar([
+    `プリントの いちばん上の 枠。　右側の 不等号で、塗る ところが 決まる。`,
+    `＞ 0 は 0より 大きい → x軸より <b>上</b> を 塗る。`,
+    `＜ 0 は 0より 小さい → x軸より <b>下</b> を 塗る。`,
+    `≧ 0 は ＝ も ある → x軸より 上 <b>と x軸上</b> を 塗る（黒丸）。`,
+    `≦ 0 も ＝ が ある → x軸より 下 <b>と x軸上</b> を 塗る。　この 決まりで 12問 解いて いこう！`])}`;
+
+const PG = [{name:'表紙', html:coverF(KK3, '<span class="mk">2次不等式</span><br>練習編', '塗って 答える', 'テンポよく 12問', POL3, '塗って 答える')}, {name:'塗る ところ', html:BOX3}];
 for(let r=0;r<3;r++){
   PG.push({name:`${['1','2','3'][r]}段目`, html:ROWHEAD(r)});
   for(let j=0;j<4;j++) PG.push({name:`${NO3[r*4+j]} ${SIGN3[j]} 0`, html:Q3(r,j)});

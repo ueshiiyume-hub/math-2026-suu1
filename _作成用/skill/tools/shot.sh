@@ -10,7 +10,7 @@ OUT="${OUTDIR:-./_shot}"; mkdir -p "$OUT"
 # Windows（Git Bash）では Chrome、Linux（クラウド）では /opt/pw-browsers/chromium
 if [ -z "$CHROME" ]; then
   if [ -x "/c/Program Files/Google/Chrome/Application/chrome.exe" ]; then CHROME="/c/Program Files/Google/Chrome/Application/chrome.exe"
-  else CHROME="$(ls /opt/pw-browsers/chromium-*/chrome-linux/chrome 2>/dev/null | head -1)"; fi
+  else CHROME="$(ls /opt/pw-browsers/chromium-*/chrome-linux*/chrome 2>/dev/null | head -1)"; fi
 fi
 DIR="$(cd "$OUT" && (pwd -W 2>/dev/null || pwd))"
 for k in "$@"; do
