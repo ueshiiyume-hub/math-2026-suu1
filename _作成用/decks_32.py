@@ -296,19 +296,21 @@ const PH12 = probHead('プリント問題③-1', '次の 2次不等式を、図�
   `ここから <b>プリント問題③-1</b>。　練習編と 同じ「塗って 答える」で 20問！`);
 
 /* プリントの いちばん上の 枠（2026-11-04）：緑の 行 ×4、オレンジの 式 ⇒ 白い 枠 を塗る。1番ずつ 答えが 入る */
-const BXA = ['x軸より 上', 'x軸より 下', 'x軸より 上 <span class="p3bxe">と x軸上</span>', 'x軸より 下 <span class="p3bxe">と x軸上</span>'];
+/* 答えは 短く「上」「下」「上 と x軸」（先生の 指示、2026-11-04）。正確な 言い方は 枠の 下に 小さく 注釈 */
+const BXA = ['上', '下', '上 <span class="p3bxe">と x軸</span>', '下 <span class="p3bxe">と x軸</span>'];
 const BOX3 = `
   <div class="card abs dcard v2 p3">${EQTAPE}
     <div class="p3bx">${SIGN3.map((sg,k)=>`<div class="p3bxr">
       <span class="p3bxq math">x${P2} − 2x − 3 <span class="p3sg" data-o="${k+1}">${sg} 0</span></span><span class="p3bxt">⇒</span>
-      <span class="p3bxb${k>=2?' w':''}"><span class="lh" data-s="${k+1}">${BXA[k].replace(/x軸/g,'<i class="math">x</i>軸')}</span></span><span class="p3bxt">を塗る</span></div>`).join('')}</div>
+      <span class="p3bxb${k>=2?' w':''}"><span class="lh" data-s="${k+1}">${BXA[k].replace(/x軸/g,'<i class="math">x</i>軸')}</span></span><span class="p3bxt">を塗る</span></div>`).join('')}
+      <div class="p3bxn">※ 正確には「<i class="math">x</i>軸より上」「<i class="math">x</i>軸との交点」</div></div>
   </div>
   ${cbar([
     `プリントの いちばん上の 枠。　右側の 不等号で、塗る ところが 決まる。`,
-    `＞ 0 は 0より 大きい → x軸より <b>上</b> を 塗る。`,
-    `＜ 0 は 0より 小さい → x軸より <b>下</b> を 塗る。`,
-    `≧ 0 は ＝ も ある → x軸より 上 <b>と x軸上</b> を 塗る（黒丸）。`,
-    `≦ 0 も ＝ が ある → x軸より 下 <b>と x軸上</b> を 塗る。　この 決まりで 12問 解いて いこう！`])}`;
+    `＞ 0 は 0より 大きい → <b>上</b> を 塗る。`,
+    `＜ 0 は 0より 小さい → <b>下</b> を 塗る。`,
+    `≧ 0 は ＝ も ある → 上 <b>と x軸</b> を 塗る（黒丸）。`,
+    `≦ 0 も ＝ が ある → 下 <b>と x軸</b> を 塗る。　この 決まりで 12問 解いて いこう！`])}`;
 
 const PG = [{name:'表紙', html:coverF(KK3, '<span class="mk">2次不等式</span><br>練習編', '塗って 答える', 'テンポよく 12問', POL3, '塗って 答える')}, {name:'塗る ところ', html:BOX3}];
 for(let r=0;r<3;r++){
