@@ -297,9 +297,9 @@ const PH12 = probHead('プリント問題③-1', '次の 2次不等式を、図�
 
 /* プリントの いちばん上の 枠（2026-11-04）：緑の 行 ×4、オレンジの 式 ⇒ 白い 枠 を塗る。1番ずつ 答えが 入る */
 /* 答えは 短く「上」「下」「上 と x軸」（先生の 指示、2026-11-04）。正確な 言い方は 枠の 下に 小さく 注釈 */
-// 答えの 色：上＝オレンジ、下＝水色、x軸＝紫（導入の「塗るところは3つ」と 同じ 色、11/7）
-const UP = '<span class="c-up">上</span>', DN = '<span class="c-dn">下</span>', AXW = '<span class="c-ax">x軸</span>';
-const BXA = [UP, DN, `${UP} <span class="p3bxe">と</span> ${AXW}`, `${DN} <span class="p3bxe">と</span> ${AXW}`];
+// 答えは 全部 黒（色分けは ごちゃごちゃ する ので やめた、11/7 先生の 指示）
+const UP = '<span class="c-up">上</span>', DN = '<span class="c-dn">下</span>';   // 導入の「塗るところは3つ」だけ 色つき
+const BXA = ['上', '下', '上 <span class="p3bxe">と</span> x軸', '下 <span class="p3bxe">と</span> x軸'];
 const BOX3 = `
   <div class="card abs dcard v2 p3">${EQTAPE}
     <div class="p3bx">${SIGN3.map((sg,k)=>`<div class="p3bxr">
@@ -309,23 +309,24 @@ const BOX3 = `
   </div>
   ${cbar([
     `プリントの いちばん上の 枠。　右側の 不等号で、塗る ところが 決まる。`,
-    `＞ 0 は 0より 大きい → <b style="color:#d9731a">上</b> を 塗る。`,
-    `＜ 0 は 0より 小さい → <b style="color:#2f86c8">下</b> を 塗る。`,
-    `≧ 0 は ＝ も ある → <b style="color:#d9731a">上</b> と <b style="color:#8a4fb0">x軸</b> を 塗る（黒丸）。`,
-    `≦ 0 も ＝ が ある → <b style="color:#2f86c8">下</b> と <b style="color:#8a4fb0">x軸</b> を 塗る。　この 決まりで 12問 解いて いこう！`])}`;
+    `＞ 0 は 0より 大きい → <b>上</b> を 塗る。`,
+    `＜ 0 は 0より 小さい → <b>下</b> を 塗る。`,
+    `≧ 0 は ＝ も ある → <b>上</b> と <b>x軸</b> を 塗る（黒丸）。`,
+    `≦ 0 も ＝ が ある → <b>下</b> と <b>x軸</b> を 塗る。　この 決まりで 12問 解いて いこう！`])}`;
 
 /* ====== 導入（2026-11-07、先生の 指示）：言葉と 情報を 減らす。3枚
    ① 今までと 今回（= 0 が ＞ 0 に 変わる） ② 今日やる ところ（解く → グラフ → 塗る → 答える の 後ろ 2つ） ③ 塗るところは 3つ（上・下・軸）
    「軸の上」とは 言わない（「上」と 混ざる）。軸は「軸を塗る」。色：上＝うすい オレンジ、下＝うすい 水色、軸＝紫の 太い 線 */
 const IN1 = `
   <div class="card abs dcard v2 p3">${EQTAPE}
-    <div class="inrow">
-      <div class="incol"><div class="inlab">2次方程式</div><div class="ineq math">x${P2} − 2x − 3 ＝ 0</div></div>
-      <div class="incol lh" data-s="1"><div class="inlab">x軸との共有点</div><div class="ineq math">y ＝ x${P2} − 2x − 3</div></div>
-      <div class="incol lh now" data-s="2"><div class="inlab">2次不等式</div><div class="ineq math">x${P2} − 2x − 3 <span class="insw"><span class="inold" data-o="3">＝ 0</span><span class="innew lh" data-s="3">＞ 0</span></span></div></div>
+    <div class="inmorph">
+      <div class="inst" data-m="0"><div class="inlab">2次方程式</div><div class="ineq math">x${P2} − 2x − 3 ＝ 0</div></div>
+      <div class="inst" data-m="1"><div class="inlab">x軸との共有点</div><div class="ineq math">y ＝ x${P2} − 2x − 3</div></div>
+      <div class="inst" data-m="2"><div class="inlab">y ＝ 0 と して 解く</div><div class="ineq math"><span class="indim">y ＝</span> x${P2} − 2x − 3 <span class="inhl">＝ 0</span></div></div>
+      <div class="inst" data-m="3"><div class="inlab">2次不等式</div><div class="ineq math">x${P2} − 2x − 3 <span class="inhl">＞ 0</span></div></div>
     </div>
   </div>
-  ${cbar([`まず、2次方程式。`, `次に、x軸との 共有点。`, `今回は 2次不等式。`, `＝ 0 が <b>不等号</b> に 変わった だけ！`])}`;
+  ${cbar([`まず、2次方程式。`, `次に、x軸との 共有点。`, `解く ときは ＝ 0 → 2次方程式で 考えた。`, `＝ 0 が 不等号に 変わった。　今回は <b>これを 解く</b>。`])}`;
 const IN2 = `
   <div class="card abs dcard v2 p3">${EQTAPE}
     <div class="inflow">
