@@ -330,7 +330,7 @@ const IN1 = `
    1番ずつ：解く → グラフ → 塗る → 答える。最後に 解く・グラフ を うすく、塗る・答える を 赤い 枠で「今日は ここ」 */
 const I2X = x => 120 + (x - 1) * 40, I2Y = x => 160 - 0.03125 * (I2X(x) - 120) ** 2;   // −1 → 80、3 → 160、頂点 (120, 160)、x軸は y＝110
 const i2parab = (a, b) => { let d = ''; for (let i = 0; i <= 40; i++) { const X = a + (b - a) * i / 40; d += (i ? 'L' : 'M') + X.toFixed(1) + ' ' + (160 - 0.03125 * (X - 120) ** 2).toFixed(1) + ' '; } return d; };
-const I2G = (inner) => `<svg viewBox="0 0 240 200" class="in2sv"><line x1="8" y1="110" x2="226" y2="110" class="inax"/><polygon points="236,110 222,104 222,116" class="inaxh"/>${inner}</svg>`;
+const I2G = (inner, s) => `<svg viewBox="0 0 240 200" class="in2sv"><g${s !== undefined ? ` class="lh" data-s="${s}"` : ''}><line x1="8" y1="110" x2="226" y2="110" class="inax"/><polygon points="236,110 222,104 222,116" class="inaxh"/></g>${inner}</svg>`;   // s：x軸を 出す 番（グラフの 列は 最初 から 出さない、11/7）
 const I2CURVE = (cls, s) => `<path class="${cls}" ${s !== undefined ? `data-s="${s}"` : ''} pathLength="1" d="${i2parab(53, 187)}"/>`;
 const I2DOTS = (s, open) => `<g class="lh" data-s="${s}"><circle cx="80" cy="110" r="6" class="in2dot${open ? ' op' : ''}"/><circle cx="160" cy="110" r="6" class="in2dot${open ? ' op' : ''}"/><text x="74" y="136" class="in2lb" text-anchor="end">−1</text><text x="166" y="136" class="in2lb">3</text></g>`;
 const I2PAINT = s => `<g class="in2pt" data-s="${s}"><path pathLength="1" d="${i2parab(53, 80)}"/><path pathLength="1" d="${i2parab(160, 187)}"/></g>`;
@@ -344,7 +344,7 @@ const IN2 = `
           <div class="lh" data-s="1" style="transition-delay:.5s">(x ＋ 1)(x − 3) ＝ 0</div>
           <div class="lh in2b" data-s="1" style="transition-delay:1s">x ＝ −1, 3</div></div>`)}
         <span class="in2ar">→</span>
-        ${I2COL('グラフ', I2G(I2DOTS(2) + I2CURVE('in2cv', 2)))}
+        ${I2COL('グラフ', I2G(I2DOTS(2) + I2CURVE('in2cv', 2), 2))}
       </div>
       <span class="in2ar">→</span>
       <div class="in2grp today" data-o="5">
