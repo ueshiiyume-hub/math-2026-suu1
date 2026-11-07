@@ -300,11 +300,16 @@ const PH12 = probHead('プリント問題③-1', '次の 2次不等式を、図�
 // 答えは 全部 黒（色分けは ごちゃごちゃ する ので やめた、11/7 先生の 指示）
 const UP = '<span class="c-up">上</span>', DN = '<span class="c-dn">下</span>';   // 導入の「塗るところは3つ」だけ 色つき
 const BXA = ['上', '下', '上 <span class="p3bxe">と</span> x軸', '下 <span class="p3bxe">と</span> x軸'];
+/* 「塗る ところ」の 各行の 右に、塗る 場所の 小さな 図（導入「塗るところは 3つ」と 同じ 図、11/7）：＞ 上、＜ 下、≧ 上と 軸、≦ 下と 軸。答えと 同じ 番で 出る */
+const P3FIG = k => `<span class="p3fig lh" data-s="${k + 1}"><svg viewBox="0 0 160 90">
+    ${k % 2 === 0 ? '<rect x="6" y="5" width="142" height="40" class="fill-up"/>' : '<rect x="6" y="45" width="142" height="40" class="fill-dn"/>'}
+    <line x1="6" y1="45" x2="146" y2="45" class="inax"/><polygon points="156,45 144,39 144,51" class="inaxh"/>
+    ${k >= 2 ? '<line x1="6" y1="45" x2="144" y2="45" class="line-ax" style="stroke-width:8"/>' : ''}</svg></span>`;
 const BOX3 = `
   <div class="card abs dcard v2 p3">${EQTAPE}
     <div class="p3bx">${SIGN3.map((sg,k)=>`<div class="p3bxr">
       <span class="p3bxq math">x${P2} − 2x − 3 <span class="p3sg" data-o="${k+1}">${sg} 0</span></span><span class="p3bxt">⇒</span>
-      <span class="p3bxb${k>=2?' w':''}"><span class="lh" data-s="${k+1}">${BXA[k].replace(/x軸/g,'<i class="math">x</i>軸')}</span></span><span class="p3bxt">を塗る</span></div>`).join('')}
+      <span class="p3bxb${k>=2?' w':''}"><span class="lh" data-s="${k+1}">${BXA[k].replace(/x軸/g,'<i class="math">x</i>軸')}</span></span><span class="p3bxt">を塗る</span>${P3FIG(k)}</div>`).join('')}
       <div class="p3bxn">※ 正確には「<i class="math">x</i>軸より上」「<i class="math">x</i>軸との交点」</div></div>
   </div>
   ${cbar([
