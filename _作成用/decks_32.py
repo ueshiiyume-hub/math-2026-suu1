@@ -22,7 +22,7 @@ let CL3 = 0;
 /* 塗る ところの 言い方：上を 塗る／下を 塗る、＝ が あれば 上と x軸を 塗る（「0より 大きい」とは 言わない、11/7 先生の 指示） */
 const PW3 = (up, eq) => `${up ? '上' : '下'}${eq ? ' と x軸' : ''}を 塗る`;
 /* 答えの 枠：グラフの 下（プリントと 同じ 場所。書き写す ところが わかる ように）。枠は 最初から、答えは 最後の 番で */
-const ANSBOX3 = (g, ans, am) => `<div class="p3ans" style="top:${170 + g.H + 6}px"><span class="p3al">答え</span><span class="p3av lh ${am ? 'math' : ''}" data-s="6">${ans}</span></div>`;
+const ANSBOX3 = (g, ans, am, s=6) => `<div class="p3ans" style="top:${170 + g.H + 6}px"><span class="p3al">答え</span><span class="p3av lh ${am ? 'math' : ''}" data-s="${s}">${ans}</span></div>`;
 /* 練習の 問題の ページ だけ：「いま やっていること」を 左下（4問の 一覧の 下）に 小さく（答えの 枠の 場所を あける） */
 const cbarL = list => cbar(list).replace('class="card abs cbar"', 'class="card abs cbar cbarL"');
 /* 塗る：up（上）／ dn（下）、eq（軸も）。塗りは グラフを 塗る 範囲で 切る */
@@ -63,7 +63,7 @@ const XB3 = (at, to) => `<line class="ixln" x1="${f1(at[0])}" y1="${f1(at[1])}" 
 /* A（小さい 方）と B（大きい 方）を 斜めに 比べる：帯（後ろ）と 不等号（前）。le＝≦ */
 const CMP3 = (A, B, le) => { const mx=(A[0]+B[0])/2, my=(A[1]+B[1])/2, ang=Math.atan2(B[1]-A[1],B[0]-A[0])*180/Math.PI, len=Math.hypot(B[0]-A[0],B[1]-A[1])+64;
   const tr=`translate(${f1(mx)} ${f1(my)}) rotate(${f1(ang)})`, d=`M13 -13 L-13 0 L13 13${le?' M-13 9 L13 22':''}`;
-  return {band:`<rect class="iband2" x="${f1(-len/2)}" y="-26" width="${f1(len)}" height="52" rx="26" transform="${tr}"/>`,
+  return {mx, my, band:`<rect class="iband2" x="${f1(-len/2)}" y="-26" width="${f1(len)}" height="52" rx="26" transform="${tr}"/>`,
           sign:`<path class="ilt-h" d="${d}" transform="${tr}"/><path class="ilt" d="${d}" transform="${tr}"/>`}; };
 const WR3 = (x, y, t) => `<text class="iwr p3wr" x="${f1(x)}" y="${f1(y)}" text-anchor="middle">${t.replace(/x/g,'<tspan font-style="italic">x</tspan>')}</text>`;
 /* 1問の「x を 置く（3番）→ 式を 書く（4番）」 */
@@ -71,6 +71,20 @@ function XSTEP(r, j, g){
   const up = j%2===0, le = j>=2, sg = le?'≦':'＜';
   const NL = x => [g.X(x)+(x<1?-20:20), g.ay+32];      // 数（−1・3）の 文字の 位置
   let back='', x3='', w4='';
+  /* ⑴⑵（7・8ページ目）は くわしく：x を 置く(5) → 左を 比べる(6) → 書き直す(7) → 右を 比べる(8) → 書き直す(9)。③-2 の「x を 置く」と 同じ 流れ（11/7 先生の 指示） */
+  const DL = (c, t) => `<line class="idot2" x1="${f1(c.mx+(t[0]<c.mx?-24:24))}" y1="${f1(c.my+30)}" x2="${f1(t[0]+(t[0]<c.mx?70:-70))}" y2="${f1(t[1]-14)}"/>`;
+  if(r===0 && j<2){
+    let c1, c2, t1, t2, o1, o2;
+    if(up){ const L=[g.X(-1)-110, g.ay-48], R=[g.X(3)+110, g.ay-48];
+      c1=CMP3(L, NL(-1), le); c2=CMP3(NL(3), R, le); t1=[g.X(-1)-200, g.ay+80]; t2=[g.X(3)+200, g.ay+80]; o1=`x ${sg} −1`; o2=`3 ${sg} x`;
+      x3 = XB3(L,[g.X(-1.4),g.Y(-1.4)]) + XB3(R,[g.X(3.4),g.Y(3.4)]);
+    } else { const X=[g.X(1), g.Y(1)+42];
+      c1=CMP3(NL(-1), X, le); c2=CMP3(X, NL(3), le); t1=[g.X(-1)-170, g.ay+90]; t2=[g.X(3)+170, g.ay+90]; o1=`−1 ${sg} x`; o2=`x ${sg} 3`;
+      x3 = XB3(X,[g.X(1),g.Y(1)]);
+    }
+    return {back:`<g class="gs" data-s="6">${c1.band}</g><g class="gs" data-s="8">${c2.band}</g>`,
+      front:`<g class="gs" data-s="5">${x3}</g><g class="gs" data-s="6">${c1.sign}</g><g class="gs" data-s="7">${DL(c1,t1)}${WR3(t1[0],t1[1],o1)}</g><g class="gs" data-s="8">${c2.sign}</g><g class="gs" data-s="9">${DL(c2,t2)}${WR3(t2[0],t2[1],o2)}</g>`};
+  }
   if(r===0 && up){            // 外側 2か所
     const L=[g.X(-1)-110, g.ay-48], R=[g.X(3)+110, g.ay-48];
     const c1=CMP3(L, NL(-1), le), c2=CMP3(NL(3), R, le);
@@ -106,7 +120,7 @@ function Q3(r, j){
   const any = !(r===1 && !up) && !(r===2 && !up);
   const dots = R.roots.map(x=>DOT3(g, x, eq, 4)).join('');
   const w2 = R.roots.length ? (eq ? 'x軸も 塗る（黒丸）' : 'x軸は 塗らない（白丸）') : 'x軸と 交わらない';
-  const am = MATHY(ans), xs = XSTEP(r, j, g);
+  const am = MATHY(ans), xs = XSTEP(r, j, g), dt = r===0 && j<2, fin = dt ? 10 : 6;   // dt：⑴⑵ は 答えまでを くわしく（番 6〜9 を 足す）
   /* 番：1 ${sg} 0 を 強調、2 上（下）を 塗る／上（下）と x軸を 塗る、3 塗る、4 軸、5 x を 置く、6 式・答え */
   return `
   <div class="card abs dcard v2 p3 p3big">${EQTAPE}
@@ -116,8 +130,9 @@ function Q3(r, j){
       <div class="p3w lh" data-s="2" data-o="4"><span class="v2mk">${PW3(up, eq)}</span></div>
       <div class="p3w lh" data-s="4" data-o="5"><span class="v2mk">${w2}</span></div>
       <div class="p3w lh" data-s="5" data-o="6"><span class="v2mk">${any?'塗れた ところに x を 置く':'塗れた ところは？'}</span></div>
-      <div class="p3w p3a lh" data-s="6"><span class="p3why">${WHY[r][j]}</span></div>
-      ${ANSBOX3(g, ans, am)}
+      ${dt ? `<div class="p3w lh" data-s="6" data-o="10"><span class="v2mk">x と 近くの 数を 比べる</span></div>` : ''}
+      <div class="p3w p3a lh" data-s="${fin}"><span class="p3why">${WHY[r][j]}</span></div>
+      ${ANSBOX3(g, ans, am, fin)}
       <div class="p3g"><svg class="isv" width="${g.W}" height="${g.H}" viewBox="0 0 ${g.W} ${g.H}">
         ${TINT3(g, up, 3)}${xs.back}${AX3(g)}${eq ? AXP3(g, 3) : ''}${NUM3(g, R.roots)}<path class="icv p3cv" d="${g.d}"/>
         ${any ? PAINT3(g, up, false, 3) : ''}${eq && R.roots.length ? `<g class="gs" data-s="4">${PAINT3(g, up, true)}</g>` : ''}${dots}${xs.front}</svg></div>
@@ -130,7 +145,13 @@ function Q3(r, j){
     `<b>${PW3(up, eq)}</b>。${any?'':'　…でも グラフは x軸より 下に ない！'}`,
     R.roots.length ? (eq ? `＝ が ある → <b>x軸</b>も 塗る → <b>黒丸</b>。` : `＝ が ない → x軸は 塗らない → <b>白丸</b>。`) : `x軸と 交わらない ので、軸に 塗る 点は ない。`,
     any ? `塗れた ところに <b>x</b> を 置く。` : `塗れた ところが ない ので、x を 置けない。`,
-    `${WHY[r][j]} → 答え <b>${ans}</b>。`])}`;
+    ...(dt ? (up ? [
+      `左：<b>x</b> と −1 を 比べる。　x は −1 より 小さい。　白丸 なので <b>＜</b>。`, `書き直して ${M('x ＜ −1')}。`,
+      `右：<b>x</b> と 3 を 比べる。　x は 3 より 大きい。　白丸 なので <b>＜</b>。`, `書き直して ${M('3 ＜ x')}。`,
+      `2か所 なので 答えは 2つ。　答え <b>${ans}</b>。`] : [
+      `左：−1 と <b>x</b> を 比べる。　x は −1 より 大きい。　白丸 なので <b>＜</b>。`, `書き直して ${M('−1 ＜ x')}。`,
+      `右：<b>x</b> と 3 を 比べる。　x は 3 より 小さい。　白丸 なので <b>＜</b>。`, `書き直して ${M('x ＜ 3')}。`,
+      `2つを まとめて 答え <b>${ans}</b>。`]) : [`${WHY[r][j]} → 答え <b>${ans}</b>。`])])}`;
 }
 
 
