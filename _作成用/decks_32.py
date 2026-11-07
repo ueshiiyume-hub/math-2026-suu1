@@ -32,7 +32,7 @@ const PAINT3 = (g, up, eq, s, cls='') => { const id='c3_'+(++CL3);
 const TINT3 = (g, up, s) => `<rect class="v2up p3t${up?'':' p3dn'} gs" data-s="${s}" x="10" y="${up?2:g.ay}" width="${g.W-20}" height="${up?g.ay-2:g.H-g.ay}"/>`;
 const AX3 = g => `<line class="iax" x1="10" y1="${g.ay}" x2="${g.W-16}" y2="${g.ay}"/><polygon class="iah" points="${g.W-2},${g.ay} ${g.W-20},${g.ay-9} ${g.W-20},${g.ay+9}"/><text class="ixl" x="${g.W-24}" y="${g.ay+38}">x</text>`;
 const NUM3 = (g, xs) => xs.map(x=>`<text class="inum" x="${f1(g.X(x)+(xs.length>1?(x<1?-20:20):0))}" y="${g.ay+42}" text-anchor="middle">${x<0?'−'+(-x):x}</text>`).join('');
-const DOT3 = (g, x, filled, s) => `<circle class="${filled?'v2bd p3bd':'v2wd'} gs" data-s="${s}" cx="${f1(g.X(x))}" cy="${g.ay}" r="10"/>`;
+const DOT3 = (g, x, filled, s) => `<circle class="${filled?'v2bd p3bd':'v2wd'} gs" data-s="${s}" cx="${f1(g.X(x))}" cy="${g.ay}" r="13"/>`;
 /* ＝ が ある ときは「軸を 塗る」：上／下の 面を 塗る 番で、x軸 そのものを 透ける ピンクで 塗る（導入と 同じ。黒丸の まわりには 付けない＝黒丸を ピンクで 塗ると 誤解しない ように、11/7） */
 const AXP3 = (g, s) => `<line class="line-ax gs" data-s="${s}" x1="10" y1="${g.ay}" x2="${g.W-20}" y2="${g.ay}"/>`;
 
@@ -195,8 +195,8 @@ function WRITE(r){
     const id='w3_'+(++CL3);
     const clip = up ? `<rect x="${L}" y="${y0}" width="110" height="${f1((eq?ay:ay-.6)-y0)}"/>` : `<rect x="${L}" y="${f1(eq?ay:ay+.6)}" width="110" height="60"/>`;
     svg.push(`<line x1="${L+12}" y1="${ay}" x2="${L+100}" y2="${ay}" stroke="#555" stroke-width=".7"/><polygon points="${L+102},${ay} ${L+98.5},${ay-1.5} ${L+98.5},${ay+1.5}" fill="#555"/><text class="pgt" x="${L+98}" y="${ay+8}" font-style="italic">x</text>${eq?`<line x1="${L+12}" y1="${ay}" x2="${L+98}" y2="${ay}" stroke="#ff3d8b" stroke-opacity=".45" stroke-width="4" stroke-linecap="round"/>`:''}`,
-      `<clipPath id="${id}">${clip}</clipPath><path d="${d}" fill="none" stroke="${up?'#f08a2a':'#3d9be0'}" stroke-width="4" stroke-linecap="round" opacity=".6" clip-path="url(#${id})"/><path d="${d}" fill="none" stroke="#111" stroke-width="1.1"/>`,
-      R.roots.map(x=>`<circle cx="${f1(g.X(x))}" cy="${ay}" r="2.4" fill="${eq?'#333':'#fff'}" stroke="${eq?'#333':'#e0465e'}" stroke-width=".9"/><text class="pgt" x="${f1(g.X(x)+(R.roots.length>1?(x<1?-4:4):0))}" y="${ay+9}" text-anchor="middle">${x<0?'−'+(-x):x}</text>`).join(''));
+      `<clipPath id="${id}">${clip}</clipPath><path d="${d}" fill="none" stroke="#333" stroke-width="4.6" stroke-linecap="round" opacity=".55" clip-path="url(#${id})"/><path d="${d}" fill="none" stroke="#111" stroke-width="1.1"/>`,
+      R.roots.map(x=>`<circle cx="${f1(g.X(x))}" cy="${ay}" r="3" fill="${eq?'#333':'#fff'}" stroke="${eq?'#333':'#e0465e'}" stroke-width=".9"/><text class="pgt" x="${f1(g.X(x)+(R.roots.length>1?(x<1?-4:4):0))}" y="${ay+9}" text-anchor="middle">${x<0?'−'+(-x):x}</text>`).join(''));
     svg.push(`<rect x="${L}" y="${box[0]}" width="107.4" height="34.2" fill="none" stroke="#d9d9d9" stroke-width="1.5"/>`);
     items.push(T([L,y0,L+92,y0+14.3],`${NO3[r*4+j]}<span class="xsp"></span>${R.f} ${sg} 0`,9.6));
     const ans = ANS3[r][j];

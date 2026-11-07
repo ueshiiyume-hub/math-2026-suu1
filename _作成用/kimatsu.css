@@ -763,7 +763,7 @@ body.portrait .ptag{left:70px;top:8px}
 .portrait .pfit .in2row{flex-wrap:wrap}
 .p3fig{margin-left:auto;width:150px;height:74px;flex:none;background:#fff;border-radius:6px;padding:3px} .p3fig svg{width:100%;height:100%;display:block}
 /* ③-1 練習編の 問題（11/7）：導入と 同じ 色。上を 塗る＝オレンジ、下を 塗る＝水色、軸を 塗る＝透ける ピンク（黒丸に 重ねる） */
-.ipaint.pd path{stroke:#3d9be0}
+.ipaint.pu path,.ipaint.pd path{stroke:#333;opacity:.55;stroke-width:17}   /* グラフを 塗る 色は 濃い グレー（黒丸と 同じ 色に 見える ように。少し 透けて 下の 線が 見える、11/7） */
 .v2up.p3t{fill:#fde9d6} .v2up.p3t.p3dn{fill:#dcedf9}
 .icv.p3cv{stroke:#444}   /* 練習の 放物線は 濃い 灰色（下を 塗る 水色と 見分ける） */
 .p3axhl{fill:#ff3d8b;fill-opacity:.45}
