@@ -1,7 +1,7 @@
 """③-1 2次不等式の解法〜練習編 ver 2（2026-10-30 の プリントの 並べかえで ③-2 → ③-1。ファイル名・URL は そのまま。2026-11-04 の プリントで プリント問題も ③-2 → ③-1）（テンポよく「塗る → 答える」を くり返す）。
 2026-11-04：プリントの いちばん上に 足された 枠（x² − 2x − 3 ＞ 0 ⇒ □ を塗る ×4）の ページを 表紙の 次に（BOX3）。
 前の 版（3-2_2次不等式_練習編.html、プリント画像の 下書き）は ファイルだけ 残す。
-1問 1ページ：式 → ❶ 塗る（上／下）→ ❷ x軸上（白丸／黒丸）→ ❸ 答え。段の 終わりに プリントの 配置で 答えを 書きこむ。"""
+1問 1ページ：式 → ❶ 塗る（上／下）→ ❷ 軸（白丸／黒丸）→ ❸ 答え。段の 終わりに プリントの 配置で 答えを 書きこむ。"""
 import os
 B = os.path.dirname(os.path.abspath(__file__))
 
@@ -19,14 +19,16 @@ function SG(o){
   return {X,Y,ay,W,H,d};
 }
 let CL3 = 0;
-/* 塗る：up（上）／ dn（下）、eq（x軸上も）。塗りは グラフを 塗る 範囲で 切る */
+/* 塗る：up（上）／ dn（下）、eq（軸も）。塗りは グラフを 塗る 範囲で 切る */
 const PAINT3 = (g, up, eq, s, cls='') => { const id='c3_'+(++CL3);
   const r = up ? `<rect x="0" y="0" width="${g.W}" height="${f1(eq? g.ay : g.ay-2)}"/>` : `<rect x="0" y="${f1(eq? g.ay : g.ay+2)}" width="${g.W}" height="${g.H}"/>`;
-  return `<clipPath id="${id}">${r}</clipPath><g clip-path="url(#${id})"><g class="ipaint ${s===undefined?'show v2still':''} ${cls}"${s!==undefined?` data-s="${s}"`:''}><path pathLength="1" d="${g.d}"/></g></g>`; };
-const TINT3 = (g, up, s) => `<rect class="v2up gs" data-s="${s}" x="10" y="${up?2:g.ay}" width="${g.W-20}" height="${up?g.ay-2:g.H-g.ay}"/>`;
+  return `<clipPath id="${id}">${r}</clipPath><g clip-path="url(#${id})"><g class="ipaint ${up?'pu':'pd'} ${s===undefined?'show v2still':''} ${cls}"${s!==undefined?` data-s="${s}"`:''}><path pathLength="1" d="${g.d}"/></g></g>`; };
+const TINT3 = (g, up, s) => `<rect class="v2up p3t${up?'':' p3dn'} gs" data-s="${s}" x="10" y="${up?2:g.ay}" width="${g.W-20}" height="${up?g.ay-2:g.H-g.ay}"/>`;
 const AX3 = g => `<line class="iax" x1="10" y1="${g.ay}" x2="${g.W-16}" y2="${g.ay}"/><polygon class="iah" points="${g.W-2},${g.ay} ${g.W-20},${g.ay-9} ${g.W-20},${g.ay+9}"/><text class="ixl" x="${g.W-24}" y="${g.ay+38}">x</text>`;
 const NUM3 = (g, xs) => xs.map(x=>`<text class="inum" x="${f1(g.X(x)+(xs.length>1?(x<1?-20:20):0))}" y="${g.ay+42}" text-anchor="middle">${x<0?'−'+(-x):x}</text>`).join('');
-const DOT3 = (g, x, filled, s) => `<circle class="${filled?'v2bd':'v2wd'} gs" data-s="${s}" cx="${f1(g.X(x))}" cy="${g.ay}" r="10"/>`;
+// 黒丸の ときは「軸を 塗る」：点に 透ける ピンクを 重ねる（導入と 同じ 色、11/7）
+const DOT3 = (g, x, filled, s) => (filled ? `<circle class="p3axhl gs" data-s="${s}" cx="${f1(g.X(x))}" cy="${g.ay}" r="22"/>` : '')
+  + `<circle class="${filled?'v2bd p3bd':'v2wd'} gs" data-s="${s}" cx="${f1(g.X(x))}" cy="${g.ay}" r="10"/>`;
 
 /* 段ごとの グラフ */
 const ROW3 = [
@@ -40,7 +42,7 @@ const ANS3 = [
   ['1以外の すべての実数', '解なし', 'すべての実数', 'x ＝ 1'],
   ['すべての実数', '解なし', 'すべての実数', '解なし']];
 const WHY = [
-  ['外側 2か所が 塗れた', '内側が 塗れた', '外側 ＋ x軸上', '内側 ＋ x軸上'],
+  ['外側 2か所が 塗れた', '内側が 塗れた', '外側 ＋ 軸', '内側 ＋ 軸'],
   ['1 だけ 塗れない', '塗れる ところが ない', '全部 塗れた', '1 の 点 だけ 塗れた'],
   ['全部 塗れた', '塗れる ところが ない', '全部 塗れた', '塗れる ところが ない']];
 const NO3 = '⑴⑵⑶⑷⑸⑹⑺⑻⑼⑽⑾⑿';
@@ -97,9 +99,9 @@ function Q3(r, j){
   const R = ROW3[r], up = j%2===0, eq = j>=2, sg = SIGN3[j], g = SG({...R.o}), ans = ANS3[r][j];
   const any = !(r===1 && !up) && !(r===2 && !up);
   const dots = R.roots.map(x=>DOT3(g, x, eq, 4)).join('');
-  const w2 = R.roots.length ? (eq ? 'x軸上も 塗る' : 'x軸上は 塗らない') : 'x軸上に グラフは ない';
+  const w2 = R.roots.length ? (eq ? '軸も 塗る' : '軸は 塗らない') : 'x軸と 交わらない';
   const am = MATHY(ans), xs = XSTEP(r, j, g);
-  /* 番：1 ${sg} 0 を 強調、2 0より 大きい／小さい、3 上／下を 塗る、4 x軸上、5 x を 置く、6 式・答え */
+  /* 番：1 ${sg} 0 を 強調、2 0より 大きい／小さい、3 上／下を 塗る、4 軸、5 x を 置く、6 式・答え */
   return `
   <div class="card abs dcard v2 p3">${EQTAPE}
     ${LIST3(r,j)}
@@ -110,7 +112,7 @@ function Q3(r, j){
       <div class="p3w lh" data-s="5" data-o="6"><span class="v2mk">${any?'塗れた ところに x を 置く':'塗れた ところは？'}</span></div>
       <div class="p3w p3a lh" data-s="6"><span class="p3why">${WHY[r][j]} →</span><span class="v2mk ${am?'math':''}">${ans}</span></div>
       <div class="p3g"><svg class="isv" width="${g.W}" height="${g.H}" viewBox="0 0 ${g.W} ${g.H}">
-        ${TINT3(g, up, 3)}${xs.back}${AX3(g)}${NUM3(g, R.roots)}<path class="icv" d="${g.d}"/>
+        ${TINT3(g, up, 3)}${xs.back}${AX3(g)}${NUM3(g, R.roots)}<path class="icv p3cv" d="${g.d}"/>
         ${any ? PAINT3(g, up, false, 3) : ''}${eq && R.roots.length ? `<g class="gs" data-s="4">${PAINT3(g, up, true)}</g>` : ''}${dots}${xs.front}</svg></div>
     </div>
   </div>
@@ -119,19 +121,19 @@ function Q3(r, j){
     `右側の「${sg} 0」に 注目。`,
     `${up?'0より 大きい':'0より 小さい'}。`,
     `${up?'0より 大きい → x軸より <b>上</b> を 塗る。':'0より 小さい → x軸より <b>下</b> を 塗る。'}${any?'':'　…でも グラフは x軸より 下に ない！'}`,
-    R.roots.length ? (eq ? `＝ が ある → x軸上も 塗る → <b>黒丸</b>。` : `＝ が ない → x軸上は 塗らない → <b>白丸</b>。`) : `x軸と 交わらない ので、x軸上の 点は ない。`,
+    R.roots.length ? (eq ? `＝ が ある → <b>軸</b>も 塗る → <b>黒丸</b>。` : `＝ が ない → 軸は 塗らない → <b>白丸</b>。`) : `x軸と 交わらない ので、軸に 塗る 点は ない。`,
     any ? `塗れた ところに <b>x</b> を 置く。` : `塗れた ところが ない ので、x を 置けない。`,
     `${WHY[r][j]} → 答え <b>${ans}</b>。`])}`;
 }
 
 
-/* 2問 1ページ（左右に 並べて、塗る → x軸上 → 答え を 同時に） */
+/* 2問 1ページ（左右に 並べて、塗る → 軸 → 答え を 同時に） */
 function HALF3(r, j){
   const R = ROW3[r], up = j%2===0, eq = j>=2, sg = SIGN3[j], ans = ANS3[r][j];
   const o = {...R.o, sc:R.o.sc*0.7, vs:R.o.vs*0.7, W:440, H:250, ay:Math.round(R.o.ay*0.86), top:8};
   const g = SG(o), dots = R.roots.map(x=>DOT3(g, x, eq, 2)).join(''), am = MATHY(ans);
   const w1 = `${up?'0より 大きい':'0より 小さい'}<span class="p3s2">（${up?'上':'下'}を 塗る）</span>`;
-  const w2 = R.roots.length ? (eq ? 'x軸上も 塗る' : 'x軸上は 塗らない') : 'x軸上に グラフは ない';
+  const w2 = R.roots.length ? (eq ? '軸も 塗る' : '軸は 塗らない') : 'x軸と 交わらない';
   return `<div class="p3h">
       <div class="p3hq math">${NO3[r*4+j]}　${R.f} ${sg} 0</div>
       <div class="p3hw">
@@ -140,14 +142,14 @@ function HALF3(r, j){
         <div class="p3w2 p3a2 lh" data-s="3"><span class="p3why">${WHY[r][j]}</span><span class="v2mk ${am?'math':''}">${ans}</span></div>
       </div>
       <svg class="isv" width="${g.W}" height="${g.H}" viewBox="0 0 ${g.W} ${g.H}">
-        ${TINT3(g, up, 1)}${AX3(g)}${NUM3(g, R.roots)}<path class="icv" d="${g.d}"/>
+        ${TINT3(g, up, 1)}${AX3(g)}${NUM3(g, R.roots)}<path class="icv p3cv" d="${g.d}"/>
         ${PAINT3(g, up, false, 1)}${eq && R.roots.length ? `<g class="gs" data-s="2">${PAINT3(g, up, true)}</g>` : ''}${dots}</svg>
     </div>`;
 }
 function PAIR3(r, j){
   const R = ROW3[r], a = j, b = j+1, sa = SIGN3[a], sb = SIGN3[b];
-  const lw = j===0 ? '＞ は 上、＜ は 下 を 塗る。' : '≧ は 上、≦ は 下。　＝ が ある ので x軸上も 塗る。';
-  const x2 = R.roots.length ? (j===0 ? `＝ が ない → x軸上は 塗らない → <b>白丸</b>。` : `＝ が ある → x軸上も 塗る → <b>黒丸</b>。`) : `x軸と 交わらない ので、x軸上の 点は ない。`;
+  const lw = j===0 ? '＞ は 上、＜ は 下 を 塗る。' : '≧ は 上、≦ は 下。　＝ が ある ので 軸も 塗る。';
+  const x2 = R.roots.length ? (j===0 ? `＝ が ない → 軸は 塗らない → <b>白丸</b>。` : `＝ が ある → <b>軸</b>も 塗る → <b>黒丸</b>。`) : `x軸と 交わらない ので、軸に 塗る 点は ない。`;
   return `
   <div class="card abs dcard v2 p3 p3pair">${EQTAPE}
     ${LIST3(r,a,b)}
@@ -167,7 +169,7 @@ function ROWHEAD(r){
   <div class="card abs dcard v2 p3">${EQTAPE}
     <div class="v2c" style="left:60px">
       <div class="v2kw"><div class="v2sm">${['1','2','3'][r]}段目　<span class="math">y ＝ ${R.f}</span></div><div class="v2big"><span class="v2mk">${HEAD3[r]}</span></div></div>
-      <div class="p3g" style="left:150px"><svg class="isv" width="${g.W}" height="${g.H}" viewBox="0 0 ${g.W} ${g.H}">${AX3(g)}${NUM3(g, R.roots)}<path class="icv" d="${g.d}"/></svg></div>
+      <div class="p3g" style="left:150px"><svg class="isv" width="${g.W}" height="${g.H}" viewBox="0 0 ${g.W} ${g.H}">${AX3(g)}${NUM3(g, R.roots)}<path class="icv p3cv" d="${g.d}"/></svg></div>
     </div>
   </div>
   ${cbar([`${['1','2','3'][r]}段目の グラフ。　この グラフで 不等号を 変えて 4問。　テンポよく 塗って 答えよう！`])}`;
@@ -186,8 +188,8 @@ function WRITE(r){
     const id='w3_'+(++CL3);
     const clip = up ? `<rect x="${L}" y="${y0}" width="110" height="${f1((eq?ay:ay-.6)-y0)}"/>` : `<rect x="${L}" y="${f1(eq?ay:ay+.6)}" width="110" height="60"/>`;
     svg.push(`<line x1="${L+12}" y1="${ay}" x2="${L+100}" y2="${ay}" stroke="#555" stroke-width=".7"/><polygon points="${L+102},${ay} ${L+98.5},${ay-1.5} ${L+98.5},${ay+1.5}" fill="#555"/><text class="pgt" x="${L+98}" y="${ay+8}" font-style="italic">x</text>`,
-      `<clipPath id="${id}">${clip}</clipPath><path d="${d}" fill="none" stroke="#f08a2a" stroke-width="4" stroke-linecap="round" opacity=".6" clip-path="url(#${id})"/><path d="${d}" fill="none" stroke="#111" stroke-width="1.1"/>`,
-      R.roots.map(x=>`<circle cx="${f1(g.X(x))}" cy="${ay}" r="2.4" fill="${eq?'#f2a35e':'#fff'}" stroke="${eq?'#e07a1f':'#e0465e'}" stroke-width=".9"/><text class="pgt" x="${f1(g.X(x)+(R.roots.length>1?(x<1?-4:4):0))}" y="${ay+9}" text-anchor="middle">${x<0?'−'+(-x):x}</text>`).join(''));
+      `<clipPath id="${id}">${clip}</clipPath><path d="${d}" fill="none" stroke="${up?'#f08a2a':'#3d9be0'}" stroke-width="4" stroke-linecap="round" opacity=".6" clip-path="url(#${id})"/><path d="${d}" fill="none" stroke="#111" stroke-width="1.1"/>`,
+      R.roots.map(x=>`${eq?`<circle cx="${f1(g.X(x))}" cy="${ay}" r="5" fill="#ff3d8b" fill-opacity=".45"/>`:''}<circle cx="${f1(g.X(x))}" cy="${ay}" r="2.4" fill="${eq?'#333':'#fff'}" stroke="${eq?'#333':'#e0465e'}" stroke-width=".9"/><text class="pgt" x="${f1(g.X(x)+(R.roots.length>1?(x<1?-4:4):0))}" y="${ay+9}" text-anchor="middle">${x<0?'−'+(-x):x}</text>`).join(''));
     svg.push(`<rect x="${L}" y="${box[0]}" width="107.4" height="34.2" fill="none" stroke="#d9d9d9" stroke-width="1.5"/>`);
     items.push(T([L,y0,L+92,y0+14.3],`${NO3[r*4+j]}<span class="xsp"></span>${R.f} ${sg} 0`,9.6));
     const ans = ANS3[r][j];
@@ -244,10 +246,10 @@ function GQ(P){
   } else {
     x3 = `<text class="iwr p3wr" x="${f1(g.X(o.xv+2.2))}" y="${f1(g.ay-120)}" style="fill:var(--muted)">x を 置く ところが ない</text>`;
   }
-  const why = kind===0 ? [['外側 2か所が 塗れた','内側が 塗れた'],['外側 ＋ x軸上','内側 ＋ x軸上']][eq?1:0][up?0:1]
+  const why = kind===0 ? [['外側 2か所が 塗れた','内側が 塗れた'],['外側 ＋ 軸','内側 ＋ 軸']][eq?1:0][up?0:1]
             : kind===1 ? [`${lab[0]} だけ 塗れない`, '塗れる ところが ない', '全部 塗れた', `${lab[0]} の 点 だけ 塗れた`][P.s]
             : (up ? '全部 塗れた' : '塗れる ところが ない');
-  const w2 = P.roots.length ? (eq ? 'x軸上も 塗る' : 'x軸上は 塗らない') : 'x軸上に グラフは ない';
+  const w2 = P.roots.length ? (eq ? '軸も 塗る' : '軸は 塗らない') : 'x軸と 交わらない';
   const am = MATHY(P.ans.replace(/[√()/]/g,'1'));
   const same = P.list.every(q=>q[2]===P.list[0][2]);             // 4問とも 同じ 式 → 不等号 だけ、ちがう 式 → 小さく 式も
   const list = `<div class="p3list">${P.list.map(([n,sgn,f],k)=>`<div class="p3i${same?'':' sm'}${k===P.cur?' on':''}${k<P.cur?' done':''}"><span>${n}</span><span class="math">${same?'':f+' '}${sgn} 0</span></div>`).join('')}</div>`;
@@ -261,7 +263,7 @@ function GQ(P){
       <div class="p3w lh" data-s="5" data-o="6"><span class="v2mk">${any?'塗れた ところに x を 置く':'塗れた ところは？'}</span></div>
       <div class="p3w p3a lh" data-s="6"><span class="p3why">${why} →</span><span class="v2mk ${am?'math':''}">${P.ans}</span></div>
       <div class="p3g"><svg class="isv" width="${g.W}" height="${g.H}" viewBox="0 0 ${g.W} ${g.H}">
-        ${TINT3(g, up, 3)}${back}${AX3(g)}${nums}<path class="icv" d="${g.d}"/>
+        ${TINT3(g, up, 3)}${back}${AX3(g)}${nums}<path class="icv p3cv" d="${g.d}"/>
         ${any ? PAINT3(g, up, false, 3) : ''}${eq && P.roots.length ? `<g class="gs" data-s="4">${PAINT3(g, up, true)}</g>` : ''}${dots}<g class="gs" data-s="5">${x3}</g><g class="gs" data-s="6">${w4}</g></svg></div>
     </div>
   </div>
@@ -271,7 +273,7 @@ function GQ(P){
     `右側の「${sg} 0」に 注目。`,
     `${up?'0より 大きい':'0より 小さい'}。`,
     `${up?'0より 大きい → x軸より <b>上</b> を 塗る。':'0より 小さい → x軸より <b>下</b> を 塗る。'}${any?'':'　…でも グラフは x軸より 下に ない！'}`,
-    P.roots.length ? (eq ? `＝ が ある → x軸上も 塗る → <b>黒丸</b>。` : `＝ が ない → x軸上は 塗らない → <b>白丸</b>。`) : `x軸と 交わらない ので、x軸上の 点は ない。`,
+    P.roots.length ? (eq ? `＝ が ある → <b>軸</b>も 塗る → <b>黒丸</b>。` : `＝ が ない → 軸は 塗らない → <b>白丸</b>。`) : `x軸と 交わらない ので、軸に 塗る 点は ない。`,
     any ? `塗れた ところに <b>x</b> を 置く。` : `塗れた ところが ない ので、x を 置けない。`,
     `${why} → 答え <b>${P.ans}</b>。`])}`;
 }

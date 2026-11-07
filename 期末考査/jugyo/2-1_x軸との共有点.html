@@ -1207,6 +1207,14 @@ body.portrait .ptag{left:70px;top:8px}
 .in2here{position:absolute;right:10px;bottom:-4px;font:900 26px "Zen Maru Gothic",sans-serif;color:#e0465e}
 .portrait .pfit .in2row{flex-wrap:wrap}
 .p3fig{margin-left:auto;width:150px;height:74px;flex:none;background:#fff;border-radius:6px;padding:3px} .p3fig svg{width:100%;height:100%;display:block}
+/* ③-1 練習編の 問題（11/7）：導入と 同じ 色。上を 塗る＝オレンジ、下を 塗る＝水色、軸を 塗る＝透ける ピンク（黒丸に 重ねる） */
+.ipaint.pd path{stroke:#3d9be0}
+.v2up.p3t{fill:#fde9d6} .v2up.p3t.p3dn{fill:#dcedf9}
+.icv.p3cv{stroke:#444}   /* 練習の 放物線は 濃い 灰色（下を 塗る 水色と 見分ける） */
+.p3axhl{fill:#ff3d8b;fill-opacity:.45}
+.v2bd.p3bd{fill:#333;stroke:#333}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .v2up.p3t{fill:#4a3826} :root:not([data-theme="light"]) .v2up.p3t.p3dn{fill:#233a4d} :root:not([data-theme="light"]) .icv.p3cv{stroke:#ddd} :root:not([data-theme="light"]) .v2bd.p3bd{fill:#eee;stroke:#eee} }
+:root[data-theme="dark"] .v2up.p3t{fill:#4a3826} :root[data-theme="dark"] .v2up.p3t.p3dn{fill:#233a4d} :root[data-theme="dark"] .icv.p3cv{stroke:#ddd} :root[data-theme="dark"] .v2bd.p3bd{fill:#eee;stroke:#eee}
 
 /* ===== 手書き ===== */
 #ink{position:fixed;left:0;top:0;z-index:15;pointer-events:none;touch-action:none}
@@ -2001,7 +2009,7 @@ function SUDARE(n, s){
 const RDX = (t, r, s, dn) => `<span class="rdx">${t}<i class="rdl lh" data-s="${s}"></i><span class="rdn${dn?' dn':''} lh" data-s="${s}">${r}</span></span>`;
 
 /* ====== このプリントのスライド ====== */
-const SERIES = [{"f": "1-1_因数分解の復習", "no": "①-1", "t": "因数分解の 復習", "v": "1.5_2026-10-29"}, {"f": "1-2_2次方程式の解", "no": "①-2", "t": "2次方程式の 解", "v": "1.5_2026-10-29"}, {"f": "1-3_2次方程式の解", "no": "①-3", "t": "2次方程式の 解 ②", "v": "1.5_2026-10-29"}, {"f": "1-4_解の公式", "no": "①-4", "t": "解の公式", "v": "1.7_2026-10-30"}, {"f": "1-5_解の公式_重解と解なし", "no": "①-5", "t": "2次方程式の 解 ③", "v": "1.7_2026-10-30"}, {"f": "1-6_実数解の個数", "no": "①-6", "t": "実数解の 個数", "v": "1.7_2026-10-30"}, {"f": "2-1_x軸との共有点", "no": "②-1", "t": "x軸との 共有点", "v": "1.5_2026-10-29"}, {"f": "2-2_x軸との共有点", "no": "②-2", "t": "x軸との 共有点 ②", "v": "1.5_2026-10-29"}, {"f": "2-3_x軸との位置関係", "no": "②-3", "t": "x軸との 位置関係", "v": "1.10_2026-11-02"}, {"f": "3-2_2次不等式_練習編_v2", "no": "③-1", "t": "2次不等式 練習編", "v": "3.6_2026-11-07"}, {"f": "3-1_2次不等式の解法_v2", "no": "③-2", "t": "2次不等式の 解き方", "v": "2.21_2026-10-30"}, {"f": "3-3_2次不等式の解法", "no": "③-3", "t": "2次不等式 いろいろ", "v": "1.7_2026-10-30"}, {"f": "3-4_2次不等式の解法", "no": "③-4", "t": "x² の前が マイナス", "v": "1.7_2026-10-30"}], ME = "2-1_x軸との共有点";
+const SERIES = [{"f": "1-1_因数分解の復習", "no": "①-1", "t": "因数分解の 復習", "v": "1.5_2026-10-29"}, {"f": "1-2_2次方程式の解", "no": "①-2", "t": "2次方程式の 解", "v": "1.5_2026-10-29"}, {"f": "1-3_2次方程式の解", "no": "①-3", "t": "2次方程式の 解 ②", "v": "1.5_2026-10-29"}, {"f": "1-4_解の公式", "no": "①-4", "t": "解の公式", "v": "1.7_2026-10-30"}, {"f": "1-5_解の公式_重解と解なし", "no": "①-5", "t": "2次方程式の 解 ③", "v": "1.7_2026-10-30"}, {"f": "1-6_実数解の個数", "no": "①-6", "t": "実数解の 個数", "v": "1.7_2026-10-30"}, {"f": "2-1_x軸との共有点", "no": "②-1", "t": "x軸との 共有点", "v": "1.5_2026-10-29"}, {"f": "2-2_x軸との共有点", "no": "②-2", "t": "x軸との 共有点 ②", "v": "1.5_2026-10-29"}, {"f": "2-3_x軸との位置関係", "no": "②-3", "t": "x軸との 位置関係", "v": "1.10_2026-11-02"}, {"f": "3-2_2次不等式_練習編_v2", "no": "③-1", "t": "2次不等式 練習編", "v": "3.7_2026-11-07"}, {"f": "3-1_2次不等式の解法_v2", "no": "③-2", "t": "2次不等式の 解き方", "v": "2.21_2026-10-30"}, {"f": "3-3_2次不等式の解法", "no": "③-3", "t": "2次不等式 いろいろ", "v": "1.7_2026-10-30"}, {"f": "3-4_2次不等式の解法", "no": "③-4", "t": "x² の前が マイナス", "v": "1.7_2026-10-30"}], ME = "2-1_x軸との共有点";
 const VER = '<i class="nv">ver</i> 1.5　2026-10-29';
 
 const IMG = s => s;
