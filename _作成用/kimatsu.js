@@ -150,8 +150,9 @@ function ansGap(root){
     }
     if(!ok) return;
     const parts = n.nodeValue.split(/,[ \u3000]*/), f = document.createDocumentFragment();
-    parts.forEach((p,i) => { f.appendChild(document.createTextNode(p + (i < parts.length-1 ? ',' : '')));
-      if(i < parts.length-1){ const g = document.createElement('span'); g.className = 'agap'; f.appendChild(g); } });
+    const gap = () => { const g = document.createElement('span'); g.className = 'agap'; return g; };   // カンマの 前と 後ろに 同じ すき間（カンマが 2つの 式の 真ん中、11/7）
+    parts.forEach((p,i) => { f.appendChild(document.createTextNode(p));
+      if(i < parts.length-1){ f.appendChild(gap()); f.appendChild(document.createTextNode(',')); f.appendChild(gap()); } });
     n.replaceWith(f);
   });
 }
