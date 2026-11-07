@@ -1257,6 +1257,7 @@ body.portrait .ptag{left:70px;top:8px}
 .fo3w{font-size:30px;color:#e0465e}
 .pgfo{height:100%;display:flex;align-items:center;font-family:"STIX Two Text",serif;font-size:7px;color:#333;white-space:nowrap;pointer-events:none;--rw:.5px}
 .pgfo-middle{justify-content:center} .pgfo-end{justify-content:flex-end} .pgfo-start{justify-content:flex-start}
+.agap{display:inline-block;width:1.2em}   /* 2つの 不等式の 間（ansGap、11/7） */
 
 /* ===== 手書き ===== */
 #ink{position:fixed;left:0;top:0;z-index:15;pointer-events:none;touch-action:none}
@@ -1880,7 +1881,28 @@ function eqSlide(P){
 }
 
 /* 移項の矢印を、＋5 の下から −5 の上へ かく（engine.js の relayout から 呼ばれる） */
+/* 不等式の 答えが 2つ（x ≦ −1, 3 ≦ x など）の とき、カンマの 後ろを 広く あける（2つの 式が つながって 見えない ように、11/7 先生の 指示）。
+   カンマの 前後 どちらにも 不等号が ある ときだけ。1度 だけ 行う */
+const INEQ = /[＜≦＞≧<>]/;
+function ansGap(root){
+  if(root.dataset.agap) return; root.dataset.agap = 1;
+  const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {acceptNode:n => /,/.test(n.nodeValue) && !n.parentElement.closest('svg:not(foreignObject *)') ? 1 : 3});
+  const list = []; while(w.nextNode()) list.push(w.currentNode);
+  list.forEach(n => {
+    let e = n.parentElement, ok = false;
+    for(let i=0; i<4 && e && !ok; i++, e = e.parentElement){
+      const t = e.textContent, k = t.indexOf(','); if(k<0) continue;
+      ok = t.split(',').length===2 ? INEQ.test(t.slice(0,k)) && INEQ.test(t.slice(k+1)) && /x/.test(t) : false;
+    }
+    if(!ok) return;
+    const parts = n.nodeValue.split(/,[ \u3000]*/), f = document.createDocumentFragment();
+    parts.forEach((p,i) => { f.appendChild(document.createTextNode(p + (i < parts.length-1 ? ',' : '')));
+      if(i < parts.length-1){ const g = document.createElement('span'); g.className = 'agap'; f.appendChild(g); } });
+    n.replaceWith(f);
+  });
+}
 function layoutExtra(root){
+  ansGap(root);
   root.querySelectorAll('.qb').forEach(b=>{
     const t=b.querySelector('.mvt'), v=b.querySelector('.mvv'), g=b.querySelector('.mva g');
     if(!t||!v||!g) return;
@@ -2054,8 +2076,8 @@ function SUDARE(n, s){
 const RDX = (t, r, s, dn) => `<span class="rdx">${t}<i class="rdl lh" data-s="${s}"></i><span class="rdn${dn?' dn':''} lh" data-s="${s}">${r}</span></span>`;
 
 /* ====== このプリントのスライド ====== */
-const SERIES = [{"f": "1-1_因数分解の復習", "no": "①-1", "t": "因数分解の 復習", "v": "1.5_2026-10-29"}, {"f": "1-2_2次方程式の解", "no": "①-2", "t": "2次方程式の 解", "v": "1.5_2026-10-29"}, {"f": "1-3_2次方程式の解", "no": "①-3", "t": "2次方程式の 解 ②", "v": "1.5_2026-10-29"}, {"f": "1-4_解の公式", "no": "①-4", "t": "解の公式", "v": "1.7_2026-10-30"}, {"f": "1-5_解の公式_重解と解なし", "no": "①-5", "t": "2次方程式の 解 ③", "v": "1.7_2026-10-30"}, {"f": "1-6_実数解の個数", "no": "①-6", "t": "実数解の 個数", "v": "1.7_2026-10-30"}, {"f": "2-1_x軸との共有点", "no": "②-1", "t": "x軸との 共有点", "v": "1.5_2026-10-29"}, {"f": "2-2_x軸との共有点", "no": "②-2", "t": "x軸との 共有点 ②", "v": "1.5_2026-10-29"}, {"f": "2-3_x軸との位置関係", "no": "②-3", "t": "x軸との 位置関係", "v": "1.10_2026-11-02"}, {"f": "3-2_2次不等式_練習編_v2", "no": "③-1", "t": "2次不等式 練習編", "v": "3.16_2026-11-07"}, {"f": "3-1_2次不等式の解法_v2", "no": "③-2", "t": "2次不等式の 解き方", "v": "2.22_2026-11-07"}, {"f": "3-3_2次不等式の解法_v2", "no": "③-3", "t": "2次不等式 いろいろ", "v": "2.1_2026-11-07"}, {"f": "3-4_2次不等式の解法", "no": "③-4", "t": "x² の前が マイナス", "v": "1.9_2026-11-07"}], ME = "3-4_2次不等式の解法";
-const VER = '<i class="nv">ver</i> 1.9　2026-11-07';
+const SERIES = [{"f": "1-1_因数分解の復習", "no": "①-1", "t": "因数分解の 復習", "v": "1.5_2026-10-29"}, {"f": "1-2_2次方程式の解", "no": "①-2", "t": "2次方程式の 解", "v": "1.5_2026-10-29"}, {"f": "1-3_2次方程式の解", "no": "①-3", "t": "2次方程式の 解 ②", "v": "1.5_2026-10-29"}, {"f": "1-4_解の公式", "no": "①-4", "t": "解の公式", "v": "1.7_2026-10-30"}, {"f": "1-5_解の公式_重解と解なし", "no": "①-5", "t": "2次方程式の 解 ③", "v": "1.7_2026-10-30"}, {"f": "1-6_実数解の個数", "no": "①-6", "t": "実数解の 個数", "v": "1.7_2026-10-30"}, {"f": "2-1_x軸との共有点", "no": "②-1", "t": "x軸との 共有点", "v": "1.5_2026-10-29"}, {"f": "2-2_x軸との共有点", "no": "②-2", "t": "x軸との 共有点 ②", "v": "1.5_2026-10-29"}, {"f": "2-3_x軸との位置関係", "no": "②-3", "t": "x軸との 位置関係", "v": "1.10_2026-11-02"}, {"f": "3-2_2次不等式_練習編_v2", "no": "③-1", "t": "2次不等式 練習編", "v": "3.17_2026-11-07"}, {"f": "3-1_2次不等式の解法_v2", "no": "③-2", "t": "2次不等式の 解き方", "v": "2.23_2026-11-07"}, {"f": "3-3_2次不等式の解法_v2", "no": "③-3", "t": "2次不等式 いろいろ", "v": "2.2_2026-11-07"}, {"f": "3-4_2次不等式の解法", "no": "③-4", "t": "x² の前が マイナス", "v": "1.10_2026-11-07"}], ME = "3-4_2次不等式の解法";
+const VER = '<i class="nv">ver</i> 1.10　2026-11-07';
 
 const IMG = s => s;
 const A = (s,r,h,fs,al) => ({s,r,h,fs,al});

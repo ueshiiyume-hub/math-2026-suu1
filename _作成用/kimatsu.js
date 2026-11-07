@@ -135,7 +135,28 @@ function eqSlide(P){
 }
 
 /* 移項の矢印を、＋5 の下から −5 の上へ かく（engine.js の relayout から 呼ばれる） */
+/* 不等式の 答えが 2つ（x ≦ −1, 3 ≦ x など）の とき、カンマの 後ろを 広く あける（2つの 式が つながって 見えない ように、11/7 先生の 指示）。
+   カンマの 前後 どちらにも 不等号が ある ときだけ。1度 だけ 行う */
+const INEQ = /[＜≦＞≧<>]/;
+function ansGap(root){
+  if(root.dataset.agap) return; root.dataset.agap = 1;
+  const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {acceptNode:n => /,/.test(n.nodeValue) && !n.parentElement.closest('svg:not(foreignObject *)') ? 1 : 3});
+  const list = []; while(w.nextNode()) list.push(w.currentNode);
+  list.forEach(n => {
+    let e = n.parentElement, ok = false;
+    for(let i=0; i<4 && e && !ok; i++, e = e.parentElement){
+      const t = e.textContent, k = t.indexOf(','); if(k<0) continue;
+      ok = t.split(',').length===2 ? INEQ.test(t.slice(0,k)) && INEQ.test(t.slice(k+1)) && /x/.test(t) : false;
+    }
+    if(!ok) return;
+    const parts = n.nodeValue.split(/,[ \u3000]*/), f = document.createDocumentFragment();
+    parts.forEach((p,i) => { f.appendChild(document.createTextNode(p + (i < parts.length-1 ? ',' : '')));
+      if(i < parts.length-1){ const g = document.createElement('span'); g.className = 'agap'; f.appendChild(g); } });
+    n.replaceWith(f);
+  });
+}
 function layoutExtra(root){
+  ansGap(root);
   root.querySelectorAll('.qb').forEach(b=>{
     const t=b.querySelector('.mvt'), v=b.querySelector('.mvv'), g=b.querySelector('.mva g');
     if(!t||!v||!g) return;

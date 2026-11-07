@@ -812,3 +812,4 @@ body.portrait .ptag{left:70px;top:8px}
 .fo3w{font-size:30px;color:#e0465e}
 .pgfo{height:100%;display:flex;align-items:center;font-family:"STIX Two Text",serif;font-size:7px;color:#333;white-space:nowrap;pointer-events:none;--rw:.5px}
 .pgfo-middle{justify-content:center} .pgfo-end{justify-content:flex-end} .pgfo-start{justify-content:flex-start}
+.agap{display:inline-block;width:1.2em}   /* 2つの 不等式の 間（ansGap、11/7） */
