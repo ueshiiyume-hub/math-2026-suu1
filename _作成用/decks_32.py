@@ -189,12 +189,13 @@ function WRITE(r){
   const svg = [], items = [];
   SIGN3.forEach((sg,j)=>{
     const L = cx[j], up = j%2===0, eq = j>=2;
-    const sc = 10.5, ay = [y0+64, y0+64, y0+70][r], xv = L+53.7;
-    const g = {W:600, H:600, ay, X:x=>xv+(x-1)*sc, Y:x=>ay-((x-1)**2+R.o.c)*sc};
-    const hw = Math.sqrt(((ay-(y0+18))/sc - R.o.c)); let d=''; for(let i=0;i<=40;i++){ const x=1-hw+2*hw*i/40; d+=(i?'L':'M')+f1(g.X(x))+' '+f1(g.Y(x))+' '; } g.d=d;
+    const sc = 10.5, ay = [y0+56, y0+64, y0+70][r], xv = L+53.7;
+    const sy = R.o.c < 0 ? Math.min(sc, (box[0]-5-ay)/(-R.o.c)) : sc;   // 縦の 目もり：頂点が 答えの 枠に かからない ように（1段目、11/7）
+    const g = {W:600, H:600, ay, X:x=>xv+(x-1)*sc, Y:x=>ay-((x-1)**2+R.o.c)*sy};
+    const hw = Math.sqrt(((ay-(y0+18))/sy - R.o.c)); let d=''; for(let i=0;i<=40;i++){ const x=1-hw+2*hw*i/40; d+=(i?'L':'M')+f1(g.X(x))+' '+f1(g.Y(x))+' '; } g.d=d;
     const id='w3_'+(++CL3);
     const clip = up ? `<rect x="${L}" y="${y0}" width="110" height="${f1((eq?ay:ay-.6)-y0)}"/>` : `<rect x="${L}" y="${f1(eq?ay:ay+.6)}" width="110" height="60"/>`;
-    svg.push(`<line x1="${L+12}" y1="${ay}" x2="${L+100}" y2="${ay}" stroke="#555" stroke-width=".7"/><polygon points="${L+102},${ay} ${L+98.5},${ay-1.5} ${L+98.5},${ay+1.5}" fill="#555"/><text class="pgt" x="${L+98}" y="${ay+8}" font-style="italic">x</text>${eq?`<line x1="${L+12}" y1="${ay}" x2="${L+98}" y2="${ay}" stroke="#ffb000" stroke-opacity=".55" stroke-width="4" stroke-linecap="round"/>`:''}`,
+    svg.push(`<line x1="${L+12}" y1="${ay}" x2="${L+100}" y2="${ay}" stroke="#555" stroke-width=".7"/><polygon points="${L+102},${ay} ${L+98.5},${ay-1.5} ${L+98.5},${ay+1.5}" fill="#555"/><text class="pgt" x="${L+98}" y="${ay+8}" font-style="italic">x</text>`,
       `<clipPath id="${id}">${clip}</clipPath><path d="${d}" fill="none" stroke="#29a0e0" stroke-width="4.6" stroke-linecap="round" opacity=".6" clip-path="url(#${id})"/><path d="${d}" fill="none" stroke="#111" stroke-width="1.1"/>`,
       R.roots.map(x=>`<circle cx="${f1(g.X(x))}" cy="${ay}" r="3" fill="${eq?'#29a0e0':'#fff'}" stroke="#29a0e0" stroke-width=".9"/><text class="pgt" x="${f1(g.X(x)+(R.roots.length>1?(x<1?-4:4):0))}" y="${ay+9}" text-anchor="middle">${x<0?'−'+(-x):x}</text>`).join(''));
     svg.push(`<rect x="${L}" y="${box[0]}" width="107.4" height="34.2" fill="none" stroke="#d9d9d9" stroke-width="1.5"/>`);
