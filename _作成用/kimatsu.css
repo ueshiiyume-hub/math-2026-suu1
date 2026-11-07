@@ -640,9 +640,9 @@ i.nv{font-style:normal;font-family:inherit}
 .p3a2 .math{font-family:"STIX Two Text",serif;font-weight:700}
 .portrait .pfit .p3pc{flex-direction:column;gap:30px}
 .p3wr{font-size:30px}
-.p3 .iband2{fill:#e4e7ee;opacity:1}   /* x の まわりの 帯は うすい グレー（軸を 塗る 黄オレンジと まぎれない ように、11/7） */
-@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .p3 .iband2{fill:#3d4250} }
-:root[data-theme="dark"] .p3 .iband2{fill:#3d4250}
+.p3 .iband2{fill:#fbdde5;opacity:1}   /* x の まわりの 帯は うすい ピンク（x の 丸に 合わせる。黄色は 軸の 黄オレンジと まぎれた、11/7） */
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .p3 .iband2{fill:#5a3a48} }
+:root[data-theme="dark"] .p3 .iband2{fill:#5a3a48}
 .p3sg{display:inline-block;padding:0 8px;border-radius:8px;transition:background .3s,box-shadow .3s,color .3s}
 .p3sg.on{color:#e0465e;background:#fff0b3;box-shadow:0 0 0 3px #e0465e}
 .p3w .v2sub.lh{display:inline-block}
