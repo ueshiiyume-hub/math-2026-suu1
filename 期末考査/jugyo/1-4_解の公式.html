@@ -1159,15 +1159,15 @@ body.portrait .ptag{left:70px;top:8px}
 .vm{display:inline-block;vertical-align:middle}
 
 /* ③-1 練習編の 導入（2026-11-07）：上＝オレンジ、下＝水色、軸＝紫。言葉は 少なく */
-.c-up{color:#d9731a} .c-dn{color:#2f86c8} .c-ax{color:#e0408a}
+.c-up{color:#d9731a} .c-dn{color:#d9731a} .c-ax{color:#e39b00}
 .inlab{font:700 22px "Zen Maru Gothic",sans-serif;color:var(--muted);margin-bottom:18px}
 .ineq{font-size:40px;white-space:nowrap}
 .inpanels{position:absolute;left:30px;right:30px;top:70px;display:flex;justify-content:space-between;gap:20px}
 .inpn{flex:1;text-align:center}
 .insv{width:100%;height:auto;display:block}
 .inax{stroke:#555;stroke-width:3} .inaxh{fill:#555}
-.fill-up{fill:#fbd7b5} .fill-dn{fill:#cfe7f7}
-.line-ax{stroke:#ff3d8b;stroke-opacity:.45;stroke-width:18;stroke-linecap:round}   /* 軸を 塗る：蛍光ペンの ような 透ける ピンク（下の 黒い 軸が 見える。紫は 塗りつぶして 見えた、11/7） */
+.fill-up{fill:#fbd7b5} .fill-dn{fill:#fbd7b5}
+.line-ax{stroke:#ffb000;stroke-opacity:.55;stroke-width:18;stroke-linecap:round}   /* 軸を 塗る：黄色に 近い オレンジを 透かす（蛍光ペンの ように 下の 黒い 軸が 見える。紫→ピンク→黄オレンジ、11/7） */
 .inpt{margin-top:14px;font:900 32px "Zen Maru Gothic",sans-serif;color:var(--ink)}
 .inpt .math{font-weight:400;margin-right:4px}
 .portrait .pfit .inpanels{flex-wrap:wrap}
@@ -1200,21 +1200,21 @@ body.portrait .ptag{left:70px;top:8px}
 .in2sv{width:100%;max-width:250px;height:auto;display:block}
 .in2cv{fill:none;stroke:var(--ink,#333);stroke-width:4;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1s ease .5s}
 .in2cv.show{stroke-dashoffset:0}
-.in2dot{fill:#e0465e} .in2dot.op{fill:var(--paper,#fff);stroke:#e0465e;stroke-width:3}
+.in2dot{fill:#29a0e0} .in2dot.op{fill:var(--paper,#fff);stroke:#29a0e0;stroke-width:3}
 .in2lb{font:20px "STIX Two Text",serif;fill:var(--ink,#333)}
-.in2pt path{fill:none;stroke:#f2a65a;stroke-width:12;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;opacity:.85;transition:stroke-dashoffset .8s ease .5s}
+.in2pt path{fill:none;stroke:#29a0e0;stroke-width:12;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;opacity:.6;transition:stroke-dashoffset .8s ease .5s}
 .in2pt.show path{stroke-dashoffset:0}
 .in2here{position:absolute;right:10px;bottom:-4px;font:900 26px "Zen Maru Gothic",sans-serif;color:#e0465e}
 .portrait .pfit .in2row{flex-wrap:wrap}
 .p3fig{margin-left:auto;width:150px;height:74px;flex:none;background:#fff;border-radius:6px;padding:3px} .p3fig svg{width:100%;height:100%;display:block}
 /* ③-1 練習編の 問題（11/7）：導入と 同じ 色。上を 塗る＝オレンジ、下を 塗る＝水色、軸を 塗る＝透ける ピンク（黒丸に 重ねる） */
-.ipaint.pu path,.ipaint.pd path{stroke:#333;opacity:.55;stroke-width:17}   /* グラフを 塗る 色は 濃い グレー（黒丸と 同じ 色に 見える ように。少し 透けて 下の 線が 見える、11/7） */
-.v2up.p3t{fill:#fde9d6} .v2up.p3t.p3dn{fill:#dcedf9}
-.icv.p3cv{stroke:#444}   /* 練習の 放物線は 濃い 灰色（下を 塗る 水色と 見分ける） */
+.ipaint.pu path,.ipaint.pd path{stroke:#29a0e0;opacity:.6;stroke-width:17}   /* グラフを 塗る 色は 水色（黒丸も 同じ 水色。少し 透けて 下の 線が 見える、11/7） */
+.v2up.p3t{fill:#fde9d6} .v2up.p3t.p3dn{fill:#fde9d6}
+.icv.p3cv{stroke:#444}   /* 練習の 放物線は 濃い 灰色（塗る 水色と 見分ける） */
 .p3axhl{fill:#ff3d8b;fill-opacity:.45}
-.v2bd.p3bd{fill:#333;stroke:#333}
-@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .v2up.p3t{fill:#4a3826} :root:not([data-theme="light"]) .v2up.p3t.p3dn{fill:#233a4d} :root:not([data-theme="light"]) .icv.p3cv{stroke:#ddd} :root:not([data-theme="light"]) .v2bd.p3bd{fill:#eee;stroke:#eee} }
-:root[data-theme="dark"] .v2up.p3t{fill:#4a3826} :root[data-theme="dark"] .v2up.p3t.p3dn{fill:#233a4d} :root[data-theme="dark"] .icv.p3cv{stroke:#ddd} :root[data-theme="dark"] .v2bd.p3bd{fill:#eee;stroke:#eee}
+.v2bd.p3bd{fill:#29a0e0;stroke:#29a0e0} .v2wd.p3wd{stroke:#29a0e0}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .v2up.p3t{fill:#4a3826} :root:not([data-theme="light"]) .v2up.p3t.p3dn{fill:#4a3826} :root:not([data-theme="light"]) .icv.p3cv{stroke:#ddd} :root:not([data-theme="light"]) .v2bd.p3bd{fill:#4db3ec;stroke:#4db3ec} }
+:root[data-theme="dark"] .v2up.p3t{fill:#4a3826} :root[data-theme="dark"] .v2up.p3t.p3dn{fill:#4a3826} :root[data-theme="dark"] .icv.p3cv{stroke:#ddd} :root[data-theme="dark"] .v2bd.p3bd{fill:#4db3ec;stroke:#4db3ec}
 /* ③-1 練習の 問題（11/7）：答えの 枠を グラフの 下に。カードを 下まで のばし、「いま やっていること」は 左下に 小さく */
 .dcard.p3big{height:660px}
 .p3ans{position:absolute;left:24px;width:800px;height:76px;display:flex;align-items:center;gap:24px;border:3px solid #d9d9d9;border-radius:6px;background:var(--paper);padding:0 22px}
@@ -2019,7 +2019,7 @@ function SUDARE(n, s){
 const RDX = (t, r, s, dn) => `<span class="rdx">${t}<i class="rdl lh" data-s="${s}"></i><span class="rdn${dn?' dn':''} lh" data-s="${s}">${r}</span></span>`;
 
 /* ====== このプリントのスライド ====== */
-const SERIES = [{"f": "1-1_因数分解の復習", "no": "①-1", "t": "因数分解の 復習", "v": "1.5_2026-10-29"}, {"f": "1-2_2次方程式の解", "no": "①-2", "t": "2次方程式の 解", "v": "1.5_2026-10-29"}, {"f": "1-3_2次方程式の解", "no": "①-3", "t": "2次方程式の 解 ②", "v": "1.5_2026-10-29"}, {"f": "1-4_解の公式", "no": "①-4", "t": "解の公式", "v": "1.7_2026-10-30"}, {"f": "1-5_解の公式_重解と解なし", "no": "①-5", "t": "2次方程式の 解 ③", "v": "1.7_2026-10-30"}, {"f": "1-6_実数解の個数", "no": "①-6", "t": "実数解の 個数", "v": "1.7_2026-10-30"}, {"f": "2-1_x軸との共有点", "no": "②-1", "t": "x軸との 共有点", "v": "1.5_2026-10-29"}, {"f": "2-2_x軸との共有点", "no": "②-2", "t": "x軸との 共有点 ②", "v": "1.5_2026-10-29"}, {"f": "2-3_x軸との位置関係", "no": "②-3", "t": "x軸との 位置関係", "v": "1.10_2026-11-02"}, {"f": "3-2_2次不等式_練習編_v2", "no": "③-1", "t": "2次不等式 練習編", "v": "3.10_2026-11-07"}, {"f": "3-1_2次不等式の解法_v2", "no": "③-2", "t": "2次不等式の 解き方", "v": "2.21_2026-10-30"}, {"f": "3-3_2次不等式の解法", "no": "③-3", "t": "2次不等式 いろいろ", "v": "1.7_2026-10-30"}, {"f": "3-4_2次不等式の解法", "no": "③-4", "t": "x² の前が マイナス", "v": "1.7_2026-10-30"}], ME = "1-4_解の公式";
+const SERIES = [{"f": "1-1_因数分解の復習", "no": "①-1", "t": "因数分解の 復習", "v": "1.5_2026-10-29"}, {"f": "1-2_2次方程式の解", "no": "①-2", "t": "2次方程式の 解", "v": "1.5_2026-10-29"}, {"f": "1-3_2次方程式の解", "no": "①-3", "t": "2次方程式の 解 ②", "v": "1.5_2026-10-29"}, {"f": "1-4_解の公式", "no": "①-4", "t": "解の公式", "v": "1.7_2026-10-30"}, {"f": "1-5_解の公式_重解と解なし", "no": "①-5", "t": "2次方程式の 解 ③", "v": "1.7_2026-10-30"}, {"f": "1-6_実数解の個数", "no": "①-6", "t": "実数解の 個数", "v": "1.7_2026-10-30"}, {"f": "2-1_x軸との共有点", "no": "②-1", "t": "x軸との 共有点", "v": "1.5_2026-10-29"}, {"f": "2-2_x軸との共有点", "no": "②-2", "t": "x軸との 共有点 ②", "v": "1.5_2026-10-29"}, {"f": "2-3_x軸との位置関係", "no": "②-3", "t": "x軸との 位置関係", "v": "1.10_2026-11-02"}, {"f": "3-2_2次不等式_練習編_v2", "no": "③-1", "t": "2次不等式 練習編", "v": "3.11_2026-11-07"}, {"f": "3-1_2次不等式の解法_v2", "no": "③-2", "t": "2次不等式の 解き方", "v": "2.21_2026-10-30"}, {"f": "3-3_2次不等式の解法", "no": "③-3", "t": "2次不等式 いろいろ", "v": "1.7_2026-10-30"}, {"f": "3-4_2次不等式の解法", "no": "③-4", "t": "x² の前が マイナス", "v": "1.7_2026-10-30"}], ME = "1-4_解の公式";
 const VER = '<i class="nv">ver</i> 1.7　2026-10-30';
 
 const KK = KIMATSU + '　①-4';
