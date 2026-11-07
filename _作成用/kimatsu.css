@@ -653,7 +653,7 @@ i.nv{font-style:normal;font-family:inherit}
 .p3bxb{display:inline-flex;align-items:center;justify-content:center;min-width:160px;height:62px;padding:0 14px;background:#fff;color:#e0465e;white-space:nowrap}
 .p3bxb.w{min-width:280px}
 .p3bxn{align-self:flex-end;margin-top:-6px;font-size:18px;color:var(--muted);opacity:.8}
-.p3bxe{color:#e07a1f}
+.p3bxe{color:#333}   /* 「と」は 色なし（上の オレンジと 混ざらない ように、11/7） */
 .p3bxt{color:#333;white-space:nowrap}
 .p3bx .p3sg.on:not(.cur){color:inherit;background:none;box-shadow:none}
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .p3bxr{background:#2f3a22} :root:not([data-theme="light"]) .p3bxb{background:#1f1f1f} :root:not([data-theme="light"]) .p3bxt{color:#ddd} }
@@ -712,3 +712,31 @@ body.portrait .ptag{left:70px;top:8px}
 .dsud{position:absolute;left:560px;top:300px;font-size:17px}
 .nw9{font-size:.88em;white-space:nowrap}
 .vm{display:inline-block;vertical-align:middle}
+
+/* ③-1 練習編の 導入（2026-11-07）：上＝オレンジ、下＝水色、軸＝紫。言葉は 少なく */
+.c-up{color:#d9731a} .c-dn{color:#2f86c8} .c-ax{color:#8a4fb0}
+.p3bxb .c-up,.p3bxb .c-dn,.p3bxb .c-ax{font-weight:900}
+.inrow{position:absolute;left:40px;right:40px;top:120px;display:flex;justify-content:space-between;gap:24px}
+.incol{flex:1;text-align:center}
+.inlab{font:700 22px "Zen Maru Gothic",sans-serif;color:var(--muted);margin-bottom:18px}
+.ineq{font-size:40px;white-space:nowrap}
+.incol.now .ineq{font-weight:700}
+.insw{position:relative;display:inline-block;min-width:2.2em;text-align:left}
+.inold{transition:opacity .3s} .inold.on{opacity:0}
+.innew{position:absolute;left:0;top:0;color:#e0465e;font-weight:900}
+.inflow{position:absolute;left:40px;right:40px;top:150px;display:flex;align-items:center;justify-content:center;gap:18px}
+.inbox{width:200px;height:120px;display:flex;align-items:center;justify-content:center;font:900 36px "Zen Maru Gothic",sans-serif;border:3px solid var(--line,#c9d3dd);border-radius:14px;background:var(--paper);color:var(--ink);transition:opacity .4s,border-color .4s}
+.inbox.past.on{opacity:.3}
+.inbox.today.on{border:6px solid #e0465e}
+.inar{font-size:40px;color:var(--muted)}
+.intoday{position:absolute;right:150px;top:300px;font:900 28px "Zen Maru Gothic",sans-serif;color:#e0465e}
+.inpanels{position:absolute;left:30px;right:30px;top:70px;display:flex;justify-content:space-between;gap:20px}
+.inpn{flex:1;text-align:center}
+.insv{width:100%;height:auto;display:block}
+.inax{stroke:#555;stroke-width:3} .inaxh{fill:#555}
+.fill-up{fill:#fbd7b5} .fill-dn{fill:#cfe7f7}
+.line-ax{stroke:#8a4fb0;stroke-width:12;stroke-linecap:round}
+.inpt{margin-top:14px;font:900 32px "Zen Maru Gothic",sans-serif;color:var(--ink)}
+.inpt .math{font-weight:400;margin-right:4px}
+.portrait .pfit .inrow,.portrait .pfit .inflow,.portrait .pfit .inpanels{flex-wrap:wrap}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .p3bxe{color:#ddd} } :root[data-theme="dark"] .p3bxe{color:#ddd}

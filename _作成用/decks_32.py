@@ -297,7 +297,9 @@ const PH12 = probHead('プリント問題③-1', '次の 2次不等式を、図�
 
 /* プリントの いちばん上の 枠（2026-11-04）：緑の 行 ×4、オレンジの 式 ⇒ 白い 枠 を塗る。1番ずつ 答えが 入る */
 /* 答えは 短く「上」「下」「上 と x軸」（先生の 指示、2026-11-04）。正確な 言い方は 枠の 下に 小さく 注釈 */
-const BXA = ['上', '下', '上 <span class="p3bxe">と x軸</span>', '下 <span class="p3bxe">と x軸</span>'];
+// 答えの 色：上＝オレンジ、下＝水色、x軸＝紫（導入の「塗るところは3つ」と 同じ 色、11/7）
+const UP = '<span class="c-up">上</span>', DN = '<span class="c-dn">下</span>', AXW = '<span class="c-ax">x軸</span>';
+const BXA = [UP, DN, `${UP} <span class="p3bxe">と</span> ${AXW}`, `${DN} <span class="p3bxe">と</span> ${AXW}`];
 const BOX3 = `
   <div class="card abs dcard v2 p3">${EQTAPE}
     <div class="p3bx">${SIGN3.map((sg,k)=>`<div class="p3bxr">
@@ -307,12 +309,47 @@ const BOX3 = `
   </div>
   ${cbar([
     `プリントの いちばん上の 枠。　右側の 不等号で、塗る ところが 決まる。`,
-    `＞ 0 は 0より 大きい → <b>上</b> を 塗る。`,
-    `＜ 0 は 0より 小さい → <b>下</b> を 塗る。`,
-    `≧ 0 は ＝ も ある → 上 <b>と x軸</b> を 塗る（黒丸）。`,
-    `≦ 0 も ＝ が ある → 下 <b>と x軸</b> を 塗る。　この 決まりで 12問 解いて いこう！`])}`;
+    `＞ 0 は 0より 大きい → <b style="color:#d9731a">上</b> を 塗る。`,
+    `＜ 0 は 0より 小さい → <b style="color:#2f86c8">下</b> を 塗る。`,
+    `≧ 0 は ＝ も ある → <b style="color:#d9731a">上</b> と <b style="color:#8a4fb0">x軸</b> を 塗る（黒丸）。`,
+    `≦ 0 も ＝ が ある → <b style="color:#2f86c8">下</b> と <b style="color:#8a4fb0">x軸</b> を 塗る。　この 決まりで 12問 解いて いこう！`])}`;
 
-const PG = [{name:'表紙', html:coverF(KK3, '<span class="mk">2次不等式</span><br>練習編', '塗って 答える', 'テンポよく 12問', POL3, '塗って 答える')}, {name:'塗る ところ', html:BOX3}];
+/* ====== 導入（2026-11-07、先生の 指示）：言葉と 情報を 減らす。3枚
+   ① 今までと 今回（= 0 が ＞ 0 に 変わる） ② 今日やる ところ（解く → グラフ → 塗る → 答える の 後ろ 2つ） ③ 塗るところは 3つ（上・下・軸）
+   「軸の上」とは 言わない（「上」と 混ざる）。軸は「軸を塗る」。色：上＝うすい オレンジ、下＝うすい 水色、軸＝紫の 太い 線 */
+const IN1 = `
+  <div class="card abs dcard v2 p3">${EQTAPE}
+    <div class="inrow">
+      <div class="incol"><div class="inlab">2次方程式</div><div class="ineq math">x${P2} − 2x − 3 ＝ 0</div></div>
+      <div class="incol lh" data-s="1"><div class="inlab">x軸との共有点</div><div class="ineq math">y ＝ x${P2} − 2x − 3</div></div>
+      <div class="incol lh now" data-s="2"><div class="inlab">2次不等式</div><div class="ineq math">x${P2} − 2x − 3 <span class="insw"><span class="inold" data-o="3">＝ 0</span><span class="innew lh" data-s="3">＞ 0</span></span></div></div>
+    </div>
+  </div>
+  ${cbar([`まず、2次方程式。`, `次に、x軸との 共有点。`, `今回は 2次不等式。`, `＝ 0 が <b>不等号</b> に 変わった だけ！`])}`;
+const IN2 = `
+  <div class="card abs dcard v2 p3">${EQTAPE}
+    <div class="inflow">
+      ${['解く', 'グラフ', '塗る', '答える'].map((t, k) => `${k ? '<span class="inar">→</span>' : ''}<div class="inbox ${k < 2 ? 'past' : 'today'}" data-o="1">${t}</div>`).join('')}
+    </div>
+    <div class="intoday lh" data-s="1">今日は ここ</div>
+  </div>
+  ${cbar([`2次不等式は この 順に 解く。`, `解く・グラフ は もう できる。　今日は <b>塗る・答える</b> だけ！`])}`;
+const PANEL = (k, sg, word) => `<div class="inpn">
+    <svg viewBox="0 0 300 200" class="insv">
+      ${k === 0 ? `<rect class="lh fill-up" data-s="1" x="10" y="10" width="280" height="90"/>` : ''}
+      ${k === 1 ? `<rect class="lh fill-dn" data-s="2" x="10" y="100" width="280" height="90"/>` : ''}
+      <line x1="10" y1="100" x2="280" y2="100" class="inax"/><polygon points="292,100 276,93 276,107" class="inaxh"/>
+      ${k === 2 ? `<line class="lh line-ax" data-s="3" x1="10" y1="100" x2="276" y2="100"/>` : ''}
+    </svg>
+    <div class="inpt lh" data-s="${k + 1}"><span class="math">${sg} 0</span>　${word}</div></div>`;
+const IN3 = `
+  <div class="card abs dcard v2 p3">${EQTAPE}
+    <div class="inpanels">${PANEL(0, '＞', `${UP}を塗る`)}${PANEL(1, '＜', `${DN}を塗る`)}${PANEL(2, '＝', `<span class="c-ax">軸</span>を塗る`)}</div>
+  </div>
+  ${cbar([`塗る ところは 3つ。`, `＞ 0 は <b style="color:#d9731a">上</b> を 塗る。`, `＜ 0 は <b style="color:#2f86c8">下</b> を 塗る。`, `＝ 0 は <b style="color:#8a4fb0">軸</b> を 塗る。`])}`;
+
+const PG = [{name:'表紙', html:coverF(KK3, '<span class="mk">2次不等式</span><br>練習編', '塗って 答える', 'テンポよく 12問', POL3, '塗って 答える')},
+  {name:'今までと 今回', html:IN1}, {name:'今日 やる ところ', html:IN2}, {name:'塗るところは 3つ', html:IN3}, {name:'塗る ところ', html:BOX3}];
 for(let r=0;r<3;r++){
   PG.push({name:`${['1','2','3'][r]}段目`, html:ROWHEAD(r)});
   for(let j=0;j<4;j++) PG.push({name:`${NO3[r*4+j]} ${SIGN3[j]} 0`, html:Q3(r,j)});
