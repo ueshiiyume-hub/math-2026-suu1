@@ -1159,7 +1159,7 @@ body.portrait .ptag{left:70px;top:8px}
 .vm{display:inline-block;vertical-align:middle}
 
 /* ③-1 練習編の 導入（2026-11-07）：上＝オレンジ、下＝水色、軸＝紫。言葉は 少なく */
-.c-up{color:#d9731a} .c-dn{color:#2f86c8} .c-ax{color:#8a4fb0}
+.c-up{color:#d9731a} .c-dn{color:#2f86c8} .c-ax{color:#e0408a}
 .inlab{font:700 22px "Zen Maru Gothic",sans-serif;color:var(--muted);margin-bottom:18px}
 .ineq{font-size:40px;white-space:nowrap}
 .inpanels{position:absolute;left:30px;right:30px;top:70px;display:flex;justify-content:space-between;gap:20px}
@@ -1167,7 +1167,7 @@ body.portrait .ptag{left:70px;top:8px}
 .insv{width:100%;height:auto;display:block}
 .inax{stroke:#555;stroke-width:3} .inaxh{fill:#555}
 .fill-up{fill:#fbd7b5} .fill-dn{fill:#cfe7f7}
-.line-ax{stroke:#8a4fb0;stroke-width:12;stroke-linecap:round}
+.line-ax{stroke:#ff3d8b;stroke-opacity:.45;stroke-width:18;stroke-linecap:round}   /* 軸を 塗る：蛍光ペンの ような 透ける ピンク（下の 黒い 軸が 見える。紫は 塗りつぶして 見えた、11/7） */
 .inpt{margin-top:14px;font:900 32px "Zen Maru Gothic",sans-serif;color:var(--ink)}
 .inpt .math{font-weight:400;margin-right:4px}
 .portrait .pfit .inpanels{flex-wrap:wrap}
@@ -2001,8 +2001,8 @@ function SUDARE(n, s){
 const RDX = (t, r, s, dn) => `<span class="rdx">${t}<i class="rdl lh" data-s="${s}"></i><span class="rdn${dn?' dn':''} lh" data-s="${s}">${r}</span></span>`;
 
 /* ====== このプリントのスライド ====== */
-const SERIES = [{"f": "1-1_因数分解の復習", "no": "①-1", "t": "因数分解の 復習", "v": "1.5_2026-10-29"}, {"f": "1-2_2次方程式の解", "no": "①-2", "t": "2次方程式の 解", "v": "1.5_2026-10-29"}, {"f": "1-3_2次方程式の解", "no": "①-3", "t": "2次方程式の 解 ②", "v": "1.5_2026-10-29"}, {"f": "1-4_解の公式", "no": "①-4", "t": "解の公式", "v": "1.7_2026-10-30"}, {"f": "1-5_解の公式_重解と解なし", "no": "①-5", "t": "2次方程式の 解 ③", "v": "1.7_2026-10-30"}, {"f": "1-6_実数解の個数", "no": "①-6", "t": "実数解の 個数", "v": "1.7_2026-10-30"}, {"f": "2-1_x軸との共有点", "no": "②-1", "t": "x軸との 共有点", "v": "1.5_2026-10-29"}, {"f": "2-2_x軸との共有点", "no": "②-2", "t": "x軸との 共有点 ②", "v": "1.5_2026-10-29"}, {"f": "2-3_x軸との位置関係", "no": "②-3", "t": "x軸との 位置関係", "v": "1.10_2026-11-02"}, {"f": "3-2_2次不等式_練習編_v2", "no": "③-1", "t": "2次不等式 練習編", "v": "3.5_2026-11-07"}, {"f": "3-1_2次不等式の解法_v2", "no": "③-2", "t": "2次不等式の 解き方", "v": "2.21_2026-10-30"}, {"f": "3-3_2次不等式の解法", "no": "③-3", "t": "2次不等式 いろいろ", "v": "1.7_2026-10-30"}, {"f": "3-4_2次不等式の解法", "no": "③-4", "t": "x² の前が マイナス", "v": "1.7_2026-10-30"}], ME = "3-2_2次不等式_練習編_v2";
-const VER = '<i class="nv">ver</i> 3.5　2026-11-07';
+const SERIES = [{"f": "1-1_因数分解の復習", "no": "①-1", "t": "因数分解の 復習", "v": "1.5_2026-10-29"}, {"f": "1-2_2次方程式の解", "no": "①-2", "t": "2次方程式の 解", "v": "1.5_2026-10-29"}, {"f": "1-3_2次方程式の解", "no": "①-3", "t": "2次方程式の 解 ②", "v": "1.5_2026-10-29"}, {"f": "1-4_解の公式", "no": "①-4", "t": "解の公式", "v": "1.7_2026-10-30"}, {"f": "1-5_解の公式_重解と解なし", "no": "①-5", "t": "2次方程式の 解 ③", "v": "1.7_2026-10-30"}, {"f": "1-6_実数解の個数", "no": "①-6", "t": "実数解の 個数", "v": "1.7_2026-10-30"}, {"f": "2-1_x軸との共有点", "no": "②-1", "t": "x軸との 共有点", "v": "1.5_2026-10-29"}, {"f": "2-2_x軸との共有点", "no": "②-2", "t": "x軸との 共有点 ②", "v": "1.5_2026-10-29"}, {"f": "2-3_x軸との位置関係", "no": "②-3", "t": "x軸との 位置関係", "v": "1.10_2026-11-02"}, {"f": "3-2_2次不等式_練習編_v2", "no": "③-1", "t": "2次不等式 練習編", "v": "3.6_2026-11-07"}, {"f": "3-1_2次不等式の解法_v2", "no": "③-2", "t": "2次不等式の 解き方", "v": "2.21_2026-10-30"}, {"f": "3-3_2次不等式の解法", "no": "③-3", "t": "2次不等式 いろいろ", "v": "1.7_2026-10-30"}, {"f": "3-4_2次不等式の解法", "no": "③-4", "t": "x² の前が マイナス", "v": "1.7_2026-10-30"}], ME = "3-2_2次不等式_練習編_v2";
+const VER = '<i class="nv">ver</i> 3.6　2026-11-07';
 /* ③-1 ver 2.0 の 土台：ver 1.4 の 部品の 写し（ver 1.4 を 直しても ver 2.0 は 変わらない） */
 
 const IMG = s => s;
@@ -2669,7 +2669,7 @@ const BXA = ['上', '下', '上 <span class="p3bxe">と</span> x軸', '下 <span
 const P3FIG = k => `<span class="p3fig lh" data-s="${k + 1}"><svg viewBox="0 0 160 90">
     ${k % 2 === 0 ? '<rect x="6" y="5" width="142" height="40" class="fill-up"/>' : '<rect x="6" y="45" width="142" height="40" class="fill-dn"/>'}
     <line x1="6" y1="45" x2="146" y2="45" class="inax"/><polygon points="156,45 144,39 144,51" class="inaxh"/>
-    ${k >= 2 ? '<line x1="6" y1="45" x2="144" y2="45" class="line-ax" style="stroke-width:8"/>' : ''}</svg></span>`;
+    ${k >= 2 ? '<line x1="6" y1="45" x2="144" y2="45" class="line-ax" style="stroke-width:13"/>' : ''}</svg></span>`;
 const BOX3 = `
   <div class="card abs dcard v2 p3">${EQTAPE}
     <div class="p3bx">${SIGN3.map((sg,k)=>`<div class="p3bxr">
@@ -2738,7 +2738,7 @@ const IN3 = `
   <div class="card abs dcard v2 p3">${EQTAPE}
     <div class="inpanels">${PANEL(0, '＞', `${UP}を塗る`)}${PANEL(1, '＜', `${DN}を塗る`)}${PANEL(2, '＝', `<span class="c-ax">軸</span>を塗る`)}</div>
   </div>
-  ${cbar([`塗る ところは 3つ。`, `＞ 0 は <b style="color:#d9731a">上</b> を 塗る。`, `＜ 0 は <b style="color:#2f86c8">下</b> を 塗る。`, `＝ 0 は <b style="color:#8a4fb0">軸</b> を 塗る。`])}`;
+  ${cbar([`塗る ところは 3つ。`, `＞ 0 は <b style="color:#d9731a">上</b> を 塗る。`, `＜ 0 は <b style="color:#2f86c8">下</b> を 塗る。`, `＝ 0 は <b style="color:#e0408a">軸</b> を 塗る。`])}`;
 
 const PG = [{name:'表紙', html:coverF(KK3, '<span class="mk">2次不等式</span><br>練習編', '塗って 答える', 'テンポよく 12問', POL3, '塗って 答える')},
   {name:'今までと 今回', html:IN1}, {name:'今日 やる ところ', html:IN2}, {name:'塗るところは 3つ', html:IN3}, {name:'塗る ところ', html:BOX3}];

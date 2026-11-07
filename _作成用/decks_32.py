@@ -304,7 +304,7 @@ const BXA = ['上', '下', '上 <span class="p3bxe">と</span> x軸', '下 <span
 const P3FIG = k => `<span class="p3fig lh" data-s="${k + 1}"><svg viewBox="0 0 160 90">
     ${k % 2 === 0 ? '<rect x="6" y="5" width="142" height="40" class="fill-up"/>' : '<rect x="6" y="45" width="142" height="40" class="fill-dn"/>'}
     <line x1="6" y1="45" x2="146" y2="45" class="inax"/><polygon points="156,45 144,39 144,51" class="inaxh"/>
-    ${k >= 2 ? '<line x1="6" y1="45" x2="144" y2="45" class="line-ax" style="stroke-width:8"/>' : ''}</svg></span>`;
+    ${k >= 2 ? '<line x1="6" y1="45" x2="144" y2="45" class="line-ax" style="stroke-width:13"/>' : ''}</svg></span>`;
 const BOX3 = `
   <div class="card abs dcard v2 p3">${EQTAPE}
     <div class="p3bx">${SIGN3.map((sg,k)=>`<div class="p3bxr">
@@ -373,7 +373,7 @@ const IN3 = `
   <div class="card abs dcard v2 p3">${EQTAPE}
     <div class="inpanels">${PANEL(0, '＞', `${UP}を塗る`)}${PANEL(1, '＜', `${DN}を塗る`)}${PANEL(2, '＝', `<span class="c-ax">軸</span>を塗る`)}</div>
   </div>
-  ${cbar([`塗る ところは 3つ。`, `＞ 0 は <b style="color:#d9731a">上</b> を 塗る。`, `＜ 0 は <b style="color:#2f86c8">下</b> を 塗る。`, `＝ 0 は <b style="color:#8a4fb0">軸</b> を 塗る。`])}`;
+  ${cbar([`塗る ところは 3つ。`, `＞ 0 は <b style="color:#d9731a">上</b> を 塗る。`, `＜ 0 は <b style="color:#2f86c8">下</b> を 塗る。`, `＝ 0 は <b style="color:#e0408a">軸</b> を 塗る。`])}`;
 
 const PG = [{name:'表紙', html:coverF(KK3, '<span class="mk">2次不等式</span><br>練習編', '塗って 答える', 'テンポよく 12問', POL3, '塗って 答える')},
   {name:'今までと 今回', html:IN1}, {name:'今日 やる ところ', html:IN2}, {name:'塗るところは 3つ', html:IN3}, {name:'塗る ところ', html:BOX3}];
