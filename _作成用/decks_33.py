@@ -6,6 +6,49 @@
 import os
 B = os.path.dirname(os.path.abspath(__file__))
 
+SHARED33 = r'''
+/* ③-3・③-4 で 使う 部品（decks_34.py も つなげる） */
+/* ===== 例の Step❶：左に 計算（大きな 枠）、右に グラフ（点 → 放物線 → 座標）。③-2 の Step❶ と 同じ 形 =====
+   rows：[[左, 右, 番], …]（左が '' なら ＝ だけ）。kind：0 交わる・1 接する・2 交わらない。lab：点の 下の 文字。g：グラフの 番 [点, 線, 文字] */
+const EGR = (kind, lab, gs) => {
+  const W = 290, H = 380, ay = kind===2 ? 300 : 250, cx = 145, r = 55;
+  const vy = kind===0 ? ay+55 : kind===1 ? ay : ay-60, q = kind===0 ? 55/r**2 : 0.02;
+  const hw = Math.sqrt((vy-20)/q); let d=''; for(let i=0;i<=60;i++){ const dx=-hw+2*hw*i/60; d+=(i?'L':'M')+f1(cx+dx)+' '+f1(vy-q*dx*dx)+' '; }
+  const pts = kind===0 ? [cx-r, cx+r] : kind===1 ? [cx] : [];
+  const LB = (x, t, an) => HASM(t) ? FO3(x, ay+28, TXH(t), 'fo3n e33f', an) : `<text class="inum e33n" x="${x}" y="${ay+38}" text-anchor="${an}">${t}</text>`;
+  const txt = kind===0 ? LB(cx-r-6, lab[0], 'end') + LB(cx+r+6, lab[1], 'start')
+            : kind===1 ? LB(cx, lab[0], 'middle')
+            : `<text class="e33nt" x="${cx}" y="${ay+44}" text-anchor="middle">x軸と 交わらない</text>`;
+  return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
+    <line class="iax" x1="8" y1="${ay}" x2="${W-14}" y2="${ay}"/><polygon class="iah" points="${W-2},${ay} ${W-16},${ay-7} ${W-16},${ay+7}"/><text class="ixl" x="${W-20}" y="${ay+30}">x</text>
+    <path class="curve v2cv" data-s="${gs[1]}" pathLength="1" d="${d}"/>
+    ${pts.length ? `<g class="gs" data-s="${gs[0]}">${pts.map(x=>`<circle class="v2pt" cx="${x}" cy="${ay}" r="8"/>`).join('')}</g>` : ''}
+    <g class="gs" data-s="${gs[2]}">${txt}</g></svg>`; };
+const ES1G = (q, list, rows, kind, lab, gs, cm, extra='') => `
+  <div class="card abs dcard v2 p3">${EQTAPE}
+    ${list}
+    <div class="v2c">
+      <div class="e33h"><span class="v2st e33st">Step❶</span><span class="math e33q">${q[0]}　${q[2]} ${q[1]} 0</span></div>
+      <div class="v2calc e33calc math">
+        <div class="e33r1"><span>y ＝ ${q[2]}</span><span class="v2q lh e33red" data-s="2">＝</span><span class="lh e33red" data-s="2">0</span></div>
+        ${rows.map(([l,rt,s])=>`<div class="v2row" data-s="${s}"><span>${l??''}</span><span class="v2q">${l===null?'':'＝'}</span><span>${rt}</span></div>`).join('')}
+        <span class="ytag v2yt lh" data-s="1">y ＝ 0 と する</span>${extra}
+      </div>
+      <div class="v2gbox e33g">${EGR(kind, lab, gs)}</div>
+    </div>
+  </div>
+  ${cbar(cm)}`;
+const HIT = h => `<span class="v2hit">${h}</span>`;
+const PRE33 = (no, f, sg, rows, res, gline, sud, head='まず ＝ 0 を 解く', c0='<b>Step❶</b> まず ＝ 0 の 式を 解く。') => {
+  const k = rows.length + 1;
+  return {cm:[`${no} ${M(`${f.replace(/<sup>2<\/sup>/,'²')} ${sg} 0`)}。　${c0}`, ...rows.map(r=>r[1]), gline],
+    html:`<div class="p3w" data-o="${k}"><span class="v2mk">${head}</span></div>
+      <div class="q33c math" data-o="${k}">${rows.map(([h],i)=>`<div class="lh" data-s="${i+1}"><span>${h}</span></div>`).join('')}${sud ? `<div class="q33sd lh" data-s="${sud[1]}">${SUDARE(sud[0])}</div>` : ''}</div>
+      <div class="q33r math lh" data-s="${k}">${res}</div>`}; };
+const GL = ['グラフを かく。　x軸と <b>2点で 交わる</b>。', 'グラフは x軸に <b>接する</b>。', 'グラフは x軸と <b>交わらない</b>（上に 浮いて いる）。'];
+const FAC = (eq, fac, root, how) => [[`${eq} ＝ 0`, `${M(eq.replace(/<sup>2<\/sup>/,'²') + ' ＝ 0')}。　${how}`], [`${fac} ＝ 0`, M(fac.replace(/<sup>2<\/sup>/,'²') + ' ＝ 0')], [`x ＝ ${root}`, M('x ＝ ' + root.replace(/<[^>]+>/g,''))]];
+'''
+
 JS33 = r'''
 const KK33 = KIMATSU + '　③-3';
 const POL33 = `<div class="fpol"><div class="fa math">接する・交わらない</div><div class="fv">とき も</div><div class="fb" style="font-size:24px;font-weight:900">塗って 答える</div></div>`;
@@ -27,39 +70,9 @@ const IN33 = `
 
 /* ===== 例：左の 一覧 ===== */
 const EXQ = [['⑴','≧',`x${P2} ＋ 4x ＋ 2`], ['⑵','＜',`x${P2} ＋ 6x ＋ 9`], ['⑶','＞',`x${P2} − 2x ＋ 1`], ['⑷','＞',`x${P2} ＋ 2x ＋ 5`]];
+const ES1 = (cur, ...a) => ES1G(EXQ[cur], EXL(cur), ...a);
 const EXL = cur => `<div class="p3list">${EXQ.map(([n,sg,f],k)=>`<div class="p3i sm${k===cur?' on':''}${k<cur?' done':''}"><span>${n}</span><span class="math">${f} ${sg} 0</span></div>`).join('')}</div>`;
 
-/* ===== 例の Step❶：左に 計算（大きな 枠）、右に グラフ（点 → 放物線 → 座標）。③-2 の Step❶ と 同じ 形 =====
-   rows：[[左, 右, 番], …]（左が '' なら ＝ だけ）。kind：0 交わる・1 接する・2 交わらない。lab：点の 下の 文字。g：グラフの 番 [点, 線, 文字] */
-const EGR = (kind, lab, gs) => {
-  const W = 290, H = 380, ay = kind===2 ? 300 : 250, cx = 145, r = 55;
-  const vy = kind===0 ? ay+55 : kind===1 ? ay : ay-60, q = kind===0 ? 55/r**2 : 0.02;
-  const hw = Math.sqrt((vy-20)/q); let d=''; for(let i=0;i<=60;i++){ const dx=-hw+2*hw*i/60; d+=(i?'L':'M')+f1(cx+dx)+' '+f1(vy-q*dx*dx)+' '; }
-  const pts = kind===0 ? [cx-r, cx+r] : kind===1 ? [cx] : [];
-  const LB = (x, t, an) => HASM(t) ? FO3(x, ay+28, TXH(t), 'fo3n e33f', an) : `<text class="inum e33n" x="${x}" y="${ay+38}" text-anchor="${an}">${t}</text>`;
-  const txt = kind===0 ? LB(cx-r-6, lab[0], 'end') + LB(cx+r+6, lab[1], 'start')
-            : kind===1 ? LB(cx, lab[0], 'middle')
-            : `<text class="e33nt" x="${cx}" y="${ay+44}" text-anchor="middle">x軸と 交わらない</text>`;
-  return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
-    <line class="iax" x1="8" y1="${ay}" x2="${W-14}" y2="${ay}"/><polygon class="iah" points="${W-2},${ay} ${W-16},${ay-7} ${W-16},${ay+7}"/><text class="ixl" x="${W-20}" y="${ay+30}">x</text>
-    <path class="curve v2cv" data-s="${gs[1]}" pathLength="1" d="${d}"/>
-    ${pts.length ? `<g class="gs" data-s="${gs[0]}">${pts.map(x=>`<circle class="v2pt" cx="${x}" cy="${ay}" r="8"/>`).join('')}</g>` : ''}
-    <g class="gs" data-s="${gs[2]}">${txt}</g></svg>`; };
-const ES1 = (cur, rows, kind, lab, gs, cm, extra='') => `
-  <div class="card abs dcard v2 p3">${EQTAPE}
-    ${EXL(cur)}
-    <div class="v2c">
-      <div class="e33h"><span class="v2st e33st">Step❶</span><span class="math e33q">${EXQ[cur][0]}　${EXQ[cur][2]} ${EXQ[cur][1]} 0</span></div>
-      <div class="v2calc e33calc math">
-        <div class="e33r1"><span>y ＝ ${EXQ[cur][2]}</span><span class="v2q lh e33red" data-s="2">＝</span><span class="lh e33red" data-s="2">0</span></div>
-        ${rows.map(([l,rt,s])=>`<div class="v2row" data-s="${s}"><span>${l??''}</span><span class="v2q">${l===null?'':'＝'}</span><span>${rt}</span></div>`).join('')}
-        <span class="ytag v2yt lh" data-s="1">y ＝ 0 と する</span>${extra}
-      </div>
-      <div class="v2gbox e33g">${EGR(kind, lab, gs)}</div>
-    </div>
-  </div>
-  ${cbar(cm)}`;
-const HIT = h => `<span class="v2hit">${h}</span>`;
 
 const E1a = ES1(0, [['x', FX(`−4 ± ${SQ('16 − 8')}`,'2'), 3],
     ['', FX(`−${RDX('4','2',5)} ± ${RDX('2','1',5)}${SQ('2')}`, RDX('2','1',5,true)), 4],
@@ -142,14 +155,6 @@ const E4c = W33(3, [`x${P2} ＋ 2x ＋ 5 ＝ 0`, `x ＝ ${FX(`−2 ± ${SQ('4 �
 
 /* ===== プリント問題③-3（No.14・15、⑴〜⑿）：Step❶ の 枠（大きく）→ グラフ → ③-1 と 同じ 塗る・答える =====
    P3Q = [番号, 式, 不等号の 番号, 根, 答え, 文字, 計算の 行 [[html, 説明], …], 答えの 小さな まとめ, オプション] */
-const PRE33 = (no, f, sg, rows, res, gline, sud) => {
-  const k = rows.length + 1;
-  return {cm:[`${no} ${M(`${f.replace(/<sup>2<\/sup>/,'²')} ${sg} 0`)}。　<b>Step❶</b> まず ＝ 0 の 式を 解く。`, ...rows.map(r=>r[1]), gline],
-    html:`<div class="p3w" data-o="${k}"><span class="v2mk">まず ＝ 0 を 解く</span></div>
-      <div class="q33c math" data-o="${k}">${rows.map(([h],i)=>`<div class="lh" data-s="${i+1}"><span>${h}</span></div>`).join('')}${sud ? `<div class="q33sd lh" data-s="${sud[1]}">${SUDARE(sud[0])}</div>` : ''}</div>
-      <div class="q33r math lh" data-s="${k}">${res}</div>`}; };
-const GL = ['グラフを かく。　x軸と <b>2点で 交わる</b>。', 'グラフは x軸に <b>接する</b>。', 'グラフは x軸と <b>交わらない</b>（上に 浮いて いる）。'];
-const FAC = (eq, fac, root, how) => [[`${eq} ＝ 0`, `${M(eq.replace(/<sup>2<\/sup>/,'²') + ' ＝ 0')}。　${how}`], [`${fac} ＝ 0`, M(fac.replace(/<sup>2<\/sup>/,'²') + ' ＝ 0')], [`x ＝ ${root}`, M('x ＝ ' + root.replace(/<[^>]+>/g,''))]];
 const P3Q = [
   ['⑴',`x${P2} ＋ 5x ＋ 6`,2,[-3,-2],'x ≦ −3, −2 ≦ x',null, FAC(`x${P2} ＋ 5x ＋ 6`,'(x ＋ 3)(x ＋ 2)','−3, −2','たして 5、かけて 6 → 因数分解。'), 'x ＝ −3, −2'],
   ['⑵',`2x${P2} ＋ 3x − 2`,1,[-2,0.5],`−2 ＜ x ＜ ${FR(1,2)}`,['−2','1/2'], FAC(`2x${P2} ＋ 3x − 2`,'(x ＋ 2)(2x − 1)',`−2, ${FR(1,2)}`,'たすき掛けで 因数分解。'), `x ＝ −2, ${FR(1,2)}`, {am:true}],
@@ -194,4 +199,4 @@ def add(decks):
     base = open(os.path.join(B, 'v2_base_3-1.js'), encoding='utf-8').read()
     parts = decks_32.JS.split('const PG = [')
     assert len(parts) == 2
-    decks['3-3_2次不等式の解法_v2'] = ('③-3 2次不等式の解法 ver 2', base + parts[0] + JS33)
+    decks['3-3_2次不等式の解法_v2'] = ('③-3 2次不等式の解法 ver 2', base + parts[0] + SHARED33 + JS33)

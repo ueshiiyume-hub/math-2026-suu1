@@ -291,16 +291,16 @@ function GQ(P){
             : (up ? '全部 塗れた' : '塗れる ところが ない');
   const w2 = P.roots.length ? (eq ? 'x軸も 塗る（黒丸）' : 'x軸は 塗らない（白丸）') : 'x軸と 交わらない';
   const am = P.am ?? MATHY(P.ans.replace(/[√()/]/g,'1'));
-  const same = P.list.every(q=>q[2]===P.list[0][2]);             // 4問とも 同じ 式 → 不等号 だけ、ちがう 式 → 小さく 式も
-  const list = `<div class="p3list">${P.list.map(([n,sgn,f],k)=>`<div class="p3i${same?'':' sm'}${k===P.cur?' on':''}${k<P.cur?' done':''}"><span>${n}</span><span class="math">${same?'':f+' '}${sgn} 0</span></div>`).join('')}</div>`;
+  const same = !P.list || P.list.every(q=>q[2]===P.list[0][2]);             // 4問とも 同じ 式 → 不等号 だけ、ちがう 式 → 小さく 式も
+  const list = P.listH ? P.listH : `<div class="p3list">${P.list.map(([n,sgn,f],k)=>`<div class="p3i${same?'':' sm'}${k===P.cur?' on':''}${k<P.cur?' done':''}"><span>${n}</span><span class="math">${same?'':f+' '}${sgn} 0</span></div>`).join('')}</div>`;
   /* P.pre：③-3 の プリント問題。先に Step❶ の 計算（大きな 枠）→ k 番で 枠が 消えて グラフが 出る。そのあとの 番は すべて k ずつ 後ろへ */
   const k = P.pre ? P.pre.cm.length - 1 : 0;
   const SH = h => k ? h.replace(/data-(s|o)="(\d+)"/g, (mm,t,n)=>`data-${t}="${+n+k}"`) : h;
   return `
   <div class="card abs dcard v2 p3 p3big">${EQTAPE}
     ${list}
-    <div class="v2c">${SH(`
-      <div class="p3q math">${P.no}　${P.f} <span class="p3sg" data-o="1">${sg} 0</span></div>
+    <div class="v2c">${P.q0 ? `<div class="p3q math q0sw"><span class="q0a" data-o="1">${P.no}　${P.q0}</span><span class="q0b lh" data-s="1">${P.no}　${P.f} <span class="p3sg" data-o="${k+1}">${sg} 0</span></span></div>` : ''}${SH(`
+      ${P.q0 ? '' : `<div class="p3q math">${P.no}　${P.f} <span class="p3sg" data-o="1">${sg} 0</span></div>`}
       <div class="p3w lh" data-s="2" data-o="4"><span class="v2mk">${PW3(up, eq)}</span></div>
       <div class="p3w lh" data-s="4" data-o="5"><span class="v2mk">${w2}</span></div>
       <div class="p3w lh" data-s="5" data-o="${dt?6:fin}"><span class="v2mk">${any?'塗れた ところに x を 置く':'塗れた ところは？'}</span></div>

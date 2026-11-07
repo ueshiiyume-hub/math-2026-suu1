@@ -1258,6 +1258,26 @@ body.portrait .ptag{left:70px;top:8px}
 .pgfo{height:100%;display:flex;align-items:center;font-family:"STIX Two Text",serif;font-size:7px;color:#333;white-space:nowrap;pointer-events:none;--rw:.5px}
 .pgfo-middle{justify-content:center} .pgfo-end{justify-content:flex-end} .pgfo-start{justify-content:flex-start}
 .agap{display:inline-block;width:.7em}   /* 2つの 不等式の 間：カンマの 前と 後ろに 同じ だけ（ansGap、11/7） */
+/* GQ の q0：はじめは 元の 式、1番で −1 を かけた 式に 入れかわる（③-4、11/7） */
+.q0sw .q0a,.q0sw .q0b{position:absolute;left:0;top:0;white-space:nowrap}
+.q0sw .q0a.on{opacity:0;transition:opacity .3s}
+/* ===== ③-4 ver 2（decks_34.py） ===== */
+.h4grid{position:absolute;left:150px;top:70px;display:grid;grid-template-columns:repeat(5,auto);column-gap:34px;row-gap:120px;font-size:64px;align-items:baseline;justify-items:center}
+.h4c{color:#d9731a}
+.h4sg{color:#e0465e;border:4px solid #e0465e;border-radius:10px;padding:0 10px;background:#fff3c4}
+.h4arw{position:absolute;left:60px;top:90px}
+.h4chip{position:absolute;left:150px;top:178px;display:flex;align-items:center;gap:14px;font:900 30px "Zen Maru Gothic",sans-serif;color:var(--b-ink)}
+.h4chip .math{font-size:34px;background:#fff;border:3px solid var(--b-ink);border-radius:10px;padding:2px 14px;color:var(--ink)}
+.h4rev{position:absolute;left:820px;top:300px;font:900 34px "Zen Maru Gothic",sans-serif;color:#e0465e}
+.h4end{position:absolute;left:150px;top:400px;font:900 32px "Zen Maru Gothic",sans-serif;color:var(--b-ink)}
+.w4eq{position:absolute;left:60px;font-size:60px;white-space:nowrap}
+.w4chip{position:absolute;left:60px;top:150px;font:900 26px "Zen Maru Gothic",sans-serif;color:var(--b-ink)}
+.w4chip .math{font-size:30px;background:#fff;border:3px solid var(--b-ink);border-radius:10px;padding:2px 12px;color:var(--ink);margin-right:10px}
+.w4nl{position:absolute;left:380px;top:20px}
+.w4msg{position:absolute;left:60px;top:380px;font:900 32px "Zen Maru Gothic",sans-serif;color:var(--b-ink)}
+.w4t{font-family:"STIX Two Text",serif;font-size:30px;font-weight:700;fill:var(--ink)}
+.w4lab{font:900 24px "Zen Maru Gothic",sans-serif;fill:#e0465e}
+.q34m{font-size:26px;color:var(--b-ink);border:2px solid var(--b-ink);border-radius:8px;padding:0 8px;margin-right:12px;vertical-align:middle;font-family:"STIX Two Text",serif}
 
 /* ===== 手書き ===== */
 #ink{position:fixed;left:0;top:0;z-index:15;pointer-events:none;touch-action:none}
@@ -2077,7 +2097,7 @@ function SUDARE(n, s){
 const RDX = (t, r, s, dn) => `<span class="rdx">${t}<i class="rdl lh" data-s="${s}"></i><span class="rdn${dn?' dn':''} lh" data-s="${s}">${r}</span></span>`;
 
 /* ====== このプリントのスライド ====== */
-const SERIES = [{"f": "1-1_因数分解の復習", "no": "①-1", "t": "因数分解の 復習", "v": "1.5_2026-10-29"}, {"f": "1-2_2次方程式の解", "no": "①-2", "t": "2次方程式の 解", "v": "1.5_2026-10-29"}, {"f": "1-3_2次方程式の解", "no": "①-3", "t": "2次方程式の 解 ②", "v": "1.5_2026-10-29"}, {"f": "1-4_解の公式", "no": "①-4", "t": "解の公式", "v": "1.7_2026-10-30"}, {"f": "1-5_解の公式_重解と解なし", "no": "①-5", "t": "2次方程式の 解 ③", "v": "1.7_2026-10-30"}, {"f": "1-6_実数解の個数", "no": "①-6", "t": "実数解の 個数", "v": "1.7_2026-10-30"}, {"f": "2-1_x軸との共有点", "no": "②-1", "t": "x軸との 共有点", "v": "1.5_2026-10-29"}, {"f": "2-2_x軸との共有点", "no": "②-2", "t": "x軸との 共有点 ②", "v": "1.5_2026-10-29"}, {"f": "2-3_x軸との位置関係", "no": "②-3", "t": "x軸との 位置関係", "v": "1.10_2026-11-02"}, {"f": "3-2_2次不等式_練習編_v2", "no": "③-1", "t": "2次不等式 練習編", "v": "3.18_2026-11-07"}, {"f": "3-1_2次不等式の解法_v2", "no": "③-2", "t": "2次不等式の 解き方", "v": "2.24_2026-11-07"}, {"f": "3-3_2次不等式の解法_v2", "no": "③-3", "t": "2次不等式 いろいろ", "v": "2.3_2026-11-07"}, {"f": "3-4_2次不等式の解法", "no": "③-4", "t": "x² の前が マイナス", "v": "1.11_2026-11-07"}], ME = "3-3_2次不等式の解法_v2";
+const SERIES = [{"f": "1-1_因数分解の復習", "no": "①-1", "t": "因数分解の 復習", "v": "1.5_2026-10-29"}, {"f": "1-2_2次方程式の解", "no": "①-2", "t": "2次方程式の 解", "v": "1.5_2026-10-29"}, {"f": "1-3_2次方程式の解", "no": "①-3", "t": "2次方程式の 解 ②", "v": "1.5_2026-10-29"}, {"f": "1-4_解の公式", "no": "①-4", "t": "解の公式", "v": "1.7_2026-10-30"}, {"f": "1-5_解の公式_重解と解なし", "no": "①-5", "t": "2次方程式の 解 ③", "v": "1.7_2026-10-30"}, {"f": "1-6_実数解の個数", "no": "①-6", "t": "実数解の 個数", "v": "1.7_2026-10-30"}, {"f": "2-1_x軸との共有点", "no": "②-1", "t": "x軸との 共有点", "v": "1.5_2026-10-29"}, {"f": "2-2_x軸との共有点", "no": "②-2", "t": "x軸との 共有点 ②", "v": "1.5_2026-10-29"}, {"f": "2-3_x軸との位置関係", "no": "②-3", "t": "x軸との 位置関係", "v": "1.10_2026-11-02"}, {"f": "3-2_2次不等式_練習編_v2", "no": "③-1", "t": "2次不等式 練習編", "v": "3.18_2026-11-07"}, {"f": "3-1_2次不等式の解法_v2", "no": "③-2", "t": "2次不等式の 解き方", "v": "2.24_2026-11-07"}, {"f": "3-3_2次不等式の解法_v2", "no": "③-3", "t": "2次不等式 いろいろ", "v": "2.3_2026-11-07"}, {"f": "3-4_2次不等式の解法_v2", "no": "③-4", "t": "x² の前が マイナス", "v": "2.0_2026-11-07"}], ME = "3-3_2次不等式の解法_v2";
 const VER = '<i class="nv">ver</i> 2.3　2026-11-07';
 /* ③-1 ver 2.0 の 土台：ver 1.4 の 部品の 写し（ver 1.4 を 直しても ver 2.0 は 変わらない） */
 
@@ -2732,16 +2752,16 @@ function GQ(P){
             : (up ? '全部 塗れた' : '塗れる ところが ない');
   const w2 = P.roots.length ? (eq ? 'x軸も 塗る（黒丸）' : 'x軸は 塗らない（白丸）') : 'x軸と 交わらない';
   const am = P.am ?? MATHY(P.ans.replace(/[√()/]/g,'1'));
-  const same = P.list.every(q=>q[2]===P.list[0][2]);             // 4問とも 同じ 式 → 不等号 だけ、ちがう 式 → 小さく 式も
-  const list = `<div class="p3list">${P.list.map(([n,sgn,f],k)=>`<div class="p3i${same?'':' sm'}${k===P.cur?' on':''}${k<P.cur?' done':''}"><span>${n}</span><span class="math">${same?'':f+' '}${sgn} 0</span></div>`).join('')}</div>`;
+  const same = !P.list || P.list.every(q=>q[2]===P.list[0][2]);             // 4問とも 同じ 式 → 不等号 だけ、ちがう 式 → 小さく 式も
+  const list = P.listH ? P.listH : `<div class="p3list">${P.list.map(([n,sgn,f],k)=>`<div class="p3i${same?'':' sm'}${k===P.cur?' on':''}${k<P.cur?' done':''}"><span>${n}</span><span class="math">${same?'':f+' '}${sgn} 0</span></div>`).join('')}</div>`;
   /* P.pre：③-3 の プリント問題。先に Step❶ の 計算（大きな 枠）→ k 番で 枠が 消えて グラフが 出る。そのあとの 番は すべて k ずつ 後ろへ */
   const k = P.pre ? P.pre.cm.length - 1 : 0;
   const SH = h => k ? h.replace(/data-(s|o)="(\d+)"/g, (mm,t,n)=>`data-${t}="${+n+k}"`) : h;
   return `
   <div class="card abs dcard v2 p3 p3big">${EQTAPE}
     ${list}
-    <div class="v2c">${SH(`
-      <div class="p3q math">${P.no}　${P.f} <span class="p3sg" data-o="1">${sg} 0</span></div>
+    <div class="v2c">${P.q0 ? `<div class="p3q math q0sw"><span class="q0a" data-o="1">${P.no}　${P.q0}</span><span class="q0b lh" data-s="1">${P.no}　${P.f} <span class="p3sg" data-o="${k+1}">${sg} 0</span></span></div>` : ''}${SH(`
+      ${P.q0 ? '' : `<div class="p3q math">${P.no}　${P.f} <span class="p3sg" data-o="1">${sg} 0</span></div>`}
       <div class="p3w lh" data-s="2" data-o="4"><span class="v2mk">${PW3(up, eq)}</span></div>
       <div class="p3w lh" data-s="4" data-o="5"><span class="v2mk">${w2}</span></div>
       <div class="p3w lh" data-s="5" data-o="${dt?6:fin}"><span class="v2mk">${any?'塗れた ところに x を 置く':'塗れた ところは？'}</span></div>
@@ -2865,6 +2885,47 @@ const IN3 = `
   ${cbar([`塗る ところは 3つ。`, `＞ 0 は <b style="color:#d9731a">上</b> を 塗る。`, `＜ 0 は <b style="color:#d9731a">下</b> を 塗る。`, `＝ 0 は <b style="color:#e39b00">軸</b> を 塗る。`])}`;
 
 
+/* ③-3・③-4 で 使う 部品（decks_34.py も つなげる） */
+/* ===== 例の Step❶：左に 計算（大きな 枠）、右に グラフ（点 → 放物線 → 座標）。③-2 の Step❶ と 同じ 形 =====
+   rows：[[左, 右, 番], …]（左が '' なら ＝ だけ）。kind：0 交わる・1 接する・2 交わらない。lab：点の 下の 文字。g：グラフの 番 [点, 線, 文字] */
+const EGR = (kind, lab, gs) => {
+  const W = 290, H = 380, ay = kind===2 ? 300 : 250, cx = 145, r = 55;
+  const vy = kind===0 ? ay+55 : kind===1 ? ay : ay-60, q = kind===0 ? 55/r**2 : 0.02;
+  const hw = Math.sqrt((vy-20)/q); let d=''; for(let i=0;i<=60;i++){ const dx=-hw+2*hw*i/60; d+=(i?'L':'M')+f1(cx+dx)+' '+f1(vy-q*dx*dx)+' '; }
+  const pts = kind===0 ? [cx-r, cx+r] : kind===1 ? [cx] : [];
+  const LB = (x, t, an) => HASM(t) ? FO3(x, ay+28, TXH(t), 'fo3n e33f', an) : `<text class="inum e33n" x="${x}" y="${ay+38}" text-anchor="${an}">${t}</text>`;
+  const txt = kind===0 ? LB(cx-r-6, lab[0], 'end') + LB(cx+r+6, lab[1], 'start')
+            : kind===1 ? LB(cx, lab[0], 'middle')
+            : `<text class="e33nt" x="${cx}" y="${ay+44}" text-anchor="middle">x軸と 交わらない</text>`;
+  return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
+    <line class="iax" x1="8" y1="${ay}" x2="${W-14}" y2="${ay}"/><polygon class="iah" points="${W-2},${ay} ${W-16},${ay-7} ${W-16},${ay+7}"/><text class="ixl" x="${W-20}" y="${ay+30}">x</text>
+    <path class="curve v2cv" data-s="${gs[1]}" pathLength="1" d="${d}"/>
+    ${pts.length ? `<g class="gs" data-s="${gs[0]}">${pts.map(x=>`<circle class="v2pt" cx="${x}" cy="${ay}" r="8"/>`).join('')}</g>` : ''}
+    <g class="gs" data-s="${gs[2]}">${txt}</g></svg>`; };
+const ES1G = (q, list, rows, kind, lab, gs, cm, extra='') => `
+  <div class="card abs dcard v2 p3">${EQTAPE}
+    ${list}
+    <div class="v2c">
+      <div class="e33h"><span class="v2st e33st">Step❶</span><span class="math e33q">${q[0]}　${q[2]} ${q[1]} 0</span></div>
+      <div class="v2calc e33calc math">
+        <div class="e33r1"><span>y ＝ ${q[2]}</span><span class="v2q lh e33red" data-s="2">＝</span><span class="lh e33red" data-s="2">0</span></div>
+        ${rows.map(([l,rt,s])=>`<div class="v2row" data-s="${s}"><span>${l??''}</span><span class="v2q">${l===null?'':'＝'}</span><span>${rt}</span></div>`).join('')}
+        <span class="ytag v2yt lh" data-s="1">y ＝ 0 と する</span>${extra}
+      </div>
+      <div class="v2gbox e33g">${EGR(kind, lab, gs)}</div>
+    </div>
+  </div>
+  ${cbar(cm)}`;
+const HIT = h => `<span class="v2hit">${h}</span>`;
+const PRE33 = (no, f, sg, rows, res, gline, sud, head='まず ＝ 0 を 解く', c0='<b>Step❶</b> まず ＝ 0 の 式を 解く。') => {
+  const k = rows.length + 1;
+  return {cm:[`${no} ${M(`${f.replace(/<sup>2<\/sup>/,'²')} ${sg} 0`)}。　${c0}`, ...rows.map(r=>r[1]), gline],
+    html:`<div class="p3w" data-o="${k}"><span class="v2mk">${head}</span></div>
+      <div class="q33c math" data-o="${k}">${rows.map(([h],i)=>`<div class="lh" data-s="${i+1}"><span>${h}</span></div>`).join('')}${sud ? `<div class="q33sd lh" data-s="${sud[1]}">${SUDARE(sud[0])}</div>` : ''}</div>
+      <div class="q33r math lh" data-s="${k}">${res}</div>`}; };
+const GL = ['グラフを かく。　x軸と <b>2点で 交わる</b>。', 'グラフは x軸に <b>接する</b>。', 'グラフは x軸と <b>交わらない</b>（上に 浮いて いる）。'];
+const FAC = (eq, fac, root, how) => [[`${eq} ＝ 0`, `${M(eq.replace(/<sup>2<\/sup>/,'²') + ' ＝ 0')}。　${how}`], [`${fac} ＝ 0`, M(fac.replace(/<sup>2<\/sup>/,'²') + ' ＝ 0')], [`x ＝ ${root}`, M('x ＝ ' + root.replace(/<[^>]+>/g,''))]];
+
 const KK33 = KIMATSU + '　③-3';
 const POL33 = `<div class="fpol"><div class="fa math">接する・交わらない</div><div class="fv">とき も</div><div class="fb" style="font-size:24px;font-weight:900">塗って 答える</div></div>`;
 
@@ -2885,39 +2946,9 @@ const IN33 = `
 
 /* ===== 例：左の 一覧 ===== */
 const EXQ = [['⑴','≧',`x${P2} ＋ 4x ＋ 2`], ['⑵','＜',`x${P2} ＋ 6x ＋ 9`], ['⑶','＞',`x${P2} − 2x ＋ 1`], ['⑷','＞',`x${P2} ＋ 2x ＋ 5`]];
+const ES1 = (cur, ...a) => ES1G(EXQ[cur], EXL(cur), ...a);
 const EXL = cur => `<div class="p3list">${EXQ.map(([n,sg,f],k)=>`<div class="p3i sm${k===cur?' on':''}${k<cur?' done':''}"><span>${n}</span><span class="math">${f} ${sg} 0</span></div>`).join('')}</div>`;
 
-/* ===== 例の Step❶：左に 計算（大きな 枠）、右に グラフ（点 → 放物線 → 座標）。③-2 の Step❶ と 同じ 形 =====
-   rows：[[左, 右, 番], …]（左が '' なら ＝ だけ）。kind：0 交わる・1 接する・2 交わらない。lab：点の 下の 文字。g：グラフの 番 [点, 線, 文字] */
-const EGR = (kind, lab, gs) => {
-  const W = 290, H = 380, ay = kind===2 ? 300 : 250, cx = 145, r = 55;
-  const vy = kind===0 ? ay+55 : kind===1 ? ay : ay-60, q = kind===0 ? 55/r**2 : 0.02;
-  const hw = Math.sqrt((vy-20)/q); let d=''; for(let i=0;i<=60;i++){ const dx=-hw+2*hw*i/60; d+=(i?'L':'M')+f1(cx+dx)+' '+f1(vy-q*dx*dx)+' '; }
-  const pts = kind===0 ? [cx-r, cx+r] : kind===1 ? [cx] : [];
-  const LB = (x, t, an) => HASM(t) ? FO3(x, ay+28, TXH(t), 'fo3n e33f', an) : `<text class="inum e33n" x="${x}" y="${ay+38}" text-anchor="${an}">${t}</text>`;
-  const txt = kind===0 ? LB(cx-r-6, lab[0], 'end') + LB(cx+r+6, lab[1], 'start')
-            : kind===1 ? LB(cx, lab[0], 'middle')
-            : `<text class="e33nt" x="${cx}" y="${ay+44}" text-anchor="middle">x軸と 交わらない</text>`;
-  return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
-    <line class="iax" x1="8" y1="${ay}" x2="${W-14}" y2="${ay}"/><polygon class="iah" points="${W-2},${ay} ${W-16},${ay-7} ${W-16},${ay+7}"/><text class="ixl" x="${W-20}" y="${ay+30}">x</text>
-    <path class="curve v2cv" data-s="${gs[1]}" pathLength="1" d="${d}"/>
-    ${pts.length ? `<g class="gs" data-s="${gs[0]}">${pts.map(x=>`<circle class="v2pt" cx="${x}" cy="${ay}" r="8"/>`).join('')}</g>` : ''}
-    <g class="gs" data-s="${gs[2]}">${txt}</g></svg>`; };
-const ES1 = (cur, rows, kind, lab, gs, cm, extra='') => `
-  <div class="card abs dcard v2 p3">${EQTAPE}
-    ${EXL(cur)}
-    <div class="v2c">
-      <div class="e33h"><span class="v2st e33st">Step❶</span><span class="math e33q">${EXQ[cur][0]}　${EXQ[cur][2]} ${EXQ[cur][1]} 0</span></div>
-      <div class="v2calc e33calc math">
-        <div class="e33r1"><span>y ＝ ${EXQ[cur][2]}</span><span class="v2q lh e33red" data-s="2">＝</span><span class="lh e33red" data-s="2">0</span></div>
-        ${rows.map(([l,rt,s])=>`<div class="v2row" data-s="${s}"><span>${l??''}</span><span class="v2q">${l===null?'':'＝'}</span><span>${rt}</span></div>`).join('')}
-        <span class="ytag v2yt lh" data-s="1">y ＝ 0 と する</span>${extra}
-      </div>
-      <div class="v2gbox e33g">${EGR(kind, lab, gs)}</div>
-    </div>
-  </div>
-  ${cbar(cm)}`;
-const HIT = h => `<span class="v2hit">${h}</span>`;
 
 const E1a = ES1(0, [['x', FX(`−4 ± ${SQ('16 − 8')}`,'2'), 3],
     ['', FX(`−${RDX('4','2',5)} ± ${RDX('2','1',5)}${SQ('2')}`, RDX('2','1',5,true)), 4],
@@ -3000,14 +3031,6 @@ const E4c = W33(3, [`x${P2} ＋ 2x ＋ 5 ＝ 0`, `x ＝ ${FX(`−2 ± ${SQ('4 �
 
 /* ===== プリント問題③-3（No.14・15、⑴〜⑿）：Step❶ の 枠（大きく）→ グラフ → ③-1 と 同じ 塗る・答える =====
    P3Q = [番号, 式, 不等号の 番号, 根, 答え, 文字, 計算の 行 [[html, 説明], …], 答えの 小さな まとめ, オプション] */
-const PRE33 = (no, f, sg, rows, res, gline, sud) => {
-  const k = rows.length + 1;
-  return {cm:[`${no} ${M(`${f.replace(/<sup>2<\/sup>/,'²')} ${sg} 0`)}。　<b>Step❶</b> まず ＝ 0 の 式を 解く。`, ...rows.map(r=>r[1]), gline],
-    html:`<div class="p3w" data-o="${k}"><span class="v2mk">まず ＝ 0 を 解く</span></div>
-      <div class="q33c math" data-o="${k}">${rows.map(([h],i)=>`<div class="lh" data-s="${i+1}"><span>${h}</span></div>`).join('')}${sud ? `<div class="q33sd lh" data-s="${sud[1]}">${SUDARE(sud[0])}</div>` : ''}</div>
-      <div class="q33r math lh" data-s="${k}">${res}</div>`}; };
-const GL = ['グラフを かく。　x軸と <b>2点で 交わる</b>。', 'グラフは x軸に <b>接する</b>。', 'グラフは x軸と <b>交わらない</b>（上に 浮いて いる）。'];
-const FAC = (eq, fac, root, how) => [[`${eq} ＝ 0`, `${M(eq.replace(/<sup>2<\/sup>/,'²') + ' ＝ 0')}。　${how}`], [`${fac} ＝ 0`, M(fac.replace(/<sup>2<\/sup>/,'²') + ' ＝ 0')], [`x ＝ ${root}`, M('x ＝ ' + root.replace(/<[^>]+>/g,''))]];
 const P3Q = [
   ['⑴',`x${P2} ＋ 5x ＋ 6`,2,[-3,-2],'x ≦ −3, −2 ≦ x',null, FAC(`x${P2} ＋ 5x ＋ 6`,'(x ＋ 3)(x ＋ 2)','−3, −2','たして 5、かけて 6 → 因数分解。'), 'x ＝ −3, −2'],
   ['⑵',`2x${P2} ＋ 3x − 2`,1,[-2,0.5],`−2 ＜ x ＜ ${FR(1,2)}`,['−2','1/2'], FAC(`2x${P2} ＋ 3x − 2`,'(x ＋ 2)(2x − 1)',`−2, ${FR(1,2)}`,'たすき掛けで 因数分解。'), `x ＝ −2, ${FR(1,2)}`, {am:true}],
