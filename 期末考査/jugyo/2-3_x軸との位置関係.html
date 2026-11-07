@@ -1160,20 +1160,8 @@ body.portrait .ptag{left:70px;top:8px}
 
 /* ③-1 練習編の 導入（2026-11-07）：上＝オレンジ、下＝水色、軸＝紫。言葉は 少なく */
 .c-up{color:#d9731a} .c-dn{color:#2f86c8} .c-ax{color:#8a4fb0}
-.inrow{position:absolute;left:40px;right:40px;top:120px;display:flex;justify-content:space-between;gap:24px}
-.incol{flex:1;text-align:center}
 .inlab{font:700 22px "Zen Maru Gothic",sans-serif;color:var(--muted);margin-bottom:18px}
 .ineq{font-size:40px;white-space:nowrap}
-.incol.now .ineq{font-weight:700}
-.insw{position:relative;display:inline-block;min-width:2.2em;text-align:left}
-.inold{transition:opacity .3s} .inold.on{opacity:0}
-.innew{position:absolute;left:0;top:0;color:#e0465e;font-weight:900}
-.inflow{position:absolute;left:40px;right:40px;top:150px;display:flex;align-items:center;justify-content:center;gap:18px}
-.inbox{width:200px;height:120px;display:flex;align-items:center;justify-content:center;font:900 36px "Zen Maru Gothic",sans-serif;border:3px solid var(--line,#c9d3dd);border-radius:14px;background:var(--paper);color:var(--ink);transition:opacity .4s,border-color .4s}
-.inbox.past.on{opacity:.3}
-.inbox.today.on{border:6px solid #e0465e}
-.inar{font-size:40px;color:var(--muted)}
-.intoday{position:absolute;right:150px;top:300px;font:900 28px "Zen Maru Gothic",sans-serif;color:#e0465e}
 .inpanels{position:absolute;left:30px;right:30px;top:70px;display:flex;justify-content:space-between;gap:20px}
 .inpn{flex:1;text-align:center}
 .insv{width:100%;height:auto;display:block}
@@ -1182,7 +1170,7 @@ body.portrait .ptag{left:70px;top:8px}
 .line-ax{stroke:#8a4fb0;stroke-width:12;stroke-linecap:round}
 .inpt{margin-top:14px;font:900 32px "Zen Maru Gothic",sans-serif;color:var(--ink)}
 .inpt .math{font-weight:400;margin-right:4px}
-.portrait .pfit .inrow,.portrait .pfit .inflow,.portrait .pfit .inpanels{flex-wrap:wrap}
+.portrait .pfit .inpanels{flex-wrap:wrap}
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .p3bxe{color:#ddd} } :root[data-theme="dark"] .p3bxe{color:#ddd}
 /* ③-1 導入 1枚目（11/7 作り直し 2）：式は 1本。「y ＝」「＝ 0」「＞ 0」が 横から 出入りする（幅を 伸び縮み させて 真ん中の 式が すべるように 動く） */
 .inmorph{position:absolute;left:0;right:0;top:110px;height:220px;text-align:center}
@@ -1197,6 +1185,27 @@ body.portrait .ptag{left:70px;top:8px}
 .indim{opacity:.25}
 .inhl{color:#e0465e;font-weight:900}
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .p3bxb{color:#eee} } :root[data-theme="dark"] .p3bxb{color:#eee}
+/* ③-1 導入 2枚目（11/7 案A）：横に 4つ、見出しの 下で 早回し */
+.in2row{position:absolute;left:24px;right:24px;top:26px;bottom:22px;display:flex;align-items:stretch;gap:6px}
+.in2grp{flex:2;display:flex;align-items:stretch;gap:6px;border:5px solid transparent;border-radius:18px;padding:6px;position:relative;transition:opacity .5s,border-color .5s}
+.in2grp.past.on{opacity:.3}
+.in2grp.today.on{border-color:#e0465e}
+.in2col{flex:1;display:flex;flex-direction:column;min-width:0}
+.in2tab{height:58px;flex:none;display:flex;align-items:center;justify-content:center;font:900 32px "Zen Maru Gothic",sans-serif;border:3px solid var(--line,#c9d3dd);border-radius:12px;background:var(--paper);color:var(--ink)}
+.in2demo{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:6px;padding-top:56px}
+.in2ar{align-self:flex-start;margin-top:22px;font-size:30px;color:var(--muted);flex:none}
+.in2math{font-size:23px;line-height:1.9;text-align:center;white-space:nowrap}
+.in2col:first-child .in2math{margin-top:34px}
+.in2b{font-weight:700}
+.in2sv{width:100%;max-width:250px;height:auto;display:block}
+.in2cv{fill:none;stroke:var(--ink,#333);stroke-width:4;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1s ease .5s}
+.in2cv.show{stroke-dashoffset:0}
+.in2dot{fill:#e0465e} .in2dot.op{fill:var(--paper,#fff);stroke:#e0465e;stroke-width:3}
+.in2lb{font:20px "STIX Two Text",serif;fill:var(--ink,#333)}
+.in2pt path{fill:none;stroke:#f2a65a;stroke-width:12;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;opacity:.85;transition:stroke-dashoffset .8s ease .5s}
+.in2pt.show path{stroke-dashoffset:0}
+.in2here{position:absolute;right:10px;bottom:-4px;font:900 26px "Zen Maru Gothic",sans-serif;color:#e0465e}
+.portrait .pfit .in2row{flex-wrap:wrap}
 
 /* ===== 手書き ===== */
 #ink{position:fixed;left:0;top:0;z-index:15;pointer-events:none;touch-action:none}
@@ -1991,7 +2000,7 @@ function SUDARE(n, s){
 const RDX = (t, r, s, dn) => `<span class="rdx">${t}<i class="rdl lh" data-s="${s}"></i><span class="rdn${dn?' dn':''} lh" data-s="${s}">${r}</span></span>`;
 
 /* ====== このプリントのスライド ====== */
-const SERIES = [{"f": "1-1_因数分解の復習", "no": "①-1", "t": "因数分解の 復習", "v": "1.5_2026-10-29"}, {"f": "1-2_2次方程式の解", "no": "①-2", "t": "2次方程式の 解", "v": "1.5_2026-10-29"}, {"f": "1-3_2次方程式の解", "no": "①-3", "t": "2次方程式の 解 ②", "v": "1.5_2026-10-29"}, {"f": "1-4_解の公式", "no": "①-4", "t": "解の公式", "v": "1.7_2026-10-30"}, {"f": "1-5_解の公式_重解と解なし", "no": "①-5", "t": "2次方程式の 解 ③", "v": "1.7_2026-10-30"}, {"f": "1-6_実数解の個数", "no": "①-6", "t": "実数解の 個数", "v": "1.7_2026-10-30"}, {"f": "2-1_x軸との共有点", "no": "②-1", "t": "x軸との 共有点", "v": "1.5_2026-10-29"}, {"f": "2-2_x軸との共有点", "no": "②-2", "t": "x軸との 共有点 ②", "v": "1.5_2026-10-29"}, {"f": "2-3_x軸との位置関係", "no": "②-3", "t": "x軸との 位置関係", "v": "1.10_2026-11-02"}, {"f": "3-2_2次不等式_練習編_v2", "no": "③-1", "t": "2次不等式 練習編", "v": "3.2_2026-11-07"}, {"f": "3-1_2次不等式の解法_v2", "no": "③-2", "t": "2次不等式の 解き方", "v": "2.21_2026-10-30"}, {"f": "3-3_2次不等式の解法", "no": "③-3", "t": "2次不等式 いろいろ", "v": "1.7_2026-10-30"}, {"f": "3-4_2次不等式の解法", "no": "③-4", "t": "x² の前が マイナス", "v": "1.7_2026-10-30"}], ME = "2-3_x軸との位置関係";
+const SERIES = [{"f": "1-1_因数分解の復習", "no": "①-1", "t": "因数分解の 復習", "v": "1.5_2026-10-29"}, {"f": "1-2_2次方程式の解", "no": "①-2", "t": "2次方程式の 解", "v": "1.5_2026-10-29"}, {"f": "1-3_2次方程式の解", "no": "①-3", "t": "2次方程式の 解 ②", "v": "1.5_2026-10-29"}, {"f": "1-4_解の公式", "no": "①-4", "t": "解の公式", "v": "1.7_2026-10-30"}, {"f": "1-5_解の公式_重解と解なし", "no": "①-5", "t": "2次方程式の 解 ③", "v": "1.7_2026-10-30"}, {"f": "1-6_実数解の個数", "no": "①-6", "t": "実数解の 個数", "v": "1.7_2026-10-30"}, {"f": "2-1_x軸との共有点", "no": "②-1", "t": "x軸との 共有点", "v": "1.5_2026-10-29"}, {"f": "2-2_x軸との共有点", "no": "②-2", "t": "x軸との 共有点 ②", "v": "1.5_2026-10-29"}, {"f": "2-3_x軸との位置関係", "no": "②-3", "t": "x軸との 位置関係", "v": "1.10_2026-11-02"}, {"f": "3-2_2次不等式_練習編_v2", "no": "③-1", "t": "2次不等式 練習編", "v": "3.3_2026-11-07"}, {"f": "3-1_2次不等式の解法_v2", "no": "③-2", "t": "2次不等式の 解き方", "v": "2.21_2026-10-30"}, {"f": "3-3_2次不等式の解法", "no": "③-3", "t": "2次不等式 いろいろ", "v": "1.7_2026-10-30"}, {"f": "3-4_2次不等式の解法", "no": "③-4", "t": "x² の前が マイナス", "v": "1.7_2026-10-30"}], ME = "2-3_x軸との位置関係";
 const VER = '<i class="nv">ver</i> 1.10　2026-11-02';
 
 const IMG = s => s;

@@ -326,14 +326,36 @@ const IN1 = `
     </div>
   </div>
   ${cbar([`まず、2次方程式。`, `x軸との 共有点は、＝ 0 の かわりに 左に y ＝。`, `解く ときは ＝ 0 → 2次方程式で 考えた。`, `＝ 0 が 不等号に 変わった。　今回は <b>これを 解く</b>。`])}`;
+/* 導入 2枚目（11/7 案A）：横に 4つ。上の 細い 見出し（解く・グラフ・塗る・答える）の 下で、x² − 2x − 3 ＞ 0 を 早回しで 見せる。
+   1番ずつ：解く → グラフ → 塗る → 答える。最後に 解く・グラフ を うすく、塗る・答える を 赤い 枠で「今日は ここ」 */
+const I2X = x => 120 + (x - 1) * 40, I2Y = x => 160 - 0.03125 * (I2X(x) - 120) ** 2;   // −1 → 80、3 → 160、頂点 (120, 160)、x軸は y＝110
+const i2parab = (a, b) => { let d = ''; for (let i = 0; i <= 40; i++) { const X = a + (b - a) * i / 40; d += (i ? 'L' : 'M') + X.toFixed(1) + ' ' + (160 - 0.03125 * (X - 120) ** 2).toFixed(1) + ' '; } return d; };
+const I2G = (inner) => `<svg viewBox="0 0 240 200" class="in2sv"><line x1="8" y1="110" x2="226" y2="110" class="inax"/><polygon points="236,110 222,104 222,116" class="inaxh"/>${inner}</svg>`;
+const I2CURVE = (cls, s) => `<path class="${cls}" ${s !== undefined ? `data-s="${s}"` : ''} pathLength="1" d="${i2parab(53, 187)}"/>`;
+const I2DOTS = (s, open) => `<g class="lh" data-s="${s}"><circle cx="80" cy="110" r="6" class="in2dot${open ? ' op' : ''}"/><circle cx="160" cy="110" r="6" class="in2dot${open ? ' op' : ''}"/><text x="74" y="136" class="in2lb" text-anchor="end">−1</text><text x="166" y="136" class="in2lb">3</text></g>`;
+const I2PAINT = s => `<g class="in2pt" data-s="${s}"><path pathLength="1" d="${i2parab(53, 80)}"/><path pathLength="1" d="${i2parab(160, 187)}"/></g>`;
+const I2COL = (t, demo) => `<div class="in2col"><div class="in2tab">${t}</div><div class="in2demo">${demo}</div></div>`;
 const IN2 = `
   <div class="card abs dcard v2 p3">${EQTAPE}
-    <div class="inflow">
-      ${['解く', 'グラフ', '塗る', '答える'].map((t, k) => `${k ? '<span class="inar">→</span>' : ''}<div class="inbox ${k < 2 ? 'past' : 'today'}" data-o="1">${t}</div>`).join('')}
+    <div class="in2row">
+      <div class="in2grp past" data-o="5">
+        ${I2COL('解く', `<div class="in2math math">
+          <div class="lh" data-s="1">x${P2} − 2x − 3 ＝ 0</div>
+          <div class="lh" data-s="1" style="transition-delay:.5s">(x ＋ 1)(x − 3) ＝ 0</div>
+          <div class="lh in2b" data-s="1" style="transition-delay:1s">x ＝ −1, 3</div></div>`)}
+        <span class="in2ar">→</span>
+        ${I2COL('グラフ', I2G(I2DOTS(2) + I2CURVE('in2cv', 2)))}
+      </div>
+      <span class="in2ar">→</span>
+      <div class="in2grp today" data-o="5">
+        ${I2COL('塗る', `<div class="lh" data-s="3">${I2G(`<g>${I2CURVE('in2cv show')}</g>` + I2PAINT(3) + I2DOTS(3, true))}</div>`)}
+        <span class="in2ar">→</span>
+        ${I2COL('答える', `<div class="lh" data-s="4">${I2G(`${I2CURVE('in2cv show')}<g class="in2pt show"><path pathLength="1" d="${i2parab(53, 80)}"/><path pathLength="1" d="${i2parab(160, 187)}"/></g>` + I2DOTS(4, true))}<div class="in2math math in2b lh" data-s="4" style="transition-delay:.4s">x ＜ −1,　3 ＜ x</div></div>`)}
+        <div class="in2here lh" data-s="5">今日は ここ</div>
+      </div>
     </div>
-    <div class="intoday lh" data-s="1">今日は ここ</div>
   </div>
-  ${cbar([`2次不等式は この 順に 解く。`, `解く・グラフ は もう できる。　今日は <b>塗る・答える</b> だけ！`])}`;
+  ${cbar([`2次不等式は この 4つで 解く。`, `解く：＝ 0 と して 解く。`, `グラフ：点を 打って 放物線。`, `塗る：＞ 0 なので 上を 塗る。`, `答える：塗った ところの x。`, `解く・グラフ は もう できる。　今日は <b>塗る・答える</b> だけ！`])}`;
 const PANEL = (k, sg, word) => `<div class="inpn">
     <svg viewBox="0 0 300 200" class="insv">
       ${k === 0 ? `<rect class="lh fill-up" data-s="1" x="10" y="10" width="280" height="90"/>` : ''}
