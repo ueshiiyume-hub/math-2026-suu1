@@ -240,7 +240,7 @@ const SUM3 = `
 function GQ(P){
   const up = P.s%2===0, eq = P.s>=2, sg = SIGN3[P.s], kind = P.roots.length===2 ? 0 : P.roots.length===1 ? 1 : 2;
   const [a, b] = P.roots, m = kind===0 ? (a+b)/2 : kind===1 ? a : 0, lab = P.lab || P.roots.map(x=>x<0?'−'+(-x):''+x);
-  const o = kind===0 ? {xv:m, k:1, c:-(((b-a)/2)**2), sc:160/(b-a), vs:80/(((b-a)/2)**2), ay:170, top:10, H:316}
+  const o = kind===0 ? {xv:m, k:1, c:-(((b-a)/2)**2), sc:2*(P.span||80)/(b-a), vs:80/(((b-a)/2)**2), ay:170, top:10, H:316}   // span：根の 間の 半分（px）。長い 数の とき 広げる（③-3）
           : kind===1 ? {xv:m, k:1, c:0, sc:40, vs:20, ay:250, top:10} : {xv:0, k:1, c:2, sc:40, vs:20, ay:272, top:10};
   const g = SG(o), u = 1/o.sc*40;                                  // u：1目もり 40px ぶんの x
   const any = !(kind===1 && !up) && !(kind===2 && !up);
@@ -250,16 +250,20 @@ function GQ(P){
   const NL = (x,i) => [g.X(x)+off(i), g.ay+32];
   const le = eq, s2 = le ? '≦' : '＜';
   let back='', x3='', w4='';
+  const dt = P.dt && kind===0, fin = dt ? 10 : 6;   // dt：答えを くわしく（左を 比べる 6 → 書き直す 7 → 右 8 → 9、答えは 10。③-3 の 例⑴、11/7）
+  const DL3 = (c, t) => `<line class="idot2" x1="${f1(c.mx+(t[0]<c.mx?-24:24))}" y1="${f1(c.my+30)}" x2="${f1(t[0]+(t[0]<c.mx?70:-70))}" y2="${f1(t[1]-14)}"/>`;
+  const SPLIT = (c1, c2, t1, t2, o1, o2) => { if(dt){
+      back = `<g class="gs" data-s="6">${c1.band}</g><g class="gs" data-s="8">${c2.band}</g>`;
+      w4 = `<g class="gs" data-s="6">${c1.sign}</g><g class="gs" data-s="7">${DL3(c1,t1)}${WR3(t1[0],t1[1],o1)}</g><g class="gs" data-s="8">${c2.sign}</g><g class="gs" data-s="9">${DL3(c2,t2)}${WR3(t2[0],t2[1],o2)}</g>`;
+    } else { back = `<g class="gs" data-s="6">${c1.band}${c2.band}</g>`; w4 = c1.sign + c2.sign + WR3(t1[0],t1[1],o1) + WR3(t2[0],t2[1],o2); } };
   if(kind===0 && up){
     const L=[g.X(a)-110, g.ay-48], R=[g.X(b)+110, g.ay-48], c1=CMP3(L, NL(a,0), le), c2=CMP3(NL(b,1), R, le);
-    back = `<g class="gs" data-s="6">${c1.band}${c2.band}</g>`;
     x3 = XB3(L,[g.X(a-0.4*u),g.Y(a-0.4*u)]) + XB3(R,[g.X(b+0.4*u),g.Y(b+0.4*u)]);
-    w4 = c1.sign + c2.sign + WR3(g.X(a)-200, g.ay+80, `x ${s2} ${lab[0]}`) + WR3(g.X(b)+200, g.ay+80, `${lab[1]} ${s2} x`);
+    SPLIT(c1, c2, [g.X(a)-200, g.ay+80], [g.X(b)+200, g.ay+80], `x ${s2} ${lab[0]}`, `${lab[1]} ${s2} x`);
   } else if(kind===0){
     const X=[g.X(m), g.Y(m)+42], c1=CMP3(NL(a,0), X, le), c2=CMP3(X, NL(b,1), le);
-    back = `<g class="gs" data-s="6">${c1.band}${c2.band}</g>`;
     x3 = XB3(X,[g.X(m),g.Y(m)]);
-    w4 = c1.sign + c2.sign + WR3(g.X(a)-170, g.ay+90, `${lab[0]} ${s2} x`) + WR3(g.X(b)+170, g.ay+90, `x ${s2} ${lab[1]}`);
+    SPLIT(c1, c2, [g.X(a)-(P.wo||170), g.ay+90], [g.X(b)+(P.wo||170), g.ay+90], `${lab[0]} ${s2} x`, `x ${s2} ${lab[1]}`);
   } else if(kind===1 && P.s===0){
     const L=[g.X(m)-150, g.ay-80], R=[g.X(m)+150, g.ay-80], N=[g.X(m), g.ay+34], c1=CMP3(L, N, false), c2=CMP3(N, R, false);
     back = `<g class="gs" data-s="6">${c1.band}${c2.band}</g>`;
@@ -279,33 +283,38 @@ function GQ(P){
             : kind===1 ? [`${lab[0]} だけ 塗れない`, '塗れる ところが ない', '全部 塗れた', `${lab[0]} の 点 だけ 塗れた`][P.s]
             : (up ? '全部 塗れた' : '塗れる ところが ない');
   const w2 = P.roots.length ? (eq ? 'x軸も 塗る（黒丸）' : 'x軸は 塗らない（白丸）') : 'x軸と 交わらない';
-  const am = MATHY(P.ans.replace(/[√()/]/g,'1'));
+  const am = P.am ?? MATHY(P.ans.replace(/[√()/]/g,'1'));
   const same = P.list.every(q=>q[2]===P.list[0][2]);             // 4問とも 同じ 式 → 不等号 だけ、ちがう 式 → 小さく 式も
   const list = `<div class="p3list">${P.list.map(([n,sgn,f],k)=>`<div class="p3i${same?'':' sm'}${k===P.cur?' on':''}${k<P.cur?' done':''}"><span>${n}</span><span class="math">${same?'':f+' '}${sgn} 0</span></div>`).join('')}</div>`;
+  /* P.pre：③-3 の プリント問題。先に Step❶ の 計算（大きな 枠）→ k 番で 枠が 消えて グラフが 出る。そのあとの 番は すべて k ずつ 後ろへ */
+  const k = P.pre ? P.pre.cm.length - 1 : 0;
+  const SH = h => k ? h.replace(/data-(s|o)="(\d+)"/g, (mm,t,n)=>`data-${t}="${+n+k}"`) : h;
   return `
   <div class="card abs dcard v2 p3 p3big">${EQTAPE}
     ${list}
-    <div class="v2c">
+    <div class="v2c">${SH(`
       <div class="p3q math">${P.no}　${P.f} <span class="p3sg" data-o="1">${sg} 0</span></div>
       <div class="p3w lh" data-s="2" data-o="4"><span class="v2mk">${PW3(up, eq)}</span></div>
       <div class="p3w lh" data-s="4" data-o="5"><span class="v2mk">${w2}</span></div>
-      <div class="p3w lh" data-s="5" data-o="6"><span class="v2mk">${any?'塗れた ところに x を 置く':'塗れた ところは？'}</span></div>
-      <div class="p3w p3a lh" data-s="6"><span class="p3why">${why}</span></div>
-      ${ANSBOX3(g, P.ans, am)}
-      <div class="p3g"><svg class="isv" width="${g.W}" height="${g.H}" viewBox="0 0 ${g.W} ${g.H}">
+      <div class="p3w lh" data-s="5" data-o="${dt?6:fin}"><span class="v2mk">${any?'塗れた ところに x を 置く':'塗れた ところは？'}</span></div>
+      ${dt ? `<div class="p3w lh" data-s="6" data-o="10"><span class="v2mk">x と 近くの 数を 比べる</span></div>` : ''}
+      <div class="p3w p3a lh" data-s="${fin}"><span class="p3why">${why}</span></div>
+      ${ANSBOX3(g, P.ans, am, fin)}`)}
+      ${P.pre ? P.pre.html : ''}
+      <div class="p3g${k ? ' lh' : ''}"${k ? ` data-s="${k}"` : ''}>${SH(`<svg class="isv" width="${g.W}" height="${g.H}" viewBox="0 0 ${g.W} ${g.H}">
         ${TINT3(g, up, 3)}${back}${AX3(g)}${eq ? AXP3(g, 3) : ''}${nums}<path class="icv p3cv" d="${g.d}"/>
-        ${any ? PAINT3(g, up, false, 3) : ''}${eq && P.roots.length ? `<g class="gs" data-s="4">${PAINT3(g, up, true)}</g>` : ''}${dots}<g class="gs" data-s="5">${x3}</g><g class="gs" data-s="6">${w4}</g></svg></div>
+        ${any ? PAINT3(g, up, false, 3) : ''}${eq && P.roots.length ? `<g class="gs" data-s="4">${PAINT3(g, up, true)}</g>` : ''}${dots}<g class="gs" data-s="5">${x3}</g>${dt ? w4 : `<g class="gs" data-s="6">${w4}</g>`}</svg>`)}</div>
     </div>
   </div>
-  ${ptag('プリント問題③-1')}
+  ${P.tag === null ? '' : ptag(P.tag || 'プリント問題③-1')}
   ${cbarL([
-    `${P.no} ${M(`${P.f.replace(/<sup>2<\/sup>/,'²')} ${sg} 0`)}${P.c0 ? '　' + P.c0 : ''}`,
+    ...(P.pre ? P.pre.cm : [`${P.no} ${M(`${P.f.replace(/<sup>2<\/sup>/,'²')} ${sg} 0`)}${P.c0 ? '　' + P.c0 : ''}`]),
     `右側の「${sg} 0」に 注目。`,
     `${sg} 0 → <b>${PW3(up, eq)}</b>。`,
     `<b>${PW3(up, eq)}</b>。${any?'':'　…でも グラフは x軸より 下に ない！'}`,
     P.roots.length ? (eq ? `＝ が ある → <b>x軸</b>も 塗る → <b>黒丸</b>。` : `＝ が ない → x軸は 塗らない → <b>白丸</b>。`) : `x軸と 交わらない ので、軸に 塗る 点は ない。`,
     any ? `塗れた ところに <b>x</b> を 置く。` : `塗れた ところが ない ので、x を 置けない。`,
-    `${why} → 答え <b>${P.ans}</b>。`])}`;
+    ...(dt ? P.dt : [`${why} → 答え <b>${P.ansT || P.ans}</b>。`])])}`;
 }
 /* No.11 の 20問（4問 ずつ 左の 一覧に 出す） */
 const R5 = `${FR('1 − √5',2)}`, R5b = `${FR('1 ＋ √5',2)}`;

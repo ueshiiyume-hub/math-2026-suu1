@@ -586,6 +586,7 @@ sys.path.insert(0, B); import decks_kimatsu2; decks_kimatsu2.add(decks)
 # ③-1 ver 2.0（作り直し。ver 1.4 は そのまま 残す）
 import decks_v2; decks_v2.add(decks)
 import decks_32; decks_32.add(decks)   # ③-2 ver 2
+import decks_33; decks_33.add(decks)   # ③-3 ver 2（2026-11-07）
 
 # バージョンと 日付（versions.json）。直したら v と date を 書きかえる。表紙の 右下に 出る
 import json
@@ -597,7 +598,7 @@ SERIES_LIST = [('1-1_因数分解の復習','①-1','因数分解の 復習'), (
   ('1-5_解の公式_重解と解なし','①-5','2次方程式の 解 ③'), ('1-6_実数解の個数','①-6','実数解の 個数'),
   ('2-1_x軸との共有点','②-1','x軸との 共有点'), ('2-2_x軸との共有点','②-2','x軸との 共有点 ②'),
   ('2-3_x軸との位置関係','②-3','x軸との 位置関係'), ('3-2_2次不等式_練習編_v2','③-1','2次不等式 練習編'),
-  ('3-1_2次不等式の解法_v2','③-2','2次不等式の 解き方'), ('3-3_2次不等式の解法','③-3','2次不等式 いろいろ'),
+  ('3-1_2次不等式の解法_v2','③-2','2次不等式の 解き方'), ('3-3_2次不等式の解法_v2','③-3','2次不等式 いろいろ'),
   ('3-4_2次不等式の解法','③-4','x² の前が マイナス')]
 SER = [dict(f=f, no=no, t=tt, v=VERS.get(f, {}).get('v', '') + '_' + VERS.get(f, {}).get('date', '')) for f, no, tt in SERIES_LIST if f in decks]
 for fn, (title, js) in decks.items():
