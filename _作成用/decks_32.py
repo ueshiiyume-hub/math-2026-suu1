@@ -19,6 +19,12 @@ function SG(o){
   return {X,Y,ay,W,H,d};
 }
 let CL3 = 0;
+/* 塗る ところの 言い方：上を 塗る／下を 塗る、＝ が あれば 上と x軸を 塗る（「0より 大きい」とは 言わない、11/7 先生の 指示） */
+const PW3 = (up, eq) => `${up ? '上' : '下'}${eq ? ' と x軸' : ''}を 塗る`;
+/* 答えの 枠：グラフの 下（プリントと 同じ 場所。書き写す ところが わかる ように）。枠は 最初から、答えは 最後の 番で */
+const ANSBOX3 = (g, ans, am) => `<div class="p3ans" style="top:${170 + g.H + 6}px"><span class="p3al">答え</span><span class="p3av lh ${am ? 'math' : ''}" data-s="6">${ans}</span></div>`;
+/* 練習の 問題の ページ だけ：「いま やっていること」を 左下（4問の 一覧の 下）に 小さく（答えの 枠の 場所を あける） */
+const cbarL = list => cbar(list).replace('class="card abs cbar"', 'class="card abs cbar cbarL"');
 /* 塗る：up（上）／ dn（下）、eq（軸も）。塗りは グラフを 塗る 範囲で 切る */
 const PAINT3 = (g, up, eq, s, cls='') => { const id='c3_'+(++CL3);
   const r = up ? `<rect x="0" y="0" width="${g.W}" height="${f1(eq? g.ay : g.ay-2)}"/>` : `<rect x="0" y="${f1(eq? g.ay : g.ay+2)}" width="${g.W}" height="${g.H}"/>`;
@@ -99,29 +105,30 @@ function Q3(r, j){
   const R = ROW3[r], up = j%2===0, eq = j>=2, sg = SIGN3[j], g = SG({...R.o}), ans = ANS3[r][j];
   const any = !(r===1 && !up) && !(r===2 && !up);
   const dots = R.roots.map(x=>DOT3(g, x, eq, 4)).join('');
-  const w2 = R.roots.length ? (eq ? '軸も 塗る' : '軸は 塗らない') : 'x軸と 交わらない';
+  const w2 = R.roots.length ? (eq ? 'x軸も 塗る（黒丸）' : 'x軸は 塗らない（白丸）') : 'x軸と 交わらない';
   const am = MATHY(ans), xs = XSTEP(r, j, g);
-  /* 番：1 ${sg} 0 を 強調、2 0より 大きい／小さい、3 上／下を 塗る、4 軸、5 x を 置く、6 式・答え */
+  /* 番：1 ${sg} 0 を 強調、2 上（下）を 塗る／上（下）と x軸を 塗る、3 塗る、4 軸、5 x を 置く、6 式・答え */
   return `
-  <div class="card abs dcard v2 p3">${EQTAPE}
+  <div class="card abs dcard v2 p3 p3big">${EQTAPE}
     ${LIST3(r,j)}
     <div class="v2c">
       <div class="p3q math">${NO3[r*4+j]}　${R.f} <span class="p3sg" data-o="1">${sg} 0</span></div>
-      <div class="p3w lh" data-s="2" data-o="4"><span class="v2mk">${up?'0より 大きい':'0より 小さい'}</span><span class="v2sub lh" data-s="3">（${up?'上':'下'}を 塗る）</span></div>
+      <div class="p3w lh" data-s="2" data-o="4"><span class="v2mk">${PW3(up, eq)}</span></div>
       <div class="p3w lh" data-s="4" data-o="5"><span class="v2mk">${w2}</span></div>
       <div class="p3w lh" data-s="5" data-o="6"><span class="v2mk">${any?'塗れた ところに x を 置く':'塗れた ところは？'}</span></div>
-      <div class="p3w p3a lh" data-s="6"><span class="p3why">${WHY[r][j]} →</span><span class="v2mk ${am?'math':''}">${ans}</span></div>
+      <div class="p3w p3a lh" data-s="6"><span class="p3why">${WHY[r][j]}</span></div>
+      ${ANSBOX3(g, ans, am)}
       <div class="p3g"><svg class="isv" width="${g.W}" height="${g.H}" viewBox="0 0 ${g.W} ${g.H}">
         ${TINT3(g, up, 3)}${xs.back}${AX3(g)}${NUM3(g, R.roots)}<path class="icv p3cv" d="${g.d}"/>
         ${any ? PAINT3(g, up, false, 3) : ''}${eq && R.roots.length ? `<g class="gs" data-s="4">${PAINT3(g, up, true)}</g>` : ''}${dots}${xs.front}</svg></div>
     </div>
   </div>
-  ${cbar([
+  ${cbarL([
     `${NO3[r*4+j]} ${M(`${R.f.replace(/<sup>2<\/sup>/,'²')} ${sg} 0`)}`,
     `右側の「${sg} 0」に 注目。`,
-    `${up?'0より 大きい':'0より 小さい'}。`,
-    `${up?'0より 大きい → x軸より <b>上</b> を 塗る。':'0より 小さい → x軸より <b>下</b> を 塗る。'}${any?'':'　…でも グラフは x軸より 下に ない！'}`,
-    R.roots.length ? (eq ? `＝ が ある → <b>軸</b>も 塗る → <b>黒丸</b>。` : `＝ が ない → 軸は 塗らない → <b>白丸</b>。`) : `x軸と 交わらない ので、軸に 塗る 点は ない。`,
+    `${sg} 0 → <b>${PW3(up, eq)}</b>。`,
+    `<b>${up?'上':'下'}</b> を 塗る。${any?'':'　…でも グラフは x軸より 下に ない！'}`,
+    R.roots.length ? (eq ? `＝ が ある → <b>x軸</b>も 塗る → <b>黒丸</b>。` : `＝ が ない → x軸は 塗らない → <b>白丸</b>。`) : `x軸と 交わらない ので、軸に 塗る 点は ない。`,
     any ? `塗れた ところに <b>x</b> を 置く。` : `塗れた ところが ない ので、x を 置けない。`,
     `${WHY[r][j]} → 答え <b>${ans}</b>。`])}`;
 }
@@ -132,8 +139,8 @@ function HALF3(r, j){
   const R = ROW3[r], up = j%2===0, eq = j>=2, sg = SIGN3[j], ans = ANS3[r][j];
   const o = {...R.o, sc:R.o.sc*0.7, vs:R.o.vs*0.7, W:440, H:250, ay:Math.round(R.o.ay*0.86), top:8};
   const g = SG(o), dots = R.roots.map(x=>DOT3(g, x, eq, 2)).join(''), am = MATHY(ans);
-  const w1 = `${up?'0より 大きい':'0より 小さい'}<span class="p3s2">（${up?'上':'下'}を 塗る）</span>`;
-  const w2 = R.roots.length ? (eq ? '軸も 塗る' : '軸は 塗らない') : 'x軸と 交わらない';
+  const w1 = PW3(up, eq);
+  const w2 = R.roots.length ? (eq ? 'x軸も 塗る（黒丸）' : 'x軸は 塗らない（白丸）') : 'x軸と 交わらない';
   return `<div class="p3h">
       <div class="p3hq math">${NO3[r*4+j]}　${R.f} ${sg} 0</div>
       <div class="p3hw">
@@ -149,7 +156,7 @@ function HALF3(r, j){
 function PAIR3(r, j){
   const R = ROW3[r], a = j, b = j+1, sa = SIGN3[a], sb = SIGN3[b];
   const lw = j===0 ? '＞ は 上、＜ は 下 を 塗る。' : '≧ は 上、≦ は 下。　＝ が ある ので 軸も 塗る。';
-  const x2 = R.roots.length ? (j===0 ? `＝ が ない → 軸は 塗らない → <b>白丸</b>。` : `＝ が ある → <b>軸</b>も 塗る → <b>黒丸</b>。`) : `x軸と 交わらない ので、軸に 塗る 点は ない。`;
+  const x2 = R.roots.length ? (j===0 ? `＝ が ない → x軸は 塗らない → <b>白丸</b>。` : `＝ が ある → <b>x軸</b>も 塗る → <b>黒丸</b>。`) : `x軸と 交わらない ので、軸に 塗る 点は ない。`;
   return `
   <div class="card abs dcard v2 p3 p3pair">${EQTAPE}
     ${LIST3(r,a,b)}
@@ -249,31 +256,32 @@ function GQ(P){
   const why = kind===0 ? [['外側 2か所が 塗れた','内側が 塗れた'],['外側 ＋ 軸','内側 ＋ 軸']][eq?1:0][up?0:1]
             : kind===1 ? [`${lab[0]} だけ 塗れない`, '塗れる ところが ない', '全部 塗れた', `${lab[0]} の 点 だけ 塗れた`][P.s]
             : (up ? '全部 塗れた' : '塗れる ところが ない');
-  const w2 = P.roots.length ? (eq ? '軸も 塗る' : '軸は 塗らない') : 'x軸と 交わらない';
+  const w2 = P.roots.length ? (eq ? 'x軸も 塗る（黒丸）' : 'x軸は 塗らない（白丸）') : 'x軸と 交わらない';
   const am = MATHY(P.ans.replace(/[√()/]/g,'1'));
   const same = P.list.every(q=>q[2]===P.list[0][2]);             // 4問とも 同じ 式 → 不等号 だけ、ちがう 式 → 小さく 式も
   const list = `<div class="p3list">${P.list.map(([n,sgn,f],k)=>`<div class="p3i${same?'':' sm'}${k===P.cur?' on':''}${k<P.cur?' done':''}"><span>${n}</span><span class="math">${same?'':f+' '}${sgn} 0</span></div>`).join('')}</div>`;
   return `
-  <div class="card abs dcard v2 p3">${EQTAPE}
+  <div class="card abs dcard v2 p3 p3big">${EQTAPE}
     ${list}
     <div class="v2c">
       <div class="p3q math">${P.no}　${P.f} <span class="p3sg" data-o="1">${sg} 0</span></div>
-      <div class="p3w lh" data-s="2" data-o="4"><span class="v2mk">${up?'0より 大きい':'0より 小さい'}</span><span class="v2sub lh" data-s="3">（${up?'上':'下'}を 塗る）</span></div>
+      <div class="p3w lh" data-s="2" data-o="4"><span class="v2mk">${PW3(up, eq)}</span></div>
       <div class="p3w lh" data-s="4" data-o="5"><span class="v2mk">${w2}</span></div>
       <div class="p3w lh" data-s="5" data-o="6"><span class="v2mk">${any?'塗れた ところに x を 置く':'塗れた ところは？'}</span></div>
-      <div class="p3w p3a lh" data-s="6"><span class="p3why">${why} →</span><span class="v2mk ${am?'math':''}">${P.ans}</span></div>
+      <div class="p3w p3a lh" data-s="6"><span class="p3why">${why}</span></div>
+      ${ANSBOX3(g, P.ans, am)}
       <div class="p3g"><svg class="isv" width="${g.W}" height="${g.H}" viewBox="0 0 ${g.W} ${g.H}">
         ${TINT3(g, up, 3)}${back}${AX3(g)}${nums}<path class="icv p3cv" d="${g.d}"/>
         ${any ? PAINT3(g, up, false, 3) : ''}${eq && P.roots.length ? `<g class="gs" data-s="4">${PAINT3(g, up, true)}</g>` : ''}${dots}<g class="gs" data-s="5">${x3}</g><g class="gs" data-s="6">${w4}</g></svg></div>
     </div>
   </div>
   ${ptag('プリント問題③-1')}
-  ${cbar([
+  ${cbarL([
     `${P.no} ${M(`${P.f.replace(/<sup>2<\/sup>/,'²')} ${sg} 0`)}${P.c0 ? '　' + P.c0 : ''}`,
     `右側の「${sg} 0」に 注目。`,
-    `${up?'0より 大きい':'0より 小さい'}。`,
-    `${up?'0より 大きい → x軸より <b>上</b> を 塗る。':'0より 小さい → x軸より <b>下</b> を 塗る。'}${any?'':'　…でも グラフは x軸より 下に ない！'}`,
-    P.roots.length ? (eq ? `＝ が ある → <b>軸</b>も 塗る → <b>黒丸</b>。` : `＝ が ない → 軸は 塗らない → <b>白丸</b>。`) : `x軸と 交わらない ので、軸に 塗る 点は ない。`,
+    `${sg} 0 → <b>${PW3(up, eq)}</b>。`,
+    `<b>${up?'上':'下'}</b> を 塗る。${any?'':'　…でも グラフは x軸より 下に ない！'}`,
+    P.roots.length ? (eq ? `＝ が ある → <b>x軸</b>も 塗る → <b>黒丸</b>。` : `＝ が ない → x軸は 塗らない → <b>白丸</b>。`) : `x軸と 交わらない ので、軸に 塗る 点は ない。`,
     any ? `塗れた ところに <b>x</b> を 置く。` : `塗れた ところが ない ので、x を 置けない。`,
     `${why} → 答え <b>${P.ans}</b>。`])}`;
 }
@@ -316,8 +324,8 @@ const BOX3 = `
   </div>
   ${cbar([
     `プリントの いちばん上の 枠。　右側の 不等号で、塗る ところが 決まる。`,
-    `＞ 0 は 0より 大きい → <b>上</b> を 塗る。`,
-    `＜ 0 は 0より 小さい → <b>下</b> を 塗る。`,
+    `＞ 0 → <b>上</b> を 塗る。`,
+    `＜ 0 → <b>下</b> を 塗る。`,
     `≧ 0 は ＝ も ある → <b>上</b> と <b>x軸</b> を 塗る（黒丸）。`,
     `≦ 0 も ＝ が ある → <b>下</b> と <b>x軸</b> を 塗る。　この 決まりで 12問 解いて いこう！`])}`;
 
