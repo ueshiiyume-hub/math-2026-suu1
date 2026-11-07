@@ -1184,12 +1184,16 @@ body.portrait .ptag{left:70px;top:8px}
 .inpt .math{font-weight:400;margin-right:4px}
 .portrait .pfit .inrow,.portrait .pfit .inflow,.portrait .pfit .inpanels{flex-wrap:wrap}
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .p3bxe{color:#ddd} } :root[data-theme="dark"] .p3bxe{color:#ddd}
-/* ③-1 導入 1枚目（11/7 作り直し）：式が 1つずつ 切り替わる（横に 並べない） */
-.inmorph{position:absolute;left:0;right:0;top:110px;height:220px}
-.inst{position:absolute;left:0;right:0;text-align:center;opacity:0;transform:translateY(12px);transition:opacity .45s,transform .45s}
-.inst.cur{opacity:1;transform:none}
-.inmorph .inlab{font-size:30px;margin-bottom:26px}
-.inmorph .ineq{font-size:72px}
+/* ③-1 導入 1枚目（11/7 作り直し 2）：式は 1本。「y ＝」「＝ 0」「＞ 0」が 横から 出入りする（幅を 伸び縮み させて 真ん中の 式が すべるように 動く） */
+.inmorph{position:absolute;left:0;right:0;top:110px;height:220px;text-align:center}
+.inlabs{position:relative;height:44px;margin-bottom:26px}
+.inlabs .inst{position:absolute;left:0;right:0;font:700 30px "Zen Maru Gothic",sans-serif;color:var(--muted);opacity:0;transition:opacity .2s}
+.inlabs .inst.cur{opacity:1;transition:opacity .4s .25s}   /* 前の 見出しが 消えてから 出る（重ならない） */
+.inmorph .ineq{font-size:72px;white-space:nowrap}
+.ip{display:inline-block;max-width:0;opacity:0;overflow:hidden;white-space:nowrap;vertical-align:bottom;transition:max-width .7s ease,opacity .5s ease,margin .7s ease}
+.ip.show,.ip.wv-on{max-width:3em;opacity:1}
+.ip.iy.show{margin-right:.25em} .ip:not(.iy).show,.ip:not(.iy).wv-on{margin-left:.25em}
+.iyd{transition:opacity .6s} .iyd.on{opacity:.25}
 .indim{opacity:.25}
 .inhl{color:#e0465e;font-weight:900}
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .p3bxb{color:#eee} } :root[data-theme="dark"] .p3bxb{color:#eee}
@@ -1987,7 +1991,7 @@ function SUDARE(n, s){
 const RDX = (t, r, s, dn) => `<span class="rdx">${t}<i class="rdl lh" data-s="${s}"></i><span class="rdn${dn?' dn':''} lh" data-s="${s}">${r}</span></span>`;
 
 /* ====== このプリントのスライド ====== */
-const SERIES = [{"f": "1-1_因数分解の復習", "no": "①-1", "t": "因数分解の 復習", "v": "1.5_2026-10-29"}, {"f": "1-2_2次方程式の解", "no": "①-2", "t": "2次方程式の 解", "v": "1.5_2026-10-29"}, {"f": "1-3_2次方程式の解", "no": "①-3", "t": "2次方程式の 解 ②", "v": "1.5_2026-10-29"}, {"f": "1-4_解の公式", "no": "①-4", "t": "解の公式", "v": "1.7_2026-10-30"}, {"f": "1-5_解の公式_重解と解なし", "no": "①-5", "t": "2次方程式の 解 ③", "v": "1.7_2026-10-30"}, {"f": "1-6_実数解の個数", "no": "①-6", "t": "実数解の 個数", "v": "1.7_2026-10-30"}, {"f": "2-1_x軸との共有点", "no": "②-1", "t": "x軸との 共有点", "v": "1.5_2026-10-29"}, {"f": "2-2_x軸との共有点", "no": "②-2", "t": "x軸との 共有点 ②", "v": "1.5_2026-10-29"}, {"f": "2-3_x軸との位置関係", "no": "②-3", "t": "x軸との 位置関係", "v": "1.10_2026-11-02"}, {"f": "3-2_2次不等式_練習編_v2", "no": "③-1", "t": "2次不等式 練習編", "v": "3.1_2026-11-07"}, {"f": "3-1_2次不等式の解法_v2", "no": "③-2", "t": "2次不等式の 解き方", "v": "2.21_2026-10-30"}, {"f": "3-3_2次不等式の解法", "no": "③-3", "t": "2次不等式 いろいろ", "v": "1.7_2026-10-30"}, {"f": "3-4_2次不等式の解法", "no": "③-4", "t": "x² の前が マイナス", "v": "1.7_2026-10-30"}], ME = "3-1_2次不等式の解法";
+const SERIES = [{"f": "1-1_因数分解の復習", "no": "①-1", "t": "因数分解の 復習", "v": "1.5_2026-10-29"}, {"f": "1-2_2次方程式の解", "no": "①-2", "t": "2次方程式の 解", "v": "1.5_2026-10-29"}, {"f": "1-3_2次方程式の解", "no": "①-3", "t": "2次方程式の 解 ②", "v": "1.5_2026-10-29"}, {"f": "1-4_解の公式", "no": "①-4", "t": "解の公式", "v": "1.7_2026-10-30"}, {"f": "1-5_解の公式_重解と解なし", "no": "①-5", "t": "2次方程式の 解 ③", "v": "1.7_2026-10-30"}, {"f": "1-6_実数解の個数", "no": "①-6", "t": "実数解の 個数", "v": "1.7_2026-10-30"}, {"f": "2-1_x軸との共有点", "no": "②-1", "t": "x軸との 共有点", "v": "1.5_2026-10-29"}, {"f": "2-2_x軸との共有点", "no": "②-2", "t": "x軸との 共有点 ②", "v": "1.5_2026-10-29"}, {"f": "2-3_x軸との位置関係", "no": "②-3", "t": "x軸との 位置関係", "v": "1.10_2026-11-02"}, {"f": "3-2_2次不等式_練習編_v2", "no": "③-1", "t": "2次不等式 練習編", "v": "3.2_2026-11-07"}, {"f": "3-1_2次不等式の解法_v2", "no": "③-2", "t": "2次不等式の 解き方", "v": "2.21_2026-10-30"}, {"f": "3-3_2次不等式の解法", "no": "③-3", "t": "2次不等式 いろいろ", "v": "1.7_2026-10-30"}, {"f": "3-4_2次不等式の解法", "no": "③-4", "t": "x² の前が マイナス", "v": "1.7_2026-10-30"}], ME = "3-1_2次不等式の解法";
 const VER = '<i class="nv">ver</i> 1.10　2026-10-30';
 
 const IMG = s => s;

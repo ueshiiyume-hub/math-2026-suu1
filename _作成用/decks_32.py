@@ -320,13 +320,12 @@ const BOX3 = `
 const IN1 = `
   <div class="card abs dcard v2 p3">${EQTAPE}
     <div class="inmorph">
-      <div class="inst" data-m="0"><div class="inlab">2次方程式</div><div class="ineq math">x${P2} − 2x − 3 ＝ 0</div></div>
-      <div class="inst" data-m="1"><div class="inlab">x軸との共有点</div><div class="ineq math">y ＝ x${P2} − 2x − 3</div></div>
-      <div class="inst" data-m="2"><div class="inlab">y ＝ 0 と して 解く</div><div class="ineq math"><span class="indim">y ＝</span> x${P2} − 2x − 3 <span class="inhl">＝ 0</span></div></div>
-      <div class="inst" data-m="3"><div class="inlab">2次不等式</div><div class="ineq math">x${P2} − 2x − 3 <span class="inhl">＞ 0</span></div></div>
+      <div class="inlabs">${['2次方程式', 'x軸との共有点', 'y ＝ 0 と して 解く', '2次不等式'].map((t, k) => `<div class="inst" data-m="${k}">${t}</div>`).join('')}</div>
+      <!-- 式は 1本：x² − 2x − 3 は 動かさず、まわりの「y ＝」「＝ 0」「＞ 0」だけが 出たり 消えたり する（11/7） -->
+      <div class="ineq math"><span class="ip iy" data-s="1"><span class="iyd" data-o="3">y ＝</span></span>x${P2} − 2x − 3<span class="ip" data-wa="0" data-wb="1">＝ 0</span><span class="ip inhl" data-wa="2" data-wb="3">＝ 0</span><span class="ip inhl" data-s="3">＞ 0</span></div>
     </div>
   </div>
-  ${cbar([`まず、2次方程式。`, `次に、x軸との 共有点。`, `解く ときは ＝ 0 → 2次方程式で 考えた。`, `＝ 0 が 不等号に 変わった。　今回は <b>これを 解く</b>。`])}`;
+  ${cbar([`まず、2次方程式。`, `x軸との 共有点は、＝ 0 の かわりに 左に y ＝。`, `解く ときは ＝ 0 → 2次方程式で 考えた。`, `＝ 0 が 不等号に 変わった。　今回は <b>これを 解く</b>。`])}`;
 const IN2 = `
   <div class="card abs dcard v2 p3">${EQTAPE}
     <div class="inflow">
