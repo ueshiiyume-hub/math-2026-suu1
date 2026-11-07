@@ -242,7 +242,7 @@ function PB(o){
     else if(o.paint==='down' && roots.length===2) seg = [[roots[0],roots[1]]];
     s += `<g class="gs" data-s="${o.ps}">${seg.map(([a,b])=>`<path class="pgp" d="${path(a,b)}"/>`).join('')}</g>`;
   }
-  if(o.dot) s += `<g class="gs" data-s="${o.ds??o.s}">${roots.map(x=>`<circle class="pgd ${o.dot==='o'?'op':''}" cx="${x.toFixed(2)}" cy="${o.ay}" r="2.6"/>`).join('')}</g>`;
+  if(o.dot) s += `<g class="gs" data-s="${o.ds??o.s}">${roots.map(x=>`<circle class="pgd ${o.dot==='o'?'op':''}${o.paint?' pgq':''}" cx="${x.toFixed(2)}" cy="${o.ay}" r="2.6"/>`).join('')}</g>`;
   if(o.lab) s += `<g class="gs" data-s="${o.ls??o.s}">${o.lab.map(([x,t,an])=>`<text class="pgt" x="${x}" y="${o.ay+9}" text-anchor="${an||'middle'}">${t}</text>`).join('')}</g>`;
   return s;
 }
