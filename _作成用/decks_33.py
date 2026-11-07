@@ -36,8 +36,9 @@ const EGR = (kind, lab, gs) => {
   const vy = kind===0 ? ay+55 : kind===1 ? ay : ay-60, q = kind===0 ? 55/r**2 : 0.02;
   const hw = Math.sqrt((vy-20)/q); let d=''; for(let i=0;i<=60;i++){ const dx=-hw+2*hw*i/60; d+=(i?'L':'M')+f1(cx+dx)+' '+f1(vy-q*dx*dx)+' '; }
   const pts = kind===0 ? [cx-r, cx+r] : kind===1 ? [cx] : [];
-  const txt = kind===0 ? `<text class="inum e33n" x="${cx-r-8}" y="${ay+36}" text-anchor="end">${lab[0]}</text><text class="inum e33n" x="${cx+r+8}" y="${ay+36}">${lab[1]}</text>`
-            : kind===1 ? `<text class="inum e33n" x="${cx}" y="${ay+40}" text-anchor="middle">${lab[0]}</text>`
+  const LB = (x, t, an) => HASM(t) ? FO3(x, ay+28, TXH(t), 'fo3n e33f', an) : `<text class="inum e33n" x="${x}" y="${ay+38}" text-anchor="${an}">${t}</text>`;
+  const txt = kind===0 ? LB(cx-r-6, lab[0], 'end') + LB(cx+r+6, lab[1], 'start')
+            : kind===1 ? LB(cx, lab[0], 'middle')
             : `<text class="e33nt" x="${cx}" y="${ay+44}" text-anchor="middle">x軸と 交わらない</text>`;
   return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
     <line class="iax" x1="8" y1="${ay}" x2="${W-14}" y2="${ay}"/><polygon class="iah" points="${W-2},${ay} ${W-16},${ay-7} ${W-16},${ay+7}"/><text class="ixl" x="${W-20}" y="${ay+30}">x</text>
@@ -104,7 +105,7 @@ const E4a = ES1(3, [['x', FX(`−2 ± ${SQ('4 − 20')}`,'2'), 3], ['', FX(`−2
 /* ===== 例の 塗る・答える：③-1 の GQ（左の 一覧は 例 ⑴〜⑷） ===== */
 const R2 = SQ('2');
 const EQP = (cur, o) => GQ({no:EXQ[cur][0], f:EXQ[cur][2], tag:null, cur, list:EXQ.map(([n,sg,f])=>[n,sg,f]), ...o});
-const E1b = EQP(0, {span:130, s:2, roots:[-2-Math.SQRT2, -2+Math.SQRT2], lab:['−2−√2','−2+√2'], am:true,
+const E1b = EQP(0, {s:2, roots:[-2-Math.SQRT2, -2+Math.SQRT2], lab:['−2−√2','−2+√2'], am:true,
   ans:`x ≦ −2 − ${R2}, −2 ＋ ${R2} ≦ x`, dt:[
   `左：<b>x</b> と ${M('−2 − √2')} を 比べる。　x の 方が 小さい。　黒丸 なので ＝ も つけて <b>≦</b>。`, `書き直して ${M('x ≦ −2 − √2')}。`,
   `右：<b>x</b> と ${M('−2 ＋ √2')} を 比べる。　x の 方が 大きい。　黒丸 なので <b>≦</b>。`, `書き直して ${M('−2 ＋ √2 ≦ x')}。`,
@@ -154,10 +155,10 @@ const P3Q = [
   ['⑵',`2x${P2} ＋ 3x − 2`,1,[-2,0.5],`−2 ＜ x ＜ ${FR(1,2)}`,['−2','1/2'], FAC(`2x${P2} ＋ 3x − 2`,'(x ＋ 2)(2x − 1)',`−2, ${FR(1,2)}`,'たすき掛けで 因数分解。'), `x ＝ −2, ${FR(1,2)}`, {am:true}],
   ['⑶',`x${P2} ＋ 3x − 5`,1,[-4.19,1.19],`${FX(`−3 − ${SQ('29')}`,'2')} ＜ x ＜ ${FX(`−3 ＋ ${SQ('29')}`,'2')}`,['(−3−√29)/2','(−3+√29)/2'],
     [[`x${P2} ＋ 3x − 5 ＝ 0`, `${M('x² ＋ 3x − 5 ＝ 0')}。　因数分解 できない → <b>解の公式</b>。`], [`x ＝ ${FX(`−3 ± ${SQ('9 ＋ 20')}`,'2')}`, M(`x ＝ ${FR('−3 ± √(9 ＋ 20)',2)}`)],
-     [`x ＝ ${FX(`−3 ± ${SQ('29')}`,'2')}`, `${M(`x ＝ ${FR('−3 ± √29',2)}`)}。　29 は これ以上 簡単に ならない。`]], `x ＝ ${FX(`−3 ± ${SQ('29')}`,'2')}`, {am:true, span:175, wo:95}],
+     [`x ＝ ${FX(`−3 ± ${SQ('29')}`,'2')}`, `${M(`x ＝ ${FR('−3 ± √29',2)}`)}。　29 は これ以上 簡単に ならない。`]], `x ＝ ${FX(`−3 ± ${SQ('29')}`,'2')}`, {am:true}],
   ['⑷',`x${P2} ＋ 2x − 2`,2,[-1-Math.sqrt(3),-1+Math.sqrt(3)],`x ≦ −1 − ${SQ('3')}, −1 ＋ ${SQ('3')} ≦ x`,['−1−√3','−1+√3'],
     [[`x${P2} ＋ 2x − 2 ＝ 0`, `${M('x² ＋ 2x − 2 ＝ 0')}。　因数分解 できない → <b>解の公式</b>。`], [`x ＝ ${FX(`−2 ± ${SQ('4 ＋ 8')}`,'2')}`, `${M(`x ＝ ${FR('−2 ± √(4 ＋ 8)',2)}`)}。　12 を すだれ算 → ${M('√12 ＝ 2√3')}。`],
-     [`x ＝ ${FX(`−${RDX('2','1',3)} ± ${RDX('2','1',3)}${SQ('3')}`, RDX('2','1',3,true))} <span class="vm">＝ −1 ± ${SQ('3')}</span>`, `2 で 約分 して ${M('x ＝ −1 ± √3')}。`]], `x ＝ −1 ± ${SQ('3')}`, {am:true, sud:[12,2], span:130}],
+     [`x ＝ ${FX(`−${RDX('2','1',3)} ± ${RDX('2','1',3)}${SQ('3')}`, RDX('2','1',3,true))} <span class="vm">＝ −1 ± ${SQ('3')}</span>`, `2 で 約分 して ${M('x ＝ −1 ± √3')}。`]], `x ＝ −1 ± ${SQ('3')}`, {am:true, sud:[12,2]}],
   ['⑸',`x${P2} ＋ 5x`,3,[-5,0],'−5 ≦ x ≦ 0',null, FAC(`x${P2} ＋ 5x`,'x(x ＋ 5)','−5, 0','共通な x で くくる。'), 'x ＝ −5, 0'],
   ['⑹',`x${P2} − 4`,0,[-2,2],'x ＜ −2, 2 ＜ x',null, FAC(`x${P2} − 4`,'(x ＋ 2)(x − 2)','−2, 2','2乗 − 2乗 → 因数分解。'), 'x ＝ −2, 2'],
   ['⑺',`x${P2} ＋ 4x ＋ 4`,0,[-2],'−2以外の すべての実数',null, FAC(`x${P2} ＋ 4x ＋ 4`,`(x ＋ 2)${P2}`,'−2（重解）','たして 4、かけて 4 → 同じ ( ) が 2つ。'), 'x ＝ −2（重解）'],

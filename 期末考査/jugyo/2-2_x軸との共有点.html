@@ -1250,6 +1250,13 @@ body.portrait .ptag{left:70px;top:8px}
 .w33 .pgc{stroke:#333} .w33 .pgd{fill:#29a0e0;stroke:#29a0e0} .w33 .pgd.op{fill:#fff}
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .q33c{background:#2c3a4d} }
 :root[data-theme="dark"] .q33c{background:#2c3a4d}
+/* √・分数 の 入った グラフの 文字（foreignObject、11/7） */
+.fo3{height:100%;display:flex;align-items:center;font-family:"STIX Two Text",serif;font-weight:700;white-space:nowrap;pointer-events:none}
+.fo3-middle{justify-content:center} .fo3-end{justify-content:flex-end} .fo3-start{justify-content:flex-start}
+.fo3n{font-size:28px;color:var(--ink)} .fo3n.e33f{font-size:20px}
+.fo3w{font-size:30px;color:#e0465e}
+.pgfo{height:100%;display:flex;align-items:center;font-family:"STIX Two Text",serif;font-size:7px;color:#333;white-space:nowrap;pointer-events:none;--rw:.5px}
+.pgfo-middle{justify-content:center} .pgfo-end{justify-content:flex-end} .pgfo-start{justify-content:flex-start}
 
 /* ===== 手書き ===== */
 #ink{position:fixed;left:0;top:0;z-index:15;pointer-events:none;touch-action:none}
@@ -1981,7 +1988,10 @@ function PB(o){
     s += `<g class="gs" data-s="${o.ps}">${seg.map(([a,b])=>`<path class="pgp" d="${path(a,b)}"/>`).join('')}</g>`;
   }
   if(o.dot) s += `<g class="gs" data-s="${o.ds??o.s}">${roots.map(x=>`<circle class="pgd ${o.dot==='o'?'op':''}${o.paint?' pgq':''}" cx="${x.toFixed(2)}" cy="${o.ay}" r="2.6"/>`).join('')}</g>`;
-  if(o.lab) s += `<g class="gs" data-s="${o.ls??o.s}">${o.lab.map(([x,t,an])=>`<text class="pgt" x="${x}" y="${o.ay+9}" text-anchor="${an||'middle'}">${t}</text>`).join('')}</g>`;
+  /* √ を 含む 文字は SVG の text だと √ の 上の 棒が 出ない → HTML（SQ）を foreignObject で（11/7） */
+  const LBF = (x,t,an) => { const w = 44, x0 = an==='end' ? x-w : an==='start' ? x : x-w/2;
+    return `<foreignObject x="${x0}" y="${o.ay+2}" width="${w}" height="11"><div xmlns="http://www.w3.org/1999/xhtml" class="pgfo pgfo-${an||'middle'}">${t.replace(/(\S)([−+＋])(?=\S)/g,'$1 $2 ').replace(/\+/g,'＋').replace(/√(\d+)/g,(q,n)=>SQ(n))}</div></foreignObject>`; };
+  if(o.lab) s += `<g class="gs" data-s="${o.ls??o.s}">${o.lab.map(([x,t,an])=>/√/.test(t) ? LBF(x,t,an) : `<text class="pgt" x="${x}" y="${o.ay+9}" text-anchor="${an||'middle'}">${t}</text>`).join('')}</g>`;
   return s;
 }
 
@@ -2044,7 +2054,7 @@ function SUDARE(n, s){
 const RDX = (t, r, s, dn) => `<span class="rdx">${t}<i class="rdl lh" data-s="${s}"></i><span class="rdn${dn?' dn':''} lh" data-s="${s}">${r}</span></span>`;
 
 /* ====== このプリントのスライド ====== */
-const SERIES = [{"f": "1-1_因数分解の復習", "no": "①-1", "t": "因数分解の 復習", "v": "1.5_2026-10-29"}, {"f": "1-2_2次方程式の解", "no": "①-2", "t": "2次方程式の 解", "v": "1.5_2026-10-29"}, {"f": "1-3_2次方程式の解", "no": "①-3", "t": "2次方程式の 解 ②", "v": "1.5_2026-10-29"}, {"f": "1-4_解の公式", "no": "①-4", "t": "解の公式", "v": "1.7_2026-10-30"}, {"f": "1-5_解の公式_重解と解なし", "no": "①-5", "t": "2次方程式の 解 ③", "v": "1.7_2026-10-30"}, {"f": "1-6_実数解の個数", "no": "①-6", "t": "実数解の 個数", "v": "1.7_2026-10-30"}, {"f": "2-1_x軸との共有点", "no": "②-1", "t": "x軸との 共有点", "v": "1.5_2026-10-29"}, {"f": "2-2_x軸との共有点", "no": "②-2", "t": "x軸との 共有点 ②", "v": "1.5_2026-10-29"}, {"f": "2-3_x軸との位置関係", "no": "②-3", "t": "x軸との 位置関係", "v": "1.10_2026-11-02"}, {"f": "3-2_2次不等式_練習編_v2", "no": "③-1", "t": "2次不等式 練習編", "v": "3.15_2026-11-07"}, {"f": "3-1_2次不等式の解法_v2", "no": "③-2", "t": "2次不等式の 解き方", "v": "2.22_2026-11-07"}, {"f": "3-3_2次不等式の解法_v2", "no": "③-3", "t": "2次不等式 いろいろ", "v": "2.0_2026-11-07"}, {"f": "3-4_2次不等式の解法", "no": "③-4", "t": "x² の前が マイナス", "v": "1.8_2026-11-07"}], ME = "2-2_x軸との共有点";
+const SERIES = [{"f": "1-1_因数分解の復習", "no": "①-1", "t": "因数分解の 復習", "v": "1.5_2026-10-29"}, {"f": "1-2_2次方程式の解", "no": "①-2", "t": "2次方程式の 解", "v": "1.5_2026-10-29"}, {"f": "1-3_2次方程式の解", "no": "①-3", "t": "2次方程式の 解 ②", "v": "1.5_2026-10-29"}, {"f": "1-4_解の公式", "no": "①-4", "t": "解の公式", "v": "1.7_2026-10-30"}, {"f": "1-5_解の公式_重解と解なし", "no": "①-5", "t": "2次方程式の 解 ③", "v": "1.7_2026-10-30"}, {"f": "1-6_実数解の個数", "no": "①-6", "t": "実数解の 個数", "v": "1.7_2026-10-30"}, {"f": "2-1_x軸との共有点", "no": "②-1", "t": "x軸との 共有点", "v": "1.5_2026-10-29"}, {"f": "2-2_x軸との共有点", "no": "②-2", "t": "x軸との 共有点 ②", "v": "1.5_2026-10-29"}, {"f": "2-3_x軸との位置関係", "no": "②-3", "t": "x軸との 位置関係", "v": "1.10_2026-11-02"}, {"f": "3-2_2次不等式_練習編_v2", "no": "③-1", "t": "2次不等式 練習編", "v": "3.16_2026-11-07"}, {"f": "3-1_2次不等式の解法_v2", "no": "③-2", "t": "2次不等式の 解き方", "v": "2.22_2026-11-07"}, {"f": "3-3_2次不等式の解法_v2", "no": "③-3", "t": "2次不等式 いろいろ", "v": "2.1_2026-11-07"}, {"f": "3-4_2次不等式の解法", "no": "③-4", "t": "x² の前が マイナス", "v": "1.9_2026-11-07"}], ME = "2-2_x軸との共有点";
 const VER = '<i class="nv">ver</i> 1.5　2026-10-29';
 
 const IMG = s => s;

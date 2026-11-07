@@ -65,7 +65,14 @@ const CMP3 = (A, B, le) => { const mx=(A[0]+B[0])/2, my=(A[1]+B[1])/2, ang=Math.
   const tr=`translate(${f1(mx)} ${f1(my)}) rotate(${f1(ang)})`, d=`M13 -13 L-13 0 L13 13${le?' M-13 9 L13 22':''}`;
   return {mx, my, band:`<rect class="iband2" x="${f1(-len/2)}" y="-26" width="${f1(len)}" height="52" rx="26" transform="${tr}"/>`,
           sign:`<path class="ilt-h" d="${d}" transform="${tr}"/><path class="ilt" d="${d}" transform="${tr}"/>`}; };
-const WR3 = (x, y, t) => `<text class="iwr p3wr" x="${f1(x)}" y="${f1(y)}" text-anchor="middle">${t.replace(/x/g,'<tspan font-style="italic">x</tspan>')}</text>`;
+/* √ や 分数を 含む 文字は SVG の text では √ の 上の 棒が かけない → HTML（SQ・FX）に して foreignObject で 置く（11/7） */
+const TXH0 = t => t.replace(/(\S)([−+＋])(?=\S)/g,'$1 $2 ').replace(/\+/g,'＋').replace(/x/g,'<i>x</i>').replace(/√(\d+)/g,(q,n)=>SQ(n));
+const TXH = t => t.split(/(\([^()]+\)\/\d+|[^\s()/]+\/\d+)/).map((g,i) => { if(!(i%2)) return TXH0(g);
+  const m = g.match(/^\(?([^()]+?)\)?\/(\d+)$/); return FX(TXH0(m[1]), m[2]); }).join('');   // 分数（(…)/2・1/2）は 文の 中でも FX に
+const HASM = t => /[√\/]/.test(t);
+const FO3 = (x, y, h, cls, an='middle') => { const w = 360, hh = 100, x0 = an==='middle' ? x-w/2 : an==='end' ? x-w : x;
+  return `<foreignObject x="${f1(x0)}" y="${f1(y-hh/2)}" width="${w}" height="${hh}"><div xmlns="http://www.w3.org/1999/xhtml" class="fo3 ${cls} fo3-${an}">${h}</div></foreignObject>`; };
+const WR3 = (x, y, t) => HASM(t) ? FO3(x, y-11, TXH(t), 'fo3w') : `<text class="iwr p3wr" x="${f1(x)}" y="${f1(y)}" text-anchor="middle">${t.replace(/x/g,'<tspan font-style="italic">x</tspan>')}</text>`;
 /* 1問の「x を 置く（3番）→ 式を 書く（4番）」 */
 function XSTEP(r, j, g){
   const up = j%2===0, le = j>=2, sg = le?'≦':'＜';
@@ -245,7 +252,7 @@ function GQ(P){
   const g = SG(o), u = 1/o.sc*40;                                  // u：1目もり 40px ぶんの x
   const any = !(kind===1 && !up) && !(kind===2 && !up);
   const off = i => P.roots.length>1 ? (i?1:-1)*(lab[i].length>3?62:20) : 0;   // 長い 数（⒇）は 外へ ずらす
-  const nums = P.roots.map((x,i)=>`<text class="inum" x="${f1(g.X(x)+off(i))}" y="${g.ay+42}" text-anchor="middle">${lab[i]}</text>`).join('');
+  const nums = P.roots.map((x,i)=>HASM(lab[i]) ? FO3(g.X(x)+off(i), g.ay+32, TXH(lab[i]), 'fo3n') : `<text class="inum" x="${f1(g.X(x)+off(i))}" y="${g.ay+42}" text-anchor="middle">${lab[i]}</text>`).join('');
   const dots = P.roots.map(x=>DOT3(g, x, eq, 4)).join('');
   const NL = (x,i) => [g.X(x)+off(i), g.ay+32];
   const le = eq, s2 = le ? '≦' : '＜';

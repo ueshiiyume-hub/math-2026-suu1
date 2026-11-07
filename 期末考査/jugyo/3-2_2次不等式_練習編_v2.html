@@ -1250,6 +1250,13 @@ body.portrait .ptag{left:70px;top:8px}
 .w33 .pgc{stroke:#333} .w33 .pgd{fill:#29a0e0;stroke:#29a0e0} .w33 .pgd.op{fill:#fff}
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .q33c{background:#2c3a4d} }
 :root[data-theme="dark"] .q33c{background:#2c3a4d}
+/* √・分数 の 入った グラフの 文字（foreignObject、11/7） */
+.fo3{height:100%;display:flex;align-items:center;font-family:"STIX Two Text",serif;font-weight:700;white-space:nowrap;pointer-events:none}
+.fo3-middle{justify-content:center} .fo3-end{justify-content:flex-end} .fo3-start{justify-content:flex-start}
+.fo3n{font-size:28px;color:var(--ink)} .fo3n.e33f{font-size:20px}
+.fo3w{font-size:30px;color:#e0465e}
+.pgfo{height:100%;display:flex;align-items:center;font-family:"STIX Two Text",serif;font-size:7px;color:#333;white-space:nowrap;pointer-events:none;--rw:.5px}
+.pgfo-middle{justify-content:center} .pgfo-end{justify-content:flex-end} .pgfo-start{justify-content:flex-start}
 
 /* ===== 手書き ===== */
 #ink{position:fixed;left:0;top:0;z-index:15;pointer-events:none;touch-action:none}
@@ -1981,7 +1988,10 @@ function PB(o){
     s += `<g class="gs" data-s="${o.ps}">${seg.map(([a,b])=>`<path class="pgp" d="${path(a,b)}"/>`).join('')}</g>`;
   }
   if(o.dot) s += `<g class="gs" data-s="${o.ds??o.s}">${roots.map(x=>`<circle class="pgd ${o.dot==='o'?'op':''}${o.paint?' pgq':''}" cx="${x.toFixed(2)}" cy="${o.ay}" r="2.6"/>`).join('')}</g>`;
-  if(o.lab) s += `<g class="gs" data-s="${o.ls??o.s}">${o.lab.map(([x,t,an])=>`<text class="pgt" x="${x}" y="${o.ay+9}" text-anchor="${an||'middle'}">${t}</text>`).join('')}</g>`;
+  /* √ を 含む 文字は SVG の text だと √ の 上の 棒が 出ない → HTML（SQ）を foreignObject で（11/7） */
+  const LBF = (x,t,an) => { const w = 44, x0 = an==='end' ? x-w : an==='start' ? x : x-w/2;
+    return `<foreignObject x="${x0}" y="${o.ay+2}" width="${w}" height="11"><div xmlns="http://www.w3.org/1999/xhtml" class="pgfo pgfo-${an||'middle'}">${t.replace(/(\S)([−+＋])(?=\S)/g,'$1 $2 ').replace(/\+/g,'＋').replace(/√(\d+)/g,(q,n)=>SQ(n))}</div></foreignObject>`; };
+  if(o.lab) s += `<g class="gs" data-s="${o.ls??o.s}">${o.lab.map(([x,t,an])=>/√/.test(t) ? LBF(x,t,an) : `<text class="pgt" x="${x}" y="${o.ay+9}" text-anchor="${an||'middle'}">${t}</text>`).join('')}</g>`;
   return s;
 }
 
@@ -2044,8 +2054,8 @@ function SUDARE(n, s){
 const RDX = (t, r, s, dn) => `<span class="rdx">${t}<i class="rdl lh" data-s="${s}"></i><span class="rdn${dn?' dn':''} lh" data-s="${s}">${r}</span></span>`;
 
 /* ====== このプリントのスライド ====== */
-const SERIES = [{"f": "1-1_因数分解の復習", "no": "①-1", "t": "因数分解の 復習", "v": "1.5_2026-10-29"}, {"f": "1-2_2次方程式の解", "no": "①-2", "t": "2次方程式の 解", "v": "1.5_2026-10-29"}, {"f": "1-3_2次方程式の解", "no": "①-3", "t": "2次方程式の 解 ②", "v": "1.5_2026-10-29"}, {"f": "1-4_解の公式", "no": "①-4", "t": "解の公式", "v": "1.7_2026-10-30"}, {"f": "1-5_解の公式_重解と解なし", "no": "①-5", "t": "2次方程式の 解 ③", "v": "1.7_2026-10-30"}, {"f": "1-6_実数解の個数", "no": "①-6", "t": "実数解の 個数", "v": "1.7_2026-10-30"}, {"f": "2-1_x軸との共有点", "no": "②-1", "t": "x軸との 共有点", "v": "1.5_2026-10-29"}, {"f": "2-2_x軸との共有点", "no": "②-2", "t": "x軸との 共有点 ②", "v": "1.5_2026-10-29"}, {"f": "2-3_x軸との位置関係", "no": "②-3", "t": "x軸との 位置関係", "v": "1.10_2026-11-02"}, {"f": "3-2_2次不等式_練習編_v2", "no": "③-1", "t": "2次不等式 練習編", "v": "3.15_2026-11-07"}, {"f": "3-1_2次不等式の解法_v2", "no": "③-2", "t": "2次不等式の 解き方", "v": "2.22_2026-11-07"}, {"f": "3-3_2次不等式の解法_v2", "no": "③-3", "t": "2次不等式 いろいろ", "v": "2.0_2026-11-07"}, {"f": "3-4_2次不等式の解法", "no": "③-4", "t": "x² の前が マイナス", "v": "1.8_2026-11-07"}], ME = "3-2_2次不等式_練習編_v2";
-const VER = '<i class="nv">ver</i> 3.15　2026-11-07';
+const SERIES = [{"f": "1-1_因数分解の復習", "no": "①-1", "t": "因数分解の 復習", "v": "1.5_2026-10-29"}, {"f": "1-2_2次方程式の解", "no": "①-2", "t": "2次方程式の 解", "v": "1.5_2026-10-29"}, {"f": "1-3_2次方程式の解", "no": "①-3", "t": "2次方程式の 解 ②", "v": "1.5_2026-10-29"}, {"f": "1-4_解の公式", "no": "①-4", "t": "解の公式", "v": "1.7_2026-10-30"}, {"f": "1-5_解の公式_重解と解なし", "no": "①-5", "t": "2次方程式の 解 ③", "v": "1.7_2026-10-30"}, {"f": "1-6_実数解の個数", "no": "①-6", "t": "実数解の 個数", "v": "1.7_2026-10-30"}, {"f": "2-1_x軸との共有点", "no": "②-1", "t": "x軸との 共有点", "v": "1.5_2026-10-29"}, {"f": "2-2_x軸との共有点", "no": "②-2", "t": "x軸との 共有点 ②", "v": "1.5_2026-10-29"}, {"f": "2-3_x軸との位置関係", "no": "②-3", "t": "x軸との 位置関係", "v": "1.10_2026-11-02"}, {"f": "3-2_2次不等式_練習編_v2", "no": "③-1", "t": "2次不等式 練習編", "v": "3.16_2026-11-07"}, {"f": "3-1_2次不等式の解法_v2", "no": "③-2", "t": "2次不等式の 解き方", "v": "2.22_2026-11-07"}, {"f": "3-3_2次不等式の解法_v2", "no": "③-3", "t": "2次不等式 いろいろ", "v": "2.1_2026-11-07"}, {"f": "3-4_2次不等式の解法", "no": "③-4", "t": "x² の前が マイナス", "v": "1.9_2026-11-07"}], ME = "3-2_2次不等式_練習編_v2";
+const VER = '<i class="nv">ver</i> 3.16　2026-11-07';
 /* ③-1 ver 2.0 の 土台：ver 1.4 の 部品の 写し（ver 1.4 を 直しても ver 2.0 は 変わらない） */
 
 const IMG = s => s;
@@ -2473,7 +2483,14 @@ const CMP3 = (A, B, le) => { const mx=(A[0]+B[0])/2, my=(A[1]+B[1])/2, ang=Math.
   const tr=`translate(${f1(mx)} ${f1(my)}) rotate(${f1(ang)})`, d=`M13 -13 L-13 0 L13 13${le?' M-13 9 L13 22':''}`;
   return {mx, my, band:`<rect class="iband2" x="${f1(-len/2)}" y="-26" width="${f1(len)}" height="52" rx="26" transform="${tr}"/>`,
           sign:`<path class="ilt-h" d="${d}" transform="${tr}"/><path class="ilt" d="${d}" transform="${tr}"/>`}; };
-const WR3 = (x, y, t) => `<text class="iwr p3wr" x="${f1(x)}" y="${f1(y)}" text-anchor="middle">${t.replace(/x/g,'<tspan font-style="italic">x</tspan>')}</text>`;
+/* √ や 分数を 含む 文字は SVG の text では √ の 上の 棒が かけない → HTML（SQ・FX）に して foreignObject で 置く（11/7） */
+const TXH0 = t => t.replace(/(\S)([−+＋])(?=\S)/g,'$1 $2 ').replace(/\+/g,'＋').replace(/x/g,'<i>x</i>').replace(/√(\d+)/g,(q,n)=>SQ(n));
+const TXH = t => t.split(/(\([^()]+\)\/\d+|[^\s()/]+\/\d+)/).map((g,i) => { if(!(i%2)) return TXH0(g);
+  const m = g.match(/^\(?([^()]+?)\)?\/(\d+)$/); return FX(TXH0(m[1]), m[2]); }).join('');   // 分数（(…)/2・1/2）は 文の 中でも FX に
+const HASM = t => /[√\/]/.test(t);
+const FO3 = (x, y, h, cls, an='middle') => { const w = 360, hh = 100, x0 = an==='middle' ? x-w/2 : an==='end' ? x-w : x;
+  return `<foreignObject x="${f1(x0)}" y="${f1(y-hh/2)}" width="${w}" height="${hh}"><div xmlns="http://www.w3.org/1999/xhtml" class="fo3 ${cls} fo3-${an}">${h}</div></foreignObject>`; };
+const WR3 = (x, y, t) => HASM(t) ? FO3(x, y-11, TXH(t), 'fo3w') : `<text class="iwr p3wr" x="${f1(x)}" y="${f1(y)}" text-anchor="middle">${t.replace(/x/g,'<tspan font-style="italic">x</tspan>')}</text>`;
 /* 1問の「x を 置く（3番）→ 式を 書く（4番）」 */
 function XSTEP(r, j, g){
   const up = j%2===0, le = j>=2, sg = le?'≦':'＜';
@@ -2653,7 +2670,7 @@ function GQ(P){
   const g = SG(o), u = 1/o.sc*40;                                  // u：1目もり 40px ぶんの x
   const any = !(kind===1 && !up) && !(kind===2 && !up);
   const off = i => P.roots.length>1 ? (i?1:-1)*(lab[i].length>3?62:20) : 0;   // 長い 数（⒇）は 外へ ずらす
-  const nums = P.roots.map((x,i)=>`<text class="inum" x="${f1(g.X(x)+off(i))}" y="${g.ay+42}" text-anchor="middle">${lab[i]}</text>`).join('');
+  const nums = P.roots.map((x,i)=>HASM(lab[i]) ? FO3(g.X(x)+off(i), g.ay+32, TXH(lab[i]), 'fo3n') : `<text class="inum" x="${f1(g.X(x)+off(i))}" y="${g.ay+42}" text-anchor="middle">${lab[i]}</text>`).join('');
   const dots = P.roots.map(x=>DOT3(g, x, eq, 4)).join('');
   const NL = (x,i) => [g.X(x)+off(i), g.ay+32];
   const le = eq, s2 = le ? '≦' : '＜';

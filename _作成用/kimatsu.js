@@ -243,7 +243,10 @@ function PB(o){
     s += `<g class="gs" data-s="${o.ps}">${seg.map(([a,b])=>`<path class="pgp" d="${path(a,b)}"/>`).join('')}</g>`;
   }
   if(o.dot) s += `<g class="gs" data-s="${o.ds??o.s}">${roots.map(x=>`<circle class="pgd ${o.dot==='o'?'op':''}${o.paint?' pgq':''}" cx="${x.toFixed(2)}" cy="${o.ay}" r="2.6"/>`).join('')}</g>`;
-  if(o.lab) s += `<g class="gs" data-s="${o.ls??o.s}">${o.lab.map(([x,t,an])=>`<text class="pgt" x="${x}" y="${o.ay+9}" text-anchor="${an||'middle'}">${t}</text>`).join('')}</g>`;
+  /* √ を 含む 文字は SVG の text だと √ の 上の 棒が 出ない → HTML（SQ）を foreignObject で（11/7） */
+  const LBF = (x,t,an) => { const w = 44, x0 = an==='end' ? x-w : an==='start' ? x : x-w/2;
+    return `<foreignObject x="${x0}" y="${o.ay+2}" width="${w}" height="11"><div xmlns="http://www.w3.org/1999/xhtml" class="pgfo pgfo-${an||'middle'}">${t.replace(/(\S)([−+＋])(?=\S)/g,'$1 $2 ').replace(/\+/g,'＋').replace(/√(\d+)/g,(q,n)=>SQ(n))}</div></foreignObject>`; };
+  if(o.lab) s += `<g class="gs" data-s="${o.ls??o.s}">${o.lab.map(([x,t,an])=>/√/.test(t) ? LBF(x,t,an) : `<text class="pgt" x="${x}" y="${o.ay+9}" text-anchor="${an||'middle'}">${t}</text>`).join('')}</g>`;
   return s;
 }
 
