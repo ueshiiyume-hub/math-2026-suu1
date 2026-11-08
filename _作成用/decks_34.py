@@ -1,7 +1,6 @@
 """③-4 2次不等式の解法（x² の 前が マイナス）ver 2（2026-11-07、作り直し）。前の 版（3-4_2次不等式の解法.html、プリント画像の 下書き）は 残す。
 ③-3 ver 2 と 同じ 作り：③-1 の 部品（decks_32.py の 前半）＋ ③-3 の 部品（decks_33.SHARED33）を つなげる。
-流れ：表紙 → 解き方（−1 を かけて 向きを 逆に）→ なぜ 向きが 逆に なるか（2 ＞ 1 → −2 ＜ −1）→ 例⑴（Step❶ 解く → 塗る・答える → 書きこみ）
-→ まとめ → プリント問題 ⑴⑵（−1 を かける → 計算の 枠 → グラフ → 塗る → 答え）。判別式は 使わない。"""
+流れ：表紙 → 解き方（−1 を かけて 向きを 逆に）→ 例⑴（1ページ：−1 → 解く → グラフ → 塗る → 答え）→ まとめ → プリント問題 ⑴⑵（−1 を かける → 計算の 枠 → グラフ → 塗る → 答え）。判別式は 使わない。"""
 import os
 B = os.path.dirname(os.path.abspath(__file__))
 
@@ -14,7 +13,7 @@ const H4A = [`−x${P2}`, '− 6x', '− 7', '＞', '0'];
 const H4B = [[`x${P2}`,2,1], ['＋ 6x',3,1], ['＋ 7',4,1], ['＜',5,2], ['0',5,0]];   // [文字, 番, 0 そのまま・1 符号が 変わる・2 向きが 逆]
 const HOW4 = `
   <div class="card abs dcard v2">${EQTAPE}
-    <svg class="h4arw lh" data-s="1" width="70" height="200" viewBox="0 0 70 200"><path d="M40 10 C 70 60, 70 140, 30 180" fill="none" stroke="#2c4d75" stroke-width="10" stroke-linecap="round"/><polygon points="12,170 44,166 30,196" fill="#2c4d75"/></svg>
+    <svg class="h4arw lh" data-s="1" width="90" height="210" viewBox="0 0 90 210"><defs><marker id="h4mk" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="#2c4d75"/></marker></defs><path d="M66 18 C 14 40, 10 150, 58 186" fill="none" stroke="#2c4d75" stroke-width="9" stroke-linecap="round" marker-end="url(#h4mk)"/></svg>
     <div class="h4grid math">
       ${H4A.map(t=>`<span>${t}</span>`).join('')}
       ${H4B.map(([t,s,c])=>`<span class="lh ${c===1?'h4c':c===2?'h4sg':''}" data-s="${s}">${t}</span>`).join('')}
@@ -29,69 +28,9 @@ const HOW4 = `
     `0 は −1 を かけても 0。　そして <b>不等号の 向きが 逆</b>：＞ が ＜ に なる！`,
     `${M('x² ＋ 6x ＋ 7 ＜ 0')}。　x² の 前が プラス に なったので、あとは いつもの 解き方。`])}`;
 
-/* ===== なぜ 向きが 逆に なるか：2 ＞ 1 の 両方に −1 を かける → −2 と −1 → 数直線で −2 が 左 → −2 ＜ −1 ===== */
-const NX = x => 380 + x*105;
-const WHY4 = `
-  <div class="card abs dcard v2">${EQTAPE}
-    <div class="w4eq math" style="top:40px">2 ＞ 1</div>
-    <div class="w4chip lh" data-s="1"><span class="math">× (−1)</span>両方に −1 を かける</div>
-    <div class="w4eq math lh" data-s="1" style="top:210px">−2 <span class="lh" data-s="2" style="color:#e0465e">＜</span> −1</div>
-    <svg class="w4nl" width="780" height="320" viewBox="0 0 780 320">
-      <line class="iax" x1="40" y1="200" x2="740" y2="200"/><polygon class="iah" points="756,200 738,192 738,208"/>
-      ${[-3,-2,-1,0,1,2,3].map(x=>`<line x1="${NX(x)}" y1="190" x2="${NX(x)}" y2="210" stroke="var(--ink)" stroke-width="3"/><text class="w4t" x="${NX(x)}" y="246" text-anchor="middle">${x<0?'−'+(-x):x}</text>`).join('')}
-      <circle class="v2pt" cx="${NX(1)}" cy="200" r="11" style="fill:#2f86c8"/><circle class="v2pt" cx="${NX(2)}" cy="200" r="11" style="fill:#2f86c8"/>
-      <g class="gs" data-s="1">
-        <path d="M${NX(2)} 186 Q ${NX(0)} 40 ${NX(-2)+10} 184" fill="none" stroke="#d9731a" stroke-width="4" stroke-dasharray="8 8"/>
-        <path d="M${NX(1)} 186 Q ${NX(0)} 110 ${NX(-1)+8} 184" fill="none" stroke="#d9731a" stroke-width="4" stroke-dasharray="8 8"/>
-        <circle cx="${NX(-1)}" cy="200" r="11" fill="#d9731a"/><circle cx="${NX(-2)}" cy="200" r="11" fill="#d9731a"/></g>
-      <g class="gs" data-s="2"><path d="M${NX(-1)-14} 280 L${NX(-2)+14} 280" stroke="#e0465e" stroke-width="5"/><polygon points="${NX(-2)},280 ${NX(-2)+18},270 ${NX(-2)+18},290" fill="#e0465e"/>
-        <text class="w4lab" x="${NX(-1.5)}" y="312" text-anchor="middle">左 ＝ 小さい</text></g>
-    </svg>
-    <div class="w4msg lh" data-s="3"><span class="v2mk">マイナスを かけると 大きい・小さいが 入れかわる → 向きが 逆</span></div>
-  </div>
-  ${cbar([`なぜ 向きが 逆に なるの？　数で 見て みよう。　${M('2 ＞ 1')}。`,
-    `両方に −1 を かけると ${M('−2')} と ${M('−1')}。`,
-    `数直線では −2 の 方が 左。　左の 方が 小さい → ${M('−2 ＜ −1')}。`,
-    `マイナスを かけると、大きい・小さいが 入れかわる。　だから 不等号の 向きが 逆に なる。`])}`;
-
 /* ===== 例⑴ ===== */
 const BX4 = (r,c) => `<rect fill="${c}" x="${r[0]}" y="${r[1]}" width="${(r[2]-r[0]).toFixed(1)}" height="${(r[3]-r[1]).toFixed(1)}"/>`;
 const L4 = `<div class="p3list"><div class="p3i sm on"><span>⑴</span><span class="math">−x${P2} − 6x − 7 ＞ 0</span></div></div>`;
-const E4S = ES1G(['⑴','＜',`x${P2} ＋ 6x ＋ 7`], L4, [['x', FX(`−6 ± ${SQ('36 − 28')}`,'2'), 3],
-    ['', FX(`−${RDX('6','3',5)} ± ${RDX('2','1',5)}${SQ('2')}`, RDX('2','1',5,true)), 4],
-    ['', HIT(`−3 ± ${SQ('2')}`), 6]], 0, ['−3−√2','−3+√2'], [7,8,9], [
-  `⑴ −1 を かけた 式 ${M('x² ＋ 6x ＋ 7 ＜ 0')}。　<b>Step❶</b> まず ＝ 0 の 式を 解く。`,
-  `x軸との 共有点 → <b>y ＝ 0</b> と する。`,
-  `${M('x² ＋ 6x ＋ 7 ＝ 0')}。　たして 6、かけて 7 に なる 整数は ない → <b>解の公式</b>。`,
-  `${M(`x ＝ ${FR('−6 ± √(36 − 28)',2)}`)}`,
-  `8 を すだれ算：${M('8 ＝ 2 × 2 × 2')} → ${M('√8 ＝ 2√2')}。`,
-  `2 で 約分。`,
-  `${M('x ＝ −3 ± √2')}。　これが x軸との 共有点。`,
-  `グラフ：x軸に 点を 2つ 打つ。`,
-  `下に凸の 放物線を、2つの 点を 通るように かく。`,
-  `点の 下に ${M('−3 − √2')}、${M('−3 ＋ √2')} を 書く。　<b>Step❶ 完成！</b>`],
-  `<div class="e33sd lh" data-s="4">${SUDARE(8)}</div>`);
-const E4P = GQ({no:'⑴', f:`x${P2} ＋ 6x ＋ 7`, s:1, roots:[-3-Math.SQRT2, -3+Math.SQRT2], lab:['−3−√2','−3+√2'], am:true, tag:null, cur:0, listH:L4,
-  ans:`−3 − ${SQ('2')} ＜ x ＜ −3 ＋ ${SQ('2')}`, dt:[
-  `左：${M('−3 − √2')} と <b>x</b> を 比べる。　x の 方が 大きい。　白丸 なので <b>＜</b>。`, `書き直して ${M('−3 − √2 ＜ x')}。`,
-  `右：<b>x</b> と ${M('−3 ＋ √2')} を 比べる。　x の 方が 小さい。　白丸 なので <b>＜</b>。`, `書き直して ${M('x ＜ −3 ＋ √2')}。`,
-  `2つを まとめて 答え ${M('−3 − √2 ＜ x ＜ −3 ＋ √2')}。`]});
-/* 書きこみ：プリント（No.16）の 配置。−1 の 枠と Step❶ は 書いた 形、塗る(1) → 答え(2) だけ 動かす */
-const W4 = (() => { const ay = 343.6, xv = 299.6;
-  const gr = PB({xv, ay, top:272, s:0, yv:ay+22, q:22/18**2, lab:[[xv-20,'−3−√2','end'],[xv+20,'−3+√2','start']], paint:'down', ps:1, dot:'o', ds:1});
-  return ptSlide({clip:[58,207,534,380],
-    svg:[BX4([62.7,231.5,199.9,263.4],'#dce6f2'), BX4([62.7,266.6,240.9,376.4],'#dce6f2'), BX4([245.9,266.6,353.4,376.4],'#dce6f2'), BX4([358.9,345.3,526.6,376.4],'#dbeef4'),
-      `<line x1="255" y1="${ay}" x2="342" y2="${ay}" stroke="#555" stroke-width=".8"/><polygon points="344,${ay} 340,${ay-1.6} 340,${ay+1.6}" fill="#555"/><text class="pgt" x="342" y="${ay+8}" font-style="italic">x</text>`,
-      `<g class="w33">${gr}</g>`],
-    items:[T([61.6,210,330,227],`⑴<span class="xsp"></span>−x${P2} − 6x − 7 ＞ 0`,10.5),
-      {s:0, r:[62.7,231.5,199.9,263.4], h:`x${P2} ＋ 6x ＋ 7 ＜ 0`, fs:11, cls:'xan', al:'c'},
-      ...[`x${P2} ＋ 6x ＋ 7 ＝ 0`, `x ＝ ${FX(`−6 ± ${SQ('36 − 28')}`,'2')}`, `＝ ${FX(`−6 ± 2${SQ('2')}`,'2')}`, `＝ −3 ± ${SQ('2')}`]
-        .map((h,i)=>({s:0, r:[68,271+i*26,240,295+i*26], h, fs:10, al:'l', cls:'xan'})),
-      {s:0, r:[196,270,240,338], h:SUDARE(8), fs:6},
-      XA(2,[358.9,345.3,526.6,376.4], `−3 − ${SQ('2')} ＜ x ＜ −3 ＋ ${SQ('2')}`, 9.5)],
-    done:2, cm:[`プリントに 書こう。　−1 を かけた 式と Step❶ は 書けて いる。`, `下を 塗る。　＝ が ない ので x軸は 塗らない → 白丸。`,
-      `答えの 枠に ${M('−3 − √2 ＜ x ＜ −3 ＋ √2')}。　<b>完成！</b>`]}); })();
-
 /* ===== まとめ（動きなし） ===== */
 const SUM4 = `
   <div class="end-h"><h2>x${P2} の 前が マイナス の とき</h2></div>
@@ -118,10 +57,18 @@ const PROB34 = [
 const PH34 = probHead('プリント問題③-4', '次の 2次不等式を 解きなさい。', ['⑴ −x² ＋ x ＋ 2 ＞ 0', '⑵ −x² ＋ 2x ＋ 2 ≦ 0'],
   `ここから <b>プリント問題③-4</b>。　まず −1 を かけて、向きを 逆に！`);
 
+/* 例⑴：−1 を かけた あとは いつもと 同じ なので 1ページに まとめる（−1 → 解く → グラフ → 塗る → 答え。先生の 指示 11/7） */
+const E41 = GQ({no:'⑴', q0:`−x${P2} − 6x − 7 ＞ 0`, f:`x${P2} ＋ 6x ＋ 7`, s:1, roots:[-3-Math.SQRT2, -3+Math.SQRT2], lab:['−3−√2','−3+√2'], am:true,
+  ans:`−3 − ${SQ('2')} ＜ x ＜ −3 ＋ ${SQ('2')}`, tag:null, cur:0, listH:L4,
+  pre:PRE33('⑴', `−x${P2} − 6x − 7`, '＞', [
+    [CV(`x${P2} ＋ 6x ＋ 7 ＜ 0`), `両辺に −1 を かけて、向きを 逆に。　${M('x² ＋ 6x ＋ 7 ＜ 0')}`],
+    [`x ＝ ${FX(`−6 ± ${SQ('36 − 28')}`,'2')}`, `${M('x² ＋ 6x ＋ 7 ＝ 0')} を 解の公式で。　8 を すだれ算 → ${M('√8 ＝ 2√2')}。`],
+    [`x ＝ ${FX(`−${RDX('6','3',3)} ± ${RDX('2','1',3)}${SQ('2')}`, RDX('2','1',3,true))} <span class="vm">＝ −3 ± ${SQ('2')}</span>`, `2 で 約分 して ${M('x ＝ −3 ± √2')}。`]],
+    `x ＝ −3 ± ${SQ('2')}`, GL[0], [8,2], H34, C34)});
 const DECK = {title:'③-4 2次不等式の解法', pages:[
   {name:'表紙', html:coverF(KK34, 'x² の 前が<br><span class="mk">マイナス</span>', '2次不等式の 解き方', '−1 を かけて 向きを 逆に！', POL34, '向きが 逆')},
-  {name:'解き方', html:HOW4}, {name:'なぜ 向きが 逆？', html:WHY4},
-  {name:'⑴ Step❶', html:E4S}, {name:'⑴ 塗る・答える', html:E4P}, {name:'⑴ 書きこみ', html:W4},
+  {name:'解き方', html:HOW4},
+  {name:'⑴', html:E41},
   {name:'まとめ', html:SUM4}, {name:'プリント問題', html:PH34}, ...PROB34,
   {name:'終', html:endF(KK34 + '　2次不等式', POL34)}]};
 '''
