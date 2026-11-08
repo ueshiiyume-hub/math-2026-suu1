@@ -588,6 +588,7 @@ import decks_v2; decks_v2.add(decks)
 import decks_32; decks_32.add(decks)   # ③-2 ver 2
 import decks_33; decks_33.add(decks)   # ③-3 ver 2（2026-11-07）
 import decks_34; decks_34.add(decks)   # ③-4 ver 2（2026-11-07）
+import decks_renshu; decks_renshu.add(decks)   # 練習プリント x軸との共有点（2026-11-08）
 
 # バージョンと 日付（versions.json）。直したら v と date を 書きかえる。表紙の 右下に 出る
 import json
