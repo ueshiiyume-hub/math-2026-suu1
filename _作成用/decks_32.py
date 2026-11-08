@@ -247,8 +247,8 @@ const SUM3 = `
 function GQ(P){
   const up = P.s%2===0, eq = P.s>=2, sg = SIGN3[P.s], kind = P.roots.length===2 ? 0 : P.roots.length===1 ? 1 : 2;
   const [a, b] = P.roots, m = kind===0 ? (a+b)/2 : kind===1 ? a : 0, lab = P.lab || P.roots.map(x=>x<0?'−'+(-x):''+x);
-  const o = kind===0 ? {xv:m, k:1, c:-(((b-a)/2)**2), sc:2*(P.span||80)/(b-a), vs:80/(((b-a)/2)**2), ay:170, top:10, H:316}   // span：根の 間の 半分（px）。長い 数の とき 広げる（③-3）
-          : kind===1 ? {xv:m, k:1, c:0, sc:40, vs:20, ay:250, top:10} : {xv:0, k:1, c:2, sc:40, vs:20, ay:272, top:10};
+  const o = kind===0 ? {W:P.W, xv:m, k:1, c:-(((b-a)/2)**2), sc:2*(P.span||80)/(b-a), vs:80/(((b-a)/2)**2), ay:170, top:10, H:316}   // span：根の 間の 半分（px）。長い 数の とき 広げる（③-3）
+          : kind===1 ? {W:P.W, xv:m, k:1, c:0, sc:40, vs:20, ay:250, top:10} : {W:P.W, xv:0, k:1, c:2, sc:40, vs:20, ay:272, top:10};
   const g = SG(o), u = 1/o.sc*40;                                  // u：1目もり 40px ぶんの x
   const any = !(kind===1 && !up) && !(kind===2 && !up);
   const off = i => P.roots.length>1 ? (i?1:-1)*(lab[i].length>3?62:20) : 0;   // 長い 数（⒇）は 外へ ずらす
@@ -292,13 +292,13 @@ function GQ(P){
   const w2 = P.roots.length ? (eq ? 'x軸も 塗る（黒丸）' : 'x軸は 塗らない（白丸）') : 'x軸と 交わらない';
   const am = P.am ?? MATHY(P.ans.replace(/[√()/]/g,'1'));
   const same = !P.list || P.list.every(q=>q[2]===P.list[0][2]);             // 4問とも 同じ 式 → 不等号 だけ、ちがう 式 → 小さく 式も
-  const list = P.listH ? P.listH : `<div class="p3list">${P.list.map(([n,sgn,f],k)=>`<div class="p3i${same?'':' sm'}${k===P.cur?' on':''}${k<P.cur?' done':''}"><span>${n}</span><span class="math">${same?'':f+' '}${sgn} 0</span></div>`).join('')}</div>`;
+  const list = P.listH ? P.listH : !P.list ? '' : `<div class="p3list">${P.list.map(([n,sgn,f],k)=>`<div class="p3i${same?'':' sm'}${k===P.cur?' on':''}${k<P.cur?' done':''}"><span>${n}</span><span class="math">${same?'':f+' '}${sgn} 0</span></div>`).join('')}</div>`;
   /* P.pre：③-3 の プリント問題。先に Step❶ の 計算（大きな 枠）→ k 番で 枠が 消えて グラフが 出る。そのあとの 番は すべて k ずつ 後ろへ */
   const k = P.pre ? P.pre.cm.length - 1 : 0;
   const SH = h => k ? h.replace(/data-(s|o)="(\d+)"/g, (mm,t,n)=>`data-${t}="${+n+k}"`) : h;
   return `
-  <div class="card abs dcard v2 p3 p3big">${EQTAPE}
-    ${list}
+  <div class="card abs dcard v2 p3 p3big${P.side ? ' p3side' : ''}">${EQTAPE}
+    ${P.side ? P.pre.html : list}
     <div class="v2c">${P.q0 ? `<div class="p3q math q0sw"><span class="q0a" data-o="1">${P.no}　${P.q0}</span><span class="q0b lh" data-s="1">${P.no}　${P.f} <span class="p3sg" data-o="${k+1}">${sg} 0</span></span></div>` : ''}${SH(`
       ${P.q0 ? '' : `<div class="p3q math">${P.no}　${P.f} <span class="p3sg" data-o="1">${sg} 0</span></div>`}
       <div class="p3w lh" data-s="2" data-o="4"><span class="v2mk">${PW3(up, eq)}</span></div>
@@ -307,7 +307,7 @@ function GQ(P){
       ${dt ? `<div class="p3w lh" data-s="6" data-o="10"><span class="v2mk">x と 近くの 数を 比べる</span></div>` : ''}
       <div class="p3w p3a lh" data-s="${fin}"><span class="p3why">${why}</span></div>
       ${ANSBOX3(g, P.ans, am, fin)}`)}
-      ${P.pre ? P.pre.html : ''}
+      ${P.pre && !P.side ? P.pre.html : ''}
       <div class="p3g${k ? ' lh' : ''}"${k ? ` data-s="${k}"` : ''}>${SH(`<svg class="isv" width="${g.W}" height="${g.H}" viewBox="0 0 ${g.W} ${g.H}">
         ${TINT3(g, up, 3)}${back}${AX3(g)}${eq ? AXP3(g, 3) : ''}${nums}<path class="icv p3cv" d="${g.d}"/>
         ${any ? PAINT3(g, up, false, 3) : ''}${eq && P.roots.length ? `<g class="gs" data-s="4">${PAINT3(g, up, true)}</g>` : ''}${dots}<g class="gs" data-s="5">${x3}</g>${dt ? w4 : `<g class="gs" data-s="6">${w4}</g>`}</svg>`)}</div>
