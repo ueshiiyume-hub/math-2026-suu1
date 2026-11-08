@@ -102,21 +102,20 @@ const EQS = [['y ＝ x² − 4x ＋ 3','y ＝ x² − 3x ＋ 1'],['y ＝ x² ＋
 const QRI = `<img class="ex8qr" src="@@QRHINT@@" alt="ヒントの ＱＲ コード">`;   // プリントと 同じ ＱＲ（ヒントの ページ）。build の とき 画像を 埋めこむ
 const EXS = (s, n, t, sub, extra='') => `<div class="ex8s lh" data-s="${s}"><div class="ex8n">${n}</div><div class="ex8t">${t}</div><div class="ex8b">${sub}</div>${extra}</div>`;
 const EX8 = `
-  <div class="card abs dcard v2">${EQTAPE}
+  <div class="card abs dcard v2 ex8card">${EQTAPE}
     <div class="ex8h"><span class="v2mk">② 〜 ⑧ は 演習</span></div>
     <div class="ex8row">
-      ${EXS(1, '1', '1枚ずつ 解く', '② から 順に<br>1枚 2問')}
-      ${EXS(2, '2', '先生に 丸つけ', '解けたら<br>見せに 行く')}
-      ${EXS(3, '？', 'わからない とき', 'プリントの<br>ＱＲ コード → ヒント', QRI)}
-      ${EXS(4, '3', 'どんどん 次へ', '丸つけ が 終わったら<br>次の 1枚')}
+      ${EXS(1, '1', '1枚ずつ 解く', '② から 順に　1枚 2問')}
+      ${EXS(2, '2', '先生に 丸つけ', '解けたら 見せに 行く')}
+      ${EXS(3, '3', 'どんどん 次へ', '終わったら 次の 1枚')}
     </div>
-    <div class="ex8hint lh" data-s="3">ヒント：参考に する プリントの Ｎｏ．・例 ／ 解き方の 途中まで</div>
-  </div>
-  ${cbar([`① で 解き方を 確かめた。　② 〜 ⑧ は <b>演習</b>。　自分で 解いて いこう！`,
-    `プリントを <b>1枚ずつ</b> 解く。　② から 順に、1枚に 2問。`,
-    `解けたら <b>先生に 丸つけ</b> を してもらう。`,
-    `解き方が わからない ときは、プリントの 右上の <b>ＱＲ コード</b> から <b>ヒント</b> を 見よう。　参考に する プリントの ページ（Ｎｏ．・例）や、解き方の 途中まで が のって いる。`,
-    `丸つけが 終わったら 次の 1枚へ。　<b>どんどん 解いて</b>、先生に 丸を つけて もらおう！`])}`;
+    <div class="ex8hb lh" data-s="4">
+      <div class="ex8hl"><div class="ex8n">？</div><div><div class="ex8t">わからない とき</div>
+        <div class="ex8b">プリントの ＱＲ コード → ヒント</div>
+        <div class="ex8hint">参考に する プリントの Ｎｏ．・例 ／ 解き方の 途中まで</div></div></div>
+      ${QRI}
+    </div>
+  </div>`;   // 「いま やっていること」は 置かない（先生の 指示 11/8）
 const PGR = [{name:'表紙', html:coverF(KKR, '<span class="mk">x軸</span>との<br>共有点', '練習プリント ①〜⑧', 'y ＝ 0 と して 解く！', POLR, '16問')}];
 PR.forEach(([no, title, qs], i) => {
   PGR.push({name:`${no} ${title}`, html:RH(no, title, EQS[i].map((e,j)=>`${'⑴⑵'[j]} ${e}`))});
