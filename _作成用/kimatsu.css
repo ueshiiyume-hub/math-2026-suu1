@@ -839,20 +839,20 @@ body.portrait .ptag{left:70px;top:8px}
 .h4st{grid-row:1;grid-column:1/-1;position:absolute;left:-10px;right:-10px;top:30px}
 .h4tip{position:absolute;left:150px;top:362px;font:900 24px "Zen Maru Gothic",sans-serif;color:#e0465e;display:flex;align-items:center;gap:10px}
 .s4bdg{display:inline-block;background:#e0465e;color:#fff;border-radius:999px;padding:2px 12px;font:900 18px "Zen Maru Gothic",sans-serif}
-.s4col{position:absolute;left:28px;top:22px;width:420px}
-.s4q{font-size:34px;white-space:nowrap}
+.s4col{position:absolute;left:28px;top:22px;width:510px}
+.s4q{font-size:34px;white-space:nowrap} .s4q3{font-size:40px}
 .s4no{margin-right:14px}
 .s4org{position:relative;display:inline-block}
 .s4new{margin-top:16px;font-size:34px;white-space:nowrap}
 .s4tip{margin-top:12px;font:900 20px "Zen Maru Gothic",sans-serif;color:#e0465e;display:flex;align-items:center;gap:8px;white-space:nowrap}
-.s4calc{margin-top:14px;background:#dce6f2;border-radius:6px;padding:14px 18px;display:flex;flex-direction:column;gap:8px;font-size:27px;min-height:180px;box-sizing:border-box;white-space:nowrap}
-.s4sd{position:absolute;left:560px;top:120px;font-size:30px}
+.s4calc{margin-top:14px;background:#dce6f2;border-radius:6px;padding:16px 20px;display:flex;flex-direction:column;gap:10px;font-size:34px;min-height:180px;box-sizing:border-box;white-space:nowrap}
+.s4sd{position:absolute;left:640px;top:110px;font-size:26px}
 .s4sd.on{opacity:0;transition:opacity .3s}
-.dcard.p3side .v2c{left:470px}
+.dcard.p3side .v2c{left:556px}
 .dcard.p3side .p3q{display:none}
 .dcard.p3side .p3w{top:14px;font-size:44px}
-.dcard.p3side .p3g{top:84px}
-.dcard.p3side .p3ans{top:412px!important;width:636px}
-.p3side ~ .cbar.cbarL{left:76px;top:520px;width:412px;height:160px}
+.dcard.p3side .p3g{top:78px;transform:scale(.9);transform-origin:top left}
+.dcard.p3side .p3ans{top:370px!important;width:580px} .dcard.p3side .p3av{font-size:34px}
+.p3side ~ .cbar.cbarL{left:76px;top:530px;width:500px;height:150px}
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .s4calc{background:#2c3a4d} }
 :root[data-theme="dark"] .s4calc{background:#2c3a4d}

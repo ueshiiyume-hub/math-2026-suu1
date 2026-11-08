@@ -249,7 +249,7 @@ function GQ(P){
   const [a, b] = P.roots, m = kind===0 ? (a+b)/2 : kind===1 ? a : 0, lab = P.lab || P.roots.map(x=>x<0?'−'+(-x):''+x);
   const o = kind===0 ? {W:P.W, xv:m, k:1, c:-(((b-a)/2)**2), sc:2*(P.span||80)/(b-a), vs:80/(((b-a)/2)**2), ay:170, top:10, H:316}   // span：根の 間の 半分（px）。長い 数の とき 広げる（③-3）
           : kind===1 ? {W:P.W, xv:m, k:1, c:0, sc:40, vs:20, ay:250, top:10} : {W:P.W, xv:0, k:1, c:2, sc:40, vs:20, ay:272, top:10};
-  const g = SG(o), u = 1/o.sc*40;                                  // u：1目もり 40px ぶんの x
+  const g = SG(o), u = 1/o.sc*40, fW = g.W/800;   // fW：グラフが 細い（③-3・③-4 の 1画面）ときは 横の 位置を 縮める                                  // u：1目もり 40px ぶんの x
   const any = !(kind===1 && !up) && !(kind===2 && !up);
   const off = i => P.roots.length>1 ? (i?1:-1)*(lab[i].length>3?62:20) : 0;   // 長い 数（⒇）は 外へ ずらす
   const nums = P.roots.map((x,i)=>HASM(lab[i]) ? FO3(g.X(x)+off(i), g.ay+32, TXH(lab[i]), 'fo3n') : `<text class="inum" x="${f1(g.X(x)+off(i))}" y="${g.ay+42}" text-anchor="middle">${lab[i]}</text>`).join('');
@@ -264,27 +264,28 @@ function GQ(P){
       w4 = `<g class="gs" data-s="6">${c1.sign}</g><g class="gs" data-s="7">${DL3(c1,t1)}${WR3(t1[0],t1[1],o1)}</g><g class="gs" data-s="8">${c2.sign}</g><g class="gs" data-s="9">${DL3(c2,t2)}${WR3(t2[0],t2[1],o2)}</g>`;
     } else { back = `<g class="gs" data-s="6">${c1.band}${c2.band}</g>`; w4 = c1.sign + c2.sign + WR3(t1[0],t1[1],o1) + WR3(t2[0],t2[1],o2); } };
   if(kind===0 && up){
-    const L=[g.X(a)-110, g.ay-48], R=[g.X(b)+110, g.ay-48], c1=CMP3(L, NL(a,0), le), c2=CMP3(NL(b,1), R, le);
+    const L=[g.X(a)-110*fW, g.ay-48], R=[g.X(b)+110*fW, g.ay-48], c1=CMP3(L, NL(a,0), le), c2=CMP3(NL(b,1), R, le);
     x3 = XB3(L,[g.X(a-0.4*u),g.Y(a-0.4*u)]) + XB3(R,[g.X(b+0.4*u),g.Y(b+0.4*u)]);
-    SPLIT(c1, c2, [g.X(a)-200, g.ay+80], [g.X(b)+200, g.ay+80], `x ${s2} ${lab[0]}`, `${lab[1]} ${s2} x`);
+    SPLIT(c1, c2, [g.X(a)-200*fW, g.ay+80], [g.X(b)+200*fW, g.ay+80], `x ${s2} ${lab[0]}`, `${lab[1]} ${s2} x`);
   } else if(kind===0){
     const X=[g.X(m), g.Y(m)+42], c1=CMP3(NL(a,0), X, le), c2=CMP3(X, NL(b,1), le);
     x3 = XB3(X,[g.X(m),g.Y(m)]);
-    SPLIT(c1, c2, [g.X(a)-(P.wo||170), g.ay+90], [g.X(b)+(P.wo||170), g.ay+90], `${lab[0]} ${s2} x`, `x ${s2} ${lab[1]}`);
+    SPLIT(c1, c2, [g.X(a)-(P.wo||170)*fW, g.ay+90], [g.X(b)+(P.wo||170)*fW, g.ay+90], `${lab[0]} ${s2} x`, `x ${s2} ${lab[1]}`);
   } else if(kind===1 && P.s===0){
-    const L=[g.X(m)-150, g.ay-80], R=[g.X(m)+150, g.ay-80], N=[g.X(m), g.ay+34], c1=CMP3(L, N, false), c2=CMP3(N, R, false);
+    const L=[g.X(m)-150*fW, g.ay-80], R=[g.X(m)+150*fW, g.ay-80], N=[g.X(m), g.ay+34], c1=CMP3(L, N, false), c2=CMP3(N, R, false);
     back = `<g class="gs" data-s="6">${c1.band}${c2.band}</g>`;
     x3 = XB3(L,[g.X(m-1.5),g.Y(m-1.5)]) + XB3(R,[g.X(m+1.5),g.Y(m+1.5)]);
-    w4 = c1.sign + c2.sign + WR3(g.X(m)-250, g.ay+20, `x ＜ ${lab[0]}`) + WR3(g.X(m)+250, g.ay+20, `${lab[0]} ＜ x`);
+    w4 = c1.sign + c2.sign + WR3(g.X(m)-250*fW, g.ay+20, `x ＜ ${lab[0]}`) + WR3(g.X(m)+250*fW, g.ay+20, `${lab[0]} ＜ x`);
   } else if(kind===1 && P.s===3){
-    const A=[g.X(m)+110, g.ay-60];
-    x3 = XB3(A,[g.X(m),g.ay]); w4 = WR3(g.X(m)+220, g.ay-50, `x ＝ ${lab[0]}`);
+    const A=[g.X(m)+110*fW, g.ay-60];
+    x3 = XB3(A,[g.X(m),g.ay]); w4 = WR3(g.X(m)+220*fW, g.ay-50, `x ＝ ${lab[0]}`);
   } else if(up){
-    const A=[g.X(o.xv+1.4)+100, g.Y(o.xv+1.4)];
+    const A=[g.X(o.xv+1.4)+100*fW, g.Y(o.xv+1.4)];
     x3 = XB3(A,[g.X(o.xv+1.4),g.Y(o.xv+1.4)]);
-    w4 = `<text class="iwr p3wr" x="${f1(g.X(o.xv+1.4)+140)}" y="${f1(g.Y(o.xv+1.4)+10)}">どこでも OK</text>`;
+    w4 = fW<1 ? `<text class="iwr p3wr" x="${f1(A[0])}" y="${f1(A[1]+62)}" text-anchor="middle">どこでも OK</text>`
+              : `<text class="iwr p3wr" x="${f1(g.X(o.xv+1.4)+140)}" y="${f1(g.Y(o.xv+1.4)+10)}">どこでも OK</text>`;
   } else {
-    x3 = `<text class="iwr p3wr" x="${f1(g.X(o.xv+2.2))}" y="${f1(g.ay-120)}" style="fill:var(--muted)">x を 置く ところが ない</text>`;
+    x3 = `<text class="iwr p3wr" x="${f1(fW<1 ? (kind===1 ? g.X(m)-34 : g.W/2) : g.X(o.xv+2.2))}" y="${f1(fW<1 ? g.ay+(kind===2?26:36) : g.ay-120)}" text-anchor="${fW<1 ? (kind===2 ? 'middle' : 'end') : 'start'}" style="fill:var(--muted)${fW<1?';font-size:26px':''}">x を 置く ところが ない</text>`;   // 細い グラフでは x軸の 下の 空いた ところに
   }
   const why = kind===0 ? [['外側 2か所が 塗れた','内側が 塗れた'],['外側 ＋ 軸','内側 ＋ 軸']][eq?1:0][up?0:1]
             : kind===1 ? [`${lab[0]} だけ 塗れない`, '塗れる ところが ない', '全部 塗れた', `${lab[0]} の 点 だけ 塗れた`][P.s]

@@ -146,7 +146,8 @@ function ansGap(root){
     let e = n.parentElement, ok = false;
     for(let i=0; i<4 && e && !ok; i++, e = e.parentElement){
       const t = e.textContent, k = t.indexOf(','); if(k<0) continue;
-      ok = t.split(',').length===2 ? INEQ.test(t.slice(0,k)) && INEQ.test(t.slice(k+1)) && /x/.test(t) : false;
+      const L = t.slice(0,k).split(/[。、\n]/).pop(), R = t.slice(k+1).split(/[。、\n]/)[0];   // カンマの 前後の 同じ 文の 中だけ 見る
+      ok = INEQ.test(L) && INEQ.test(R) && /x/.test(L + R);
     }
     if(!ok) return;
     const parts = n.nodeValue.split(/,[ \u3000]*/), f = document.createDocumentFragment();
