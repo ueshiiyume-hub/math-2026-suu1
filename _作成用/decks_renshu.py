@@ -98,10 +98,30 @@ const PR = [
     c4:`${M('25 ＋ 24 ＝ 49')}、${M('√49 ＝ 7')}。　${M('(5 ＋ 7)/6 ＝ 2')}、${M('(5 − 7)/6 ＝ −1/3')}。　（別解：${M('(3x ＋ 1)(x − 2) ＝ 0')}）`})]]];
 const EQS = [['y ＝ x² − 4x ＋ 3','y ＝ x² − 3x ＋ 1'],['y ＝ x² ＋ 5x ＋ 3','y ＝ x² − x − 3'],['y ＝ 4x² − 4x ＋ 1','y ＝ x² ＋ 3x ＋ 4'],['y ＝ x² − 1','y ＝ x² ＋ 2x'],
   ['y ＝ x² − 8x ＋ 16','y ＝ x² ＋ x − 6'],['y ＝ x² − x − 6','y ＝ x² − 3x ＋ 5'],['y ＝ 3x² − 5x','y ＝ x² ＋ 4x − 2'],['y ＝ 2x² ＋ 5x ＋ 2','y ＝ 3x² − 5x − 2']];
+/* ① の あと：②〜⑧ は 演習（1枚ずつ 解く → 先生に 丸つけ。わからない ときは ＱＲ コードの ヒント。先生の 指示 11/8） */
+const QRI = `<svg class="ex8qr" viewBox="0 0 21 21" width="64" height="64"><rect width="21" height="21" fill="#fff"/>${[[0,0],[14,0],[0,14]].map(([x,y])=>`<rect x="${x}" y="${y}" width="7" height="7" fill="#333"/><rect x="${x+1}" y="${y+1}" width="5" height="5" fill="#fff"/><rect x="${x+2}" y="${y+2}" width="3" height="3" fill="#333"/>`).join('')}${[[9,1],[10,3],[8,5],[9,8],[12,9],[15,9],[18,10],[9,11],[11,13],[14,12],[17,14],[9,15],[12,16],[15,17],[18,18],[10,18],[13,19]].map(([x,y])=>`<rect x="${x}" y="${y}" width="2" height="2" fill="#333"/>`).join('')}</svg>`;
+const EXS = (s, n, t, sub, extra='') => `<div class="ex8s lh" data-s="${s}"><div class="ex8n">${n}</div><div class="ex8t">${t}</div><div class="ex8b">${sub}</div>${extra}</div>`;
+const EX8 = `
+  <div class="card abs dcard v2">${EQTAPE}
+    <div class="ex8h"><span class="v2mk">② 〜 ⑧ は 演習</span></div>
+    <div class="ex8row">
+      ${EXS(1, '1', '1枚ずつ 解く', '② から 順に<br>1枚 2問')}
+      ${EXS(2, '2', '先生に 丸つけ', '解けたら<br>見せに 行く')}
+      ${EXS(3, '？', 'わからない とき', 'プリントの<br>ＱＲ コード → ヒント', QRI)}
+      ${EXS(4, '3', 'どんどん 次へ', '丸つけ が 終わったら<br>次の 1枚')}
+    </div>
+    <div class="ex8hint lh" data-s="3">ヒント：参考に する プリントの Ｎｏ．・例 ／ 解き方の 途中まで</div>
+  </div>
+  ${cbar([`① で 解き方を 確かめた。　② 〜 ⑧ は <b>演習</b>。　自分で 解いて いこう！`,
+    `プリントを <b>1枚ずつ</b> 解く。　② から 順に、1枚に 2問。`,
+    `解けたら <b>先生に 丸つけ</b> を してもらう。`,
+    `解き方が わからない ときは、プリントの 右上の <b>ＱＲ コード</b> から <b>ヒント</b> を 見よう。　参考に する プリントの ページ（Ｎｏ．・例）や、解き方の 途中まで が のって いる。`,
+    `丸つけが 終わったら 次の 1枚へ。　<b>どんどん 解いて</b>、先生に 丸を つけて もらおう！`])}`;
 const PGR = [{name:'表紙', html:coverF(KKR, '<span class="mk">x軸</span>との<br>共有点', '練習プリント ①〜⑧', 'y ＝ 0 と して 解く！', POLR, '16問')}];
 PR.forEach(([no, title, qs], i) => {
   PGR.push({name:`${no} ${title}`, html:RH(no, title, EQS[i].map((e,j)=>`${'⑴⑵'[j]} ${e}`))});
   qs.forEach((h,j) => PGR.push({name:`${no}${'⑴⑵'[j]}`, html:h}));
+  if(i===0) PGR.push({name:'演習の 進め方', html:EX8});
 });
 PGR.push({name:'終', html:endF(KKR + '　x軸との共有点', POLR)});
 const DECK = {title:'練習プリント x軸との共有点', pages:PGR};

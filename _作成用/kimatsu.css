@@ -856,3 +856,12 @@ body.portrait .ptag{left:70px;top:8px}
 .p3side ~ .cbar.cbarL{left:76px;top:530px;width:500px;height:150px}
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .s4calc{background:#2c3a4d} }
 :root[data-theme="dark"] .s4calc{background:#2c3a4d}
+/* 練習プリント：演習の 進め方（decks_renshu.py の EX8、11/8） */
+.ex8h{position:absolute;left:60px;top:30px;font:900 52px "Zen Maru Gothic",sans-serif;color:var(--b-ink)}
+.ex8row{position:absolute;left:50px;right:50px;top:130px;display:flex;gap:22px}
+.ex8s{flex:1;position:relative;background:var(--b-bg);border-radius:16px;padding:18px 16px 20px;text-align:center;min-height:250px;box-sizing:border-box}
+.ex8n{width:52px;height:52px;margin:0 auto 10px;border-radius:50%;background:var(--accent);color:#fff;font:900 30px/52px "Zen Maru Gothic",sans-serif}
+.ex8t{font:900 30px "Zen Maru Gothic",sans-serif;color:var(--ink)}
+.ex8b{margin-top:10px;font:700 22px/1.5 "Zen Maru Gothic",sans-serif;color:var(--muted)}
+.ex8qr{display:block;margin:10px auto 0;border:2px solid #333;border-radius:4px}
+.ex8hint{position:absolute;left:50px;right:50px;top:438px;text-align:center;font:900 24px "Zen Maru Gothic",sans-serif;color:#e0465e}
