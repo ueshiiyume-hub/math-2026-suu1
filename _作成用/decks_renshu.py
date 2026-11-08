@@ -99,7 +99,7 @@ const PR = [
 const EQS = [['y ＝ x² − 4x ＋ 3','y ＝ x² − 3x ＋ 1'],['y ＝ x² ＋ 5x ＋ 3','y ＝ x² − x − 3'],['y ＝ 4x² − 4x ＋ 1','y ＝ x² ＋ 3x ＋ 4'],['y ＝ x² − 1','y ＝ x² ＋ 2x'],
   ['y ＝ x² − 8x ＋ 16','y ＝ x² ＋ x − 6'],['y ＝ x² − x − 6','y ＝ x² − 3x ＋ 5'],['y ＝ 3x² − 5x','y ＝ x² ＋ 4x − 2'],['y ＝ 2x² ＋ 5x ＋ 2','y ＝ 3x² − 5x − 2']];
 /* ① の あと：②〜⑧ は 演習（1枚ずつ 解く → 先生に 丸つけ。わからない ときは ＱＲ コードの ヒント。先生の 指示 11/8） */
-const QRI = `<svg class="ex8qr" viewBox="0 0 21 21" width="64" height="64"><rect width="21" height="21" fill="#fff"/>${[[0,0],[14,0],[0,14]].map(([x,y])=>`<rect x="${x}" y="${y}" width="7" height="7" fill="#333"/><rect x="${x+1}" y="${y+1}" width="5" height="5" fill="#fff"/><rect x="${x+2}" y="${y+2}" width="3" height="3" fill="#333"/>`).join('')}${[[9,1],[10,3],[8,5],[9,8],[12,9],[15,9],[18,10],[9,11],[11,13],[14,12],[17,14],[9,15],[12,16],[15,17],[18,18],[10,18],[13,19]].map(([x,y])=>`<rect x="${x}" y="${y}" width="2" height="2" fill="#333"/>`).join('')}</svg>`;
+const QRI = `<img class="ex8qr" src="@@QRHINT@@" alt="ヒントの ＱＲ コード">`;   // プリントと 同じ ＱＲ（ヒントの ページ）。build の とき 画像を 埋めこむ
 const EXS = (s, n, t, sub, extra='') => `<div class="ex8s lh" data-s="${s}"><div class="ex8n">${n}</div><div class="ex8t">${t}</div><div class="ex8b">${sub}</div>${extra}</div>`;
 const EX8 = `
   <div class="card abs dcard v2">${EQTAPE}
@@ -129,4 +129,7 @@ const DECK = {title:'練習プリント x軸との共有点', pages:PGR};
 
 def add(decks):
     import decks_kimatsu2 as k2
-    decks['練習_x軸との共有点'] = ('練習プリント x軸との共有点', k2.COMMON + k2.XCOMMON + JSR)
+    import base64
+    # プリント（非公開の 数学Ⅰ/練習プリント/img/qr_hint.png）と 同じ ＱＲ。読むと 公開の ヒントの ページ（期末考査/renshu/x軸との共有点_ヒント.html）
+    qr = base64.b64encode(open(os.path.join(B, 'renshu_qr_hint.png'), 'rb').read()).decode()
+    decks['練習_x軸との共有点'] = ('練習プリント x軸との共有点', k2.COMMON + k2.XCOMMON + JSR.replace('@@QRHINT@@', 'data:image/png;base64,' + qr))
