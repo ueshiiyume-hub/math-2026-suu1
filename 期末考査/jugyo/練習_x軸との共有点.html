@@ -1316,6 +1316,18 @@ body.portrait .ptag{left:70px;top:8px}
 .ex8qr{display:block;width:220px;height:220px;flex:none;background:#fff;padding:6px;border-radius:6px;image-rendering:pixelated}
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .ex8hb{background:#4a2f38} }
 :root[data-theme="dark"] .ex8hb{background:#4a2f38}
+/* 練習プリント：答えの 一覧（decks_renshu.py の ANSL、11/9） */
+.dcard.ansrcard{height:660px}
+.ansrh{position:absolute;left:40px;top:16px;display:flex;align-items:baseline;gap:24px;font:900 40px "Zen Maru Gothic",sans-serif;color:var(--b-ink)}
+.ansrs{font:700 22px "Zen Maru Gothic",sans-serif;color:var(--muted)}
+.ansrg{position:absolute;left:24px;right:24px;top:84px;bottom:18px;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:1fr 1fr;gap:14px}
+.ansrc{background:var(--b-bg);border-radius:12px;padding:10px 14px;display:flex;flex-direction:column;gap:6px;position:relative}
+.ansrn{position:absolute;right:12px;top:6px;font:900 28px "Zen Maru Gothic",sans-serif;color:var(--accent)}
+.ansrq{flex:1;display:flex;flex-direction:column;justify-content:center}
+.ansre{font-size:16px;color:var(--muted);white-space:nowrap}
+.ansra{display:flex;align-items:center;gap:12px;font-size:24px;color:#e0465e;white-space:nowrap}
+.ansra .ja{font-size:20px}
+.ansrk{font:900 18px "Zen Maru Gothic",sans-serif;color:#e0465e;border:2px solid #e0465e;border-radius:999px;padding:0 8px;margin-left:auto}
 
 /* ===== 手書き ===== */
 #ink{position:fixed;left:0;top:0;z-index:15;pointer-events:none;touch-action:none}
@@ -2137,7 +2149,7 @@ const RDX = (t, r, s, dn) => `<span class="rdx">${t}<i class="rdl lh" data-s="${
 
 /* ====== このプリントのスライド ====== */
 const SERIES = [{"f": "1-1_因数分解の復習", "no": "①-1", "t": "因数分解の 復習", "v": "1.5_2026-10-29"}, {"f": "1-2_2次方程式の解", "no": "①-2", "t": "2次方程式の 解", "v": "1.5_2026-10-29"}, {"f": "1-3_2次方程式の解", "no": "①-3", "t": "2次方程式の 解 ②", "v": "1.5_2026-10-29"}, {"f": "1-4_解の公式", "no": "①-4", "t": "解の公式", "v": "1.7_2026-10-30"}, {"f": "1-5_解の公式_重解と解なし", "no": "①-5", "t": "2次方程式の 解 ③", "v": "1.7_2026-10-30"}, {"f": "1-6_実数解の個数", "no": "①-6", "t": "実数解の 個数", "v": "1.7_2026-10-30"}, {"f": "2-1_x軸との共有点", "no": "②-1", "t": "x軸との 共有点", "v": "1.5_2026-10-29"}, {"f": "2-2_x軸との共有点", "no": "②-2", "t": "x軸との 共有点 ②", "v": "1.5_2026-10-29"}, {"f": "2-3_x軸との位置関係", "no": "②-3", "t": "x軸との 位置関係", "v": "1.10_2026-11-02"}, {"f": "3-2_2次不等式_練習編_v2", "no": "③-1", "t": "2次不等式 練習編", "v": "3.18_2026-11-07"}, {"f": "3-1_2次不等式の解法_v2", "no": "③-2", "t": "2次不等式の 解き方", "v": "2.24_2026-11-07"}, {"f": "3-3_2次不等式の解法_v2", "no": "③-3", "t": "2次不等式 いろいろ", "v": "2.4_2026-11-08"}, {"f": "3-4_2次不等式の解法_v2", "no": "③-4", "t": "x² の前が マイナス", "v": "2.3_2026-11-08"}], ME = "練習_x軸との共有点";
-const VER = '<i class="nv">ver</i> 1.3　2026-11-08';
+const VER = '<i class="nv">ver</i> 1.4　2026-11-09';
 
 const IMG = s => s;
 const A = (s,r,h,fs,al) => ({s,r,h,fs,al});
@@ -2392,6 +2404,24 @@ PR.forEach(([no, title, qs], i) => {
   qs.forEach((h,j) => PGR.push({name:`${no}${'⑴⑵'[j]}`, html:h}));
   if(i===0) PGR.push({name:'演習の 進め方', html:EX8});
 });
+/* 最後：① 〜 ⑧ の 答えの 一覧（動きなし、先生の 指示 11/9）。[x座標, 個数] */
+const R5 = SQ('5'), R13 = SQ('13'), R6 = SQ('6');
+const ANSR = [
+  [['x ＝ 1, 3','2'], [`x ＝ ${KR(`3 ± ${R5}`,'2')}`,'2']],
+  [[`x ＝ ${KR(`−5 ± ${R13}`,'2')}`,'2'], [`x ＝ ${KR(`1 ± ${R13}`,'2')}`,'2']],
+  [[`x ＝ ${KR('1','2')}`,'1'], ['<span class="ja">共有点なし</span>','0']],
+  [['x ＝ −1, 1','2'], ['x ＝ −2, 0','2']],
+  [['x ＝ 4','1'], ['x ＝ −3, 2','2']],
+  [['x ＝ −2, 3','2'], ['<span class="ja">共有点なし</span>','0']],
+  [[`x ＝ 0, ${KR('5','3')}`,'2'], [`x ＝ −2 ± ${R6}`,'2']],
+  [[`x ＝ −2, −${KR('1','2')}`,'2'], [`x ＝ −${KR('1','3')}, 2`,'2']]];
+const ANSL = `
+  <div class="card abs dcard v2 ansrcard">${EQTAPE}
+    <div class="ansrh"><span class="v2mk">答え の 一覧</span><span class="ansrs">x座標 と 共有点の 個数</span></div>
+    <div class="ansrg">${ANSR.map((qs,i)=>`<div class="ansrc"><div class="ansrn">${PR[i][0]}</div>${qs.map(([x,n],j)=>`
+      <div class="ansrq"><div class="ansre math">${'⑴⑵'[j]} ${EQS[i][j]}</div><div class="ansra"><span class="math">${x}</span><span class="ansrk">${n} 個</span></div></div>`).join('')}</div>`).join('')}</div>
+  </div>`;
+PGR.push({name:'答え の 一覧', html:ANSL});
 PGR.push({name:'終', html:endF(KKR + '　x軸との共有点', POLR)});
 const DECK = {title:'練習プリント x軸との共有点', pages:PGR};
 

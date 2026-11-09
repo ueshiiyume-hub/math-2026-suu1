@@ -122,6 +122,24 @@ PR.forEach(([no, title, qs], i) => {
   qs.forEach((h,j) => PGR.push({name:`${no}${'⑴⑵'[j]}`, html:h}));
   if(i===0) PGR.push({name:'演習の 進め方', html:EX8});
 });
+/* 最後：① 〜 ⑧ の 答えの 一覧（動きなし、先生の 指示 11/9）。[x座標, 個数] */
+const R5 = SQ('5'), R13 = SQ('13'), R6 = SQ('6');
+const ANSR = [
+  [['x ＝ 1, 3','2'], [`x ＝ ${KR(`3 ± ${R5}`,'2')}`,'2']],
+  [[`x ＝ ${KR(`−5 ± ${R13}`,'2')}`,'2'], [`x ＝ ${KR(`1 ± ${R13}`,'2')}`,'2']],
+  [[`x ＝ ${KR('1','2')}`,'1'], ['<span class="ja">共有点なし</span>','0']],
+  [['x ＝ −1, 1','2'], ['x ＝ −2, 0','2']],
+  [['x ＝ 4','1'], ['x ＝ −3, 2','2']],
+  [['x ＝ −2, 3','2'], ['<span class="ja">共有点なし</span>','0']],
+  [[`x ＝ 0, ${KR('5','3')}`,'2'], [`x ＝ −2 ± ${R6}`,'2']],
+  [[`x ＝ −2, −${KR('1','2')}`,'2'], [`x ＝ −${KR('1','3')}, 2`,'2']]];
+const ANSL = `
+  <div class="card abs dcard v2 ansrcard">${EQTAPE}
+    <div class="ansrh"><span class="v2mk">答え の 一覧</span><span class="ansrs">x座標 と 共有点の 個数</span></div>
+    <div class="ansrg">${ANSR.map((qs,i)=>`<div class="ansrc"><div class="ansrn">${PR[i][0]}</div>${qs.map(([x,n],j)=>`
+      <div class="ansrq"><div class="ansre math">${'⑴⑵'[j]} ${EQS[i][j]}</div><div class="ansra"><span class="math">${x}</span><span class="ansrk">${n} 個</span></div></div>`).join('')}</div>`).join('')}</div>
+  </div>`;
+PGR.push({name:'答え の 一覧', html:ANSL});
 PGR.push({name:'終', html:endF(KKR + '　x軸との共有点', POLR)});
 const DECK = {title:'練習プリント x軸との共有点', pages:PGR};
 '''
