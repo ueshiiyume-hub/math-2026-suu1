@@ -185,7 +185,8 @@ SHEETS.append(dict(no='②-3', title='置換積分の不定積分（x で微分�
                                           '$=\\int\\sqrt{x^3+1}\\cdot3x^2dx=\\int t\\cdot2t\\,dt=\\int2t^2dt=\\frac{2}{3}t^3+C$',
                                           '$t^3=(x^3+1)\\sqrt{x^3+1}$ より　同じ答え'], '11/2')),
     it('⑶', r'\int e^x(e^x+1)^2dx', [r'e^x+1=t\ \text{とおくと}', r'e^x=\frac{dt}{dx}\ \ \text{よって}\ \ e^xdx=dt', r'=\int t^2dt', r'=\frac{1}{3}t^3+C', r'=\frac{1}{3}(e^x+1)^3+C'],
-       N('【展開しなくてよい】', ['$(e^x)\'=e^x$ なので $e^xdx$ がまるごと $dt$ になる'])),
+       N('【展開しなくてよい】', ['$(e^x)\'=e^x$ なので $e^xdx$ がまるごと $dt$ になる']),
+       N('【$e^x+1=t$ を そのまま $t$ で微分】', ['かたまり $e^x+1$ を微分すると $e^x$（前にある）', '各項を $t$ で微分：$e^x\\cdot\\frac{dx}{dt}+0=1$', '→ $e^xdx=dt$（$e^x$ と $dx$ をまとめて $dt$ に）'], '11/9')),
     it('⑷', r'\int xe^{-x^2}dx', [r'-x^2=t\ \text{とおくと}', r'-2x=\frac{dt}{dx}\ \ \text{よって}\ \ x\,dx=-\frac{1}{2}dt', r'=\int e^t\cdot\left(-\frac{1}{2}\right)dt', r'=-\frac{1}{2}e^t+C', r'=-\frac{1}{2}e^{-x^2}+C'],
        N('【例⑵と同じ形】', ['$-2x\\,dx=dt$ の両辺を $-2$ でわって', '→ $x\\,dx=-\\frac{1}{2}dt$']))])]))
 

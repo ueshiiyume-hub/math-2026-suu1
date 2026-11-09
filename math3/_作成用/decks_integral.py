@@ -1034,7 +1034,44 @@ const p5 = subPage({no:NO, sec:SEC, title:'問8　⑶', tag:'⑶', q:String.raw`
   pt:PT(3, '展開しなくて よい', `${M`(e^x)'=e^x`} なので ${M`e^x\,dx`} が まるごと ${M`dt`} に なる`),
   calc:[[3, String.raw`=\int t^2\,dt`], [4, String.raw`=\frac{1}{3}t^3+C`], [5, String.raw`=\DP{\frac{1}{3}\left(e^x+1\right)^3+C}`]],
   cm:[`${M`e^x+1`} を 微分すると ${M`e^x`}。前の ${M`e^x`} と 同じです。`, `${M`e^x+1=t`} と おきます。`, `${M`x`} で 微分して ${M`e^x\,dx=dt`}。`,
-      `${M`(e^x+1)^2\to t^2`}、${M`e^x\,dx\to dt`}。展開は いりません。`, `${M`t`} で 積分します。`, `${M`t=e^x+1`} を 戻します。`]});
+      `${M`(e^x+1)^2\to t^2`}、${M`e^x\,dx\to dt`}。展開は いりません。（次の ページで くわしく）`, `${M`t`} で 積分します。`, `${M`t=e^x+1`} を 戻します。`]});
+/* 問8⑶ の くわしく（11/9 の 板書）：かたまりを 微分すると 前の e^x → e^x+1=t を そのまま t で 微分 → e^x dx = dt を まとめて 置きかえ */
+const p5b = HD(NO, '問8　⑶　くわしく', SEC) + `<div class="bd">
+  <div class="l" style="gap:12px">
+    <div class="calc" style="font-size:30px;gap:4px">
+      <div>${D`\int\on{2}{a}{e^x}\on{1}{b}{\left(e^x+1\right)}^2\,dx`}</div>
+      <div data-s="1" style="font-size:21px;color:var(--a)">↑ かたまり ${M`e^x+1`} を 微分すると ${M`\A{e^x}`}（前に ある）</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(5,auto);justify-content:start;justify-items:center;align-items:center;column-gap:20px;row-gap:6px;font-size:30px">
+      <div data-s="3">${M`e^x`}</div><div data-s="3">${M`+`}</div><div data-s="3">${M`1`}</div><div data-s="3">${M`=`}</div><div data-s="3">${M`\B{t}`}</div>
+      <div data-s="4" style="color:var(--a)">↓</div><div></div><div data-s="4" style="color:var(--a)">↓</div><div></div><div data-s="4" style="color:var(--a)">↓</div>
+      <div data-s="4">${D`e^x\cdot\A{\frac{dx}{dt}}`}</div><div data-s="4">${M`+`}</div><div data-s="4">${M`\A{0}`}</div><div data-s="4">${M`=`}</div><div data-s="4">${M`\A{1}`}</div>
+    </div>
+    <div class="calc" style="font-size:30px"><div data-s="5">${D`\DP{e^x\,dx=dt}`}</div></div>
+  </div>
+  <div class="r" style="flex-direction:column;gap:10px;align-items:stretch;width:470px">
+    <div class="calc" style="font-size:26px;gap:8px">
+      <div data-s="6">${D`\int\A{e^x}\,\B{\underbrace{\left(e^x+1\right)^2}_{t^2}}\,\A{dx}`}</div>
+      <div data-s="6" style="font-size:19px;color:var(--a)">${M`\A{e^x}`} と ${M`\A{dx}`} で ひとまとまり → ${M`dt`}</div>
+      <div data-s="7">${D`=\int t^2\,dt`}</div>
+      <div data-s="8">${D`=\frac{1}{3}t^3+C`}</div>
+      <div data-s="9">${D`=\DP{\frac{1}{3}\left(e^x+1\right)^3+C}`}</div>
+    </div>
+    ${PT(4, '左辺を t で 微分', `${M`e^x`} を ${M`x`} で 微分して ${M`e^x`}、それに ${M`\frac{dx}{dt}`} を 掛ける`)}
+  </div>
+</div>` + CAP([
+  `問8⑶ を くわしく 見ます。どこを ${M`t`} と おくか から 考えます。`,
+  `かたまり ${M`e^x+1`} を 微分すると ${M`e^x`}。`,
+  `その ${M`e^x`} が 前に あります。だから ${M`e^x+1=t`} と おけば うまく いきます。`,
+  `${M`e^x+1=t`} と おきます。`,
+  `②-1 と 同じ ように、この まま 両辺を ${M`t`} で 微分します。${M`e^x`} は ${M`e^x\cdot\frac{dx}{dt}`}、${M`1`} は ${M`0`}、${M`t`} は ${M`1`}。`,
+  `両辺に ${M`dt`} を 掛けて ${M`e^x\,dx=dt`}。${M`e^x\,dx`} が まるごと ${M`dt`} に なります。`,
+  `式の 中の ${M`(e^x+1)^2`} は ${M`t^2`}。前の ${M`e^x`} と 後ろの ${M`dx`} を あわせて ${M`dt`}。`,
+  `${M`t`} だけの 式に なりました。展開は いりません。`,
+  `${M`t`} で 積分します。`,
+  `${M`t=e^x+1`} を 戻します。`
+]);
+
 const p6 = subPage({no:NO, sec:SEC, title:'問8　⑷', tag:'⑷', q:String.raw`\int\A{x}e^{-x^2}\,dx`, plabel:XP,
   prep:[[1, String.raw`-x^2=\B{t}\ \text{とおくと}`], [2, String.raw`-2x=\frac{dt}{dx}\quad\text{よって}\quad\A{x\,dx}=-\frac{1}{2}dt`]],
   pt:PT(2, '例⑵ と 同じ 形', `${M`-2x\,dx=dt`} の 両辺を ${M`-2`} で 割って ${M`x\,dx=-\frac{1}{2}dt`}`),
@@ -1053,7 +1090,7 @@ const p7 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:26px">
 
 const DECK = {title:'②-3 置換積分（x で 微分する 型）', pages:[
   {name:'表紙', html:p0}, {name:'例　⑴', html:p1}, {name:'例　⑵', html:p2}, {name:'問8　⑴', html:p3},
-  {name:'問8　⑵', html:p4}, {name:'問8　⑵　くわしく（√ を t と おく）', html:p4b, add:'11/2'}, {name:'問8　⑶', html:p5}, {name:'問8　⑷', html:p6}, {name:'まとめ', html:p7},
+  {name:'問8　⑵', html:p4}, {name:'問8　⑵　くわしく（√ を t と おく）', html:p4b, add:'11/2'}, {name:'問8　⑶', html:p5}, {name:'問8　⑶　くわしく', html:p5b, add:'11/9'}, {name:'問8　⑷', html:p6}, {name:'まとめ', html:p7},
 ]};
 ''')
 
