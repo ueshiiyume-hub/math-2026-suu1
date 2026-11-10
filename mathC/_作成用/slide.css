@@ -298,3 +298,7 @@ body.portrait #endp .eh{font-size:40px}
 #inkback:active{transform:scale(.96)}
 body.inking #inkback{display:inline-flex}
 body.portrait #inkback{left:12px;bottom:14px;height:54px;font-size:18px}
+/* ②-3 例⑵ くわしく：分配の 弧（板書の 青い 線） */
+.pl.dx text{fill:var(--ink);font-size:44px!important;font-family:'KaTeX_Main','Times New Roman',serif}
+.pl .dxa,.pl .dxb{fill:none;stroke-width:3.5;stroke-linecap:round}
+.pl .dxa{stroke:#2f6fb3}.pl .dxb{stroke:#3a3a8c}

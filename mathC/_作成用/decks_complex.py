@@ -1182,7 +1182,39 @@ const p4 = rotPage({title:'例 ⑵　45° 回転', R:{...RE, y1:4, u:70}, z:[2,2
   lines:[[String.raw`(2+2i)(\cos45^\circ+i\sin45^\circ)`, 2], [String.raw`=(2+2i)\left(\tfrac{1}{\sqrt{2}}+\tfrac{1}{\sqrt{2}}i\right)`, 2, .5],
          [String.raw`=\tfrac{1}{\sqrt{2}}(2+2i+2i+2i^2)=\tfrac{4i}{\sqrt{2}}=\DP{2\sqrt{2}i}`, 3]],
   cm:[`今度は ${M`45^\circ`} 回します。`, `${M`2+2i`} は 向き ${M`45^\circ`}。さらに ${M`45^\circ`} 回すと 向き ${M`90^\circ`}、真上に 来ます。`,
-      `${M`45^\circ`} 回転 ＝ ${M`\cos45^\circ+i\sin45^\circ`} を 掛ける。値は Point の 表から。`, `${M`2\sqrt{2}i`}。長さ ${M`2\sqrt{2}`} の まま、真上に 来ました。（次の ページで 別解）`]});
+      `${M`45^\circ`} 回転 ＝ ${M`\cos45^\circ+i\sin45^\circ`} を 掛ける。値は Point の 表から。`, `${M`2\sqrt{2}i`}。長さ ${M`2\sqrt{2}`} の まま、真上に 来ました。（次の ページで 計算を くわしく、その 次で 別解）`]});
+
+/* 例 ⑵ くわしく（11/10 の 板書）：1/√2 を 先に くくり出して、(2+2i)(1+i) を 4つの 掛け算に 分けて 展開 */
+const DX = `<svg viewBox="0 0 360 230" style="width:100%;max-width:440px" class="pl dx">
+  <text x="22" y="130" font-size="44">(</text><text x="40" y="130" font-size="44">2</text><text x="72" y="130" font-size="44">+</text>
+  <text x="115" y="130" font-size="44">2<tspan class="it">i</tspan></text><text x="160" y="130" font-size="44">)</text>
+  <text x="185" y="130" font-size="44">(</text><text x="205" y="130" font-size="44">1</text><text x="236" y="130" font-size="44">+</text>
+  <text x="282" y="130" font-size="44" class="it">i</text><text x="300" y="130" font-size="44">)</text>
+  <path class="dxa dr" pathLength="1" d="M52 88 Q132 20 214 88" data-s="2"/>
+  <path class="dxa dr" pathLength="1" d="M52 88 Q170 -10 288 88" data-s="2" style="--d:.4s"/>
+  <path class="dxb dr" pathLength="1" d="M140 142 Q177 200 214 142" data-s="2" style="--d:.8s"/>
+  <path class="dxb dr" pathLength="1" d="M140 142 Q214 225 290 142" data-s="2" style="--d:1.2s"/>
+</svg>`;
+const p4c = HD(NO, '例 ⑵　くわしく', SEC) + `<div class="bd">
+  <div class="l">${EXQ(`⑵　${M`45^\circ`}`)}
+    <div class="calc" style="font-size:26px;gap:8px">
+      <div>${M`(2+2i)\left(\tfrac{1}{\sqrt{2}}+\tfrac{1}{\sqrt{2}}i\right)`}</div>
+      <div data-s="1">${M`=\DP{\tfrac{1}{\sqrt{2}}}(2+2i)(1+i)`}</div>
+      <div data-s="2">${M`=\tfrac{1}{\sqrt{2}}(\textcolor{#2f6fb3}{2\cdot1}+\textcolor{#2f6fb3}{2\cdot i}+\textcolor{#3a3a8c}{2i\cdot1}+\textcolor{#3a3a8c}{2i\cdot i})`}</div>
+      <div data-s="3">${M`=\tfrac{1}{\sqrt{2}}(2+2i+2i+2i^2)`}</div>
+      <div data-s="4">${M`=\tfrac{1}{\sqrt{2}}(2+4i-2)=\tfrac{4i}{\sqrt{2}}`}</div>
+      <div data-s="5" class="hl2">${M`=\tfrac{4\sqrt{2}i}{2}=\DP{2\sqrt{2}i}`}</div>
+    </div>
+  </div>
+  <div class="r">${DX}</div>
+</div>` + CAP([
+  `${M`\cos45^\circ+i\sin45^\circ=\tfrac{1}{\sqrt{2}}+\tfrac{1}{\sqrt{2}}i`} を 掛けます。分数の まま 展開すると 大変です。`,
+  `かっこの 中の ${M`\tfrac{1}{\sqrt{2}}`} を 先に 前へ くくり出します。残りは ${M`(2+2i)(1+i)`}。`,
+  `前の かっこの ${M`2`} と ${M`2i`} を、後ろの ${M`1`} と ${M`i`} に それぞれ 掛けます（4つの 掛け算）。`,
+  `${M`2+2i+2i+2i^2`}。`,
+  `${M`i^2=-1`} なので ${M`2i^2=-2`}。実部が 消えて ${M`\tfrac{4i}{\sqrt{2}}`}。`,
+  `分母を 有理化して ${M`2\sqrt{2}i`}。`
+]);
 
 /* 例 ⑵ 別解（11/10 の 板書）：2+2i を 極形式に → 向きに 45° を 足す → cos90°＝0、sin90°＝1 */
 const g4b = PL({...RE, y1:4, u:70});
@@ -1245,7 +1277,7 @@ const p9 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:26px">
 
 const DECK = {title:'②-3 掛け算と回転', pages:[
   {name:'表紙', html:p0}, {name:'積の 図形的な 意味', html:p1}, {name:'原点の まわりの 回転', html:p2},
-  {name:'例 ⑴　90° 回転', html:p3}, {name:'例 ⑵　45° 回転', html:p4}, {name:'例 ⑵　別解', html:p4b, add:'11/10'}, {name:'例 ⑶　60° 回転', html:p5},
+  {name:'例 ⑴　90° 回転', html:p3}, {name:'例 ⑵　45° 回転', html:p4}, {name:'例 ⑵　くわしく', html:p4c, add:'11/10'}, {name:'例 ⑵　別解', html:p4b, add:'11/10'}, {name:'例 ⑶　60° 回転', html:p5},
   {name:'問13 ⑴　30° 回転', html:p6}, {name:'問13 ⑵　60° 回転', html:p7}, {name:'問13 ⑶　90° 回転', html:p8},
   {name:'まとめ', html:p9},
 ]};
