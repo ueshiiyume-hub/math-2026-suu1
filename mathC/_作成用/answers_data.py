@@ -237,7 +237,10 @@ SHEETS.append(dict(no='②-3', title='掛け算と回転', blocks=[
   ('group', '例', '点 $2+2i$ を，原点のまわりに次の角だけ回転した点を表す複素数を求めよ。', [
     it('⑴', '$90^\\circ$', ['$90^\\circ$ 回転は $i$ を掛けることだから　$(2+2i)i=2i+2i^2=-2+2i$']),
     it('⑵', '$45^\\circ$', [r'(2+2i)(\cos45^\circ+i\sin45^\circ)=(2+2i)\left(\frac{1}{\sqrt{2}}+\frac{1}{\sqrt{2}}i\right)',
-                          r'=\frac{1}{\sqrt{2}}(2+2i+2i+2i^2)=\frac{4i}{\sqrt{2}}=2\sqrt{2}i']),
+                          r'=\frac{1}{\sqrt{2}}(2+2i+2i+2i^2)=\frac{4i}{\sqrt{2}}=2\sqrt{2}i'],
+       notes=[N('【別解：極形式のまま向きを足す】', ['$2+2i=2\\sqrt{2}(\\cos45^\\circ+i\\sin45^\\circ)$',
+         '$45^\\circ$ 回転 → 向きに $+45^\\circ$　→　$2\\sqrt{2}(\\cos90^\\circ+i\\sin90^\\circ)$',
+         '$\\cos90^\\circ=0$，$\\sin90^\\circ=1$ より　$=2\\sqrt{2}i$'], '11/10')]),
     it('⑶', '$60^\\circ$', [r'(2+2i)(\cos60^\circ+i\sin60^\circ)=(2+2i)\left(\frac{1}{2}+\frac{\sqrt{3}}{2}i\right)',
                           r'=(1+i)(1+\sqrt{3}i)=(1-\sqrt{3})+(1+\sqrt{3})i'],
        P(-3, 3, -1, 3, pts=[(2,2,'2+2i',0,'se'),(-2,2,'⑴',1,'nw'),(0,2*S2,'⑵',1,'ne'),(1-S3,1+S3,'⑶',1,'nw')]))]),
