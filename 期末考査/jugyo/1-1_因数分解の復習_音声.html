@@ -651,9 +651,9 @@ body{overflow:hidden;height:100%;width:100%}
 .pgsv{position:absolute;overflow:hidden;pointer-events:none}
 .pgdone{left:1120px;top:548px;transform:scale(.8);z-index:6}
 .pgc{stroke:#d4677f;stroke-width:1.4}
-.pgp{fill:none;stroke:#f08a2a;stroke-width:3.6;stroke-linecap:round;opacity:.6}
+.pgp{fill:none;stroke:#29a0e0;stroke-width:3.6;stroke-linecap:round;opacity:.6}
 .pgd{fill:#e0465e;stroke:#e0465e;stroke-width:.9}
-.pgd.op{fill:#fff}
+.pgd.op{fill:#fff} .pgd.pgq{fill:#29a0e0;stroke:#29a0e0}   /* 2次不等式（塗る グラフ）の 黒丸・白丸は 水色（③-1 に そろえる、11/7） */ .pgd.pgq.op{fill:#fff}
 .pgt{font-family:"STIX Two Text",serif;font-size:7.5px;fill:#333}
 .pga{position:absolute;display:flex;align-items:center;justify-content:center;color:#c0304e;font-family:"STIX Two Text","Zen Maru Gothic",serif;font-weight:500;white-space:nowrap}
 .pga.al{justify-content:flex-start;padding-left:6px}
@@ -833,15 +833,15 @@ body{overflow:hidden;height:100%;width:100%}
 .iax{stroke:var(--ink);stroke-width:3} .iah{fill:var(--ink)}
 .ixl{font-family:"STIX Two Text",serif;font-style:italic;font-size:30px;fill:var(--ink)}
 .inum{font-family:"STIX Two Text",serif;font-size:30px;font-weight:700;fill:var(--ink)}
-.icv{fill:none;stroke:var(--b-ink);stroke-width:4.5;stroke-linecap:round}
+.icv{fill:none;stroke:#444;stroke-width:4.5;stroke-linecap:round}
 .ipl{stroke:var(--muted);stroke-width:2.5;stroke-dasharray:7 6}
 .ipc{fill:var(--paper);stroke:var(--ink);stroke-width:3}
 .ipm{font-family:"Zen Maru Gothic",sans-serif;font-size:34px;font-weight:900}
 .ipm.ok{fill:#2f9e6a} .ipm.ng{fill:#e0465e}
 .ipx{font-family:"STIX Two Text",serif;font-size:22px;fill:var(--muted)}
-.ipaint path{fill:none;stroke:#f08a2a;stroke-width:14;stroke-linecap:round;opacity:.6;stroke-dasharray:1;stroke-dashoffset:1}
+.ipaint path{fill:none;stroke:#29a0e0;stroke-width:14;stroke-linecap:round;opacity:.6;stroke-dasharray:1;stroke-dashoffset:1}
 .ipaint.show path{stroke-dashoffset:0;transition:stroke-dashoffset 1.2s ease-in-out}
-.iend{fill:var(--ink);stroke:var(--ink);stroke-width:3.5}
+.iend{fill:#29a0e0;stroke:#29a0e0;stroke-width:3.5}   /* 黒丸は 水色で 塗りつぶす、白丸の ふちも 水色（③-1 に そろえる、11/7） */
 .iend.op{fill:var(--paper)}
 .idrop{stroke:#f08a2a;stroke-width:3;stroke-dasharray:6 6}
 .idrh{fill:#f08a2a}
@@ -975,10 +975,10 @@ i.nv{font-style:normal;font-family:inherit}
 .v2sub{font-size:40px;color:var(--accent);margin-left:14px}
 .v2eq{position:absolute;left:24px;top:250px;font-size:64px}
 .v2g{position:absolute;left:24px;top:164px}
-.v2up{fill:#fde3e8}
+.v2up{fill:#fde9d6}   /* 塗る 面は うすい オレンジ（上も 下も、11/7） */
 .v2up.gs.show{opacity:.9}
-@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .v2up{fill:#5a3a48} }
-:root[data-theme="dark"] .v2up{fill:#5a3a48}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .v2up{fill:#4a3826} }
+:root[data-theme="dark"] .v2up{fill:#4a3826}
 .v2 .ititle{display:none}
 .v2eqm{position:absolute;left:24px;top:40px;font-size:72px;white-space:nowrap}
 .v2sw{display:inline-grid}
@@ -1013,7 +1013,7 @@ i.nv{font-style:normal;font-family:inherit}
 .v2zoom{transition:transform 1.1s ease-in-out}
 .v2zoom.wv-on{transform:scale(3.4)}
 .v2still path{stroke-dasharray:none!important;stroke-dashoffset:0!important}
-.v2wd{fill:var(--paper);stroke:var(--ink);stroke-width:3}
+.v2wd{fill:var(--paper);stroke:#29a0e0;stroke-width:3}
 .v2wd.v2draw{stroke-dasharray:1;stroke-dashoffset:1}
 .v2wd.v2draw.show{stroke-dashoffset:0;transition:stroke-dashoffset .8s ease-out}
 .v2zl.on{opacity:0}
@@ -1024,7 +1024,7 @@ i.nv{font-style:normal;font-family:inherit}
 .slide:has(.v2cont),.slide:has(+ .slide .v2cont){transition:none!important;transform:none!important}
 .ilt-h{fill:none;stroke:var(--paper);stroke-width:16;stroke-linecap:round;stroke-linejoin:round}
 .idot2{stroke:#e0465e;stroke-width:3.5;stroke-dasharray:2 9;stroke-linecap:round}
-.v2bd{fill:#f2a35e;stroke:#e07a1f;stroke-width:3}
+.v2bd{fill:#29a0e0;stroke:#29a0e0;stroke-width:3}
 .v2bd.v2draw{fill-opacity:0;stroke-dasharray:1;stroke-dashoffset:1}
 .v2bd.v2draw.show{fill-opacity:1;stroke-dashoffset:0;transition:stroke-dashoffset .7s ease-out,fill-opacity .4s ease .7s}
 /* ===== ③-2 ver 2：テンポよく 塗って 答える ===== */
@@ -1085,12 +1085,26 @@ i.nv{font-style:normal;font-family:inherit}
 .p3a2 .math{font-family:"STIX Two Text",serif;font-weight:700}
 .portrait .pfit .p3pc{flex-direction:column;gap:30px}
 .p3wr{font-size:30px}
-.p3 .iband2{fill:#fff0b3;opacity:1}
-@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .p3 .iband2{fill:#5e5428} }
-:root[data-theme="dark"] .p3 .iband2{fill:#5e5428}
+.p3 .iband2{fill:#fbdde5;opacity:1}   /* x の まわりの 帯は うすい ピンク（x の 丸に 合わせる。黄色は 軸の 黄オレンジと まぎれた、11/7） */
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .p3 .iband2{fill:#5a3a48} }
+:root[data-theme="dark"] .p3 .iband2{fill:#5a3a48}
 .p3sg{display:inline-block;padding:0 8px;border-radius:8px;transition:background .3s,box-shadow .3s,color .3s}
 .p3sg.on{color:#e0465e;background:#fff0b3;box-shadow:0 0 0 3px #e0465e}
 .p3w .v2sub.lh{display:inline-block}
+/* ③-1：プリントの いちばん上の 枠（緑の 行 ×4、2026-11-04） */
+.p3bx{position:absolute;left:70px;top:34px;right:70px;display:flex;flex-direction:column;gap:18px}
+.p3bxr{display:flex;align-items:center;gap:22px;height:86px;padding:0 28px;background:#ebf1de;border-left:12px solid #77933c;font-size:34px;font-weight:900;font-family:"Zen Maru Gothic",sans-serif;color:var(--ink)}
+.p3bxq{background:#fcd5b5;padding:4px 14px;border-radius:4px;font-size:36px;font-weight:400;white-space:nowrap;color:#333}
+.p3bxb{display:inline-flex;align-items:center;justify-content:center;min-width:160px;height:62px;padding:0 14px;background:#fff;color:#333;white-space:nowrap}
+.p3bxb.w{min-width:280px}
+.p3bxn{align-self:flex-end;margin-top:-6px;font-size:18px;color:var(--muted);opacity:.8}
+.p3bxe{color:#333}   /* 「と」は 色なし（上の オレンジと 混ざらない ように、11/7） */
+.p3bxt{color:#333;white-space:nowrap}
+.p3bx .p3sg.on:not(.cur){color:inherit;background:none;box-shadow:none}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .p3bxr{background:#2f3a22} :root:not([data-theme="light"]) .p3bxb{background:#1f1f1f} :root:not([data-theme="light"]) .p3bxt{color:#ddd} }
+:root[data-theme="dark"] .p3bxr{background:#2f3a22} :root[data-theme="dark"] .p3bxb{background:#1f1f1f} :root[data-theme="dark"] .p3bxt{color:#ddd}
+.portrait .pfit .p3bx{left:20px;right:auto;width:640px}
+.portrait .pfit .p3bxr{flex-wrap:wrap;height:auto;padding:12px 20px;gap:10px 16px}
 
 /* ①-5 まとめ（プリントの 緑の 枠）。スマホでは 縦に 並べる */
 .smcard{left:48px;top:30px;width:1184px;height:490px;display:flex;align-items:center;justify-content:center}
@@ -1143,6 +1157,177 @@ body.portrait .ptag{left:70px;top:8px}
 .dsud{position:absolute;left:560px;top:300px;font-size:17px}
 .nw9{font-size:.88em;white-space:nowrap}
 .vm{display:inline-block;vertical-align:middle}
+
+/* ③-1 練習編の 導入（2026-11-07）：上＝オレンジ、下＝水色、軸＝紫。言葉は 少なく */
+.c-up{color:#d9731a} .c-dn{color:#d9731a} .c-ax{color:#e39b00}
+.inlab{font:700 22px "Zen Maru Gothic",sans-serif;color:var(--muted);margin-bottom:18px}
+.ineq{font-size:40px;white-space:nowrap}
+.inpanels{position:absolute;left:30px;right:30px;top:70px;display:flex;justify-content:space-between;gap:20px}
+.inpn{flex:1;text-align:center}
+.insv{width:100%;height:auto;display:block}
+.inax{stroke:#555;stroke-width:3} .inaxh{fill:#555}
+.fill-up{fill:#fbd7b5} .fill-dn{fill:#fbd7b5}
+.line-ax{stroke:#ffb000;stroke-opacity:.55;stroke-width:18;stroke-linecap:round}   /* 軸を 塗る：黄色に 近い オレンジを 透かす（蛍光ペンの ように 下の 黒い 軸が 見える。紫→ピンク→黄オレンジ、11/7） */
+.inpt{margin-top:14px;font:900 32px "Zen Maru Gothic",sans-serif;color:var(--ink)}
+.inpt .math{font-weight:400;margin-right:4px}
+.portrait .pfit .inpanels{flex-wrap:wrap}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .p3bxe{color:#ddd} } :root[data-theme="dark"] .p3bxe{color:#ddd}
+/* ③-1 導入 1枚目（11/7 作り直し 2）：式は 1本。「y ＝」「＝ 0」「＞ 0」が 横から 出入りする（幅を 伸び縮み させて 真ん中の 式が すべるように 動く） */
+.inmorph{position:absolute;left:0;right:0;top:110px;height:220px;text-align:center}
+.inlabs{position:relative;height:44px;margin-bottom:26px}
+.inlabs .inst{position:absolute;left:0;right:0;font:700 30px "Zen Maru Gothic",sans-serif;color:var(--muted);opacity:0;transition:opacity .2s}
+.inlabs .inst.cur{opacity:1;transition:opacity .4s .25s}   /* 前の 見出しが 消えてから 出る（重ならない） */
+.inmorph .ineq{font-size:72px;white-space:nowrap}
+.ip{display:inline-block;max-width:0;opacity:0;overflow:hidden;white-space:nowrap;vertical-align:bottom;transition:max-width .7s ease,opacity .5s ease,margin .7s ease}
+.ip.show,.ip.wv-on{max-width:3em;opacity:1}
+.ip.iy.show{margin-right:.25em} .ip:not(.iy).show,.ip:not(.iy).wv-on{margin-left:.25em}
+.iyd{transition:opacity .6s} .iyd.on{opacity:.25}
+.indim{opacity:.25}
+.inhl{color:#e0465e;font-weight:900}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .p3bxb{color:#eee} } :root[data-theme="dark"] .p3bxb{color:#eee}
+/* ③-1 導入 2枚目（11/7 案A）：横に 4つ、見出しの 下で 早回し */
+.in2row{position:absolute;left:24px;right:24px;top:26px;bottom:22px;display:flex;align-items:stretch;gap:6px}
+.in2grp{flex:2;display:flex;align-items:stretch;gap:6px;border:5px solid transparent;border-radius:18px;padding:6px;position:relative;transition:opacity .5s,border-color .5s}
+.in2grp.past.on{opacity:.3}
+.in2grp.today.on{border-color:#e0465e}
+.in2col{flex:1;display:flex;flex-direction:column;min-width:0}
+.in2tab{height:58px;flex:none;display:flex;align-items:center;justify-content:center;font:900 32px "Zen Maru Gothic",sans-serif;border:3px solid var(--line,#c9d3dd);border-radius:12px;background:var(--paper);color:var(--ink)}
+.in2demo{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:6px;padding-top:56px}
+.in2ar{align-self:flex-start;margin-top:22px;font-size:30px;color:var(--muted);flex:none}
+.in2math{font-size:23px;line-height:1.9;text-align:center;white-space:nowrap}
+.in2col:first-child .in2math{margin-top:34px}
+.in2b{font-weight:700}
+.in2sv{width:100%;max-width:250px;height:auto;display:block}
+.in2cv{fill:none;stroke:var(--ink,#333);stroke-width:4;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1s ease .5s}
+.in2cv.show{stroke-dashoffset:0}
+.in2dot{fill:#29a0e0} .in2dot.op{fill:var(--paper,#fff);stroke:#29a0e0;stroke-width:3}
+.in2lb{font:20px "STIX Two Text",serif;fill:var(--ink,#333)}
+.in2pt path{fill:none;stroke:#29a0e0;stroke-width:12;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;opacity:.6;transition:stroke-dashoffset .8s ease .5s}
+.in2pt.show path{stroke-dashoffset:0}
+.in2here{position:absolute;right:10px;bottom:-4px;font:900 26px "Zen Maru Gothic",sans-serif;color:#e0465e}
+.portrait .pfit .in2row{flex-wrap:wrap}
+.p3fig{margin-left:auto;width:150px;height:74px;flex:none;background:#fff;border-radius:6px;padding:3px} .p3fig svg{width:100%;height:100%;display:block}
+/* ③-1 練習編の 問題（11/7）：導入と 同じ 色。上を 塗る＝オレンジ、下を 塗る＝水色、軸を 塗る＝透ける ピンク（黒丸に 重ねる） */
+.ipaint.pu path,.ipaint.pd path{stroke:#29a0e0;opacity:.6;stroke-width:17}   /* グラフを 塗る 色は 水色（黒丸も 同じ 水色。少し 透けて 下の 線が 見える、11/7） */
+.v2up.p3t{fill:#fde9d6} .v2up.p3t.p3dn{fill:#fde9d6}
+.icv.p3cv{stroke:#444}   /* 練習の 放物線は 濃い 灰色（塗る 水色と 見分ける） */
+.p3axhl{fill:#ff3d8b;fill-opacity:.45}
+.v2bd.p3bd{fill:#29a0e0;stroke:#29a0e0} .v2wd.p3wd{stroke:#29a0e0}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .v2up.p3t{fill:#4a3826} :root:not([data-theme="light"]) .v2up.p3t.p3dn{fill:#4a3826} :root:not([data-theme="light"]) .icv.p3cv{stroke:#ddd} :root:not([data-theme="light"]) .v2bd.p3bd{fill:#4db3ec;stroke:#4db3ec} }
+:root[data-theme="dark"] .v2up.p3t{fill:#4a3826} :root[data-theme="dark"] .v2up.p3t.p3dn{fill:#4a3826} :root[data-theme="dark"] .icv.p3cv{stroke:#ddd} :root[data-theme="dark"] .v2bd.p3bd{fill:#4db3ec;stroke:#4db3ec}
+/* ③-1 練習の 問題（11/7）：答えの 枠を グラフの 下に。カードを 下まで のばし、「いま やっていること」は 左下に 小さく */
+.dcard.p3big{height:660px}
+.p3ans{position:absolute;left:24px;width:800px;height:76px;display:flex;align-items:center;gap:24px;border:3px solid #d9d9d9;border-radius:6px;background:var(--paper);padding:0 22px}
+.p3al{font:900 24px "Zen Maru Gothic",sans-serif;color:var(--muted);flex:none}
+.p3av{font-size:40px;font-weight:700;color:#e0465e;white-space:nowrap}
+.p3av:not(.math){font-family:"Zen Maru Gothic",sans-serif;font-weight:900;font-size:34px}
+.cbar.cbarL{left:62px;top:396px;width:222px;height:280px;padding:26px 16px 10px;align-items:start;z-index:3}
+.cbarL .tape{display:none}
+.cbarL .lab{font-size:14px;left:12px;padding:0 10px}
+.cbarL .cm{font-size:19px;line-height:1.55}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .icv{stroke:#ddd} }
+:root[data-theme="dark"] .icv{stroke:#ddd}
+/* ===== ③-3 ver 2（decks_33.py、2026-11-07） ===== */
+.sh33row{position:absolute;left:40px;right:40px;top:50px;display:flex;justify-content:space-between}
+.sh33{position:relative;width:340px;padding:14px 16px 18px;text-align:center;box-sizing:border-box}
+.sh33t{font:900 34px "Zen Maru Gothic",sans-serif;color:var(--b-ink)}
+.sh33s{font:700 22px "Zen Maru Gothic",sans-serif;color:var(--muted);margin-top:4px}
+.e33h{position:absolute;left:24px;top:22px;display:flex;align-items:center;gap:20px}
+.e33st{position:static}
+.e33q{font-size:30px;white-space:nowrap}
+.v2calc.e33calc{width:610px;row-gap:12px;font-size:36px;padding:26px 24px}
+.v2gbox.e33g{left:654px;width:280px;overflow:hidden}
+.e33sd{position:absolute;right:22px;top:120px;font-size:22px}
+.e33n{font-size:22px}
+.e33nt{font:900 22px "Zen Maru Gothic",sans-serif;fill:var(--muted)}
+.e33r1{grid-column:1/-1;display:flex;align-items:baseline;margin-bottom:6px}
+.e33red{color:#e0465e;font-weight:700}
+.e33nw{margin-left:18px;font:900 24px "Zen Maru Gothic",sans-serif;color:var(--muted)}
+.q33c{position:absolute;left:24px;top:170px;width:880px;height:316px;background:#dce6f2;border-radius:6px;padding:26px 34px;box-sizing:border-box;display:flex;flex-direction:column;gap:16px;font-size:38px;transition:opacity .3s;z-index:2}
+.q33c.on{opacity:0;pointer-events:none}
+.q33sd{position:absolute;right:40px;top:28px;font-size:24px}
+.q33r{position:absolute;right:30px;top:26px;font-size:32px;color:var(--accent);white-space:nowrap}
+.w33 .pgc{stroke:#333} .w33 .pgd{fill:#29a0e0;stroke:#29a0e0} .w33 .pgd.op{fill:#fff}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .q33c{background:#2c3a4d} }
+:root[data-theme="dark"] .q33c{background:#2c3a4d}
+/* √・分数 の 入った グラフの 文字（foreignObject、11/7） */
+.fo3{height:100%;display:flex;align-items:center;font-family:"STIX Two Text",serif;font-weight:700;white-space:nowrap;pointer-events:none}
+.fo3-middle{justify-content:center} .fo3-end{justify-content:flex-end} .fo3-start{justify-content:flex-start}
+.fo3n{font-size:28px;color:var(--ink)} .fo3n.e33f{font-size:20px}
+.fo3w{font-size:30px;color:#e0465e}
+.pgfo{height:100%;display:flex;align-items:center;font-family:"STIX Two Text",serif;font-size:7px;color:#333;white-space:nowrap;pointer-events:none;--rw:.5px}
+.pgfo-middle{justify-content:center} .pgfo-end{justify-content:flex-end} .pgfo-start{justify-content:flex-start}
+.agap{display:inline-block;width:.7em}   /* 2つの 不等式の 間：カンマの 前と 後ろに 同じ だけ（ansGap、11/7） */
+/* GQ の q0：はじめは 元の 式、1番で −1 を かけた 式に 入れかわる（③-4、11/7） */
+.q0sw .q0a,.q0sw .q0b{position:absolute;left:0;top:0;white-space:nowrap}
+.q0sw .q0a.on{opacity:0;transition:opacity .3s}
+/* ===== ③-4 ver 2（decks_34.py） ===== */
+.h4grid{position:absolute;left:150px;top:46px;display:grid;grid-template-columns:repeat(5,auto);column-gap:34px;row-gap:96px;font-size:64px;align-items:baseline;justify-items:center}
+.h4c{color:#d9731a}
+.h4sg{color:#e0465e;border:4px solid #e0465e;border-radius:10px;padding:0 10px;background:#fff3c4}
+.h4arw{position:absolute;left:52px;top:36px}
+.h4chip{position:absolute;left:150px;top:140px;display:flex;align-items:center;gap:14px;font:900 30px "Zen Maru Gothic",sans-serif;color:var(--b-ink)}
+.h4chip .math{font-size:34px;background:#fff;border:3px solid var(--b-ink);border-radius:10px;padding:2px 14px;color:var(--ink)}
+.h4rev{position:absolute;left:820px;top:252px;font:900 34px "Zen Maru Gothic",sans-serif;color:#e0465e}
+.h4end{position:absolute;left:150px;top:420px;font:900 32px "Zen Maru Gothic",sans-serif;color:var(--b-ink)}
+.w4eq{position:absolute;left:60px;font-size:60px;white-space:nowrap}
+.w4chip{position:absolute;left:60px;top:150px;font:900 26px "Zen Maru Gothic",sans-serif;color:var(--b-ink)}
+.w4chip .math{font-size:30px;background:#fff;border:3px solid var(--b-ink);border-radius:10px;padding:2px 12px;color:var(--ink);margin-right:10px}
+.w4nl{position:absolute;left:380px;top:20px}
+.w4msg{position:absolute;left:60px;top:380px;font:900 32px "Zen Maru Gothic",sans-serif;color:var(--b-ink)}
+.w4t{font-family:"STIX Two Text",serif;font-size:30px;font-weight:700;fill:var(--ink)}
+.w4lab{font:900 24px "Zen Maru Gothic",sans-serif;fill:#e0465e}
+.q34m{font-size:26px;color:var(--b-ink);border:2px solid var(--b-ink);border-radius:8px;padding:0 8px;margin-right:12px;vertical-align:middle;font-family:"STIX Two Text",serif}
+/* ③-4：元の 式を 二重線で 消す・問題を 1画面で（GQ の side、11/7） */
+.s4strike{position:absolute;left:-6px;right:-6px;top:calc(50% - 6px);height:7px;border-top:3px solid #e0465e;border-bottom:3px solid #e0465e;transform:scaleX(0);transform-origin:left;transition:transform .6s ease-out;pointer-events:none}
+.s4strike.show{transform:scaleX(1)}
+.h4st{grid-row:1;grid-column:1/-1;position:absolute;left:-10px;right:-10px;top:30px}
+.h4tip{position:absolute;left:150px;top:362px;font:900 24px "Zen Maru Gothic",sans-serif;color:#e0465e;display:flex;align-items:center;gap:10px}
+.s4bdg{display:inline-block;background:#e0465e;color:#fff;border-radius:999px;padding:2px 12px;font:900 18px "Zen Maru Gothic",sans-serif}
+.s4col{position:absolute;left:28px;top:22px;width:510px}
+.s4q{font-size:34px;white-space:nowrap} .s4q3{font-size:40px}
+.s4no{margin-right:14px}
+.s4org{position:relative;display:inline-block}
+.s4new{margin-top:16px;font-size:34px;white-space:nowrap}
+.s4tip{margin-top:12px;font:900 20px "Zen Maru Gothic",sans-serif;color:#e0465e;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.s4calc{margin-top:14px;background:#dce6f2;border-radius:6px;padding:16px 20px;display:flex;flex-direction:column;gap:10px;font-size:34px;min-height:180px;box-sizing:border-box;white-space:nowrap}
+.s4sd{position:absolute;left:640px;top:110px;font-size:26px}
+.s4sd.on{opacity:0;transition:opacity .3s}
+.dcard.p3side .v2c{left:556px}
+.dcard.p3side .p3q{display:none}
+.dcard.p3side .p3w{top:14px;font-size:44px}
+.dcard.p3side .p3g{top:78px;transform:scale(.9);transform-origin:top left}
+.dcard.p3side .p3ans{top:370px!important;width:580px} .dcard.p3side .p3av{font-size:34px}
+.p3side ~ .cbar.cbarL{left:76px;top:530px;width:500px;height:150px}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .s4calc{background:#2c3a4d} }
+:root[data-theme="dark"] .s4calc{background:#2c3a4d}
+/* 練習プリント：演習の 進め方（decks_renshu.py の EX8、11/8）。「いま やっていること」なし、1・2・3 を 横に、ヒントは 下 */
+.dcard.ex8card{height:660px}
+.ex8h{position:absolute;left:60px;top:22px;font:900 52px "Zen Maru Gothic",sans-serif;color:var(--b-ink)}
+.ex8row{position:absolute;left:50px;right:50px;top:116px;display:flex;gap:24px}
+.ex8s{flex:1;background:var(--b-bg);border-radius:16px;padding:18px 16px 20px;text-align:center;box-sizing:border-box}
+.ex8n{flex:none;width:52px;height:52px;margin:0 auto 8px;border-radius:50%;background:var(--accent);color:#fff;font:900 30px/52px "Zen Maru Gothic",sans-serif;text-align:center}
+.ex8t{font:900 32px "Zen Maru Gothic",sans-serif;color:var(--ink)}
+.ex8b{margin-top:8px;font:700 24px/1.5 "Zen Maru Gothic",sans-serif;color:var(--muted)}
+.ex8hb{position:absolute;left:50px;right:50px;top:352px;height:278px;box-sizing:border-box;background:#fdecef;border-radius:16px;padding:24px 34px;display:flex;align-items:center;justify-content:space-between;gap:30px}
+.ex8hl{display:flex;align-items:flex-start;gap:20px}
+.ex8hl .ex8n{margin:0}
+.ex8hint{margin-top:16px;font:900 24px "Zen Maru Gothic",sans-serif;color:#e0465e}
+.ex8qr{display:block;width:220px;height:220px;flex:none;background:#fff;padding:6px;border-radius:6px;image-rendering:pixelated}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .ex8hb{background:#4a2f38} }
+:root[data-theme="dark"] .ex8hb{background:#4a2f38}
+/* 練習プリント：答えの 一覧（decks_renshu.py の ANSL、11/9） */
+.dcard.ansrcard{height:660px}
+.ansrh{position:absolute;left:40px;top:16px;display:flex;align-items:baseline;gap:24px;font:900 40px "Zen Maru Gothic",sans-serif;color:var(--b-ink)}
+.ansrs{font:700 22px "Zen Maru Gothic",sans-serif;color:var(--muted)}
+.ansrg{position:absolute;left:24px;right:24px;top:84px;bottom:18px;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:1fr 1fr;gap:14px}
+.ansrc{background:var(--b-bg);border-radius:12px;padding:10px 14px;display:flex;flex-direction:column;gap:6px;position:relative}
+.ansrn{position:absolute;right:12px;top:6px;font:900 28px "Zen Maru Gothic",sans-serif;color:var(--accent)}
+.ansrq{flex:1;display:flex;flex-direction:column;justify-content:center}
+.ansre{font-size:16px;color:var(--muted);white-space:nowrap}
+.ansra{display:flex;align-items:center;gap:12px;font-size:24px;color:#e0465e;white-space:nowrap}
+.ansra .ja{font-size:20px}
+.ansrk{font:900 18px "Zen Maru Gothic",sans-serif;color:#e0465e;border:2px solid #e0465e;border-radius:999px;padding:0 8px;margin-left:auto}
 
 /* ===== 手書き ===== */
 #ink{position:fixed;left:0;top:0;z-index:15;pointer-events:none;touch-action:none}
@@ -1633,12 +1818,13 @@ const endHtml = `
 const KIMATSU = '数学Ⅰ　２学期期末考査まで';
 /* 表紙・おわりの 写真の中身：式が 変わる様子 */
 const fpol = (a,b,msg) => `<div class="fpol"><div class="fa math">${a}</div><div class="fv">↓ ${msg}</div><div class="fb math">${b}</div></div>`;
+/* 表紙は 動かさない（はじめから 全部 出す。先生の 指示 11/10） */
 const coverF = (kicker,title,sub,sub2,pol,cap) => `
 <div class="card abs cover">${TP('pink','left:-26px;top:-4px;transform:rotate(-38deg)')}${TP('mint','right:-26px;bottom:-4px;transform:rotate(-38deg)')}
   <div class="kicker">${kicker}</div>
   <h1>${title}</h1>
-  <div class="r" data-s="1"><div class="sub">${sub}</div></div>
-  <div class="r" data-s="2"><div class="sub2">${sub2}</div></div>
+  <div class="r" data-s="0"><div class="sub">${sub}</div></div>
+  <div class="r" data-s="0"><div class="sub2">${sub2}</div></div>
   ${typeof VER!=='undefined' ? `<div class="ver">${VER}</div>` : ''}
 </div>
 <div class="card abs polaroid">${TP('yellow','left:92px;top:-14px;transform:rotate(-3deg)')}${pol}<div class="cap">${cap}</div></div>`;
@@ -1766,7 +1952,30 @@ function eqSlide(P){
 }
 
 /* 移項の矢印を、＋5 の下から −5 の上へ かく（engine.js の relayout から 呼ばれる） */
+/* 不等式の 答えが 2つ（x ≦ −1, 3 ≦ x など）の とき、カンマの 後ろを 広く あける（2つの 式が つながって 見えない ように、11/7 先生の 指示）。
+   カンマの 前後 どちらにも 不等号が ある ときだけ。1度 だけ 行う */
+const INEQ = /[＜≦＞≧<>]/;
+function ansGap(root){
+  if(root.dataset.agap) return; root.dataset.agap = 1;
+  const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {acceptNode:n => /,/.test(n.nodeValue) && !n.parentElement.closest('svg:not(foreignObject *)') ? 1 : 3});
+  const list = []; while(w.nextNode()) list.push(w.currentNode);
+  list.forEach(n => {
+    let e = n.parentElement, ok = false;
+    for(let i=0; i<4 && e && !ok; i++, e = e.parentElement){
+      const t = e.textContent, k = t.indexOf(','); if(k<0) continue;
+      const L = t.slice(0,k).split(/[。、\n]/).pop(), R = t.slice(k+1).split(/[。、\n]/)[0];   // カンマの 前後の 同じ 文の 中だけ 見る
+      ok = INEQ.test(L) && INEQ.test(R) && /x/.test(L + R);
+    }
+    if(!ok) return;
+    const parts = n.nodeValue.split(/,[ \u3000]*/), f = document.createDocumentFragment();
+    const gap = () => { const g = document.createElement('span'); g.className = 'agap'; return g; };   // カンマの 前と 後ろに 同じ すき間（カンマが 2つの 式の 真ん中、11/7）
+    parts.forEach((p,i) => { f.appendChild(document.createTextNode(p));
+      if(i < parts.length-1){ f.appendChild(gap()); f.appendChild(document.createTextNode(',')); f.appendChild(gap()); } });
+    n.replaceWith(f);
+  });
+}
 function layoutExtra(root){
+  ansGap(root);
   root.querySelectorAll('.qb').forEach(b=>{
     const t=b.querySelector('.mvt'), v=b.querySelector('.mvv'), g=b.querySelector('.mva g');
     if(!t||!v||!g) return;
@@ -1873,8 +2082,11 @@ function PB(o){
     else if(o.paint==='down' && roots.length===2) seg = [[roots[0],roots[1]]];
     s += `<g class="gs" data-s="${o.ps}">${seg.map(([a,b])=>`<path class="pgp" d="${path(a,b)}"/>`).join('')}</g>`;
   }
-  if(o.dot) s += `<g class="gs" data-s="${o.ds??o.s}">${roots.map(x=>`<circle class="pgd ${o.dot==='o'?'op':''}" cx="${x.toFixed(2)}" cy="${o.ay}" r="2.6"/>`).join('')}</g>`;
-  if(o.lab) s += `<g class="gs" data-s="${o.ls??o.s}">${o.lab.map(([x,t])=>`<text class="pgt" x="${x}" y="${o.ay+9}" text-anchor="middle">${t}</text>`).join('')}</g>`;
+  if(o.dot) s += `<g class="gs" data-s="${o.ds??o.s}">${roots.map(x=>`<circle class="pgd ${o.dot==='o'?'op':''}${o.paint?' pgq':''}" cx="${x.toFixed(2)}" cy="${o.ay}" r="2.6"/>`).join('')}</g>`;
+  /* √ を 含む 文字は SVG の text だと √ の 上の 棒が 出ない → HTML（SQ）を foreignObject で（11/7） */
+  const LBF = (x,t,an) => { const w = 44, x0 = an==='end' ? x-w : an==='start' ? x : x-w/2;
+    return `<foreignObject x="${x0}" y="${o.ay+2}" width="${w}" height="11"><div xmlns="http://www.w3.org/1999/xhtml" class="pgfo pgfo-${an||'middle'}">${t.replace(/(\S)([−+＋])(?=\S)/g,'$1 $2 ').replace(/\+/g,'＋').replace(/√(\d+)/g,(q,n)=>SQ(n))}</div></foreignObject>`; };
+  if(o.lab) s += `<g class="gs" data-s="${o.ls??o.s}">${o.lab.map(([x,t,an])=>/√/.test(t) ? LBF(x,t,an) : `<text class="pgt" x="${x}" y="${o.ay+9}" text-anchor="${an||'middle'}">${t}</text>`).join('')}</g>`;
   return s;
 }
 
@@ -1937,8 +2149,8 @@ function SUDARE(n, s){
 const RDX = (t, r, s, dn) => `<span class="rdx">${t}<i class="rdl lh" data-s="${s}"></i><span class="rdn${dn?' dn':''} lh" data-s="${s}">${r}</span></span>`;
 
 /* ====== このプリントのスライド ====== */
-const SERIES = [{"f": "1-1_因数分解の復習", "no": "①-1", "t": "因数分解の 復習", "v": "1.5_2026-10-29"}, {"f": "1-2_2次方程式の解", "no": "①-2", "t": "2次方程式の 解", "v": "1.5_2026-10-29"}, {"f": "1-3_2次方程式の解", "no": "①-3", "t": "2次方程式の 解 ②", "v": "1.5_2026-10-29"}, {"f": "1-4_解の公式", "no": "①-4", "t": "解の公式", "v": "1.7_2026-10-30"}, {"f": "1-5_解の公式_重解と解なし", "no": "①-5", "t": "2次方程式の 解 ③", "v": "1.7_2026-10-30"}, {"f": "1-6_実数解の個数", "no": "①-6", "t": "実数解の 個数", "v": "1.7_2026-10-30"}, {"f": "2-1_x軸との共有点", "no": "②-1", "t": "x軸との 共有点", "v": "1.5_2026-10-29"}, {"f": "2-2_x軸との共有点", "no": "②-2", "t": "x軸との 共有点 ②", "v": "1.5_2026-10-29"}, {"f": "2-3_x軸との位置関係", "no": "②-3", "t": "x軸との 位置関係", "v": "1.8_2026-10-30"}, {"f": "3-2_2次不等式_練習編_v2", "no": "③-1", "t": "2次不等式 練習編", "v": "2.9_2026-10-30"}, {"f": "3-1_2次不等式の解法_v2", "no": "③-2", "t": "2次不等式の 解き方", "v": "2.21_2026-10-30"}, {"f": "3-3_2次不等式の解法", "no": "③-3", "t": "2次不等式 いろいろ", "v": "1.7_2026-10-30"}, {"f": "3-4_2次不等式の解法", "no": "③-4", "t": "x² の前が マイナス", "v": "1.7_2026-10-30"}], ME = "1-1_因数分解の復習";
-const VER = '<i class="nv">ver</i> 1.5　2026-10-29';
+const SERIES = [{"f": "1-1_因数分解の復習", "no": "①-1", "t": "因数分解の 復習", "v": "1.6_2026-11-10"}, {"f": "1-2_2次方程式の解", "no": "①-2", "t": "2次方程式の 解", "v": "1.6_2026-11-10"}, {"f": "1-3_2次方程式の解", "no": "①-3", "t": "2次方程式の 解 ②", "v": "1.6_2026-11-10"}, {"f": "1-4_解の公式", "no": "①-4", "t": "解の公式", "v": "1.8_2026-11-10"}, {"f": "1-5_解の公式_重解と解なし", "no": "①-5", "t": "2次方程式の 解 ③", "v": "1.8_2026-11-10"}, {"f": "1-6_実数解の個数", "no": "①-6", "t": "実数解の 個数", "v": "1.8_2026-11-10"}, {"f": "2-1_x軸との共有点", "no": "②-1", "t": "x軸との 共有点", "v": "1.6_2026-11-10"}, {"f": "2-2_x軸との共有点", "no": "②-2", "t": "x軸との 共有点 ②", "v": "1.6_2026-11-10"}, {"f": "2-3_x軸との位置関係", "no": "②-3", "t": "x軸との 位置関係", "v": "1.11_2026-11-10"}, {"f": "3-2_2次不等式_練習編_v2", "no": "③-1", "t": "2次不等式 練習編", "v": "3.19_2026-11-10"}, {"f": "3-1_2次不等式の解法_v2", "no": "③-2", "t": "2次不等式の 解き方", "v": "2.25_2026-11-10"}, {"f": "3-3_2次不等式の解法_v2", "no": "③-3", "t": "2次不等式 いろいろ", "v": "2.5_2026-11-10"}, {"f": "3-4_2次不等式の解法_v2", "no": "③-4", "t": "x² の前が マイナス", "v": "2.4_2026-11-10"}], ME = "1-1_因数分解の復習";
+const VER = '<i class="nv">ver</i> 1.6　2026-11-10';
 
 const KK = KIMATSU + '　①-1';
 const POL = fpol(`x${P2} ＋ 2x − 15`, `(x ＋ 5)(x − 3)`, 'かけ算の形に');
@@ -2438,7 +2650,7 @@ var INK = {on:false, color:'#e0465e', tool:'pen', w:3.5, strokes:{}, cur:null};
 #narhint{position:fixed;left:12px;bottom:52px;z-index:30;background:#fff7e6;border:2px solid #e8a33d;color:#8a5a00;border-radius:999px;padding:8px 18px;font-weight:700;font-size:15px;box-shadow:0 4px 14px rgba(0,0,0,.12);cursor:pointer}
 #narhint[hidden]{display:none}
 </style>
-<script>const NARR = {"dir": "audio/1-1_因数分解の復習/", "s": {"0": {"f": "s01.mp3", "h": "82e262229f", "m": [0.0, 6.785, 9.865]}, "1": {"f": "s02.mp3", "h": "cdf71f36fd", "m": [0.0]}, "2": {"f": "s03.mp3", "h": "4599db3cd3", "m": [0.0, 12.89, 18.885, 26.275, 34.92, 42.585, 46.735]}, "3": {"f": "s04.mp3", "h": "d7361c29bf", "m": [0.0, 7.975, 15.775, 25.995, 34.19]}, "4": {"f": "s05.mp3", "h": "df6450f7a7", "m": [0.0, 9.07, 15.005, 21.345, 29.47, 35.605, 41.91, 46.235, 55.81]}, "5": {"f": "s06.mp3", "h": "90fe7651dd", "m": [0.0, 8.545, 12.195, 19.115, 24.255, 28.255, 35.63, 40.11]}, "6": {"f": "s07.mp3", "h": "49bdbf0243", "m": [0.0]}}};</script>
+<script>const NARR = {"dir": "audio/1-1_因数分解の復習/", "s": {"0": {"f": "s01.mp3", "h": "9f7ce62400", "m": [0.0]}, "1": {"f": "s02.mp3", "h": "cdf71f36fd", "m": [0.0]}, "2": {"f": "s03.mp3", "h": "4599db3cd3", "m": [0.0, 12.89, 18.885, 26.275, 34.92, 42.585, 46.735]}, "3": {"f": "s04.mp3", "h": "d7361c29bf", "m": [0.0, 7.975, 15.775, 25.995, 34.19]}, "4": {"f": "s05.mp3", "h": "df6450f7a7", "m": [0.0, 9.07, 15.005, 21.345, 29.47, 35.605, 41.91, 46.235, 55.81]}, "5": {"f": "s06.mp3", "h": "90fe7651dd", "m": [0.0, 8.545, 12.195, 19.115, 24.255, 28.255, 35.63, 40.11]}, "6": {"f": "s07.mp3", "h": "49bdbf0243", "m": [0.0]}}};</script>
 <script>/* ナレーション（narrate.py が 組みこむ）。NARR = {dir, s:{スライド番号:{f:mp3, h:版, m:[各 番の 始まりの 秒]}}}
    「▶ 音声」で 再生。読み終えた 番で 次の 番へ、スライドの 終わりで 次の スライドへ 自動で 進む。
    再生中に 手で 進める・戻すと、その 番の ところから 読み直す。N キーでも 再生・停止 */

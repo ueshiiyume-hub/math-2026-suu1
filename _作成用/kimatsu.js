@@ -2,12 +2,13 @@
 const KIMATSU = '数学Ⅰ　２学期期末考査まで';
 /* 表紙・おわりの 写真の中身：式が 変わる様子 */
 const fpol = (a,b,msg) => `<div class="fpol"><div class="fa math">${a}</div><div class="fv">↓ ${msg}</div><div class="fb math">${b}</div></div>`;
+/* 表紙は 動かさない（はじめから 全部 出す。先生の 指示 11/10） */
 const coverF = (kicker,title,sub,sub2,pol,cap) => `
 <div class="card abs cover">${TP('pink','left:-26px;top:-4px;transform:rotate(-38deg)')}${TP('mint','right:-26px;bottom:-4px;transform:rotate(-38deg)')}
   <div class="kicker">${kicker}</div>
   <h1>${title}</h1>
-  <div class="r" data-s="1"><div class="sub">${sub}</div></div>
-  <div class="r" data-s="2"><div class="sub2">${sub2}</div></div>
+  <div class="r" data-s="0"><div class="sub">${sub}</div></div>
+  <div class="r" data-s="0"><div class="sub2">${sub2}</div></div>
   ${typeof VER!=='undefined' ? `<div class="ver">${VER}</div>` : ''}
 </div>
 <div class="card abs polaroid">${TP('yellow','left:92px;top:-14px;transform:rotate(-3deg)')}${pol}<div class="cap">${cap}</div></div>`;
