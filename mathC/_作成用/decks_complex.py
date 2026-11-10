@@ -891,8 +891,61 @@ const p3 = HD(NO, '長さと 向きを 比べる', SEC) + `<div class="bd col" s
   `${M`4i`}：長さ ${M`4`}、向き ${M`90^\circ`}。`,
   `<b class="re">長さ</b> を 見比べると…　${M`2\times\sqrt{2}=2\sqrt{2}`}、${M`\sqrt{2}\times\sqrt{2}=2`}、${M`2\times2=4`}。<b>掛け算</b> に なって います。`,
   `<b class="im">向き</b> は…　${M`90^\circ+45^\circ=135^\circ`}、${M`60^\circ+30^\circ=90^\circ`}。<b>足し算</b> に なって います。`,
-  `掛け算は「<b>長さは 掛け算、向きは 足し算</b>」。極形式（長さと 向き）で 見ると、しくみが よく 見えます。`
+  `掛け算は「<b>長さは 掛け算、向きは 足し算</b>」。極形式（長さと 向き）で 見ると、しくみが よく 見えます。（次の ページから、結果の 長さと 向きの 求め方を 1段ずつ くわしく）`
 ]);
+
+/* 表の 1段ずつ くわしく（11/10 の 板書：1段目・3段目。ほかの 段も 同じ ように）
+   結果の 点を とって 直角三角形 → 長さ（三平方）、三角形の 角 → 向き θ
+   [段, 積, 結果, a, b, 横の 辺, 縦の 辺, r の 計算, r（図）, r（TeX）, 三角形の 角（軸の 上は null）, θ, 三角形の 辺の 比 or 軸の 言葉] */
+const LROWS = [
+  [1, String.raw`2\times(1+i)`, '2+2i', 2, 2, '2', '2', String.raw`\sqrt{2^2+2^2}=\sqrt{8}=2\sqrt{2}`, '2√2', String.raw`2\sqrt{2}`, 45, 45, String.raw`1:1:\sqrt{2}`],
+  [2, String.raw`i\times(1+i)`, '-1+i', -1, 1, '1', '1', String.raw`\sqrt{1^2+1^2}=\sqrt{2}`, '√2', String.raw`\sqrt{2}`, 45, 135, String.raw`1:1:\sqrt{2}`],
+  [3, String.raw`(-1)\times(1+i)`, '-1-i', -1, -1, '1', '1', String.raw`\sqrt{1^2+1^2}=\sqrt{2}`, '√2', String.raw`\sqrt{2}`, 45, 225, String.raw`1:1:\sqrt{2}`],
+  [4, String.raw`(1+i)\times(1+i)`, '2i', 0, 2, '', '2', '2', '2', '2', null, 90, '虚軸の 上、真上'],
+  [5, String.raw`i\times(\sqrt{3}+i)`, String.raw`-1+\sqrt{3}i`, -1, S3, '1', '√3', String.raw`\sqrt{1^2+(\sqrt{3})^2}=\sqrt{4}=2`, '2', '2', 60, 120, String.raw`1:\sqrt{3}:2`],
+  [6, String.raw`(1+\sqrt{3}i)(\sqrt{3}+i)`, '4i', 0, 4, '', '4', '4', '4', '4', null, 90, '虚軸の 上、真上'],
+];
+const TH = {1:(b,t)=>`第1象限 なので そのまま ${M(`\\theta=\\IM{${t}^\\circ}`)}`, 2:(b,t)=>`第2象限 なので ${M(`\\theta=180^\\circ-${b}^\\circ=\\IM{${t}^\\circ}`)}`,
+            3:(b,t)=>`第3象限 なので ${M(`\\theta=180^\\circ+${b}^\\circ=\\IM{${t}^\\circ}`)}`};
+function lenPage([k, pr, res, a, b, la, lb, rc, rl, rt, base, t, how]){
+  const x0 = Math.min(a, 0)-1, x1 = Math.max(a, 0)+1, y0 = Math.min(b, 0)-1, y1 = Math.ceil(Math.max(b, 0))+1;
+  const g = PL({x0, x1, y0, y1, u:Math.min(110, Math.floor(480/(x1-x0)), Math.floor(400/(y1-y0))), ticks:false});
+  const q = !base ? 0 : a>0 ? 1 : b>0 ? 2 : 3;
+  const RN = v => v.replace(/\\sqrt\{(\d)\}/g, '√$1').replace(/-/g, '−').replace(/i/, IT('i'));
+  const pt = g.dot(a, b, RN(res), null, {pos:(b<0?'s':'n')+(a<0?'w':'e')});
+  let fig, lines, cm;
+  if(base){
+    const BL = {r:56, lr:26, lab:`${base}°`};
+    const inner = q===1 ? g.ang(base, 2, BL) : q===2 ? g.ang(180, 2, {...BL, from:t}) : g.ang(t, 2, {...BL, from:180});
+    fig = g.walk(a, b, 1, {plain:true, below:b>0, la:la, lb:lb}) + g.ra(a, b, 1) + g.seg(0, 0, a, b, 1, {lab:rl, d:1.2, side:(a>=0)===(b>=0) ? -1 : 1}) + inner
+      + (q===1 ? '' : g.ang(t, 3, {r:30, lr:22, la:q===2 ? 70 : 100})) + pt;
+    lines = [[`r=${rc}`, 1], [`三角形の 角は ${M(`${base}^\\circ`)}（${M(how)}）`, 2], [TH[q](base, t), 3]];
+    cm = [`結果の 点 ${M(res)} を とり、原点と 結んで 直角三角形を 作ります。`,
+      `横 ${M(la)}、縦 ${M(lb.replace('√3', '\\sqrt{3}'))} の 直角三角形。三平方の 定理で、長さは ${M(`r=${rc}`)}。`,
+      `辺の 比が ${M(how)} なので、原点の ところの 角は ${M(`${base}^\\circ`)}。`,
+      `向き θ は 実軸の 正の 向きから 左回りに 測ります。${q===1 ? `第1象限 なので そのまま ${M(`${t}^\\circ`)}。` : `${M(`${t}^\\circ`)} です。`}`,
+      `表の ${k}段目：長さ ${M(rt)}、向き ${M(`${t}^\\circ`)}。`];
+  } else {
+    fig = g.walk(0, b, 1, {la:'', lb:lb}) + g.ang(90, 2, {r:36, lr:22}) + pt;
+    lines = [[`r=${rc}`, 1], [`${how} なので ${M(`\\theta=\\IM{${t}^\\circ}`)}`, 2]];
+    cm = [`結果の 点 ${M(res)} を とります。`,
+      `原点から 真上に ${M(rt)} 進んだ 点 なので、長さは ${M(`r=${rt}`)}。`,
+      `点は ${how}。だから 向きは ${M(`${t}^\\circ`)}。`,
+      `表の ${k}段目：長さ ${M(rt)}、向き ${M(`${t}^\\circ`)}。`];
+  }
+  const fin = lines.length + 1;
+  return HD(NO, `表の ${k}段目　くわしく`, SEC) + `<div class="bd">
+  <div class="l">
+    <div class="big" style="font-size:34px">${M(`${pr}=\\DP{${res}}`)}</div>
+    <div class="calc" style="font-size:28px;gap:12px">
+      ${lines.map(([x, n])=>`<div data-s="${n}">${x.startsWith('r=') ? M(x.replace(/=([^=]*)$/, '=\\RE{$1}')) : x}</div>`).join('')}
+      <div data-s="${fin}" class="hl2">長さ ${M(`\\RE{${rt}}`)}、向き ${M(`\\IM{${t}^\\circ}`)}</div>
+    </div>
+  </div>
+  <div class="r">${g.svg(fig)}</div>
+</div>` + CAP(cm);
+}
+const LP = LROWS.map(lenPage);
 
 /* 図で 確かめる */
 const gm = PL({x0:-1, x1:3, y0:-1, y1:5, u:66});
@@ -925,7 +978,9 @@ const p5 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:30px">
 
 const DECK = {title:'②-1 掛け算と長さ・向き', pages:[
   {name:'表紙', html:p0}, {name:'i を 掛けると', html:p1}, {name:'積を 計算する', html:p2},
-  {name:'長さと 向きを 比べる', html:p3}, {name:'図で 確かめる', html:p4}, {name:'まとめ', html:p5},
+  {name:'長さと 向きを 比べる', html:p3},
+  ...LP.map((h, i)=>({name:`表の ${i+1}段目　くわしく`, html:h, add:'11/10'})),
+  {name:'図で 確かめる', html:p4}, {name:'まとめ', html:p5},
 ]};
 ''')
 
