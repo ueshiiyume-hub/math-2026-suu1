@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>２学期期末考査まで No.10〜16 解答</title>
+<!-- プリントの 解答（kaitou.py が 作る）。プリントの ページを そのまま 背景に して、答えを 同じ 場所に 重ねる -->
+<style>
+:root{--bg:#eef1f4;--paper:#fff;--ink:#22303c;--muted:#5f6d7a;--r-bd:#c9d2db;--red:#a01c1c;--chip:#fff}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#171c22;--paper:#232a32;--ink:#e6ebf0;--muted:#9aa7b4;--r-bd:#3a4552;--red:#ff8a80;--chip:#2b333c}}
+:root[data-theme="dark"]{--bg:#171c22;--paper:#232a32;--ink:#e6ebf0;--muted:#9aa7b4;--r-bd:#3a4552;--red:#ff8a80;--chip:#2b333c}
+*{box-sizing:border-box}
+html{scroll-padding-top:70px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif}
+#jump{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--r-bd);box-shadow:0 2px 6px rgba(0,0,0,.06);padding:8px 16px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+#jump .ttl{font-weight:700;font-size:15px;margin-right:auto}
+#jump a,#jump button.b{font:inherit;font-size:14px;border:1.5px solid var(--r-bd);background:var(--chip);color:var(--ink);border-radius:999px;padding:5px 12px;text-decoration:none;cursor:pointer;white-space:nowrap}
+#jump button.b.on{background:var(--red);border-color:var(--red);color:#fff}
+.lead{max-width:900px;margin:14px auto 0;padding:0 16px;font-size:14px;color:var(--muted);line-height:1.7}
+.lead b{color:var(--red)}
+.top{display:block;max-width:900px;margin:6px auto 0;padding:0 16px;font-size:14px;color:var(--muted)}
+.wrap{max-width:900px;margin:0 auto;padding:12px 16px 40px}
+.zoom .wrap{max-width:none;overflow-x:auto}
+.sheet{position:relative;width:100%;margin:0 auto 22px;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.15);border-radius:2px}
+.zoom .sheet{width:200%;max-width:1700px}
+.sheet img{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;user-select:none}
+.sheet img.ans{transition:opacity .15s}
+.hit{position:absolute;border:0;background:transparent;padding:0;margin:0;cursor:pointer;border-radius:4px}
+.hit:focus-visible{outline:2px solid #3b78c2}
+/* かくした 答え：場所が 分かるように 点線の 枠だけ 出す */
+.hit.shut{background:rgba(255,250,240,.88);border:1.5px dashed #c97a1f}
+.hit.shut::after{content:"？";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#c97a1f;font-weight:700;font-size:clamp(10px,2.2vw,18px)}
+.no{font-size:13px;color:var(--muted);margin:0 0 4px 2px}
+</style>
+<!-- 明るい／暗い の 切りかえ（スマホでも 押せる ボタン）。選んだ ものは この サイト 全体で 覚える -->
+<style>
+#themebtn{position:fixed;z-index:26;top:10px;width:40px;height:40px;border-radius:50%;border:2px solid var(--r-bd);background:var(--paper);color:var(--ink);font-size:20px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;box-shadow:0 2px 6px rgba(0,0,0,.12)}
+#themebtn.l{left:12px} #themebtn.r{right:12px}
+#themebtn.inj{position:static;width:32px;height:32px;font-size:16px;box-shadow:0 2px 6px rgba(0,0,0,.1)}
+</style>
+<script>
+(function(){
+  var d=document.documentElement;
+  try{ var t=localStorage.getItem('theme'); if(t) d.dataset.theme=t; }catch(e){}
+  function isDark(){ return d.dataset.theme ? d.dataset.theme==='dark' : matchMedia('(prefers-color-scheme: dark)').matches; }
+  window.toggleTheme=function(){ d.dataset.theme = isDark() ? 'light' : 'dark'; try{ localStorage.setItem('theme', d.dataset.theme); }catch(e){} paint(); };
+  function paint(){ var b=document.getElementById('themebtn'); if(b){ b.textContent = isDark() ? '☀' : '🌙'; b.title = isDark() ? '明るく する' : '暗く する'; } }
+  document.addEventListener('DOMContentLoaded',function(){
+    var b=document.createElement('button'); b.id='themebtn'; b.className=window.THEME_BTN_SIDE||'l';
+    b.addEventListener('click',function(e){ e.stopPropagation(); e.preventDefault(); toggleTheme(); });
+    var j=document.getElementById('jump');   // スライドでは 左下の「目次」の 横に 置く
+    if(j){ b.className='inj'; j.insertBefore(b, j.querySelector('.tocp')); } else document.body.appendChild(b);
+    paint();
+  });
+})();
+</script>
+
+</head>
+<body>
+<div id="jump">
+  <span class="ttl">２学期期末考査まで No.10〜16 解答</span>
+  <span id="nos"></span>
+  <button class="b" id="hide" type="button">答えを かくす</button>
+  <button class="b" id="big" type="button">大きく</button>
+</div>
+<a class="top" href="目次.html">← 解答の 目次へ</a>
+<p class="lead"><b>赤い 字</b>が 答えです。プリントと 同じ 場所に 書いて あるよ。<br>
+「答えを かくす」を 押すと、答えの 場所が <span style="color:#c97a1f;font-weight:700">？</span> の 枠に なります。自分で 解いてから 枠を タップすると、その 枠の 答えが 見られます（もう一度 タップで かくす）。</p>
+<div class="wrap" id="wrap"></div>
+<script>
+const PAGES = [{"no": 10, "w": 595.3200073242188, "h": 841.9199829101562, "g": [{"f": "p10_01.svg", "label": "③-1 塗る ところ", "p": [[197.4, 89.8, 244.4, 118.2], [197.4, 143.8, 244.4, 172.2], [197.4, 197.8, 297.4, 226.2], [197.4, 251.8, 297.4, 280.2]]}, {"f": "p10_02.svg", "label": "③-1 ⑴", "p": [[85.5, 335.2, 144.0, 397.8], [62.8, 401.8, 170.2, 436.0]]}, {"f": "p10_03.svg", "label": "③-1 ⑵", "p": [[205.6, 335.2, 264.1, 397.8], [182.9, 401.8, 290.4, 436.0]]}, {"f": "p10_04.svg", "label": "③-1 ⑶", "p": [[325.7, 335.2, 384.2, 397.8], [303.0, 401.8, 410.4, 436.0]]}, {"f": "p10_05.svg", "label": "③-1 ⑷", "p": [[445.8, 335.2, 504.3, 397.8], [423.1, 401.8, 530.5, 436.0]]}, {"f": "p10_06.svg", "label": "③-1 ⑸", "p": [[85.5, 460.1, 144.0, 523.8], [62.8, 545.8, 170.2, 580.0]]}, {"f": "p10_07.svg", "label": "③-1 ⑹", "p": [[205.6, 460.1, 264.1, 523.8], [182.9, 545.8, 290.4, 580.0]]}, {"f": "p10_08.svg", "label": "③-1 ⑺", "p": [[325.7, 460.1, 384.2, 523.8], [303.0, 545.8, 410.4, 580.0]]}, {"f": "p10_09.svg", "label": "③-1 ⑻", "p": [[445.8, 460.1, 504.3, 523.8], [423.1, 545.8, 530.5, 580.0]]}, {"f": "p10_10.svg", "label": "③-1 ⑼", "p": [[89.7, 605.7, 138.7, 674.5], [62.8, 689.8, 170.2, 724.0]]}, {"f": "p10_11.svg", "label": "③-1 ⑽", "p": [[209.7, 605.7, 258.8, 674.5], [182.9, 689.8, 290.4, 724.0]]}, {"f": "p10_12.svg", "label": "③-1 ⑾", "p": [[329.8, 605.7, 378.9, 674.5], [303.0, 689.8, 410.4, 724.0]]}, {"f": "p10_13.svg", "label": "③-1 ⑿", "p": [[449.9, 605.9, 499.0, 674.3], [423.1, 689.8, 530.5, 724.0]]}]}, {"no": 11, "w": 595.3200073242188, "h": 841.9199829101562, "g": [{"f": "p11_14.svg", "label": "プリント問題③-1 ⑴", "p": [[86.0, 101.2, 144.4, 163.8], [63.3, 167.8, 170.8, 202.0]]}, {"f": "p11_15.svg", "label": "プリント問題③-1 ⑵", "p": [[205.9, 101.2, 264.4, 163.8], [183.3, 167.8, 290.7, 202.0]]}, {"f": "p11_16.svg", "label": "プリント問題③-1 ⑶", "p": [[325.9, 101.2, 384.4, 163.8], [303.2, 167.8, 410.6, 202.0]]}, {"f": "p11_17.svg", "label": "プリント問題③-1 ⑷", "p": [[445.9, 101.2, 504.4, 163.8], [423.2, 167.8, 530.7, 202.0]]}, {"f": "p11_18.svg", "label": "プリント問題③-1 ⑸", "p": [[86.0, 226.1, 144.4, 289.8], [63.3, 311.8, 170.8, 346.0]]}, {"f": "p11_19.svg", "label": "プリント問題③-1 ⑹", "p": [[205.9, 226.1, 264.4, 289.8], [183.3, 311.8, 290.7, 346.0]]}, {"f": "p11_20.svg", "label": "プリント問題③-1 ⑺", "p": [[325.9, 226.1, 384.4, 289.8], [303.2, 311.8, 410.6, 346.0]]}, {"f": "p11_21.svg", "label": "プリント問題③-1 ⑻", "p": [[445.9, 226.1, 504.4, 289.8], [423.2, 311.8, 530.7, 346.0]]}, {"f": "p11_22.svg", "label": "プリント問題③-1 ⑼", "p": [[90.1, 371.7, 139.1, 440.5], [63.3, 455.8, 170.8, 490.0]]}, {"f": "p11_23.svg", "label": "プリント問題③-1 ⑽", "p": [[210.0, 371.7, 259.1, 440.5], [183.3, 455.8, 290.7, 490.0]]}, {"f": "p11_24.svg", "label": "プリント問題③-1 ⑾", "p": [[330.0, 371.7, 379.1, 440.5], [303.2, 455.8, 410.6, 490.0]]}, {"f": "p11_25.svg", "label": "プリント問題③-1 ⑿", "p": [[450.0, 371.9, 499.1, 440.3], [423.2, 455.8, 530.7, 490.0]]}, {"f": "p11_26.svg", "label": "プリント問題③-1 ⒀", "p": [[85.9, 511.8, 144.4, 563.6], [63.3, 581.8, 170.8, 616.0]]}, {"f": "p11_27.svg", "label": "プリント問題③-1 ⒁", "p": [[205.9, 512.4, 264.4, 565.2], [183.3, 581.8, 290.7, 616.0]]}, {"f": "p11_28.svg", "label": "プリント問題③-1 ⒂", "p": [[330.0, 514.4, 379.1, 569.6], [303.2, 581.8, 410.6, 616.0]]}, {"f": "p11_29.svg", "label": "プリント問題③-1 ⒃", "p": [[445.9, 511.8, 504.3, 563.6], [423.2, 581.8, 530.7, 616.0]]}, {"f": "p11_30.svg", "label": "プリント問題③-1 ⒄", "p": [[86.0, 656.4, 144.4, 709.2], [63.3, 725.8, 170.8, 760.0]]}, {"f": "p11_31.svg", "label": "プリント問題③-1 ⒅", "p": [[210.0, 658.4, 259.1, 713.6], [183.3, 725.8, 290.7, 760.0]]}, {"f": "p11_32.svg", "label": "プリント問題③-1 ⒆", "p": [[325.9, 656.4, 384.4, 709.2], [303.2, 725.8, 410.6, 760.0]]}, {"f": "p11_33.svg", "label": "プリント問題③-1 ⒇", "p": [[445.9, 661.8, 504.3, 713.5], [423.2, 725.8, 530.7, 760.0]]}]}, {"no": 12, "w": 595.3200073242188, "h": 841.9199829101562, "g": [{"f": "p12_34.svg", "label": "③-2 2次不等式の解き方", "p": [[182.9, 109.7, 302.7, 138], [163.5, 146.1, 266.2, 174.5], [244.9, 182.1, 282.6, 210.4], [370.7, 182.1, 408.4, 210.4], [192, 218.1, 229.8, 246.4]]}, {"f": "p12_35.svg", "label": "③-2 ⑴ Step❶", "p": [[148, 309, 326, 331], [148, 335, 326, 357], [148, 361, 326, 383], [148, 387, 326, 409], [277.3, 300.4, 314.7, 307], [374.0, 309, 466.0, 418.5]]}, {"f": "p12_36.svg", "label": "③-2 ⑴ Step❷", "p": [[161.9, 437.9, 242.1, 523.8]]}, {"f": "p12_37.svg", "label": "③-2 ⑴ Step❸", "p": [[323.2, 467.2, 507.3, 498.3]]}, {"f": "p12_38.svg", "label": "③-2 ⑵ Step❶", "p": [[148, 561, 326, 583], [148, 587, 326, 609], [148, 613, 326, 635], [148, 639, 326, 661], [277.3, 552.4, 314.7, 559], [374.0, 561, 466.0, 670.5]]}, {"f": "p12_39.svg", "label": "③-2 ⑵ Step❷", "p": [[161.9, 689.9, 242.1, 775.8]]}, {"f": "p12_40.svg", "label": "③-2 ⑵ Step❸", "p": [[323.2, 719.2, 507.3, 750.3]]}]}, {"no": 13, "w": 595.3200073242188, "h": 841.9199829101562, "g": [{"f": "p13_41.svg", "label": "③-3 例⑴", "p": [[68, 134, 132.0, 145.4], [68, 154.4, 138.9, 176.4], [68, 185.4, 161.1, 207.4], [202.6, 132, 227.8, 165.9], [260.3, 131, 340.5, 241.6], [359.6, 207, 527.3, 238.2]]}, {"f": "p13_42.svg", "label": "③-3 例⑵", "p": [[68, 296, 132.0, 307.4], [68, 316.4, 117.1, 327.8], [68, 336.8, 137.8, 346.7], [252.2, 293, 348.6, 381.6], [359.6, 369, 527.3, 400.2]]}, {"f": "p13_43.svg", "label": "③-3 例⑶", "p": [[68, 458, 132.0, 469.4], [68, 478.4, 117.1, 489.8], [68, 498.8, 131.9, 508.7], [252.2, 455, 348.6, 543.6], [359.6, 531, 527.3, 562.2]]}, {"f": "p13_44.svg", "label": "③-3 例⑷", "p": [[68, 620, 132.0, 631.4], [68, 640.4, 194.9, 662.4], [68, 671.4, 197.1, 681.3], [254.3, 617, 346.5, 695.6], [359.6, 693, 527.3, 724.2]]}]}, {"no": 14, "w": 595.3200073242188, "h": 841.9199829101562, "g": [{"f": "p14_45.svg", "label": "プリント問題③-3 ⑴", "p": [[68.1, 96.5, 132.1, 107.9], [68.1, 116.9, 142.4, 126.8], [68.1, 135.8, 112.4, 145.6], [204.8, 135.5, 279.4, 232.5], [68.1, 244.5, 181.2, 255.8]]}, {"f": "p14_46.svg", "label": "プリント問題③-3 ⑵", "p": [[308.9, 96.5, 378.2, 107.9], [308.9, 116.9, 388.4, 126.8], [308.9, 135.8, 350.9, 156.1], [445.6, 135.5, 520.2, 232.5], [308.9, 244.5, 393.7, 267.7]]}, {"f": "p14_47.svg", "label": "プリント問題③-3 ⑶", "p": [[68.1, 330.5, 132.1, 341.9], [68.1, 350.9, 139.0, 372.9], [68.1, 381.9, 121.4, 403.9], [204.8, 369.5, 279.4, 466.5], [68.1, 478.5, 220.5, 503.6]]}, {"f": "p14_48.svg", "label": "プリント問題③-3 ⑷", "p": [[308.9, 330.5, 372.9, 341.9], [308.9, 350.9, 375.1, 372.9], [308.9, 381.9, 407.3, 403.9], [306.5, 422.5, 334.7, 456.4], [445.6, 369.5, 520.2, 466.5], [308.9, 478.5, 474.4, 491.9]]}, {"f": "p14_49.svg", "label": "プリント問題③-3 ⑸", "p": [[68.1, 582.5, 115.7, 593.9], [68.1, 602.9, 118.9, 612.8], [68.1, 621.8, 106.4, 631.6], [204.8, 621.5, 279.4, 718.5], [68.1, 730.5, 159.2, 741.8]]}, {"f": "p14_50.svg", "label": "プリント問題③-3 ⑹", "p": [[308.9, 582.5, 351.0, 593.9], [308.9, 602.9, 383.2, 612.8], [308.9, 621.8, 347.2, 631.6], [445.6, 621.5, 520.2, 718.5], [308.9, 730.5, 404.8, 741.8]]}]}, {"no": 15, "w": 595.3200073242188, "h": 841.9199829101562, "g": [{"f": "p15_51.svg", "label": "プリント問題③-3 ⑺", "p": [[68.1, 78.5, 132.1, 89.9], [68.1, 98.9, 117.2, 110.3], [68.1, 119.3, 137.9, 129.2], [198.4, 117.5, 285.8, 192.5], [68.1, 226.5, 218.9, 237.8]]}, {"f": "p15_52.svg", "label": "プリント問題③-3 ⑻", "p": [[308.9, 78.5, 372.9, 89.9], [308.9, 98.9, 358.0, 110.3], [308.9, 119.3, 378.7, 129.2], [439.2, 117.5, 526.6, 192.5], [308.9, 226.5, 410.9, 237.8]]}, {"f": "p15_53.svg", "label": "プリント問題③-3 ⑼", "p": [[68.1, 330.5, 132.1, 341.9], [68.1, 350.9, 117.2, 362.3], [68.1, 371.3, 132.0, 381.2], [198.4, 369.5, 285.8, 444.5], [68.1, 478.5, 134.1, 489.8]]}, {"f": "p15_54.svg", "label": "プリント問題③-3 ⑽", "p": [[308.9, 330.5, 372.9, 341.9], [308.9, 350.9, 358.0, 362.3], [308.9, 371.3, 372.8, 381.2], [439.2, 369.5, 526.6, 444.5], [308.9, 478.5, 364.0, 489.8]]}, {"f": "p15_55.svg", "label": "プリント問題③-3 ⑾", "p": [[68.1, 564.5, 132.1, 575.9], [68.1, 584.9, 143.8, 606.9], [68.1, 615.9, 122.0, 637.9], [68.1, 646.9, 197.2, 656.8], [201.7, 603.5, 282.5, 668.5], [68.1, 712.5, 170.1, 723.8]]}, {"f": "p15_56.svg", "label": "プリント問題③-3 ⑿", "p": [[308.9, 564.5, 372.9, 575.9], [308.9, 584.9, 384.6, 606.9], [308.9, 615.9, 362.8, 637.9], [308.9, 646.9, 438.0, 656.8], [442.5, 603.5, 523.3, 668.5], [308.9, 712.5, 374.9, 723.8]]}]}, {"no": 16, "w": 595.3200073242188, "h": 841.9199829101562, "g": [{"f": "p16_57.svg", "label": "③-4 解き方", "p": [[88.5, 125.4, 172.5, 131.4], [218.2, 131.4, 255.9, 159.7], [73.3, 144.6, 183.9, 172.9], [230.0, 171.4, 370.0, 178]]}, {"f": "p16_58.svg", "label": "③-4 例⑴", "p": [[62.7, 231.5, 199.9, 263.4], [68, 272, 132.0, 283.4], [68, 292.4, 143.7, 314.4], [68, 323.4, 161.1, 345.4], [202.6, 270, 227.8, 303.9], [259.5, 269, 339.7, 379.6], [358.9, 345.3, 526.6, 376.4]]}, {"f": "p16_59.svg", "label": "プリント問題③-4 ⑴", "p": [[68.1, 459.5, 132.8, 470.9], [67.1, 462.1, 133.8, 468.1], [68.1, 477.5, 126.9, 488.9], [68.1, 497.9, 142.4, 507.8], [68.1, 516.8, 106.4, 526.6], [204.8, 516.5, 279.4, 613.5], [68.1, 625.5, 148.7, 636.8]]}, {"f": "p16_60.svg", "label": "プリント問題③-4 ⑵", "p": [[308.9, 459.5, 383.4, 470.9], [307.9, 462.1, 384.4, 468.1], [308.9, 477.5, 377.5, 488.9], [308.9, 497.9, 369.8, 519.9], [308.9, 528.9, 390.8, 550.9], [306.5, 569.5, 334.7, 603.4], [445.6, 516.5, 520.2, 613.5], [308.9, 625.5, 460.9, 638.9]]}]}];
+const V = '1.0_2026-11-11';
+const wrap = document.getElementById('wrap'), nos = document.getElementById('nos');
+const hits = [];
+PAGES.forEach((p, i) => {
+  const id = 'p' + p.no;
+  nos.insertAdjacentHTML('beforeend', `<a href="#${id}">No.${p.no}</a> `);
+  const pct = (v, w) => (v / w * 100).toFixed(3) + '%';
+  let h = `<div class="no">No.${p.no}</div><div class="sheet" id="${id}" style="aspect-ratio:${p.w}/${p.h}">`;
+  h += `<img src="svg/p${p.no}.svg?v=${V}" alt="プリント No.${p.no}" loading="${i ? 'lazy' : 'eager'}">`;
+  // 答えは 枠（穴うめの 箱・書く 行）ごとに、問題の SVG を その 枠の 形に 切りぬいて 重ねる
+  p.g.forEach(g => g.p.forEach(([x0, y0, x1, y1]) => {
+    const pad = 2, L = x0 - pad, T = y0 - pad, R = x1 + pad, B = y1 + pad;
+    h += `<img class="ans" src="svg/${g.f}?v=${V}" alt="" style="clip-path:inset(${pct(T, p.h)} ${pct(p.w - R, p.w)} ${pct(p.h - B, p.h)} ${pct(L, p.w)})">`;
+    h += `<button class="hit" type="button" aria-label="${g.label} の 答え" title="${g.label}" style="left:${pct(L, p.w)};top:${pct(T, p.h)};width:${pct(R - L, p.w)};height:${pct(B - T, p.h)}"></button>`;
+  }));
+  wrap.insertAdjacentHTML('beforeend', h + '</div>');
+});
+// 答えの 画像と、その 場所の ボタンを 組に する
+document.querySelectorAll('.sheet').forEach(s => {
+  const im = s.querySelectorAll('img.ans'), bt = s.querySelectorAll('.hit');
+  bt.forEach((b, k) => { hits.push({ b, im: im[k] }); });
+});
+function show(o, on) { o.im.style.opacity = on ? 1 : 0; o.b.classList.toggle('shut', !on); }
+hits.forEach(o => o.b.addEventListener('click', () => show(o, o.b.classList.contains('shut'))));
+const hideBtn = document.getElementById('hide');
+let hidden = false;
+function setHidden(v) {
+  hidden = v; hits.forEach(o => show(o, !v));
+  hideBtn.textContent = v ? '答えを 全部 見せる' : '答えを かくす';
+  hideBtn.classList.toggle('on', v);
+}
+hideBtn.addEventListener('click', () => setHidden(!hidden));
+const bigBtn = document.getElementById('big');
+function setBig(v) {
+  document.body.classList.toggle('zoom', v);
+  bigBtn.textContent = v ? 'もとの 大きさ' : '大きく';
+  bigBtn.classList.toggle('on', v);
+  try { localStorage.setItem('kaitou-big', v ? '1' : ''); } catch (e) {}
+}
+bigBtn.addEventListener('click', () => setBig(!document.body.classList.contains('zoom')));
+try { if (localStorage.getItem('kaitou-big')) setBig(true); } catch (e) {}
+</script>
+</body>
+</html>
