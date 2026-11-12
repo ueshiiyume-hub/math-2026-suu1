@@ -314,6 +314,11 @@ SHEETS.append(dict(no='③-1', title='部分積分の不定積分', boxes=[('部
   groups=[('例', conv(A['③-1']['ex'], [r'\int x\sin x\,dx'])),
           ('問10（ノート）', conv(A['③-1']['q'][0], [r'\int x\cos x\,dx', r'\int x\sin3x\,dx', r'\int(2x+1)\sin x\,dx', r'\int(x+1)\cos2x\,dx']))]))
 SHEETS[-1]['groups'][0][1][0]['notes'].insert(0, N('【選び方】', ['微分する方を $x$ とし，積分する方を $\\sin x$ とすると，', '「微分した方」と「積分した方」の積は $1\\cdot(-\\cos x)=-\\cos x$ となり，積分しやすそう。']))
+SHEETS[-1]['groups'][0][1][0]['notes'].append(N('【sin と cos の 微分・積分】', [
+    '$\\sin x$，$\\cos x$，$-\\sin x$，$-\\cos x$ を縦に並べて輪にする',
+    '微分は 1つ 下へ：$\\sin x\\to\\cos x\\to-\\sin x\\to-\\cos x\\to\\sin x$',
+    '積分は 1つ 上へ：$\\sin x\\to-\\cos x\\to-\\sin x\\to\\cos x\\to\\sin x$',
+    '→ $\\int\\sin x\\,dx=-\\cos x+C$（上がないので ぐるっと 回る）'], '11/12'))
 
 SHEETS.append(dict(no='③-2', title='部分積分の不定積分（eˣ・log x）', boxes=[],
   groups=[('例', conv(A['③-2']['ex'], [r'\int xe^x\,dx', r'\int\log x\,dx'])),

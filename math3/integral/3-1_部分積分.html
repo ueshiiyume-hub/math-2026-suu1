@@ -280,8 +280,8 @@ body.portrait #inkback{left:12px;bottom:14px;height:54px;font-size:18px}
 <div id="ui"></div>
 <div id="jump"></div>
 <script>
-const VER = 'ver 1.4　2026-10-29';
-const SERIES = [{"f": "1-1_xnの不定積分", "no": "①-1", "t": "xⁿ の不定積分", "v": "1.4_2026-10-29"}, {"f": "1-2_分子が多項式の場合", "no": "①-2", "t": "分子が多項式の場合", "v": "1.9_2026-10-29"}, {"f": "1-3_三角関数の不定積分", "no": "①-3", "t": "三角関数の不定積分", "v": "1.6_2026-10-29"}, {"f": "1-4_指数関数の不定積分", "no": "①-4", "t": "指数関数の不定積分", "v": "1.4_2026-10-29"}, {"f": "1-5_合成関数の不定積分", "no": "①-5", "t": "合成関数の不定積分", "v": "1.5_2026-10-29"}, {"f": "2-1_置換積分_1次式", "no": "②-1", "t": "置換積分（1次式を t に）", "v": "1.8_2026-10-29"}, {"f": "2-2_置換積分_根号", "no": "②-2", "t": "置換積分（√ を t に）", "v": "1.4_2026-10-29"}, {"f": "2-3_置換積分_xで微分", "no": "②-3", "t": "置換積分（x で 微分する 型）", "v": "1.4_2026-10-29"}, {"f": "2-4_置換積分_分子が分母の微分", "no": "②-4", "t": "置換積分（分子が 分母の 微分）", "v": "1.4_2026-10-29"}, {"f": "3-1_部分積分", "no": "③-1", "t": "部分積分法", "v": "1.4_2026-10-29"}, {"f": "3-2_部分積分_指数と対数", "no": "③-2", "t": "部分積分（eˣ・log x）", "v": "1.4_2026-10-29"}, {"f": "4-1_分数関数の不定積分", "no": "④-1", "t": "分数関数の不定積分", "v": "1.4_2026-10-29"}, {"f": "4-2_半角と積和の公式", "no": "④-2", "t": "半角の公式・積和の公式", "v": "1.4_2026-10-29"}, {"f": "4-3_三角関数_次数を下げる", "no": "④-3", "t": "三角関数の不定積分（次数を下げる）", "v": "1.4_2026-10-29"}, {"f": "4-4_三角関数_積を和に", "no": "④-4", "t": "三角関数の不定積分（積を和に）", "v": "1.4_2026-10-29"}], ME = "3-1_部分積分";
+const VER = 'ver 1.5　2026-11-12';
+const SERIES = [{"f": "1-1_xnの不定積分", "no": "①-1", "t": "xⁿ の不定積分", "v": "1.4_2026-10-29"}, {"f": "1-2_分子が多項式の場合", "no": "①-2", "t": "分子が多項式の場合", "v": "1.9_2026-10-29"}, {"f": "1-3_三角関数の不定積分", "no": "①-3", "t": "三角関数の不定積分", "v": "1.6_2026-10-29"}, {"f": "1-4_指数関数の不定積分", "no": "①-4", "t": "指数関数の不定積分", "v": "1.4_2026-10-29"}, {"f": "1-5_合成関数の不定積分", "no": "①-5", "t": "合成関数の不定積分", "v": "1.5_2026-10-29"}, {"f": "2-1_置換積分_1次式", "no": "②-1", "t": "置換積分（1次式を t に）", "v": "1.9_2026-11-02"}, {"f": "2-2_置換積分_根号", "no": "②-2", "t": "置換積分（√ を t に）", "v": "1.5_2026-11-02"}, {"f": "2-3_置換積分_xで微分", "no": "②-3", "t": "置換積分（x で 微分する 型）", "v": "1.6_2026-11-09"}, {"f": "2-4_置換積分_分子が分母の微分", "no": "②-4", "t": "置換積分（分子が 分母の 微分）", "v": "1.4_2026-10-29"}, {"f": "3-1_部分積分", "no": "③-1", "t": "部分積分法", "v": "1.5_2026-11-12"}, {"f": "3-2_部分積分_指数と対数", "no": "③-2", "t": "部分積分（eˣ・log x）", "v": "1.4_2026-10-29"}, {"f": "4-1_分数関数の不定積分", "no": "④-1", "t": "分数関数の不定積分", "v": "1.4_2026-10-29"}, {"f": "4-2_半角と積和の公式", "no": "④-2", "t": "半角の公式・積和の公式", "v": "1.4_2026-10-29"}, {"f": "4-3_三角関数_次数を下げる", "no": "④-3", "t": "三角関数の不定積分（次数を下げる）", "v": "1.4_2026-10-29"}, {"f": "4-4_三角関数_積を和に", "no": "④-4", "t": "三角関数の不定積分（積を和に）", "v": "1.4_2026-10-29"}], ME = "3-1_部分積分";
 /* ====== 数学Ⅲ の 部品（数学C の parts.js を 元に した 別もの） ====== */
 
 /* 数式：M`\int x^3\,dx`（\ を そのまま 書ける）。KaTeX で かく。D は 大きい 形（\displaystyle：計算の 行に 使う） */
@@ -377,6 +377,42 @@ const p2 = HD(NO, '選び方', SEC) + `<div class="bd col" style="gap:22px">
   `最後に 残る ${M`\int f'(x)g(x)\,dx`} が 積分できれば 成功です。先に 確かめておきます。`
 ]);
 
+// 11/12 の 板書：sin → cos → −sin → −cos の 輪（微分は 下へ、積分は 上へ）
+const CY = (y, tex) => `<div style="position:absolute;left:230px;top:${y}px;transform:translate(-50%,-50%);font-size:36px;white-space:nowrap">${M(tex)}</div>`;
+const CYAR = (n, x, y1, y2, c, up) => `<line data-s="${n}" x1="${x}" y1="${up?y2:y1}" x2="${x}" y2="${up?y1:y2}" style="stroke:var(--${c})" stroke-width="3.5" marker-end="url(#cy${c})"/>`;
+const CYMK = c => `<marker id="cy${c}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--${c})"/></marker>`;
+const p2c = HD(NO, 'sin と cos の 微分・積分', SEC) + `<div class="bd">
+  <style>body.portrait .cyfig{transform:scale(.78);margin:-52px 0}</style>
+  <div class="r cyfig" style="width:460px;height:470px;position:relative">
+    <svg width="460" height="470" viewBox="0 0 460 470" style="position:absolute;left:0;top:0;overflow:visible" fill="none">
+      <defs>${CYMK('a')}${CYMK('b')}</defs>
+      ${[[80,140],[190,250],[300,360]].map(([a,b]) => CYAR(1, 205, a, b, 'a', false) + CYAR(3, 255, a, b, 'b', true)).join('')}
+      <path data-s="2" d="M196,410 C30,480 0,-10 196,26" style="stroke:var(--a)" stroke-width="3.5" marker-end="url(#cya)"/>
+      <path data-s="4" d="M264,26 C460,-10 430,480 264,410" style="stroke:var(--b)" stroke-width="3.5" marker-end="url(#cyb)"/>
+    </svg>
+    ${CY(55, String.raw`\sin x`)}${CY(165, String.raw`\cos x`)}${CY(275, String.raw`-\sin x`)}${CY(385, String.raw`-\cos x`)}
+    <div data-s="1" style="position:absolute;left:150px;top:110px;transform:translate(-50%,-50%);font-size:24px;font-weight:700;color:var(--a)">微分</div>
+    <div data-s="3" style="position:absolute;left:310px;top:110px;transform:translate(-50%,-50%);font-size:24px;font-weight:700;color:var(--b)">積分</div>
+  </div>
+  <div class="l" style="gap:14px;max-width:560px">
+    ${PT(2, '<span style="color:var(--a)">微分</span> は 下へ', `${M`-\cos x`} の 下は ない → ぐるっと 回って ${M`\sin x`} に 戻る`)}
+    ${PT(5, '<span style="color:var(--b)">積分</span> は 上へ', `<div class="calc" style="font-size:26px;gap:6px">
+      <div>${D`\int\cos x\,dx=\DP{\sin x}+C`}</div>
+      <div data-s="6">${D`\int\sin x\,dx=\DP{-\cos x}+C`}</div></div>
+      <div data-s="6" style="font-size:19px">${M`\sin x`} の 上は ない → ぐるっと 回って ${M`-\cos x`}</div>`)}
+    ${PT(7, '部分積分で 使う', `例 ${M`\int x\B{\sin x}\,dx`} の <b class="b">積分する方</b><br>${M`\B{\sin x}`} → 上へ → ${M`\B{-\cos x}`}`)}
+  </div>
+</div>` + CAP([
+  `授業の 板書です。${M`\sin x`}・${M`\cos x`}・${M`-\sin x`}・${M`-\cos x`} を 縦に 並べます。`,
+  `<b class="a">微分</b> すると 1つ 下へ。${M`(\sin x)'=\cos x`}、${M`(\cos x)'=-\sin x`}、${M`(-\sin x)'=-\cos x`}。`,
+  `いちばん 下の ${M`-\cos x`} を 微分すると ${M`\sin x`}。上に 戻って 1周 します。`,
+  `<b class="b">積分</b> は 微分の 逆なので、1つ 上へ。`,
+  `いちばん 上の ${M`\sin x`} を 積分すると、ぐるっと 回って ${M`-\cos x`}。`,
+  `${M`\cos x`} の 1つ 上は ${M`\sin x`}。だから ${M`\int\cos x\,dx=\sin x+C`}。`,
+  `${M`\sin x`} の 積分は ${M`-\cos x`}。マイナスが 付くのは ここです。`,
+  `部分積分では、${M`\sin x`}・${M`\cos x`} を 何回も 積分します。符号は この 図で 確かめましょう。`
+]);
+
 const Q = `<div class="q qline">次の 不定積分を 求めよ。</div>`;
 const p3 = ppPage({title:'例', tag:'⑴', q:String.raw`\int x\sin x\,dx`, top:Q,
   f:['x', '1'], g:[String.raw`\sin x`, String.raw`-\cos x`], prod:String.raw`1\cdot(-\cos x)=-\cos x`,
@@ -421,7 +457,7 @@ const p8 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:26px">
 </div>` + CAP([`③-2 では、${M`e^x`} や ${M`\log x`} を 含む 積の 部分積分を 学びます。`]);
 
 const DECK = {title:'③-1 部分積分法', pages:[
-  {name:'表紙', html:p0}, {name:'部分積分法', html:p1}, {name:'選び方', html:p2}, {name:'例', html:p3},
+  {name:'表紙', html:p0}, {name:'部分積分法', html:p1}, {name:'選び方', html:p2}, {name:'sin と cos の 微分・積分', html:p2c, add:'11/12'}, {name:'例', html:p3},
   {name:'問10　⑴', html:p4}, {name:'問10　⑵', html:p5}, {name:'問10　⑶', html:p6}, {name:'問10　⑷', html:p7}, {name:'まとめ', html:p8},
 ]};
 
