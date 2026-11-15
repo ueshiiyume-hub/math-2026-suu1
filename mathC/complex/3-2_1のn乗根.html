@@ -320,6 +320,10 @@ body.portrait #endp .eh{font-size:40px}
 #inkback:active{transform:scale(.96)}
 body.inking #inkback{display:inline-flex}
 body.portrait #inkback{left:12px;bottom:14px;height:54px;font-size:18px}
+/* ②-3 例⑵ くわしく：分配の 弧（板書の 青い 線） */
+.pl.dx text{fill:var(--ink);font-size:44px!important;font-family:'KaTeX_Main','Times New Roman',serif}
+.pl .dxa,.pl .dxb{fill:none;stroke-width:3.5;stroke-linecap:round}
+.pl .dxa{stroke:#2f6fb3}.pl .dxb{stroke:#3a3a8c}
 
 </style>
 </head>
@@ -329,8 +333,8 @@ body.portrait #inkback{left:12px;bottom:14px;height:54px;font-size:18px}
 <div id="ui"></div>
 <div id="jump"></div>
 <script>
-const VER = 'ver 1.1　2026-10-29';
-const SERIES = [{"f": "1-1_複素数平面", "no": "①-1", "t": "複素数平面", "v": "1.2_2026-10-29"}, {"f": "1-2_和差実数倍共役", "no": "①-2", "t": "和・差・実数倍・共役", "v": "1.2_2026-10-29"}, {"f": "1-3_絶対値", "no": "①-3", "t": "複素数の絶対値", "v": "1.2_2026-10-29"}, {"f": "1-4_極形式", "no": "①-4", "t": "複素数の極形式", "v": "1.5_2026-10-29"}, {"f": "1-4_極形式_練習編", "no": "①-4", "t": "極形式 練習編（問10）", "v": "1.4_2026-10-29"}, {"f": "2-1_掛け算と長さ向き", "no": "②-1", "t": "掛け算と長さ・向き", "v": "1.2_2026-10-29"}, {"f": "2-2_複素数の積", "no": "②-2", "t": "複素数の積", "v": "1.2_2026-10-29"}, {"f": "2-3_掛け算と回転", "no": "②-3", "t": "掛け算と回転", "v": "1.2_2026-10-29"}, {"f": "3-1_ド・モアブルの定理", "no": "③-1", "t": "ド・モアブルの定理", "v": "1.2_2026-10-29"}, {"f": "3-2_1のn乗根", "no": "③-2", "t": "1のn乗根", "v": "1.1_2026-10-29"}, {"f": "3-3_回転の応用", "no": "③-3", "t": "【発展】回転の応用", "v": "1.1_2026-10-29"}], ME = "3-2_1のn乗根";
+const VER = 'ver 1.2　2026-11-15';
+const SERIES = [{"f": "1-1_複素数平面", "no": "①-1", "t": "複素数平面", "v": "1.3_2026-11-15"}, {"f": "1-2_和差実数倍共役", "no": "①-2", "t": "和・差・実数倍・共役", "v": "1.3_2026-11-15"}, {"f": "1-3_絶対値", "no": "①-3", "t": "複素数の絶対値", "v": "1.3_2026-11-15"}, {"f": "1-4_極形式", "no": "①-4", "t": "複素数の極形式", "v": "1.6_2026-11-15"}, {"f": "1-4_極形式_練習編", "no": "①-4", "t": "極形式 練習編（問10）", "v": "1.5_2026-11-15"}, {"f": "2-1_掛け算と長さ向き", "no": "②-1", "t": "掛け算と長さ・向き", "v": "1.4_2026-11-15"}, {"f": "2-2_複素数の積", "no": "②-2", "t": "複素数の積", "v": "1.3_2026-11-15"}, {"f": "2-3_掛け算と回転", "no": "②-3", "t": "掛け算と回転", "v": "1.5_2026-11-15"}, {"f": "3-1_ド・モアブルの定理", "no": "③-1", "t": "ド・モアブルの定理", "v": "1.3_2026-11-15"}, {"f": "3-2_1のn乗根", "no": "③-2", "t": "1のn乗根", "v": "1.2_2026-11-15"}, {"f": "3-3_回転の応用", "no": "③-3", "t": "【発展】回転の応用", "v": "1.2_2026-11-15"}], ME = "3-2_1のn乗根";
 /* ====== 数学C の 部品 ====== */
 
 /* 数式：M`z = a + bi`（\ を そのまま 書ける）。KaTeX で かく */
@@ -803,12 +807,18 @@ var INK = {on:false, color:'#e0465e', tool:'pen', w:3.5, strokes:{}, cur:null};
   back.innerHTML = '<span class="ib-i">▶</span>スライドに 戻る'; back.title = '書くのを やめて スライドを 進める（W・Esc）';
   /* 指・ペンで 押した とき は 離した 時点で 戻す（少し 動くと click が 来ない ことが ある ため）。マウス・キーボードは click */
   let backDown = null;
-  back.addEventListener('pointerdown', e=>{ e.stopPropagation(); backDown = e.pointerId; try{ back.setPointerCapture(e.pointerId); }catch(_){} });
+  /* ボタンを 押して 書くモードを やめると、ボタンが 消えて、同じ タップの click が 下の スライドに 届いて 前・次に 動いて しまった（2026-11-15 直した）：
+     押してから 0.7秒は click を すべて 止める（スライドは 動かさない） */
+  let backAt = 0;
+  const leave = () => { backAt = performance.now(); setOn(false); back.blur(); };
+  addEventListener('click', e=>{ if(e.target.closest && e.target.closest('#inkback')) return;   /* ボタン 自身の click は 通す（マウス） */
+  if(backAt && performance.now() - backAt < 700){ e.stopPropagation(); e.stopImmediatePropagation(); e.preventDefault(); } }, true);
+  back.addEventListener('pointerdown', e=>{ e.stopPropagation(); backDown = e.pointerId; backAt = performance.now(); try{ back.setPointerCapture(e.pointerId); }catch(_){} });
   back.addEventListener('pointerup', e=>{ e.stopPropagation();
-    if(backDown===e.pointerId && e.pointerType!=='mouse'){ setOn(false); back.blur(); }
+    if(backDown===e.pointerId && e.pointerType!=='mouse') leave();
     backDown = null; });
   back.addEventListener('pointercancel', ()=>{ backDown = null; });
-  back.addEventListener('click', e=>{ e.stopPropagation(); e.preventDefault(); setOn(false); back.blur(); });
+  back.addEventListener('click', e=>{ e.stopPropagation(); e.preventDefault(); if(INK.on) leave(); });
   document.body.appendChild(back);
   const key = () => si + (document.body.classList.contains('portrait') ? 'p' : 'l');
   const list = () => (INK.strokes[key()] ||= []);

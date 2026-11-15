@@ -2149,8 +2149,8 @@ function SUDARE(n, s){
 const RDX = (t, r, s, dn) => `<span class="rdx">${t}<i class="rdl lh" data-s="${s}"></i><span class="rdn${dn?' dn':''} lh" data-s="${s}">${r}</span></span>`;
 
 /* ====== このプリントのスライド ====== */
-const SERIES = [{"f": "1-1_因数分解の復習", "no": "①-1", "t": "因数分解の 復習", "v": "1.6_2026-11-10"}, {"f": "1-2_2次方程式の解", "no": "①-2", "t": "2次方程式の 解", "v": "1.6_2026-11-10"}, {"f": "1-3_2次方程式の解", "no": "①-3", "t": "2次方程式の 解 ②", "v": "1.6_2026-11-10"}, {"f": "1-4_解の公式", "no": "①-4", "t": "解の公式", "v": "1.8_2026-11-10"}, {"f": "1-5_解の公式_重解と解なし", "no": "①-5", "t": "2次方程式の 解 ③", "v": "1.8_2026-11-10"}, {"f": "1-6_実数解の個数", "no": "①-6", "t": "実数解の 個数", "v": "1.8_2026-11-10"}, {"f": "2-1_x軸との共有点", "no": "②-1", "t": "x軸との 共有点", "v": "1.6_2026-11-10"}, {"f": "2-2_x軸との共有点", "no": "②-2", "t": "x軸との 共有点 ②", "v": "1.6_2026-11-10"}, {"f": "2-3_x軸との位置関係", "no": "②-3", "t": "x軸との 位置関係", "v": "1.11_2026-11-10"}, {"f": "3-2_2次不等式_練習編_v2", "no": "③-1", "t": "2次不等式 練習編", "v": "3.19_2026-11-10"}, {"f": "3-1_2次不等式の解法_v2", "no": "③-2", "t": "2次不等式の 解き方", "v": "2.25_2026-11-10"}, {"f": "3-3_2次不等式の解法_v2", "no": "③-3", "t": "2次不等式 いろいろ", "v": "2.5_2026-11-10"}, {"f": "3-4_2次不等式の解法_v2", "no": "③-4", "t": "x² の前が マイナス", "v": "2.4_2026-11-10"}], ME = "3-3_2次不等式の解法_v2";
-const VER = '<i class="nv">ver</i> 2.5　2026-11-10';
+const SERIES = [{"f": "1-1_因数分解の復習", "no": "①-1", "t": "因数分解の 復習", "v": "1.7_2026-11-15"}, {"f": "1-2_2次方程式の解", "no": "①-2", "t": "2次方程式の 解", "v": "1.7_2026-11-15"}, {"f": "1-3_2次方程式の解", "no": "①-3", "t": "2次方程式の 解 ②", "v": "1.7_2026-11-15"}, {"f": "1-4_解の公式", "no": "①-4", "t": "解の公式", "v": "1.9_2026-11-15"}, {"f": "1-5_解の公式_重解と解なし", "no": "①-5", "t": "2次方程式の 解 ③", "v": "1.9_2026-11-15"}, {"f": "1-6_実数解の個数", "no": "①-6", "t": "実数解の 個数", "v": "1.9_2026-11-15"}, {"f": "2-1_x軸との共有点", "no": "②-1", "t": "x軸との 共有点", "v": "1.7_2026-11-15"}, {"f": "2-2_x軸との共有点", "no": "②-2", "t": "x軸との 共有点 ②", "v": "1.7_2026-11-15"}, {"f": "2-3_x軸との位置関係", "no": "②-3", "t": "x軸との 位置関係", "v": "1.12_2026-11-15"}, {"f": "3-2_2次不等式_練習編_v2", "no": "③-1", "t": "2次不等式 練習編", "v": "3.20_2026-11-15"}, {"f": "3-1_2次不等式の解法_v2", "no": "③-2", "t": "2次不等式の 解き方", "v": "2.26_2026-11-15"}, {"f": "3-3_2次不等式の解法_v2", "no": "③-3", "t": "2次不等式 いろいろ", "v": "2.6_2026-11-15"}, {"f": "3-4_2次不等式の解法_v2", "no": "③-4", "t": "x² の前が マイナス", "v": "2.5_2026-11-15"}], ME = "3-3_2次不等式の解法_v2";
+const VER = '<i class="nv">ver</i> 2.6　2026-11-15';
 /* ③-1 ver 2.0 の 土台：ver 1.4 の 部品の 写し（ver 1.4 を 直しても ver 2.0 は 変わらない） */
 
 const IMG = s => s;
@@ -3356,12 +3356,18 @@ var INK = {on:false, color:'#e0465e', tool:'pen', w:3.5, strokes:{}, cur:null};
   back.innerHTML = '<span class="ib-i">▶</span>スライドに 戻る'; back.title = '書くのを やめて スライドを 進める（W・Esc）';
   /* 指・ペンで 押した とき は 離した 時点で 戻す（少し 動くと click が 来ない ことが ある ため）。マウス・キーボードは click */
   let backDown = null;
-  back.addEventListener('pointerdown', e=>{ e.stopPropagation(); backDown = e.pointerId; try{ back.setPointerCapture(e.pointerId); }catch(_){} });
+  /* ボタンを 押して 書くモードを やめると、ボタンが 消えて、同じ タップの click が 下の スライドに 届いて 前・次に 動いて しまった（2026-11-15 直した）：
+     押してから 0.7秒は click を すべて 止める（スライドは 動かさない） */
+  let backAt = 0;
+  const leave = () => { backAt = performance.now(); setOn(false); back.blur(); };
+  addEventListener('click', e=>{ if(e.target.closest && e.target.closest('#inkback')) return;   /* ボタン 自身の click は 通す（マウス） */
+  if(backAt && performance.now() - backAt < 700){ e.stopPropagation(); e.stopImmediatePropagation(); e.preventDefault(); } }, true);
+  back.addEventListener('pointerdown', e=>{ e.stopPropagation(); backDown = e.pointerId; backAt = performance.now(); try{ back.setPointerCapture(e.pointerId); }catch(_){} });
   back.addEventListener('pointerup', e=>{ e.stopPropagation();
-    if(backDown===e.pointerId && e.pointerType!=='mouse'){ setOn(false); back.blur(); }
+    if(backDown===e.pointerId && e.pointerType!=='mouse') leave();
     backDown = null; });
   back.addEventListener('pointercancel', ()=>{ backDown = null; });
-  back.addEventListener('click', e=>{ e.stopPropagation(); e.preventDefault(); setOn(false); back.blur(); });
+  back.addEventListener('click', e=>{ e.stopPropagation(); e.preventDefault(); if(INK.on) leave(); });
   document.body.appendChild(back);
   const key = () => si + (document.body.classList.contains('portrait') ? 'p' : 'l');
   const list = () => (INK.strokes[key()] ||= []);

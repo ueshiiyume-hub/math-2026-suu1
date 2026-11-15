@@ -21,12 +21,18 @@ var INK = {on:false, color:'#e0465e', tool:'pen', w:3.5, strokes:{}, cur:null};
   back.innerHTML = '<span class="ib-i">▶</span>スライドに 戻る'; back.title = '書くのを やめて スライドを 進める（W・Esc）';
   /* 指・ペンで 押した とき は 離した 時点で 戻す（少し 動くと click が 来ない ことが ある ため）。マウス・キーボードは click */
   let backDown = null;
-  back.addEventListener('pointerdown', e=>{ e.stopPropagation(); backDown = e.pointerId; try{ back.setPointerCapture(e.pointerId); }catch(_){} });
+  /* ボタンを 押して 書くモードを やめると、ボタンが 消えて、同じ タップの click が 下の スライドに 届いて 前・次に 動いて しまった（2026-11-15 直した）：
+     押してから 0.7秒は click を すべて 止める（スライドは 動かさない） */
+  let backAt = 0;
+  const leave = () => { backAt = performance.now(); setOn(false); back.blur(); };
+  addEventListener('click', e=>{ if(e.target.closest && e.target.closest('#inkback')) return;   /* ボタン 自身の click は 通す（マウス） */
+  if(backAt && performance.now() - backAt < 700){ e.stopPropagation(); e.stopImmediatePropagation(); e.preventDefault(); } }, true);
+  back.addEventListener('pointerdown', e=>{ e.stopPropagation(); backDown = e.pointerId; backAt = performance.now(); try{ back.setPointerCapture(e.pointerId); }catch(_){} });
   back.addEventListener('pointerup', e=>{ e.stopPropagation();
-    if(backDown===e.pointerId && e.pointerType!=='mouse'){ setOn(false); back.blur(); }
+    if(backDown===e.pointerId && e.pointerType!=='mouse') leave();
     backDown = null; });
   back.addEventListener('pointercancel', ()=>{ backDown = null; });
-  back.addEventListener('click', e=>{ e.stopPropagation(); e.preventDefault(); setOn(false); back.blur(); });
+  back.addEventListener('click', e=>{ e.stopPropagation(); e.preventDefault(); if(INK.on) leave(); });
   document.body.appendChild(back);
   const key = () => si + (document.body.classList.contains('portrait') ? 'p' : 'l');
   const list = () => (INK.strokes[key()] ||= []);
