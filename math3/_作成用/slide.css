@@ -249,3 +249,10 @@ body.portrait .bigpt .pbox{font-size:21px;padding:4px 12px 6px;line-height:1.45}
 #inkback:active{transform:scale(.96)}
 body.inking #inkback{display:inline-flex}
 body.portrait #inkback{left:12px;bottom:14px;height:54px;font-size:18px}
+/* 割り算の 筆算（④-1 例⑴ くわしく、11/16）：5列＝割る式・かっこ・x² の 項・x の 項・定数項。線が 切れない ように 列の すき間は 0 */
+.ldiv{display:grid;grid-template-columns:auto 22px repeat(3,auto);justify-items:stretch;align-items:stretch;column-gap:0;row-gap:6px;font-size:32px}
+.ldiv>div{min-height:1.5em;display:flex;align-items:center;justify-content:flex-end;padding:0 10px}
+.ldiv .q{padding-bottom:2px}
+.ldiv .t{border-top:2.5px solid var(--ink)}
+.ldiv .br{padding:0;border-right:2.5px solid var(--ink);border-radius:0 60% 60% 0 / 0 50% 50% 0;margin:2px 4px 0 0}
+.ldiv .ln{border-top:2px solid var(--ink)}

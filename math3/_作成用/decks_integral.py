@@ -1393,8 +1393,39 @@ const Q = `<div class="q qline">次の 不定積分を 求めよ。</div>`;
 const p2 = frPage({title:'例　⑴', tag:'⑴', q:String.raw`\int\frac{2x^2+1}{x-1}\,dx`, top:Q, lab:'割り算',
   prep:[[1, String.raw`2x^2+1=(x-1)(\A{2x+2})+\A{3}`], [2, String.raw`\frac{2x^2+1}{x-1}=\A{2x+2}+\frac{\A{3}}{x-1}`]],
   calc:[[3, String.raw`=\int\left(2x+2+\frac{3}{x-1}\right)dx`], [4, String.raw`=\DP{x^2+2x+3\log|x-1|+C}`]],
-  cm:[`分子は 2次、分母は 1次。分子の 次数が 大きいので 割ります。`, `${M`2x^2+1`} を ${M`x-1`} で 割ると、商 ${M`2x+2`}、余り ${M`3`}。`,
+  cm:[`分子は 2次、分母は 1次。分子の 次数が 大きいので 割ります。`, `${M`2x^2+1`} を ${M`x-1`} で 割ると、商 ${M`2x+2`}、余り ${M`3`}。（筆算は 次の ページで くわしく）`,
       `「商 ＋ 余り／分母」の 形に 書きかえます。`, `これなら 項ごとに 積分できます。`, `${M`\frac{3}{x-1}`} の 積分は ${M`3\log|x-1|`}。`]});
+/* 例⑴ の くわしく（11/16 の 板書）：割り算の 筆算。x の 項が ないので +0x を 入れて 割る */
+const LD = (cls, h, n) => `<div class="${cls}"${n!=null?` data-s="${n}"`:''}>${h}</div>`;
+const p2b = HD(NO, '例　⑴　くわしく（割り算の 筆算）', SEC) + `<div class="bd">
+  <div class="l" style="flex-direction:column;align-items:flex-start;gap:22px">
+    <div class="ldiv">
+      ${LD('', '')}${LD('', '')}${LD('', '')}${LD('q', M`2x`, 2)}${LD('q', M`+2`, 5)}
+      ${LD('dv', M`x-1`)}${LD('br', '')}${LD('t', M`2x^2`)}${LD('t', M`\A{+0x}`, 1)}${LD('t', M`+1`)}
+      ${LD('', '')}${LD('', '')}${LD('', M`2x^2`, 3)}${LD('', M`-2x`, 3)}${LD('', '')}
+      ${LD('', '')}${LD('', '')}${LD('ln', '', 4)}${LD('ln', M`2x`, 4)}${LD('ln', M`+1`, 4)}
+      ${LD('', '')}${LD('', '')}${LD('', '')}${LD('', M`2x`, 6)}${LD('', M`-2`, 6)}
+      ${LD('', '')}${LD('', '')}${LD('', '')}${LD('ln', '', 7)}${LD('ln', M`\A{3}`, 7)}
+    </div>
+    <div data-s="8" style="font-size:30px">${D`\frac{2x^2+1}{x-1}=\DP{2x+2}+\frac{\A{3}}{x-1}`}</div>
+  </div>
+  <div class="r bigpt" style="flex-direction:column;gap:12px;align-items:stretch;width:400px">
+    ${PT(1, `${M`x`} の 項が ない ときは`, `${M`+0x`} を 入れて、場所を あけて おく`)}
+    ${PT(4, '引き算', `${D`(2x^2+0x)-(2x^2-2x)=2x`}`)}
+    ${PT(8, '商 ＋ 余り／分母', `商 ${M`2x+2`}、余り ${M`3`}<div>${D`\to\ 2x+2+\frac{3}{x-1}`}</div>`)}
+  </div>
+</div>` + CAP([
+  `例⑴ の 割り算を、筆算で くわしく 見ます。${M`2x^2+1`} を ${M`x-1`} で 割ります。`,
+  `${M`2x^2+1`} には ${M`x`} の 項が ありません。${M`+0x`} を 入れて、${M`x`} の 項の 場所を あけて おきます。`,
+  `${M`2x^2`} を ${M`x`} で 割って、商は ${M`2x`}。${M`x`} の 項の 上に 書きます。`,
+  `${M`2x\times(x-1)=2x^2-2x`} を 下に 書きます。`,
+  `引き算します。${M`0x-(-2x)=2x`}、${M`+1`} を 下ろして ${M`2x+1`}。`,
+  `${M`2x`} を ${M`x`} で 割って、商は ${M`+2`}。`,
+  `${M`2\times(x-1)=2x-2`} を 下に 書きます。`,
+  `引き算して ${M`1-(-2)=3`}。${M`x`} の 項が ないので、余りは ${M`3`}。`,
+  `「商 ＋ 余り／分母」の 形に 書きかえます。これで 項ごとに 積分できます。`
+]);
+
 const p3 = frPage({title:'例　⑵', tag:'⑵', q:String.raw`\int\frac{2}{x^2-1}\,dx`, lab:'部分分数に 分解',
   top:PT(null, '使える？', `置換積分 → ×（分子が 分母の 微分で ない）　部分積分 → ×`),
   prep:[[1, String.raw`\frac{2}{x^2-1}=\frac{2}{(x-1)(x+1)}`], [2, String.raw`=\frac{1}{x-1}-\frac{1}{x+1}`]],
@@ -1441,7 +1472,7 @@ const p9 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:26px">
 </div>` + CAP([`④-2 では、三角関数の 積分に 使う 公式を 加法定理から 導きます。`]);
 
 const DECK = {title:'④-1 分数関数の不定積分', pages:[
-  {name:'表紙', html:p0}, {name:'方針', html:p1}, {name:'例　⑴', html:p2}, {name:'例　⑵', html:p3},
+  {name:'表紙', html:p0}, {name:'方針', html:p1}, {name:'例　⑴', html:p2}, {name:'例　⑴　くわしく（割り算の 筆算）', html:p2b, add:'11/16'}, {name:'例　⑵', html:p3},
   {name:'問14　⑴', html:p4}, {name:'問14　⑵', html:p5}, {name:'問16　⑴', html:p6}, {name:'問16　⑵', html:p7}, {name:'問16　⑶', html:p8}, {name:'まとめ', html:p9},
 ]};
 ''')
