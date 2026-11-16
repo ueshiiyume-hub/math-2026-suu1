@@ -53,3 +53,13 @@ function subPage(o){
     </div>
   </div>` + CAP(o.cm);
 }
+
+/* プリントの 青い 枠（穴埋め）を そのまま 見せる ページ（11/16、先生の 指示）：空らんに 何が 入るか を 番で 出す
+   o = {no, sec, title, tag, q:TeX, label（枠の 上の 名前）, box:html（空らんは FILL）, side（下に 足す html）, cm} */
+function pfPage(o){
+  return HD(o.no, o.title, o.sec) + `<div class="bd col st" style="gap:22px">
+    ${PQ(o.tag, o.q)}
+    <div class="pfbox">${o.label ? `<div class="pfl">${o.label}</div>` : ''}<div class="pfc">${o.box}</div></div>
+    ${o.side||''}
+  </div>` + CAP(o.cm);
+}

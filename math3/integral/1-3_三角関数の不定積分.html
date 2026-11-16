@@ -271,6 +271,18 @@ body.portrait .bigpt .pbox{font-size:21px;padding:4px 12px 6px;line-height:1.45}
 #inkback:active{transform:scale(.96)}
 body.inking #inkback{display:inline-flex}
 body.portrait #inkback{left:12px;bottom:14px;height:54px;font-size:18px}
+/* 割り算の 筆算（④-1 例⑴ くわしく、11/16）：5列＝割る式・かっこ・x² の 項・x の 項・定数項。線が 切れない ように 列の すき間は 0 */
+.ldiv{display:grid;grid-template-columns:auto 22px repeat(3,auto);justify-items:stretch;align-items:stretch;column-gap:0;row-gap:6px;font-size:32px}
+.ldiv>div{min-height:1.5em;display:flex;align-items:center;justify-content:flex-end;padding:0 10px}
+.ldiv .q{padding-bottom:2px}
+.ldiv .t{border-top:2.5px solid var(--ink)}
+.ldiv .br{padding:0;border-right:2.5px solid var(--ink);border-radius:0 60% 60% 0 / 0 50% 50% 0;margin:2px 4px 0 0}
+.ldiv .ln{border-top:2px solid var(--ink)}
+/* プリントの 青い 枠（穴埋め、pfPage）。プリントと 同じ うすい 青の 面 */
+.pfbox{background:var(--pale);border:2px solid var(--main);padding:18px 28px 24px;font-size:30px;line-height:2.3;max-width:1100px}
+.pfbox .pfl{display:inline-block;font-size:19px;font-weight:700;color:var(--deep);line-height:1.4;margin-bottom:4px}
+.pfbox .fill{line-height:1.6}
+body.portrait .pfbox{font-size:23px;padding:14px 16px}
 
 </style>
 </head>
@@ -281,7 +293,7 @@ body.portrait #inkback{left:12px;bottom:14px;height:54px;font-size:18px}
 <div id="jump"></div>
 <script>
 const VER = 'ver 1.7　2026-11-15';
-const SERIES = [{"f": "1-1_xnの不定積分", "no": "①-1", "t": "xⁿ の不定積分", "v": "1.5_2026-11-15"}, {"f": "1-2_分子が多項式の場合", "no": "①-2", "t": "分子が多項式の場合", "v": "1.10_2026-11-15"}, {"f": "1-3_三角関数の不定積分", "no": "①-3", "t": "三角関数の不定積分", "v": "1.7_2026-11-15"}, {"f": "1-4_指数関数の不定積分", "no": "①-4", "t": "指数関数の不定積分", "v": "1.5_2026-11-15"}, {"f": "1-5_合成関数の不定積分", "no": "①-5", "t": "合成関数の不定積分", "v": "1.6_2026-11-15"}, {"f": "2-1_置換積分_1次式", "no": "②-1", "t": "置換積分（1次式を t に）", "v": "1.10_2026-11-15"}, {"f": "2-2_置換積分_根号", "no": "②-2", "t": "置換積分（√ を t に）", "v": "1.6_2026-11-15"}, {"f": "2-3_置換積分_xで微分", "no": "②-3", "t": "置換積分（x で 微分する 型）", "v": "1.7_2026-11-15"}, {"f": "2-4_置換積分_分子が分母の微分", "no": "②-4", "t": "置換積分（分子が 分母の 微分）", "v": "1.5_2026-11-15"}, {"f": "3-1_部分積分", "no": "③-1", "t": "部分積分法", "v": "1.6_2026-11-15"}, {"f": "3-2_部分積分_指数と対数", "no": "③-2", "t": "部分積分（eˣ・log x）", "v": "1.5_2026-11-15"}, {"f": "4-1_分数関数の不定積分", "no": "④-1", "t": "分数関数の不定積分", "v": "1.5_2026-11-15"}, {"f": "4-2_半角と積和の公式", "no": "④-2", "t": "半角の公式・積和の公式", "v": "1.5_2026-11-15"}, {"f": "4-3_三角関数_次数を下げる", "no": "④-3", "t": "三角関数の不定積分（次数を下げる）", "v": "1.5_2026-11-15"}, {"f": "4-4_三角関数_積を和に", "no": "④-4", "t": "三角関数の不定積分（積を和に）", "v": "1.5_2026-11-15"}], ME = "1-3_三角関数の不定積分";
+const SERIES = [{"f": "1-1_xnの不定積分", "no": "①-1", "t": "xⁿ の不定積分", "v": "1.5_2026-11-15"}, {"f": "1-2_分子が多項式の場合", "no": "①-2", "t": "分子が多項式の場合", "v": "1.10_2026-11-15"}, {"f": "1-3_三角関数の不定積分", "no": "①-3", "t": "三角関数の不定積分", "v": "1.7_2026-11-15"}, {"f": "1-4_指数関数の不定積分", "no": "①-4", "t": "指数関数の不定積分", "v": "1.5_2026-11-15"}, {"f": "1-5_合成関数の不定積分", "no": "①-5", "t": "合成関数の不定積分", "v": "1.6_2026-11-15"}, {"f": "2-1_置換積分_1次式", "no": "②-1", "t": "置換積分（1次式を t に）", "v": "1.10_2026-11-15"}, {"f": "2-2_置換積分_根号", "no": "②-2", "t": "置換積分（√ を t に）", "v": "1.6_2026-11-15"}, {"f": "2-3_置換積分_xで微分", "no": "②-3", "t": "置換積分（x で 微分する 型）", "v": "1.8_2026-11-16"}, {"f": "2-4_置換積分_分子が分母の微分", "no": "②-4", "t": "置換積分（分子が 分母の 微分）", "v": "1.6_2026-11-16"}, {"f": "3-1_部分積分", "no": "③-1", "t": "部分積分法", "v": "1.7_2026-11-16"}, {"f": "3-2_部分積分_指数と対数", "no": "③-2", "t": "部分積分（eˣ・log x）", "v": "1.6_2026-11-16"}, {"f": "4-1_分数関数の不定積分", "no": "④-1", "t": "分数関数の不定積分", "v": "1.7_2026-11-16"}, {"f": "4-2_半角と積和の公式", "no": "④-2", "t": "半角の公式・積和の公式", "v": "1.5_2026-11-15"}, {"f": "4-3_三角関数_次数を下げる", "no": "④-3", "t": "三角関数の不定積分（次数を下げる）", "v": "1.5_2026-11-15"}, {"f": "4-4_三角関数_積を和に", "no": "④-4", "t": "三角関数の不定積分（積を和に）", "v": "1.5_2026-11-15"}], ME = "1-3_三角関数の不定積分";
 /* ====== 数学Ⅲ の 部品（数学C の parts.js を 元に した 別もの） ====== */
 
 /* 数式：M`\int x^3\,dx`（\ を そのまま 書ける）。KaTeX で かく。D は 大きい 形（\displaystyle：計算の 行に 使う） */
@@ -335,6 +347,16 @@ function subPage(o){
       <div class="l2">${BOX(o.plabel||'置きかえ', CALC(o.prep))}${o.pt||''}</div>
       ${CALC(o.calc, 'main')}
     </div>
+  </div>` + CAP(o.cm);
+}
+
+/* プリントの 青い 枠（穴埋め）を そのまま 見せる ページ（11/16、先生の 指示）：空らんに 何が 入るか を 番で 出す
+   o = {no, sec, title, tag, q:TeX, label（枠の 上の 名前）, box:html（空らんは FILL）, side（下に 足す html）, cm} */
+function pfPage(o){
+  return HD(o.no, o.title, o.sec) + `<div class="bd col st" style="gap:22px">
+    ${PQ(o.tag, o.q)}
+    <div class="pfbox">${o.label ? `<div class="pfl">${o.label}</div>` : ''}<div class="pfc">${o.box}</div></div>
+    ${o.side||''}
   </div>` + CAP(o.cm);
 }
 

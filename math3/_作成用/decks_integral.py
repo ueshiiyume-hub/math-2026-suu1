@@ -1088,8 +1088,21 @@ const p7 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:26px">
   </div>
 </div>` + CAP([`②-4 では、分子が 分母の 微分に なって いる 分数の 積分を 学びます。`]);
 
+/* プリントの 枠（置換のコツ）の 空らん（11/16、先生の 指示） */
+const f1 = pfPage({no:NO, sec:SEC, title:'例　⑴　プリントの 枠', tag:'⑴', q:String.raw`\int\sin^2x\cos x\,dx`, label:'置換のコツ',
+  box:`${M`\sin x=t`} と 置くと、${FILL(1, `${M`\cos x\,dx=dt`}${S(2, ` より　${D`\int t^2\,dt`}`)}`, 12)}　となることを 予見しておく。`,
+  cm:[`プリントの 例⑴ の 下の 枠です。空らんに 入る ものを 確かめます。`,
+      `${M`\sin x=t`} の 両辺を ${M`x`} で 微分すると ${M`\cos x=\frac{dt}{dx}`}。だから ${M`\cos x\,dx=dt`}。`,
+      `${M`\sin^2x\to t^2`}、${M`\cos x\,dx\to dt`} なので ${M`\int t^2\,dt`}。積分できる 形に なると 先に 見ぬいて おきます。`]});
+const f2 = pfPage({no:NO, sec:SEC, title:'例　⑵　プリントの 枠', tag:'⑵', q:String.raw`\int xe^{x^2}\,dx`, label:'置換のコツ',
+  box:`${FILL(1, M`x^2=t`, 4)} と 置くと、${FILL(2, `${M`x\,dx=\frac{1}{2}dt`}${S(3, ` より　${D`\int\frac{1}{2}e^t\,dt`}`)}`, 12)}　となることを 予見しておく。`,
+  cm:[`プリントの 例⑵ の 下の 枠です。今度は 置く 式も 空らんです。`,
+      `${M`e^{x^2}`} の 肩の ${M`x^2`} を ${M`t`} と 置きます。`,
+      `${M`x^2=t`} の 両辺を ${M`x`} で 微分して ${M`2x\,dx=dt`}。${M`2`} で 割って ${M`x\,dx=\frac{1}{2}dt`}。`,
+      `${M`e^{x^2}\to e^t`}、${M`x\,dx\to\frac{1}{2}dt`} なので ${M`\int\frac{1}{2}e^t\,dt`}。`]});
+
 const DECK = {title:'②-3 置換積分（x で 微分する 型）', pages:[
-  {name:'表紙', html:p0}, {name:'例　⑴', html:p1}, {name:'例　⑵', html:p2}, {name:'問8　⑴', html:p3},
+  {name:'表紙', html:p0}, {name:'例　⑴', html:p1}, {name:'例　⑴　プリントの 枠', html:f1, add:'11/16'}, {name:'例　⑵', html:p2}, {name:'例　⑵　プリントの 枠', html:f2, add:'11/16'}, {name:'問8　⑴', html:p3},
   {name:'問8　⑵', html:p4}, {name:'問8　⑵　くわしく（√ を t と おく）', html:p4b, add:'11/2'}, {name:'問8　⑶', html:p5}, {name:'問8　⑶　くわしく', html:p5b, add:'11/9'}, {name:'問8　⑷', html:p6}, {name:'まとめ', html:p7},
 ]};
 ''')
@@ -1168,8 +1181,21 @@ const p8 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:26px">
   </div>
 </div>` + CAP([`③-1 では、積の 形の 積分に 使う「部分積分法」を 学びます。`]);
 
+/* プリントの 枠（先読み）の 空らん（11/16、先生の 指示） */
+const f1 = pfPage({no:NO, sec:SEC, title:'例　⑴　プリントの 枠', tag:'⑴', q:String.raw`\int\frac{2x}{x^2+1}\,dx`,
+  box:`${M`x^2+1=t`} と 置くと、${FILL(1, `${M`2x\,dx=dt`}${S(2, ` より　${D`\int\frac{1}{t}\,dt`}`)}`, 12)}　となり、<br>${D`\int\frac{1}{t}\,dt=\log|t|+C`} であることも 先読みしておく。`,
+  cm:[`プリントの 例⑴ の 下の 枠です。空らんに 入る ものを 確かめます。`,
+      `${M`x^2+1=t`} の 両辺を ${M`x`} で 微分すると ${M`2x=\frac{dt}{dx}`}。だから ${M`2x\,dx=dt`}。`,
+      `分母は ${M`t`}、分子の ${M`2x\,dx`} は ${M`dt`}。${M`\int\frac{1}{t}\,dt`} に なり、${M`\log`} で 積分できます。`]});
+const f2 = pfPage({no:NO, sec:SEC, title:'例　⑵　プリントの 枠', tag:'⑵', q:String.raw`\int\tan x\,dx`,
+  box:`${FILL(1, M`\cos x=t`, 4)} と 置くと、${FILL(2, `${M`\sin x\,dx=-dt`}${S(3, ` より　${D`-\int\frac{1}{t}\,dt`}`)}`, 12)}　となり、<br>${D`\int\frac{1}{t}\,dt=\log|t|+C`} であることも 先読みしておく。`,
+  cm:[`プリントの 例⑵ の 下の 枠です。置く 式も 空らんです。`,
+      `${M`\tan x=\frac{\sin x}{\cos x}`}。分母の ${M`\cos x`} を ${M`t`} と 置きます。`,
+      `${M`\cos x=t`} の 両辺を ${M`x`} で 微分して ${M`-\sin x=\frac{dt}{dx}`}。だから ${M`\sin x\,dx=-dt`}。マイナスに 注意。`,
+      `分母は ${M`t`}、分子の ${M`\sin x\,dx`} は ${M`-dt`}。${M`-\int\frac{1}{t}\,dt`} に なります。`]});
+
 const DECK = {title:'②-4 置換積分（分子が 分母の 微分）', pages:[
-  {name:'表紙', html:p0}, {name:'例　⑴', html:p1}, {name:'例　⑵', html:p2}, {name:'公式に まとめる', html:p3},
+  {name:'表紙', html:p0}, {name:'例　⑴', html:p1}, {name:'例　⑴　プリントの 枠', html:f1, add:'11/16'}, {name:'例　⑵', html:p2}, {name:'例　⑵　プリントの 枠', html:f2, add:'11/16'}, {name:'公式に まとめる', html:p3},
   {name:'問9　⑴', html:p4}, {name:'問9　⑵', html:p5}, {name:'問9　⑶', html:p6}, {name:'問9　⑷', html:p7}, {name:'まとめ', html:p8},
 ]};
 ''')
@@ -1293,8 +1319,16 @@ const p8 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:26px">
   </div>
 </div>` + CAP([`③-2 では、${M`e^x`} や ${M`\log x`} を 含む 積の 部分積分を 学びます。`]);
 
+/* プリントの 枠（選び方）の 空らん（11/16、先生の 指示） */
+const f3 = pfPage({no:NO, sec:SEC, title:'例　プリントの 枠', tag:'⑴', q:String.raw`\int x\sin x\,dx`,
+  box:`微分する方を　${FILL(1, M`x`, 4)}　とし、積分する方を　${FILL(2, M`\sin x`, 4)}　とすると、<br>「微分した方」と「積分した方」の 積は　${FILL(3, M`1\cdot(-\cos x)=-\cos x`, 10)}　となり、積分しやすそう。`,
+  cm:[`プリントの 例 の 下の 枠です。空らんに 入る ものを 確かめます。`,
+      `<b class="a">微分する方</b> は ${M`x`}。微分すると ${M`1`} に なり、簡単です。`,
+      `<b class="b">積分する方</b> は ${M`\sin x`}。積分すると ${M`-\cos x`}。`,
+      `微分した方 ${M`1`} と 積分した方 ${M`-\cos x`} の 積は ${M`-\cos x`}。これなら 積分できます。`]});
+
 const DECK = {title:'③-1 部分積分法', pages:[
-  {name:'表紙', html:p0}, {name:'部分積分法', html:p1}, {name:'選び方', html:p2}, {name:'sin と cos の 微分・積分', html:p2c, add:'11/12'}, {name:'例', html:p3},
+  {name:'表紙', html:p0}, {name:'部分積分法', html:p1}, {name:'選び方', html:p2}, {name:'sin と cos の 微分・積分', html:p2c, add:'11/12'}, {name:'例', html:p3}, {name:'例　プリントの 枠', html:f3, add:'11/16'},
   {name:'問10　⑴', html:p4}, {name:'問10　⑵', html:p5}, {name:'問10　⑶', html:p6}, {name:'問10　⑷', html:p7}, {name:'まとめ', html:p8},
 ]};
 ''')
@@ -1364,8 +1398,22 @@ const p10 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:26px">
   </div>
 </div>` + CAP([`④-1 では、分数関数の 不定積分を 学びます。`]);
 
+/* プリントの 枠（選び方）の 空らん（11/16、先生の 指示） */
+const f1 = pfPage({no:NO, sec:SEC, title:'例　⑴　プリントの 枠', tag:'⑴', q:String.raw`\int xe^x\,dx`,
+  box:`微分する方を　${FILL(1, M`x`, 4)}　とし、積分する方を　${FILL(2, M`e^x`, 4)}　とすると、<br>「微分した方」と「積分した方」の 積は　${FILL(3, M`1\cdot e^x=e^x`, 10)}　となり、積分しやすそう。`,
+  cm:[`プリントの 例⑴ の 下の 枠です。空らんに 入る ものを 確かめます。`,
+      `<b class="a">微分する方</b> は ${M`x`}。微分すると ${M`1`}。`,
+      `<b class="b">積分する方</b> は ${M`e^x`}。積分しても ${M`e^x`}。`,
+      `積は ${M`1\cdot e^x=e^x`}。これなら 積分できます。`]});
+const f2 = pfPage({no:NO, sec:SEC, title:'例　⑵　プリントの 枠', tag:'⑵', q:String.raw`\int\log x\,dx`,
+  box:`微分する方を　${FILL(1, M`\log x`, 4)}　とし、積分する方を　${FILL(2, M`1`, 4)}　とすると、<br>「微分した方」と「積分した方」の 積は　${FILL(3, M`\frac{1}{x}\cdot x=1`, 10)}　となり、積分しやすそう。`,
+  cm:[`プリントの 例⑵ の 下の 枠です。${M`\log x`} だけの 積分です。`,
+      `<b class="a">微分する方</b> は ${M`\log x`}。微分すると ${M`\frac{1}{x}`}。${M`\log x`} は 積分の 公式が ないので、こちらを 微分します。`,
+      `<b class="b">積分する方</b> は ${M`1`}（${M`\log x=1\cdot\log x`} と 見る）。積分すると ${M`x`}。`,
+      `積は ${M`\frac{1}{x}\cdot x=1`}。これなら 積分できます。`]});
+
 const DECK = {title:'③-2 部分積分（eˣ・log x）', pages:[
-  {name:'表紙', html:p0}, {name:'例　⑴', html:p1}, {name:'例　⑵', html:p2},
+  {name:'表紙', html:p0}, {name:'例　⑴', html:p1}, {name:'例　⑴　プリントの 枠', html:f1, add:'11/16'}, {name:'例　⑵', html:p2}, {name:'例　⑵　プリントの 枠', html:f2, add:'11/16'},
   {name:'問11　⑴', html:p3}, {name:'問11　⑵', html:p4}, {name:'問11　⑶', html:p5},
   {name:'問12　⑴', html:p6}, {name:'問12　⑵', html:p7}, {name:'問12　⑶', html:p8}, {name:'問12　⑷', html:p9}, {name:'まとめ', html:p10},
 ]};
@@ -1471,8 +1519,22 @@ const p9 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:26px">
   </div>
 </div>` + CAP([`④-2 では、三角関数の 積分に 使う 公式を 加法定理から 導きます。`]);
 
+/* プリントの 枠の 空らん（11/16、先生の 指示） */
+const f1 = pfPage({no:NO, sec:SEC, title:'例　⑴　プリントの 枠', tag:'⑴', q:String.raw`\int\frac{2x^2+1}{x-1}\,dx`,
+  box:`「分子の次数」が「分母の次数」より 大きい 時には、${FILL(1, `分子を 分母で 割って、${S(2, `「${D`\text{商}+\frac{\text{余り}}{\text{分母}}`}」の 形に する。`)}`, 18)}`,
+  cm:[`プリントの 例⑴ の 右の 枠です。空らんに 入る ものを 確かめます。`,
+      `分子 ${M`2x^2+1`} は 2次、分母 ${M`x-1`} は 1次。分子の 次数が 大きいので、分子を 分母で 割ります。`,
+      `割った 結果を「商 ＋ 余り／分母」の 形に します。⑴ では ${M`2x+2+\frac{3}{x-1}`}。`]});
+const f2 = pfPage({no:NO, sec:SEC, title:'例　⑵　プリントの 枠', tag:'⑵', q:String.raw`\int\frac{2}{x^2-1}\,dx`,
+  box:`置換積分 ⇒ ${FILL(1, '×（分子が 分母の 微分で ない）', 12)}　　部分積分 ⇒ ${FILL(2, '×', 3)}<br>分母の 次数が 高い 時には、${FILL(3, '部分分数に 分解', 7)} して、${FILL(4, '項ごとに 積分', 7)} を する。分母の 次数が 1次 ならば 積分可能。`,
+  cm:[`プリントの 例⑵ の 下の 枠です。空らんに 入る ものを 確かめます。`,
+      `分母 ${M`x^2-1`} を 微分すると ${M`2x`}。分子は ${M`2`} なので、②-4 の「分子が 分母の 微分」の 形では ありません。置換積分は 使えません。`,
+      `積の 形でも ないので、部分積分も 使えません。`,
+      `分母が 2次と 高いので、${M`\frac{1}{x-1}-\frac{1}{x+1}`} の ように 部分分数に 分解します。`,
+      `分母が 1次の 分数に なれば、項ごとに ${M`\log`} で 積分できます。`]});
+
 const DECK = {title:'④-1 分数関数の不定積分', pages:[
-  {name:'表紙', html:p0}, {name:'方針', html:p1}, {name:'例　⑴', html:p2}, {name:'例　⑴　くわしく（割り算の 筆算）', html:p2b, add:'11/16'}, {name:'例　⑵', html:p3},
+  {name:'表紙', html:p0}, {name:'方針', html:p1}, {name:'例　⑴', html:p2}, {name:'例　⑴　くわしく（割り算の 筆算）', html:p2b, add:'11/16'}, {name:'例　⑴　プリントの 枠', html:f1, add:'11/16'}, {name:'例　⑵', html:p3}, {name:'例　⑵　プリントの 枠', html:f2, add:'11/16'},
   {name:'問14　⑴', html:p4}, {name:'問14　⑵', html:p5}, {name:'問16　⑴', html:p6}, {name:'問16　⑵', html:p7}, {name:'問16　⑶', html:p8}, {name:'まとめ', html:p9},
 ]};
 ''')
