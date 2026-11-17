@@ -36,6 +36,8 @@ def make(path, title, back_href, back_label, kicker, h1, lead, items):
 make('期末考査/目次.html', '２学期期末考査 目次', '../index.html', 'トップへ',
      '数学Ⅰ　２学期期末考査', '<span class="mk">期末考査</span>まで',
      '見たい 教材の カードを クリックしてね', [
+  {'href':'試験範囲.html?v=1.0', 'no':'試験範囲', 'title':'試験範囲・提出物',
+   'desc':'教科書・問題集の ページ、提出物（ファイル・問題集）の 提出日、寺子屋スペシャル'},   # 2026-11-17（build しない 1枚の HTML、試験範囲.png も）
   {'href':'jugyo/目次.html', 'no':'授業プリント', 'title':'授業プリントの 解説スライド',
    'desc':'2次方程式、x軸との共有点、2次不等式'},
   {'href':'kaitou/目次.html', 'no':'解答', 'title':'授業プリントの 解答',
