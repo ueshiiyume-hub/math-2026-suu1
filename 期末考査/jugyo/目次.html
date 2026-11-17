@@ -63,6 +63,11 @@ h1 .mk{background:linear-gradient(transparent 62%,var(--r-bg) 62%);padding:0 4px
 .toplink{display:inline-block;margin-bottom:18px;font-size:15px;font-weight:900;color:var(--b-ink);background:var(--b-bg);border-radius:999px;padding:4px 16px;text-decoration:none}
 .tag{font-size:13px;border:1.5px solid var(--r-bd);color:var(--accent);border-radius:999px;padding:0 10px}
 .empty{grid-column:1/-1;background:var(--paper);border:2px dashed var(--r-bd);border-radius:6px;padding:28px 20px;text-align:center;color:var(--muted);font-size:17px}
+.card.info{background:repeating-linear-gradient(var(--paper) 0 29px,var(--r-bg) 29px 30px);border:2.5px dashed var(--accent);padding-top:34px}
+.card.info .tape{display:none}
+.card.info::before{content:"📌";position:absolute;top:-18px;left:50%;transform:translateX(-50%) rotate(12deg);font-size:30px;filter:drop-shadow(0 2px 2px rgba(0,0,0,.18))}
+.card.info .date{display:inline-block;background:var(--accent);color:#fff;border-radius:999px;padding:1px 12px;font-weight:900}
+.card.info .title::before{content:"📅 ";font-size:.85em}
 </style>
 <script>window.THEME_BTN_SIDE="r";</script>
 <!-- 明るい／暗い の 切りかえ（スマホでも 押せる ボタン）。選んだ ものは この サイト 全体で 覚える -->
@@ -191,7 +196,7 @@ const ITEMS = [
 ];
 const tapes = ['pink','mint','yellow','lav','blue'];
 document.getElementById('list').innerHTML = ITEMS.length ? ITEMS.map((it,i)=>`
-  <a class="card" href="${it.href}" style="transform:rotate(${i%2?1.2:-1.2}deg)">
+  <a class="card ${it.cls||''}" href="${it.href}" style="transform:rotate(${i%2?1.2:-1.2}deg)">
     <span class="tape t-${tapes[i%tapes.length]}"></span>
     <div class="date">${it.no}</div>
     <div class="title">${it.title}</div>

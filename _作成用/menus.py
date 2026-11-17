@@ -8,6 +8,11 @@ ROOT = sys.argv[1]
 tpl = open(os.path.join(B, 'menu.html'), encoding='utf-8').read()
 
 EMPTY_CSS = '.empty{grid-column:1/-1;background:var(--paper);border:2px dashed var(--r-bd);border-radius:6px;padding:28px 20px;text-align:center;color:var(--muted);font-size:17px}\n</style>'
+INFO_CSS = ('.card.info{background:repeating-linear-gradient(var(--paper) 0 29px,var(--r-bg) 29px 30px);border:2.5px dashed var(--accent);padding-top:34px}\n'
+  '.card.info .tape{display:none}\n'
+  '.card.info::before{content:"📌";position:absolute;top:-18px;left:50%;transform:translateX(-50%) rotate(12deg);font-size:30px;filter:drop-shadow(0 2px 2px rgba(0,0,0,.18))}\n'
+  '.card.info .date{display:inline-block;background:var(--accent);color:#fff;border-radius:999px;padding:1px 12px;font-weight:900}\n'
+  '.card.info .title::before{content:"📅 ";font-size:.85em}\n</style>')
 EMPTY_JS = "document.getElementById('list').innerHTML = ITEMS.length ? ITEMS.map("
 
 def make(path, title, back_href, back_label, kicker, h1, lead, items):
@@ -25,6 +30,9 @@ def make(path, title, back_href, back_label, kicker, h1, lead, items):
     h = h.replace('{{ITEMS}}', json.dumps(items, ensure_ascii=False, indent=1))
     # カードが まだ無いときは「準備中」を出す
     h = h.replace('</style>', EMPTY_CSS)
+    # cls の ある カード（お知らせ＝info）は 教材の カードと ちがう デザイン：テープの かわりに ピン、点線の ふち、罫線の 紙、塗った ラベル
+    h = h.replace('<a class="card" href="${it.href}"', '<a class="card ${it.cls||\'\'}" href="${it.href}"')
+    h = h.replace('</style>', INFO_CSS, 1)
     h = h.replace("document.getElementById('list').innerHTML = ITEMS.map(", EMPTY_JS)
     h = h.replace("</a>`).join('');", "</a>`).join('') : '<div class=\"empty\">これから 追加していくよ。お楽しみに！</div>';")
     p = os.path.join(ROOT, path)
@@ -36,14 +44,15 @@ def make(path, title, back_href, back_label, kicker, h1, lead, items):
 make('期末考査/目次.html', '２学期期末考査 目次', '../index.html', 'トップへ',
      '数学Ⅰ　２学期期末考査', '<span class="mk">期末考査</span>まで',
      '見たい 教材の カードを クリックしてね', [
-  {'href':'試験範囲.html?v=1.0', 'no':'試験範囲', 'title':'試験範囲・提出物',
-   'desc':'教科書・問題集の ページ、提出物（ファイル・問題集）の 提出日、寺子屋スペシャル'},   # 2026-11-17（build しない 1枚の HTML、試験範囲.png も）
   {'href':'jugyo/目次.html', 'no':'授業プリント', 'title':'授業プリントの 解説スライド',
    'desc':'2次方程式、x軸との共有点、2次不等式'},
   {'href':'kaitou/目次.html', 'no':'解答', 'title':'授業プリントの 解答',
    'desc':'プリントと 同じ 場所に 答え。かくして 答え合わせも できる'},
   {'href':'taisaku/目次.html', 'no':'考査対策', 'title':'期末考査対策プリントの 解説',
    'desc':'期末考査 対策プリントの 解説'},
+  # お知らせの カード（教材と ちがう デザイン＝cls:'info'、いちばん 後ろ。先生の 指示 11/17）
+  {'href':'試験範囲.html?v=1.0', 'no':'お知らせ', 'title':'試験範囲・提出物',
+   'desc':'教科書・問題集の ページ、提出物（ファイル・問題集）の 提出日、寺子屋スペシャル', 'cls':'info'},   # 2026-11-17（build しない 1枚の HTML、試験範囲.png も）
 ])
 
 # 授業プリント（スライドができたら ここに足す）
