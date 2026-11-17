@@ -1362,7 +1362,30 @@ const p3 = dmPage({title:'例　(1＋i)⁴ の 値', R:{x0:-5, x1:2, y0:-1, y1:2
          [String.raw`(1+i)^4=\RE{(\sqrt{2})^4}(\cos\IM{180^\circ}+i\sin\IM{180^\circ})`,2], [String.raw`=4\times(-1)=\DP{-4}`,3]],
   cm:[`4回 掛ける 計算を、極形式で 楽に します。`, `まず 極形式に。長さ ${M`\sqrt{2}`}、向き ${M`45^\circ`}。`,
       `4乗 すると、<b class="re">長さは 4回 掛けて ${M`(\sqrt{2})^4=4`}</b>、<b class="im">向きは 4倍 で ${M`45^\circ\times4=180^\circ`}</b>。`,
-      `${M`\cos180^\circ=-1`}、${M`\sin180^\circ=0`} なので ${M`-4`}。真左、長さ ${M`4`} の 点です。`]});
+      `${M`\cos180^\circ=-1`}、${M`\sin180^\circ=0`} なので ${M`-4`}。真左、長さ ${M`4`} の 点です。（次の ページで くわしく）`]});
+
+/* 例 くわしく（11/17 の 板書）：{√2(cos45°＋i sin45°)}⁴ ＝ (√2)⁴ × (cos45°＋i sin45°)⁴ → ド・モアブルで cos(4×45°)＋i sin(4×45°) → −1 */
+const g3b = PL({x0:-5, x1:2, y0:-1, y1:2, u:66, ticks:false});
+const p3b = HD(NO, '例　くわしく', SEC) + `<div class="bd">
+  <div class="l">
+    <div class="q" style="font-size:24px"><span class="tag">例</span>${M`(1+i)^4`} の 値を 求めよ。</div>
+    <div class="calc" style="font-size:25px;gap:10px">
+      <div>${M`(1+i)^4=\{\RE{\sqrt{2}}(\cos\IM{45^\circ}+i\sin\IM{45^\circ})\}^4`}</div>
+      <div data-s="1">${M`=\underbrace{(\sqrt{2})^4}_{\RE{4}}\ \underbrace{(\cos45^\circ+i\sin45^\circ)^4}_{\text{ド・モアブル}}`}</div>
+      <div data-s="2">${M`(\cos45^\circ+i\sin45^\circ)^4`}<br>${M`=\cos(\IM{4\times45^\circ})+i\sin(\IM{4\times45^\circ})`}</div>
+      <div data-s="3">${M`=\underbrace{\cos180^\circ}_{-1}+i\,\underbrace{\sin180^\circ}_{0}=-1`}</div>
+      <div data-s="4" class="hl2">${M`(1+i)^4=4\times(-1)=\DP{-4}`}</div>
+    </div>
+  </div>
+  <div class="r">${g3b.svg(g3b.arr(0,0,1,1,null) + g3b.dot(1,1,`1 + ${IT('i')}`,null,{given:true, pos:'nw'})    + [0,1,2,3].map(k=>g3b.carc(45*k+3, 45*(k+1)-3, 120, 2, {d:.35*k, lab:'45°', lr:22})).join('')
+    + g3b.arr(0,0,-4,0,4,{c:'g', w:5}) + g3b.dot(-4, 0, '−4', 4, {d:.5, pos:'nw'}))}</div>
+</div>` + CAP([
+  `${M`1+i`} を 極形式に すると ${M`\sqrt{2}(\cos45^\circ+i\sin45^\circ)`}。これを 4乗 します。`,
+  `4乗は、前の ${M`\sqrt{2}`} と かっこの 中に 分けて それぞれ 4乗 できます。${M`(\sqrt{2})^4=(\sqrt{2})^2\times(\sqrt{2})^2=2\times2=4`}。`,
+  `かっこの 4乗は ド・モアブルの定理。角を 4倍 して ${M`\cos(4\times45^\circ)+i\sin(4\times45^\circ)`}。${M`45^\circ`} 回転を 4回 です。`,
+  `${M`4\times45^\circ=180^\circ`}。${M`\cos180^\circ=-1`}、${M`\sin180^\circ=0`} なので、かっこの 4乗は ${M`-1`}。`,
+  `${M`4\times(-1)=-4`}。前の ページと 同じ 答えです。`
+]);
 
 /* 例：図示（うずまき） */
 const gs = PL({x0:-5, x1:2, y0:-1, y1:3, u:66, ticks:false});
@@ -1408,7 +1431,7 @@ const p7 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:26px">
 
 const DECK = {title:'③-1 ド・モアブルの定理', pages:[
   {name:'表紙', html:p0}, {name:'同じ 回転の くり返し', html:p1}, {name:'ド・モアブルの定理', html:p2},
-  {name:'例　(1＋i)⁴ の 値', html:p3}, {name:'例　図示する', html:p4},
+  {name:'例　(1＋i)⁴ の 値', html:p3}, {name:'例　くわしく', html:p3b, add:'11/17'}, {name:'例　図示する', html:p4},
   {name:'問16 ⑴', html:p5}, {name:'問16 ⑵', html:p6}, {name:'まとめ', html:p7},
 ]};
 ''')
