@@ -302,11 +302,11 @@ const w5b = AFTER2(PR({...P2_, phase:2, cm:[
 
 const DECK = {title:'③-2 2次不等式の解法', groups:{'⑴':`⑴ ${EQ1}`, '⑵':`⑵ ${EQ2}`}, pages:[
   {name:'表紙', html:coverF(KK2, '<span class="mk">2次不等式</span><br>の 解き方', '塗って 答える', '', POL, '3つの Step')},
+  {name:'解き方', html:s1},   // 解き方（3つの Step）を 最初に（先生の 指示 11/18。前は 最後の「手順の まとめ」）
   {name:'やること', html:v1}, {name:'⑴ ❶ ＝0 に', html:va}, {name:'⑴ ❶ 解く', html:vb}, {name:'⑴ ❶ プリント', html:s2v}, {name:'⑴ ❷ 上を塗る', html:v3}, {name:'⑴ ❷ x軸上', html:v4}, {name:'⑴ ❷ プリント', html:s5a},
   {name:'⑴ ❸ 答える', html:v5}, {name:'⑴ 書きこみ', html:s5b},
   {name:'⑵ ❶ ＝0 に', html:wa}, {name:'⑵ ❶ 解く', html:wb}, {name:'⑵ ❶ プリント', html:w2v}, {name:'⑵ ❷ 下を塗る', html:w3}, {name:'⑵ ❷ x軸上', html:w4}, {name:'⑵ ❷ プリント', html:w5a},
   {name:'⑵ ❸ 答える', html:w5}, {name:'⑵ 書きこみ', html:w5b},
-  {name:'手順の まとめ', html:s1},
   {name:'終', html:endF(KK2 + '　2次不等式の解法', POL)}
 ]};
 '''
