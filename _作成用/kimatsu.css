@@ -888,3 +888,6 @@ body.portrait .ptag{left:70px;top:8px}
 .ptcard.ptbig{height:640px;overflow:hidden}
 .ptbig .zw{position:absolute;left:0;top:0;width:1184px;height:640px;transform-origin:0 0;transition:transform 1s ease-in-out}
 .ptbig .zw.wv-on{transform:var(--zt)}
+.iband2v{fill:none;stroke:#fbdde5;stroke-width:14;stroke-linecap:round;stroke-linejoin:round}   /* 内側を 比べる 帯（1本の V、③-2 ⑵、11/18） */
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .iband2v{stroke:#5a3a48} }
+:root[data-theme="dark"] .iband2v{stroke:#5a3a48}

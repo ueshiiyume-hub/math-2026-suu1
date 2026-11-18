@@ -257,7 +257,7 @@ const w5a = PR({...P2_, phase:2, upto:true, cm:[
 
 /* ❸ 答える：x を 1つ 置き、−2・−1 と 斜めに 比べる → −2 ≦ x ≦ −1 */
 /* A（小さい 方）と B（大きい 方）を 斜めに 比べる。side：書き直しを 置く 側 */
-const CMPAB = (g, A, B, s, out, side, le) => {
+const CMPAB = (g, A, B, s, out, side, le, nowr) => {
   const f = n => n.toFixed(1), mx=(A[0]+B[0])/2, my=(A[1]+B[1])/2;
   const ang = Math.atan2(B[1]-A[1], B[0]-A[0])*180/Math.PI, len = Math.hypot(B[0]-A[0], B[1]-A[1]) + 76;
   const tr = `translate(${f(mx)} ${f(my)}) rotate(${f(ang)})`;
@@ -265,20 +265,22 @@ const CMPAB = (g, A, B, s, out, side, le) => {
   const tx = side==='L' ? mx-170 : mx+170, ty = my+12, ex = side==='L' ? tx+92 : tx-92, ey = ty-12;
   return {band:`<g class="gs" data-s="${s}"><rect class="iband2" x="${f(-len/2)}" y="-30" width="${f(len)}" height="60" rx="30" transform="${tr}"/></g>`,
     rest:`<g class="gs" data-s="${s}"><path class="ilt-h" d="${sign}" transform="${tr}"/><path class="ilt" d="${sign}" transform="${tr}"/></g>
-    <g class="gs" data-s="${s+1}"><line class="idot2" x1="${f(mx+(side==='L'?-34:34))}" y1="${f(my)}" x2="${f(ex)}" y2="${f(ey)}"/>
-      <text class="iwr" x="${f(tx)}" y="${f(ty)}" text-anchor="middle">${out.replace(/x/g,'<tspan font-style="italic">x</tspan>')}</text></g>`}; };
+    ${nowr ? '' : `<g class="gs" data-s="${s+1}"><line class="idot2" x1="${f(mx+(side==='L'?-34:34))}" y1="${f(my)}" x2="${f(ex)}" y2="${f(ey)}"/>
+      <text class="iwr" x="${f(tx)}" y="${f(ty)}" text-anchor="middle">${out.replace(/x/g,'<tspan font-style="italic">x</tspan>')}</text></g>`}`}; };
 const h5 = IG({...GV2});   // ほかの ページと 同じ 形
 const XP = [h5.X(-1.5), h5.Y(-1.5)+72];      // x の 札（塗れた ところの 下）
 const XC = [h5.X(-1.5), h5.Y(-1.5)+8];
 const NL = [h5.X(-2), h5.ay+34], NR = [h5.X(-1), h5.ay+34];   // −2・−1 の 数
-const D5L = CMPAB(h5, NL, XP, 2, '−2 ≦ x', 'L', true), D5R = CMPAB(h5, XP, NR, 4, 'x ≦ −1', 'R', true);
+/* 内側（下を 塗る）は 左右 まとめて 1回で 比べ、書き直さずに 1つの 式で 答える。帯も 1本の V（先生の 指示 11/18） */
+const D5L = CMPAB(h5, NL, XP, 2, '', 'L', true, true), D5R = CMPAB(h5, XP, NR, 2, '', 'R', true, true);
+const D5V = `<g class="gs" data-s="2"><path class="iband2v" style="stroke-width:60" d="M${NL[0].toFixed(1)} ${NL[1].toFixed(1)} L${XP[0].toFixed(1)} ${XP[1].toFixed(1)} L${NR[0].toFixed(1)} ${NR[1].toFixed(1)}"/></g>`;
 const w5 = `
   <div class="card abs dcard v2">${EQTAPE}
     ${NAV(3)}
     <div class="v2c">
-      ${BIG('塗れた ところの x は？','x を 置く',null,0,6)}
-      <div class="v2kw v2ans lh" data-s="6"><div class="v2sm">答え</div><div class="v2big math"><span class="v2mk">−2 ≦ x ≦ −1</span></div></div>
-      <div class="v2g">${h5.svg(D5L.band, D5R.band, `<rect class="v2up show" x="10" y="${h5.ay}" width="0" height="0"/>`, h5.base, PAINTED2(h5), BD(h5,-2), BD(h5,-1),
+      ${BIG('塗れた ところの x は？','x を 置く',null,0,3)}
+      <div class="v2kw v2ans lh" data-s="3"><div class="v2sm">答え</div><div class="v2big math"><span class="v2mk">−2 ≦ x ≦ −1</span></div></div>
+      <div class="v2g">${h5.svg(D5V, `<rect class="v2up show" x="10" y="${h5.ay}" width="0" height="0"/>`, h5.base, PAINTED2(h5), BD(h5,-2), BD(h5,-1),
         `<g class="gs" data-s="1"><line class="ixln" x1="${XP[0]}" y1="${XP[1]-24}" x2="${XC[0]}" y2="${XC[1]+4}"/><circle class="ixdot" cx="${XC[0]}" cy="${XC[1]}" r="6"/><circle class="ixb" cx="${XP[0]}" cy="${XP[1]}" r="24"/><text class="ixt" x="${XP[0]}" y="${XP[1]+10}" text-anchor="middle">x</text></g>`,
         D5L.rest, D5R.rest)}</div>
     </div>
@@ -286,11 +288,8 @@ const w5 = `
   ${cbar([
     `塗れた ところの x は どんな 数？`,
     `塗れた ところに <b>x</b> を 置く。`,
-    `x は −2 より 右 → 大きい。　黒丸 なので ＝ も つけて <b>≦</b>。`,
-    `書き直して ${M('−2 ≦ x')}。`,
-    `x は −1 より 左 → 小さい。　黒丸 なので <b>≦</b>。`,
-    `書き直して ${M('x ≦ −1')}。`,
-    `2つを まとめて 答え ${M('−2 ≦ x ≦ −1')}。　<b>完成！</b>`])}`;
+    `左右 まとめて 比べる。　x は −2 より 右（大きい）、−1 より 左（小さい）。　黒丸 なので ＝ も つけて どちらも <b>≦</b>。`,
+    `1つの 式で 答え ${M('−2 ≦ x ≦ −1')}。　<b>完成！</b>`])}`;
 const w5b = AFTER2(PR({...P2_, phase:2, cm:[
   `プリントに 書きこもう。　<i class="nv">Step</i>❷ は もう 塗れて いる。`,
   `<i class="nv">Step</i>❸。　塗れた ところに <b>x</b> を 置く。`,
@@ -319,8 +318,8 @@ function PRF(o){
     T([r1-14,ay+1.5,r1+6,ay+12.5],`<span style="font-size:.8em">${o.lab[0]}</span>`,8.5,'ac'), T([r2-6,ay+1.5,r2+14,ay+12.5],`<span style="font-size:.8em">${o.lab[1]}</span>`,8.5,'ac'),
     L(1,[148,309,326,331],o.c[0]), {s:2, r:R([262,310,326,330]), h:`<span class="ytag">y ＝ 0 と する</span>`, fs:7.8, cls:'xyt'},
     L(2,[148,335,326,357],o.c[1]), L(3,[148,361,326,383],o.c[2]), L(4,[148,387,326,409],o.c[3]),
-    XA(B(8),R([323.2,467.2,507.3,498.3]),o.ans,13),
-    ...o.rw.map((h,i)=>({s:B(5+2*i), r:[333+i*86,Yd(449),411+i*86,Yd(463)], h:h, fs:11, cls:'xan xwr', al:'c'}))];
+    XA(o.out ? B(8) : B(5),R([323.2,467.2,507.3,498.3]),o.ans,13),
+    ...(o.out ? o.rw.map((h,i)=>({s:B(5+2*i), r:[333+i*86,Yd(449),411+i*86,Yd(463)], h:h, fs:11, cls:'xan xwr', al:'c'})) : [])];   // 内側（下を 塗る）：書き直さず、比べたら すぐ 1つの 式で 答える（11/18）
   const svg = [
     `<rect class="xpb" x="73.5" y="${Yd(304.5)}" width="45.5" height="18.5"/><rect class="xpb" x="73.5" y="${Yd(428.9)}" width="45.5" height="18.5"/><rect class="xpb" x="286.7" y="${Yd(428.9)}" width="45.6" height="18.5"/>`,
     `<rect class="xpb" x="142.8" y="${Yd(305.4)}" width="184" height="109.8"/><rect class="xpb" x="354.2" y="${Yd(305.4)}" width="137.2" height="109.8"/><rect class="xpr" x="323.2" y="${Yd(467.2)}" width="184.1" height="31.1"/>`,
@@ -336,17 +335,21 @@ function PRF(o){
                   : [{at:[pv.xv,ay+36], to:[pv.xv,Yc(pv.xv)+1.5]}];
   const pairs = o.out ? [[X[0].at,P.L,B(4)],[P.R,X[1].at,B(6)]] : [[P.L,X[0].at,B(4)],[X[0].at,P.R,B(6)]];
   const le = o.dot==='f';
-  pairs.forEach(([A,Bp,st])=>{
+  /* 内側（下を 塗る）：左右 まとめて 1回で 比べる。帯も 1本（V の 形、左右で 分けない。先生の 指示 11/18） */
+  if(!o.out){ const [A,M_,C] = [P.L, X[0].at, P.R];
+    svg.splice(4,0,`<g class="gs" data-s="${B(4)}"><path class="iband2v" d="M${f(A[0])} ${f(A[1])} L${f(M_[0])} ${f(M_[1])} L${f(C[0])} ${f(C[1])}"/></g>`); }
+  pairs.forEach(([A,Bp,st0])=>{ const st = o.out ? st0 : B(4);
     const mx=(A[0]+Bp[0])/2, my=(A[1]+Bp[1])/2, ang=Math.atan2(Bp[1]-A[1],Bp[0]-A[0])*180/Math.PI, len=Math.hypot(Bp[0]-A[0],Bp[1]-A[1])+16;
     const tr = `translate(${f(mx)} ${f(my)}) rotate(${f(ang)})`;
-    svg.splice(4,0,`<g class="gs" data-s="${st}"><rect class="iband2" x="${f(-len/2)}" y="-7" width="${f(len)}" height="14" rx="7" transform="${tr}"/></g>`);
+    if(o.out) svg.splice(4,0,`<g class="gs" data-s="${st}"><rect class="iband2" x="${f(-len/2)}" y="-7" width="${f(len)}" height="14" rx="7" transform="${tr}"/></g>`);
     svg.push(`<g class="gs" data-s="${st}"><path class="ilt pt" d="M3.5 -3.5 L-3.5 0 L3.5 3.5${le?' M-3.5 2.6 L3.5 6.1':''}" transform="${tr}"/></g>`);
   });
   svg.push(`<g class="gs" data-s="${B(3)}">${X.map(x=>`<line class="ixln pt" x1="${f(x.at[0])}" y1="${f(x.at[1])}" x2="${f(x.to[0])}" y2="${f(x.to[1])}"/><circle class="ixdot" cx="${f(x.to[0])}" cy="${f(x.to[1])}" r="1.4"/><circle class="ixb" cx="${f(x.at[0])}" cy="${f(x.at[1])}" r="5.2"/><text class="ixt pt" x="${f(x.at[0])}" y="${f(x.at[1]+2.4)}" text-anchor="middle">x</text>`).join('')}</g>`);
   /* ズームする ところ（PDF の pt）：[番の はじめ, 終わりの 次, x1, y1, x2, y2] */
   const yb = (o.out?528:546)+dy;
-  const Z = [[1,5, 66,300+dy,332,418+dy], [5,8, 342,300+dy,498,418+dy], [9,11, 66,424+dy,286,yb], [12,18, 112,424+dy,512,yb]];   // ❶ 計算 → ❶ グラフ → ❷ → ❸
-  return ptBig({clip:[60,278+dy,535,yb], svg, items, done:18, Z});
+  const E3 = o.out ? 18 : 15;                  // 内側は ❸ が 3番（x を 置く → 左右 まとめて 比べる → 答え）
+  const Z = [[1,5, 66,300+dy,332,418+dy], [5,8, 342,300+dy,498,418+dy], [9,11, 66,424+dy,286,yb], [12,E3, 112,424+dy,512,yb]];   // ❶ 計算 → ❶ グラフ → ❷ → ❸
+  return ptBig({clip:[60,278+dy,535,yb], svg, items, done:E3, Z});
 }
 const F1 = PRF(P1), F2 = PRF(P2_);
 /* くわしい 解説の 見出し */

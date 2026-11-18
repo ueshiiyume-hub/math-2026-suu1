@@ -1333,6 +1333,9 @@ body.portrait .ptag{left:70px;top:8px}
 .ptcard.ptbig{height:640px;overflow:hidden}
 .ptbig .zw{position:absolute;left:0;top:0;width:1184px;height:640px;transform-origin:0 0;transition:transform 1s ease-in-out}
 .ptbig .zw.wv-on{transform:var(--zt)}
+.iband2v{fill:none;stroke:#fbdde5;stroke-width:14;stroke-linecap:round;stroke-linejoin:round}   /* 内側を 比べる 帯（1本の V、③-2 ⑵、11/18） */
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .iband2v{stroke:#5a3a48} }
+:root[data-theme="dark"] .iband2v{stroke:#5a3a48}
 
 /* ===== 手書き ===== */
 #ink{position:fixed;left:0;top:0;z-index:15;pointer-events:none;touch-action:none}
@@ -2179,7 +2182,7 @@ function ptBig(P){
 }
 
 /* ====== このプリントのスライド ====== */
-const SERIES = [{"f": "1-1_因数分解の復習", "no": "①-1", "t": "因数分解の 復習", "v": "1.7_2026-11-15"}, {"f": "1-2_2次方程式の解", "no": "①-2", "t": "2次方程式の 解", "v": "1.7_2026-11-15"}, {"f": "1-3_2次方程式の解", "no": "①-3", "t": "2次方程式の 解 ②", "v": "1.7_2026-11-15"}, {"f": "1-4_解の公式", "no": "①-4", "t": "解の公式", "v": "1.9_2026-11-15"}, {"f": "1-5_解の公式_重解と解なし", "no": "①-5", "t": "2次方程式の 解 ③", "v": "1.9_2026-11-15"}, {"f": "1-6_実数解の個数", "no": "①-6", "t": "実数解の 個数", "v": "1.9_2026-11-15"}, {"f": "2-1_x軸との共有点", "no": "②-1", "t": "x軸との 共有点", "v": "1.7_2026-11-15"}, {"f": "2-2_x軸との共有点", "no": "②-2", "t": "x軸との 共有点 ②", "v": "1.7_2026-11-15"}, {"f": "2-3_x軸との位置関係", "no": "②-3", "t": "x軸との 位置関係", "v": "1.12_2026-11-15"}, {"f": "3-2_2次不等式_練習編_v2", "no": "③-1", "t": "2次不等式 練習編", "v": "3.20_2026-11-15"}, {"f": "3-1_2次不等式の解法_v2", "no": "③-2", "t": "2次不等式の 解き方", "v": "3.0_2026-11-18"}, {"f": "3-3_2次不等式の解法_v2", "no": "③-3", "t": "2次不等式 いろいろ", "v": "2.6_2026-11-15"}, {"f": "3-4_2次不等式の解法_v2", "no": "③-4", "t": "x² の前が マイナス", "v": "2.5_2026-11-15"}], ME = "3-4_2次不等式の解法_v2";
+const SERIES = [{"f": "1-1_因数分解の復習", "no": "①-1", "t": "因数分解の 復習", "v": "1.7_2026-11-15"}, {"f": "1-2_2次方程式の解", "no": "①-2", "t": "2次方程式の 解", "v": "1.7_2026-11-15"}, {"f": "1-3_2次方程式の解", "no": "①-3", "t": "2次方程式の 解 ②", "v": "1.7_2026-11-15"}, {"f": "1-4_解の公式", "no": "①-4", "t": "解の公式", "v": "1.9_2026-11-15"}, {"f": "1-5_解の公式_重解と解なし", "no": "①-5", "t": "2次方程式の 解 ③", "v": "1.9_2026-11-15"}, {"f": "1-6_実数解の個数", "no": "①-6", "t": "実数解の 個数", "v": "1.9_2026-11-15"}, {"f": "2-1_x軸との共有点", "no": "②-1", "t": "x軸との 共有点", "v": "1.7_2026-11-15"}, {"f": "2-2_x軸との共有点", "no": "②-2", "t": "x軸との 共有点 ②", "v": "1.7_2026-11-15"}, {"f": "2-3_x軸との位置関係", "no": "②-3", "t": "x軸との 位置関係", "v": "1.12_2026-11-15"}, {"f": "3-2_2次不等式_練習編_v2", "no": "③-1", "t": "2次不等式 練習編", "v": "3.20_2026-11-15"}, {"f": "3-1_2次不等式の解法_v2", "no": "③-2", "t": "2次不等式の 解き方", "v": "3.0_2026-11-18"}, {"f": "3-3_2次不等式の解法_v2", "no": "③-3", "t": "2次不等式 いろいろ", "v": "3.0_2026-11-18"}, {"f": "3-4_2次不等式の解法_v2", "no": "③-4", "t": "x² の前が マイナス", "v": "2.5_2026-11-15"}], ME = "3-4_2次不等式の解法_v2";
 const VER = '<i class="nv">ver</i> 2.5　2026-11-15';
 /* ③-1 ver 2.0 の 土台：ver 1.4 の 部品の 写し（ver 1.4 を 直しても ver 2.0 は 変わらない） */
 
@@ -2608,6 +2611,8 @@ const CMP3 = (A, B, le) => { const mx=(A[0]+B[0])/2, my=(A[1]+B[1])/2, ang=Math.
   const tr=`translate(${f1(mx)} ${f1(my)}) rotate(${f1(ang)})`, d=`M13 -13 L-13 0 L13 13${le?' M-13 9 L13 22':''}`;
   return {mx, my, band:`<rect class="iband2" x="${f1(-len/2)}" y="-26" width="${f1(len)}" height="52" rx="26" transform="${tr}"/>`,
           sign:`<path class="ilt-h" d="${d}" transform="${tr}"/><path class="ilt" d="${d}" transform="${tr}"/>`}; };
+/* 内側（下を 塗る）の 帯：左右で 分けず 1本の V（A → x → C、先生の 指示 11/18） */
+const VB3 = (A, X, C) => `<path class="iband2v" style="stroke-width:52" d="M${f1(A[0])} ${f1(A[1])} L${f1(X[0])} ${f1(X[1])} L${f1(C[0])} ${f1(C[1])}"/>`;
 /* √ や 分数を 含む 文字は SVG の text では √ の 上の 棒が かけない → HTML（SQ・FX）に して foreignObject で 置く（11/7） */
 const TXH0 = t => t.replace(/(\S)([−+＋])(?=\S)/g,'$1 $2 ').replace(/\+/g,'＋').replace(/x/g,'<i>x</i>').replace(/√(\d+)/g,(q,n)=>SQ(n));
 const TXH = t => t.split(/(\([^()]+\)\/\d+|[^\s()/]+\/\d+)/).map((g,i) => { if(!(i%2)) return TXH0(g);
@@ -2629,8 +2634,10 @@ function XSTEP(r, j, g){
       c1=CMP3(L, NL(-1), le); c2=CMP3(NL(3), R, le); t1=[g.X(-1)-200, g.ay+80]; t2=[g.X(3)+200, g.ay+80]; o1=`x ${sg} −1`; o2=`3 ${sg} x`;
       x3 = XB3(L,[g.X(-1.4),g.Y(-1.4)]) + XB3(R,[g.X(3.4),g.Y(3.4)]);
     } else { const X=[g.X(1), g.Y(1)+42];
-      c1=CMP3(NL(-1), X, le); c2=CMP3(X, NL(3), le); t1=[g.X(-1)-170, g.ay+90]; t2=[g.X(3)+170, g.ay+90]; o1=`−1 ${sg} x`; o2=`x ${sg} 3`;
+      c1=CMP3(NL(-1), X, le); c2=CMP3(X, NL(3), le);
       x3 = XB3(X,[g.X(1),g.Y(1)]);
+      /* 内側：左右 まとめて 1回で 比べ（6）、書き直さずに 答え（7）。帯は 1本の V（11/18） */
+      return {back:`<g class="gs" data-s="6">${VB3(NL(-1), X, NL(3))}</g>`, front:`<g class="gs" data-s="5">${x3}</g><g class="gs" data-s="6">${c1.sign}${c2.sign}</g>`};
     }
     return {back:`<g class="gs" data-s="6">${c1.band}</g><g class="gs" data-s="8">${c2.band}</g>`,
       front:`<g class="gs" data-s="5">${x3}</g><g class="gs" data-s="6">${c1.sign}</g><g class="gs" data-s="7">${DL(c1,t1)}${WR3(t1[0],t1[1],o1)}</g><g class="gs" data-s="8">${c2.sign}</g><g class="gs" data-s="9">${DL(c2,t2)}${WR3(t2[0],t2[1],o2)}</g>`};
@@ -2643,9 +2650,9 @@ function XSTEP(r, j, g){
     w4 = c1.sign + c2.sign + WR3(g.X(-1)-200, g.ay+80, `x ${sg} −1`) + WR3(g.X(3)+200, g.ay+80, `3 ${sg} x`);
   } else if(r===0){           // 内側
     const X=[g.X(1), g.Y(1)+42], c1=CMP3(NL(-1), X, le), c2=CMP3(X, NL(3), le);
-    back = `<g class="gs" data-s="6">${c1.band}${c2.band}</g>`;
+    back = `<g class="gs" data-s="6">${VB3(NL(-1), X, NL(3))}</g>`;   // 帯は 1本の V、書き直さずに 1つの 式で 答える（11/18）
     x3 = XB3(X,[g.X(1),g.Y(1)]);
-    w4 = c1.sign + c2.sign + WR3(g.X(-1)-170, g.ay+90, `−1 ${sg} x`) + WR3(g.X(3)+170, g.ay+90, `x ${sg} 3`);
+    w4 = c1.sign + c2.sign;
   } else if(r===1 && j===0){  // 1 以外
     const L=[g.X(1)-150, g.ay-80], R=[g.X(1)+150, g.ay-80], N=[g.X(1), g.ay+34];
     const c1=CMP3(L, N, false), c2=CMP3(N, R, false);
@@ -2670,7 +2677,7 @@ function Q3(r, j){
   const any = !(r===1 && !up) && !(r===2 && !up);
   const dots = R.roots.map(x=>DOT3(g, x, eq, 4)).join('');
   const w2 = R.roots.length ? (eq ? 'x軸も 塗る（黒丸）' : 'x軸は 塗らない（白丸）') : 'x軸と 交わらない';
-  const am = MATHY(ans), xs = XSTEP(r, j, g), dt = r===0 && j<2, fin = dt ? 10 : 6;   // dt：⑴⑵ は 答えまでを くわしく（番 6〜9 を 足す）
+  const am = MATHY(ans), xs = XSTEP(r, j, g), dt = r===0 && j<2, fin = dt ? (up ? 10 : 7) : 6;   // 内側は 左右 まとめて 比べる（6）→ 答え（7）   // dt：⑴⑵ は 答えまでを くわしく（番 6〜9 を 足す）
   /* 番：1 ${sg} 0 を 強調、2 上（下）を 塗る／上（下）と x軸を 塗る、3 塗る、4 軸、5 x を 置く、6 式・答え */
   return `
   <div class="card abs dcard v2 p3 p3big">${EQTAPE}
@@ -2680,7 +2687,7 @@ function Q3(r, j){
       <div class="p3w lh" data-s="2" data-o="4"><span class="v2mk">${PW3(up, eq)}</span></div>
       <div class="p3w lh" data-s="4" data-o="5"><span class="v2mk">${w2}</span></div>
       <div class="p3w lh" data-s="5" data-o="6"><span class="v2mk">${any?'塗れた ところに x を 置く':'塗れた ところは？'}</span></div>
-      ${dt ? `<div class="p3w lh" data-s="6" data-o="10"><span class="v2mk">x と 近くの 数を 比べる</span></div>` : ''}
+      ${dt ? `<div class="p3w lh" data-s="6" data-o="${fin}"><span class="v2mk">x と 近くの 数を 比べる</span></div>` : ''}
       <div class="p3w p3a lh" data-s="${fin}"><span class="p3why">${WHY[r][j]}</span></div>
       ${ANSBOX3(g, ans, am, fin)}
       <div class="p3g"><svg class="isv" width="${g.W}" height="${g.H}" viewBox="0 0 ${g.W} ${g.H}">
@@ -2699,9 +2706,8 @@ function Q3(r, j){
       `左：<b>x</b> と −1 を 比べる。　x は −1 より 小さい。　白丸 なので <b>＜</b>。`, `書き直して ${M('x ＜ −1')}。`,
       `右：<b>x</b> と 3 を 比べる。　x は 3 より 大きい。　白丸 なので <b>＜</b>。`, `書き直して ${M('3 ＜ x')}。`,
       `2か所 なので 答えは 2つ。　答え <b>${ans}</b>。`] : [
-      `左：−1 と <b>x</b> を 比べる。　x は −1 より 大きい。　白丸 なので <b>＜</b>。`, `書き直して ${M('−1 ＜ x')}。`,
-      `右：<b>x</b> と 3 を 比べる。　x は 3 より 小さい。　白丸 なので <b>＜</b>。`, `書き直して ${M('x ＜ 3')}。`,
-      `2つを まとめて 答え <b>${ans}</b>。`]) : [`${WHY[r][j]} → 答え <b>${ans}</b>。`])])}`;
+      `左右 まとめて 比べる。　x は −1 より 大きく、3 より 小さい。　白丸 なので どちらも <b>＜</b>。`,
+      `1つの 式で 答え <b>${ans}</b>。`]) : [`${WHY[r][j]} → 答え <b>${ans}</b>。`])])}`;
 }
 
 
@@ -2800,7 +2806,7 @@ function GQ(P){
   const NL = (x,i) => [g.X(x)+off(i), g.ay+32];
   const le = eq, s2 = le ? '≦' : '＜';
   let back='', x3='', w4='';
-  const dt = P.dt && kind===0, fin = dt ? 10 : 6;   // dt：答えを くわしく（左を 比べる 6 → 書き直す 7 → 右 8 → 9、答えは 10。③-3 の 例⑴、11/7）
+  const dt = P.dt && kind===0 && up, fin = dt ? 10 : 6;   // 内側は くわしく しない（左右 まとめて 比べて すぐ 答え、11/18）   // dt：答えを くわしく（左を 比べる 6 → 書き直す 7 → 右 8 → 9、答えは 10。③-3 の 例⑴、11/7）
   const DL3 = (c, t) => `<line class="idot2" x1="${f1(c.mx+(t[0]<c.mx?-24:24))}" y1="${f1(c.my+30)}" x2="${f1(t[0]+(t[0]<c.mx?70:-70))}" y2="${f1(t[1]-14)}"/>`;
   const SPLIT = (c1, c2, t1, t2, o1, o2) => { if(dt){
       back = `<g class="gs" data-s="6">${c1.band}</g><g class="gs" data-s="8">${c2.band}</g>`;
@@ -2813,7 +2819,7 @@ function GQ(P){
   } else if(kind===0){
     const X=[g.X(m), g.Y(m)+42], c1=CMP3(NL(a,0), X, le), c2=CMP3(X, NL(b,1), le);
     x3 = XB3(X,[g.X(m),g.Y(m)]);
-    SPLIT(c1, c2, [g.X(a)-(P.wo||170)*fW, g.ay+90], [g.X(b)+(P.wo||170)*fW, g.ay+90], `${lab[0]} ${s2} x`, `x ${s2} ${lab[1]}`);
+    back = `<g class="gs" data-s="6">${VB3(NL(a,0), X, NL(b,1))}</g>`; w4 = c1.sign + c2.sign;   // 内側：帯は 1本の V、書き直さずに 1つの 式で 答える（11/18）
   } else if(kind===1 && P.s===0){
     const L=[g.X(m)-150*fW, g.ay-80], R=[g.X(m)+150*fW, g.ay-80], N=[g.X(m), g.ay+34], c1=CMP3(L, N, false), c2=CMP3(N, R, false);
     back = `<g class="gs" data-s="6">${c1.band}${c2.band}</g>`;
@@ -2848,7 +2854,7 @@ function GQ(P){
       <div class="p3w lh" data-s="2" data-o="4"><span class="v2mk">${PW3(up, eq)}</span></div>
       <div class="p3w lh" data-s="4" data-o="5"><span class="v2mk">${w2}</span></div>
       <div class="p3w lh" data-s="5" data-o="${dt?6:fin}"><span class="v2mk">${any?'塗れた ところに x を 置く':'塗れた ところは？'}</span></div>
-      ${dt ? `<div class="p3w lh" data-s="6" data-o="10"><span class="v2mk">x と 近くの 数を 比べる</span></div>` : ''}
+      ${dt ? `<div class="p3w lh" data-s="6" data-o="${fin}"><span class="v2mk">x と 近くの 数を 比べる</span></div>` : ''}
       <div class="p3w p3a lh" data-s="${fin}"><span class="p3why">${why}</span></div>
       ${ANSBOX3(g, P.ans, am, fin)}`)}
       ${P.pre && !P.side ? P.pre.html : ''}
