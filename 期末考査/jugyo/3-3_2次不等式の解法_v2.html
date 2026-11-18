@@ -2153,8 +2153,33 @@ function SUDARE(n, s){
 }
 const RDX = (t, r, s, dn) => `<span class="rdx">${t}<i class="rdl lh" data-s="${s}"></i><span class="rdn${dn?' dn':''} lh" data-s="${s}">${r}</span></span>`;
 
+/* ====== 1枚の 基本の 解説（③-2・③-3、2026-11-18）：ptSlide と 同じ プリントの 配置で、下の 説明 なし・カードを 大きく（640px）、ズーム つき ======
+   P = {clip, svg, items, done, Z:[[番の はじめ, 終わりの 次, x1, y1, x2, y2], …]}（Z は PDF の pt。その 番の 間だけ その ところを 大きく） */
+function ptBig(P){
+  const AW = 1184, AH = 640;
+  const [cx1,cy1,cx2,cy2] = P.clip, w = cx2-cx1, h = cy2-cy1;
+  const s = Math.min(1150/w, (AH-20)/h, 2.8);
+  const W = w*s, H = h*s, L = (AW-W)/2, T = (AH-H)/2;
+  const X = x => (L+(x-cx1)*s), Y = y => (T+(y-cy1)*s);
+  const R = r => `left:${X(r[0]).toFixed(1)}px;top:${Y(r[1]).toFixed(1)}px;width:${((r[2]-r[0])*s).toFixed(1)}px;height:${((r[3]-r[1])*s).toFixed(1)}px`;
+  const it = P.items.map(o => `<div class="pte ${o.cls||''} ${o.al==='c'?'ac':''}${o.s!==undefined?' lh':''}"${o.s!==undefined?` data-s="${o.s}"`:''} style="${R(o.r)};font-size:${((o.fs||10.5)*s).toFixed(1)}px"><span class="kwr">${o.h}</span></div>`).join('');
+  /* ズームは 入れ子の .zw（ズームする ところの 数だけ）（それぞれ data-wa〜data-wb の 間だけ wv-on → transform:var(--zt)）。:has() は 使わない（古い 端末・一部の ブラウザで 効かない） */
+  const zt = ([a,b,x1,y1,x2,y2]) => { const a1=X(x1), b1=Y(y1), a2=X(x2), b2=Y(y2);
+    const k = Math.min(AW/(a2-a1), AH/(b2-b1)) * .95, tx = AW/2 - k*(a1+a2)/2, ty = AH/2 - k*(b1+b2)/2;
+    return `translate(${tx.toFixed(1)}px,${ty.toFixed(1)}px) scale(${k.toFixed(3)})`; };
+  const open = P.Z.map(z=>`<div class="zw" data-wa="${z[0]}" data-wb="${z[1]}" style="--zt:${zt(z)}">`).join('');
+  return `
+  <div class="card abs ptcard ptbig">
+    ${open}
+      <svg class="pgsv" style="left:${L.toFixed(1)}px;top:${T.toFixed(1)}px" width="${W.toFixed(1)}" height="${H.toFixed(1)}" viewBox="${cx1} ${cy1} ${w} ${h}">${P.svg.join('')}</svg>
+      ${it}
+    ${P.Z.map(()=>'</div>').join('')}
+  </div>
+  <div class="abs r done pgdone" data-s="${P.done}"><div class="seal">完成！</div></div>`;
+}
+
 /* ====== このプリントのスライド ====== */
-const SERIES = [{"f": "1-1_因数分解の復習", "no": "①-1", "t": "因数分解の 復習", "v": "1.7_2026-11-15"}, {"f": "1-2_2次方程式の解", "no": "①-2", "t": "2次方程式の 解", "v": "1.7_2026-11-15"}, {"f": "1-3_2次方程式の解", "no": "①-3", "t": "2次方程式の 解 ②", "v": "1.7_2026-11-15"}, {"f": "1-4_解の公式", "no": "①-4", "t": "解の公式", "v": "1.9_2026-11-15"}, {"f": "1-5_解の公式_重解と解なし", "no": "①-5", "t": "2次方程式の 解 ③", "v": "1.9_2026-11-15"}, {"f": "1-6_実数解の個数", "no": "①-6", "t": "実数解の 個数", "v": "1.9_2026-11-15"}, {"f": "2-1_x軸との共有点", "no": "②-1", "t": "x軸との 共有点", "v": "1.7_2026-11-15"}, {"f": "2-2_x軸との共有点", "no": "②-2", "t": "x軸との 共有点 ②", "v": "1.7_2026-11-15"}, {"f": "2-3_x軸との位置関係", "no": "②-3", "t": "x軸との 位置関係", "v": "1.12_2026-11-15"}, {"f": "3-2_2次不等式_練習編_v2", "no": "③-1", "t": "2次不等式 練習編", "v": "3.20_2026-11-15"}, {"f": "3-1_2次不等式の解法_v2", "no": "③-2", "t": "2次不等式の 解き方", "v": "2.27_2026-11-18"}, {"f": "3-3_2次不等式の解法_v2", "no": "③-3", "t": "2次不等式 いろいろ", "v": "2.6_2026-11-15"}, {"f": "3-4_2次不等式の解法_v2", "no": "③-4", "t": "x² の前が マイナス", "v": "2.5_2026-11-15"}], ME = "3-3_2次不等式の解法_v2";
+const SERIES = [{"f": "1-1_因数分解の復習", "no": "①-1", "t": "因数分解の 復習", "v": "1.7_2026-11-15"}, {"f": "1-2_2次方程式の解", "no": "①-2", "t": "2次方程式の 解", "v": "1.7_2026-11-15"}, {"f": "1-3_2次方程式の解", "no": "①-3", "t": "2次方程式の 解 ②", "v": "1.7_2026-11-15"}, {"f": "1-4_解の公式", "no": "①-4", "t": "解の公式", "v": "1.9_2026-11-15"}, {"f": "1-5_解の公式_重解と解なし", "no": "①-5", "t": "2次方程式の 解 ③", "v": "1.9_2026-11-15"}, {"f": "1-6_実数解の個数", "no": "①-6", "t": "実数解の 個数", "v": "1.9_2026-11-15"}, {"f": "2-1_x軸との共有点", "no": "②-1", "t": "x軸との 共有点", "v": "1.7_2026-11-15"}, {"f": "2-2_x軸との共有点", "no": "②-2", "t": "x軸との 共有点 ②", "v": "1.7_2026-11-15"}, {"f": "2-3_x軸との位置関係", "no": "②-3", "t": "x軸との 位置関係", "v": "1.12_2026-11-15"}, {"f": "3-2_2次不等式_練習編_v2", "no": "③-1", "t": "2次不等式 練習編", "v": "3.20_2026-11-15"}, {"f": "3-1_2次不等式の解法_v2", "no": "③-2", "t": "2次不等式の 解き方", "v": "3.0_2026-11-18"}, {"f": "3-3_2次不等式の解法_v2", "no": "③-3", "t": "2次不等式 いろいろ", "v": "2.6_2026-11-15"}, {"f": "3-4_2次不等式の解法_v2", "no": "③-4", "t": "x² の前が マイナス", "v": "2.5_2026-11-15"}], ME = "3-3_2次不等式の解法_v2";
 const VER = '<i class="nv">ver</i> 2.6　2026-11-15';
 /* ③-1 ver 2.0 の 土台：ver 1.4 の 部品の 写し（ver 1.4 を 直しても ver 2.0 は 変わらない） */
 
@@ -3041,6 +3066,61 @@ const E4 = Q33('⑷', `x${P2} ＋ 2x ＋ 5`, 0, [], 'すべての実数', {tag:n
   cm:[`${MS(EQ0(`x${P2} ＋ 2x ＋ 5`))}。　因数分解 できない → <b>解の公式</b>。　${M(`x ＝ ${FR('−2 ± √(4 − 20)',2)} ＝ ${FR('−2 ± √(−16)',2)}`)}`,
     `√ の 中が マイナス。　2乗して マイナスに なる 数は ない → <b>解なし</b>（x軸との 共有点が ない）。`]});
 
+/* ===== 基本の 解説：⑴〜⑷ を 1枚ずつ（プリント No.13 の 配置に 書きこむ。③-2 と 同じ 作り、先生の 指示 11/18） =====
+   計算は 1行ずつ → グラフ（点 → 放物線 → 座標）→ 塗る → 白丸・黒丸 → 答え。いま 書いて いる ところを ズーム（計算 → グラフ → 全体 → 塗る → 全体 → 答え → 全体）。
+   o = {k（何番目の 例 0〜3）, no, q（問題の 式）, lines:[計算の 行 4つ], kind（0 交わる・1 接する・2 交わらない）, lab, paint, dot, rw（答えの 前に 書き直す 式、なくて よい）, ans} */
+function F33(o){
+  const dy = 162*o.k, Yd = y => y+dy, R = r => [r[0],r[1]+dy,r[2],r[3]+dy];
+  const ay = Yd(206), xv = 300, rr = 22;
+  const yv = o.kind===0 ? ay+22 : o.kind===1 ? ay : ay-22, q = o.kind===0 ? 22/rr**2 : 0.045;
+  let st = 0; const nx = () => ++st;
+  const LH = [22, 22, 26, 28], LY = [131, 154, 177, 205];          // 計算の 行の 高さ・位置（分数は 高く）
+  const items = [T(R([62.3,103.8,240,118.1]), `${o.no}<span class="xsp"></span>${o.q}`, 11)];
+  const sL = o.lines.map(() => nx());
+  o.lines.forEach((h,i) => items.push(XA(sL[i], R([68,LY[i],240,LY[i]+LH[i]]), h, 10.5, 'xan xl')));
+  items.push({s:sL[1], r:R([180,131,240,148]), h:`<span class="ytag">y ＝ 0 と する</span>`, fs:7, cls:'xyt'});
+  const z1 = [1, st+1, 58,99+dy,245,242+dy];
+  const sDot = o.kind<2 ? nx() : null, sCv = nx(), sLb = nx();
+  const z2 = [z1[1], st+1, 243,124+dy,358,242+dy];
+  nx();                                                              // 全体
+  const sP = nx(), sD = o.dot ? nx() : sP;
+  const z3 = [sP, st+1, 243,124+dy,358,242+dy];
+  nx();                                                              // 全体
+  const sR = (o.rw||[]).map(() => nx()), sA = nx();
+  const z4 = [sR.length ? sR[0] : sA, st+1, 352,124+dy,532,242+dy];
+  const done = nx();
+  (o.rw||[]).forEach((h,i) => items.push({s:sR[i], r:R([362+i*84,180,444+i*84,200]), h, fs:11, cls:'xan xwr', al:'c'}));
+  items.push(XA(sA, R([359.6,207,527.3,238.2]), o.ans, o.afs||12.5));
+  /* 点の 下の x座標：√ が 出る ように HTML の 文字で（SVG の 文字に しない） */
+  const LBP = o.kind===0 ? [xv-rr-13, xv+rr+13] : o.kind===1 ? [xv] : [];
+  LBP.forEach((x,i) => items.push({s:sLb, r:[x-20,ay+2,x+20,ay+12], h:o.lab[i], fs:7, al:'c'}));
+  const svg = [
+    `<rect class="xpb" x="63.5" y="${Yd(128.4)}" width="178.1" height="109.8"/><rect class="xpb" x="246.6" y="${Yd(128.4)}" width="107.6" height="109.8"/><rect class="xpr" x="359.6" y="${Yd(207)}" width="167.7" height="31.2"/>`,
+    `<line x1="255.6" y1="${ay}" x2="343" y2="${ay}" stroke="#555" stroke-width=".7"/><polygon points="345,${ay} 341.5,${ay-1.5} 341.5,${ay+1.5}" fill="#555"/><text class="pgt" x="341" y="${ay+7.5}" font-style="italic">x</text>`,
+    PB({xv, yv, q, ay, top:Yd(134), s:sCv, dot:o.kind<2?'f':null, ds:sDot}),
+    o.kind===2 ? `<g class="gs" data-s="${sLb}"><text class="pgt" x="${xv}" y="${ay+9}" text-anchor="middle" style="font-size:6px">x軸と 交わらない</text></g>` : '',
+    PB({xv, yv, q, ay, top:Yd(134), draw:false, paint:o.paint, ps:sP, dot:o.dot, ds:sD})];
+  return ptBig({clip:[58,99+dy,532,242+dy], svg, items, done, Z:[z1,z2,z3,z4]});
+}
+const B1 = F33({k:0, no:'⑴', q:`x${P2} ＋ 4x ＋ 2 ≧ 0`, kind:0, lab:[`−2 − ${R2}`, `−2 ＋ ${R2}`], paint:'up', dot:'f', afs:10,
+  lines:[`y ＝ x${P2} ＋ 4x ＋ 2`, `x${P2} ＋ 4x ＋ 2 ＝ 0`, `x ＝ ${FX(`−4 ± ${SQ('16 − 8')}`,'2')}`, `x ＝ ${FX(`−4 ± 2${R2}`,'2')} ＝ −2 ± ${R2}`],
+  rw:[`x ≦ −2 − ${R2}`, `−2 ＋ ${R2} ≦ x`], ans:`x ≦ −2 − ${R2}, −2 ＋ ${R2} ≦ x`});
+const B2 = F33({k:1, no:'⑵', q:`x${P2} ＋ 6x ＋ 9 ＜ 0`, kind:1, lab:['−3'], paint:'down', dot:'o',
+  lines:[`y ＝ x${P2} ＋ 6x ＋ 9`, `x${P2} ＋ 6x ＋ 9 ＝ 0`, `(x ＋ 3)${P2} ＝ 0`, 'x ＝ −3（重解）'], ans:'解なし'});
+const B3 = F33({k:2, no:'⑶', q:`x${P2} − 2x ＋ 1 ＞ 0`, kind:1, lab:['1'], paint:'up', dot:'o',
+  lines:[`y ＝ x${P2} − 2x ＋ 1`, `x${P2} − 2x ＋ 1 ＝ 0`, `(x − 1)${P2} ＝ 0`, 'x ＝ 1（重解）'], ans:'1以外の すべての実数'});
+const B4 = F33({k:3, no:'⑷', q:`x${P2} ＋ 2x ＋ 5 ＞ 0`, kind:2, paint:'up', dot:null,
+  lines:[`y ＝ x${P2} ＋ 2x ＋ 5`, `x${P2} ＋ 2x ＋ 5 ＝ 0`, `x ＝ ${FX(`−2 ± ${SQ('4 − 20')}`,'2')} ＝ ${FX(`−2 ± ${SQ('−16')}`,'2')}`, JA('√ の中がマイナス → 解なし')], ans:'すべての実数'});
+/* くわしい 解説の 見出し（③-2 と 同じ） */
+const DH33 = `
+  <div class="card abs ncard phcard">${EQTAPE}
+    <div class="ph-k">もっと くわしく</div>
+    <div class="ph-h">くわしい 解説</div>
+    <div class="ph-t">例 ⑴〜⑷ を、説明 つきで 1つずつ 見て いこう。</div>
+    <div class="ph-l math"><span>⑴ x² ＋ 4x ＋ 2 ≧ 0</span><span>⑵ x² ＋ 6x ＋ 9 ＜ 0</span><span>⑶ x² − 2x ＋ 1 ＞ 0</span><span>⑷ x² ＋ 2x ＋ 5 ＞ 0</span></div>
+  </div>
+  ${cbar(['ここからは <b>くわしい 解説</b>。　説明 つきで、例 ⑴〜⑷ を 1つずつ 見て いこう。'])}`;
+
 /* プリント問題③-3 */
 const NOROOT = (f, a, b) => ({rows:[[EQ0(f),1], [`x ＝ ${FX(`−4 ± ${SQ(a)}`,'2')} ＝ ${FX(`−4 ± ${SQ(b)}`,'2')}`,1], [JA('√ の中がマイナス → 解なし'),2]],
   cm:[`${MS(EQ0(f))}。　因数分解 できない → <b>解の公式</b>。　${M(`x ＝ ${FR(`−4 ± √(${a})`,2)} ＝ ${FR(`−4 ± √(${b})`,2)}`)}`, '√ の 中が マイナス → <b>解なし</b>（x軸との 共有点が ない）。']});
@@ -3069,8 +3149,9 @@ const PH33 = probHead('プリント問題③-3', '次の 2次不等式を 解け
 const DECK = {title:'③-3 2次不等式の解法', pages:[
   {name:'表紙', html:coverF(KK33, '<span class="mk">2次不等式</span><br>いろいろ', '接する・交わらない とき', 'グラフを かけば こわくない！', POL33, 'グラフの 形')},
   {name:'グラフの 形は 3つ', html:IN33},
-  {name:'⑴', html:E1}, {name:'⑵', html:E2}, {name:'⑶', html:E3}, {name:'⑷', html:E4},
+  {name:'⑴', html:B1}, {name:'⑵', html:B2}, {name:'⑶', html:B3}, {name:'⑷', html:B4},   // 基本の 解説：1枚ずつ（プリント No.13 の 配置、11/18）
   {name:'まとめ', html:SUM3}, {name:'プリント問題', html:PH33}, ...PROB33,
+  {name:'くわしい 解説', html:DH33}, {name:'くわしく ⑴', html:E1}, {name:'くわしく ⑵', html:E2}, {name:'くわしく ⑶', html:E3}, {name:'くわしく ⑷', html:E4},   // 前の 解説は 最後に
   {name:'終', html:endF(KK33 + '　2次不等式', POL33)}]};
 
 /* ====== 組み立て・操作 ====== */

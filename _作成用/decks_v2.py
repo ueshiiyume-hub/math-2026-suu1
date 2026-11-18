@@ -348,29 +348,6 @@ function PRF(o){
   const Z = [[1,5, 66,300+dy,332,418+dy], [5,8, 342,300+dy,498,418+dy], [9,11, 66,424+dy,286,yb], [12,18, 112,424+dy,512,yb]];   // ❶ 計算 → ❶ グラフ → ❷ → ❸
   return ptBig({clip:[60,278+dy,535,yb], svg, items, done:18, Z});
 }
-/* ptSlide と 同じ 配置で、下の 説明 なし・カードを 大きく、ズーム つき */
-function ptBig(P){
-  const AW = 1184, AH = 640;
-  const [cx1,cy1,cx2,cy2] = P.clip, w = cx2-cx1, h = cy2-cy1;
-  const s = Math.min(1150/w, (AH-20)/h, 2.8);
-  const W = w*s, H = h*s, L = (AW-W)/2, T = (AH-H)/2;
-  const X = x => (L+(x-cx1)*s), Y = y => (T+(y-cy1)*s);
-  const R = r => `left:${X(r[0]).toFixed(1)}px;top:${Y(r[1]).toFixed(1)}px;width:${((r[2]-r[0])*s).toFixed(1)}px;height:${((r[3]-r[1])*s).toFixed(1)}px`;
-  const it = P.items.map(o => `<div class="pte ${o.cls||''} ${o.al==='c'?'ac':''}${o.s!==undefined?' lh':''}"${o.s!==undefined?` data-s="${o.s}"`:''} style="${R(o.r)};font-size:${((o.fs||10.5)*s).toFixed(1)}px"><span class="kwr">${o.h}</span></div>`).join('');
-  /* ズームは 入れ子の .zw（ズームする ところの 数だけ）（それぞれ data-wa〜data-wb の 間だけ wv-on → transform:var(--zt)）。:has() は 使わない（古い 端末・一部の ブラウザで 効かない） */
-  const zt = ([a,b,x1,y1,x2,y2]) => { const a1=X(x1), b1=Y(y1), a2=X(x2), b2=Y(y2);
-    const k = Math.min(AW/(a2-a1), AH/(b2-b1)) * .95, tx = AW/2 - k*(a1+a2)/2, ty = AH/2 - k*(b1+b2)/2;
-    return `translate(${tx.toFixed(1)}px,${ty.toFixed(1)}px) scale(${k.toFixed(3)})`; };
-  const open = P.Z.map(z=>`<div class="zw" data-wa="${z[0]}" data-wb="${z[1]}" style="--zt:${zt(z)}">`).join('');
-  return `
-  <div class="card abs ptcard ptbig">
-    ${open}
-      <svg class="pgsv" style="left:${L.toFixed(1)}px;top:${T.toFixed(1)}px" width="${W.toFixed(1)}" height="${H.toFixed(1)}" viewBox="${cx1} ${cy1} ${w} ${h}">${P.svg.join('')}</svg>
-      ${it}
-    ${P.Z.map(()=>'</div>').join('')}
-  </div>
-  <div class="abs r done pgdone" data-s="${P.done}"><div class="seal">完成！</div></div>`;
-}
 const F1 = PRF(P1), F2 = PRF(P2_);
 /* くわしい 解説の 見出し */
 const DH = `
