@@ -1329,6 +1329,11 @@ body.portrait .ptag{left:70px;top:8px}
 .ansra .ja{font-size:20px}
 .ansrk{font:900 18px "Zen Maru Gothic",sans-serif;color:#e0465e;border:2px solid #e0465e;border-radius:999px;padding:0 8px;margin-left:auto}
 
+/* ③-2 基本の 解説（1枚）：下の 説明 なし・大きい カード・ズーム（decks_v2.py の ptBig、11/18） */
+.ptcard.ptbig{height:640px;overflow:hidden}
+.ptbig .zw{position:absolute;left:0;top:0;width:1184px;height:640px;transform-origin:0 0;transition:transform 1s ease-in-out}
+.ptbig .zw.wv-on{transform:var(--zt)}
+
 /* ===== 手書き ===== */
 #ink{position:fixed;left:0;top:0;z-index:15;pointer-events:none;touch-action:none}
 body.inking #ink{pointer-events:auto;cursor:crosshair}
@@ -2815,13 +2820,97 @@ const w5b = AFTER2(PR({...P2_, phase:2, cm:[
   `書き直して ${M('x ≦ −1')}。`,
   `2つを まとめて、<i class="nv">Step</i>❸ の 枠に ${M('−2 ≦ x ≦ −1')}。　<b>完成！</b>`]}));
 
+/* ===== 基本の 解説：⑴ ⑵ を それぞれ 1枚（プリントの 配置に 書きこむ。先生の 指示 11/18） =====
+   下の 説明（いま やっていること）は なし → カードを 大きく。計算・グラフは 1行ずつ。
+   いま 書いて いる Step を ズーム → 終わったら 全体 → 次の Step を ズーム（入れ子の .zw が data-wa〜data-wb の 間だけ 拡大）
+   番：1 y＝… 2 y＝0 と する・＝0 3 因数分解 4 x＝ 5 点 6 放物線 7 x座標 ／ 8 全体 ／ 9 塗る 10 白丸・黒丸 ／ 11 全体 ／
+       12 x を 置く 13 左を 比べる 14 書き直す 15 右を 比べる 16 書き直す 17 答え ／ 18 全体（完成） */
+function PRF(o){
+  const dy = o.dy, Yd = y => y+dy, R = r => [r[0],r[1]+dy,r[2],r[3]+dy];
+  const pv = o.pv, top = Yd(440), ay = Yd(492);
+  const hw = Math.sqrt((pv.yv+dy-top)/pv.q); let d='';
+  const rr = Math.sqrt((pv.yv+dy-ay)/pv.q), r1 = pv.xv-rr, r2 = pv.xv+rr, Yc = x => (pv.yv+dy)-pv.q*(x-pv.xv)**2;
+  for(let i=0;i<=50;i++){ const x=pv.xv-hw+2*hw*i/50; d+=(i?'L':'M')+x.toFixed(2)+' '+((pv.yv+dy)-pv.q*(x-pv.xv)**2).toFixed(2)+' '; }
+  const L = (s,r,h,fs=11) => XA(s,R(r),h,fs,'xan xl');
+  const B = n => n + 9;                       // Step❸ の 番（PR の phase 2 の 3〜8 → 12〜17）
+  const items = [
+    T(R([62.3,281.5,200,297.5]),`${o.no}<span class="xsp"></span>${o.eq}`,11),
+    T(R([73.5,304.5,119,323]),'<span class="ja"><i class="nv">Step</i>❶</span>',10.5,'ac'), T(R([73.5,428.9,119,447.4]),'<span class="ja"><i class="nv">Step</i>❷</span>',10.5,'ac'), T(R([286.7,428.9,332.3,447.4]),'<span class="ja"><i class="nv">Step</i>❸</span>',10.5,'ac'),
+    T([r1-14,ay+1.5,r1+6,ay+12.5],`<span style="font-size:.8em">${o.lab[0]}</span>`,8.5,'ac'), T([r2-6,ay+1.5,r2+14,ay+12.5],`<span style="font-size:.8em">${o.lab[1]}</span>`,8.5,'ac'),
+    L(1,[148,309,326,331],o.c[0]), {s:2, r:R([262,310,326,330]), h:`<span class="ytag">y ＝ 0 と する</span>`, fs:7.8, cls:'xyt'},
+    L(2,[148,335,326,357],o.c[1]), L(3,[148,361,326,383],o.c[2]), L(4,[148,387,326,409],o.c[3]),
+    XA(B(8),R([323.2,467.2,507.3,498.3]),o.ans,13),
+    ...o.rw.map((h,i)=>({s:B(5+2*i), r:[333+i*86,Yd(449),411+i*86,Yd(463)], h:h, fs:11, cls:'xan xwr', al:'c'}))];
+  const svg = [
+    `<rect class="xpb" x="73.5" y="${Yd(304.5)}" width="45.5" height="18.5"/><rect class="xpb" x="73.5" y="${Yd(428.9)}" width="45.5" height="18.5"/><rect class="xpb" x="286.7" y="${Yd(428.9)}" width="45.6" height="18.5"/>`,
+    `<rect class="xpb" x="142.8" y="${Yd(305.4)}" width="184" height="109.8"/><rect class="xpb" x="354.2" y="${Yd(305.4)}" width="137.2" height="109.8"/><rect class="xpr" x="323.2" y="${Yd(467.2)}" width="184.1" height="31.1"/>`,
+    `<line x1="373.5" y1="${Yd(384.5)}" x2="467" y2="${Yd(384.5)}" stroke="#555" stroke-width=".7"/><polygon points="469,${Yd(384.5)} 465.5,${Yd(383)} 465.5,${Yd(386)}" fill="#555"/><text class="pgt" x="465" y="${Yd(392)}" font-style="italic">x</text>`,
+    `<line x1="140" y1="${ay}" x2="268" y2="${ay}" stroke="#333" stroke-width=".8"/><polygon points="271,${ay} 266.5,${ay-1.8} 266.5,${ay+1.8}" fill="#333"/><text class="pgt" x="265" y="${ay+11}" font-style="italic" style="font-size:9px">x</text>`,
+    `<path d="${d}" fill="none" stroke="#111" stroke-width="1.6"/>`,
+    PB({xv:o.gx, yv:Yd(404.5), q:0.05, ay:Yd(384.5), top:Yd(312), s:6, dot:'f', ds:5, ls:7, lab:[[o.gx-20,o.lab[0]],[o.gx+20,o.lab[1]]]}),
+    PB({xv:pv.xv, yv:pv.yv+dy, q:pv.q, ay, top, draw:false, paint:o.paint, ps:9, dot:o.dot, ds:10})];
+  /* Step❸：x を 置く → 数と 斜めに 比べる（うすい 帯 ＋ 不等号）→ 書き直す（PR と 同じ） */
+  const f = n => n.toFixed(1);
+  const P = o.out ? {L:[r1,ay+2], R:[r2,ay+2]} : {L:[r1-4,ay+9], R:[r2+4,ay+9]};
+  const X = o.out ? [{at:[r1-22,ay-11], to:[r1-7,Yc(r1-7)]}, {at:[r2+22,ay-11], to:[r2+7,Yc(r2+7)]}]
+                  : [{at:[pv.xv,ay+36], to:[pv.xv,Yc(pv.xv)+1.5]}];
+  const pairs = o.out ? [[X[0].at,P.L,B(4)],[P.R,X[1].at,B(6)]] : [[P.L,X[0].at,B(4)],[X[0].at,P.R,B(6)]];
+  const le = o.dot==='f';
+  pairs.forEach(([A,Bp,st])=>{
+    const mx=(A[0]+Bp[0])/2, my=(A[1]+Bp[1])/2, ang=Math.atan2(Bp[1]-A[1],Bp[0]-A[0])*180/Math.PI, len=Math.hypot(Bp[0]-A[0],Bp[1]-A[1])+16;
+    const tr = `translate(${f(mx)} ${f(my)}) rotate(${f(ang)})`;
+    svg.splice(4,0,`<g class="gs" data-s="${st}"><rect class="iband2" x="${f(-len/2)}" y="-7" width="${f(len)}" height="14" rx="7" transform="${tr}"/></g>`);
+    svg.push(`<g class="gs" data-s="${st}"><path class="ilt pt" d="M3.5 -3.5 L-3.5 0 L3.5 3.5${le?' M-3.5 2.6 L3.5 6.1':''}" transform="${tr}"/></g>`);
+  });
+  svg.push(`<g class="gs" data-s="${B(3)}">${X.map(x=>`<line class="ixln pt" x1="${f(x.at[0])}" y1="${f(x.at[1])}" x2="${f(x.to[0])}" y2="${f(x.to[1])}"/><circle class="ixdot" cx="${f(x.to[0])}" cy="${f(x.to[1])}" r="1.4"/><circle class="ixb" cx="${f(x.at[0])}" cy="${f(x.at[1])}" r="5.2"/><text class="ixt pt" x="${f(x.at[0])}" y="${f(x.at[1]+2.4)}" text-anchor="middle">x</text>`).join('')}</g>`);
+  /* ズームする ところ（PDF の pt）：[番の はじめ, 終わりの 次, x1, y1, x2, y2] */
+  const yb = (o.out?528:546)+dy;
+  const Z = [[1,5, 66,300+dy,332,418+dy], [5,8, 342,300+dy,498,418+dy], [9,11, 66,424+dy,286,yb], [12,18, 112,424+dy,512,yb]];   // ❶ 計算 → ❶ グラフ → ❷ → ❸
+  return ptBig({clip:[60,278+dy,535,yb], svg, items, done:18, Z});
+}
+/* ptSlide と 同じ 配置で、下の 説明 なし・カードを 大きく、ズーム つき */
+function ptBig(P){
+  const AW = 1184, AH = 640;
+  const [cx1,cy1,cx2,cy2] = P.clip, w = cx2-cx1, h = cy2-cy1;
+  const s = Math.min(1150/w, (AH-20)/h, 2.8);
+  const W = w*s, H = h*s, L = (AW-W)/2, T = (AH-H)/2;
+  const X = x => (L+(x-cx1)*s), Y = y => (T+(y-cy1)*s);
+  const R = r => `left:${X(r[0]).toFixed(1)}px;top:${Y(r[1]).toFixed(1)}px;width:${((r[2]-r[0])*s).toFixed(1)}px;height:${((r[3]-r[1])*s).toFixed(1)}px`;
+  const it = P.items.map(o => `<div class="pte ${o.cls||''} ${o.al==='c'?'ac':''}${o.s!==undefined?' lh':''}"${o.s!==undefined?` data-s="${o.s}"`:''} style="${R(o.r)};font-size:${((o.fs||10.5)*s).toFixed(1)}px"><span class="kwr">${o.h}</span></div>`).join('');
+  /* ズームは 入れ子の .zw（ズームする ところの 数だけ）（それぞれ data-wa〜data-wb の 間だけ wv-on → transform:var(--zt)）。:has() は 使わない（古い 端末・一部の ブラウザで 効かない） */
+  const zt = ([a,b,x1,y1,x2,y2]) => { const a1=X(x1), b1=Y(y1), a2=X(x2), b2=Y(y2);
+    const k = Math.min(AW/(a2-a1), AH/(b2-b1)) * .95, tx = AW/2 - k*(a1+a2)/2, ty = AH/2 - k*(b1+b2)/2;
+    return `translate(${tx.toFixed(1)}px,${ty.toFixed(1)}px) scale(${k.toFixed(3)})`; };
+  const open = P.Z.map(z=>`<div class="zw" data-wa="${z[0]}" data-wb="${z[1]}" style="--zt:${zt(z)}">`).join('');
+  return `
+  <div class="card abs ptcard ptbig">
+    ${open}
+      <svg class="pgsv" style="left:${L.toFixed(1)}px;top:${T.toFixed(1)}px" width="${W.toFixed(1)}" height="${H.toFixed(1)}" viewBox="${cx1} ${cy1} ${w} ${h}">${P.svg.join('')}</svg>
+      ${it}
+    ${P.Z.map(()=>'</div>').join('')}
+  </div>
+  <div class="abs r done pgdone" data-s="${P.done}"><div class="seal">完成！</div></div>`;
+}
+const F1 = PRF(P1), F2 = PRF(P2_);
+/* くわしい 解説の 見出し */
+const DH = `
+  <div class="card abs ncard phcard">${EQTAPE}
+    <div class="ph-k">もっと くわしく</div>
+    <div class="ph-h">くわしい 解説</div>
+    <div class="ph-t">⑴ ⑵ を、1つずつ ゆっくり 見て いこう。</div>
+    <div class="ph-l math"><span>⑴ ${EQ1}</span><span>⑵ ${EQ2}</span></div>
+  </div>
+  ${cbar(['ここからは <b>くわしい 解説</b>。　グラフを 塗る ところ・答え方を、1つずつ 見て いこう。'])}`;
+
 const DECK = {title:'③-2 2次不等式の解法', groups:{'⑴':`⑴ ${EQ1}`, '⑵':`⑵ ${EQ2}`}, pages:[
   {name:'表紙', html:coverF(KK2, '<span class="mk">2次不等式</span><br>の 解き方', '塗って 答える', '', POL, '3つの Step')},
   {name:'解き方', html:s1},   // 解き方（3つの Step）を 最初に（先生の 指示 11/18。前は 最後の「手順の まとめ」）
+  {name:'⑴', html:F1}, {name:'⑵', html:F2},   // 基本の 解説：1枚ずつ（11/18）
+  {name:'くわしい 解説', html:DH},           // ここから 前の アニメーションの 解説（くわしい 版。書きこみの ページは ⑴ ⑵ と 同じ なので 外した）
   {name:'やること', html:v1}, {name:'⑴ ❶ ＝0 に', html:va}, {name:'⑴ ❶ 解く', html:vb}, {name:'⑴ ❶ プリント', html:s2v}, {name:'⑴ ❷ 上を塗る', html:v3}, {name:'⑴ ❷ x軸上', html:v4}, {name:'⑴ ❷ プリント', html:s5a},
-  {name:'⑴ ❸ 答える', html:v5}, {name:'⑴ 書きこみ', html:s5b},
+  {name:'⑴ ❸ 答える', html:v5},
   {name:'⑵ ❶ ＝0 に', html:wa}, {name:'⑵ ❶ 解く', html:wb}, {name:'⑵ ❶ プリント', html:w2v}, {name:'⑵ ❷ 下を塗る', html:w3}, {name:'⑵ ❷ x軸上', html:w4}, {name:'⑵ ❷ プリント', html:w5a},
-  {name:'⑵ ❸ 答える', html:w5}, {name:'⑵ 書きこみ', html:w5b},
+  {name:'⑵ ❸ 答える', html:w5},
   {name:'終', html:endF(KK2 + '　2次不等式の解法', POL)}
 ]};
 

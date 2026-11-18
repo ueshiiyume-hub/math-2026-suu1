@@ -883,3 +883,8 @@ body.portrait .ptag{left:70px;top:8px}
 .ansra{display:flex;align-items:center;gap:12px;font-size:24px;color:#e0465e;white-space:nowrap}
 .ansra .ja{font-size:20px}
 .ansrk{font:900 18px "Zen Maru Gothic",sans-serif;color:#e0465e;border:2px solid #e0465e;border-radius:999px;padding:0 8px;margin-left:auto}
+
+/* ③-2 基本の 解説（1枚）：下の 説明 なし・大きい カード・ズーム（decks_v2.py の ptBig、11/18） */
+.ptcard.ptbig{height:640px;overflow:hidden}
+.ptbig .zw{position:absolute;left:0;top:0;width:1184px;height:640px;transform-origin:0 0;transition:transform 1s ease-in-out}
+.ptbig .zw.wv-on{transform:var(--zt)}
