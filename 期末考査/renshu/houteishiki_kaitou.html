@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2次方程式 練習 解答</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<style>
+:root{--bg:#eef3f8;--paper:#fff;--ink:#22303c;--muted:#5f6d7a;--line:#cdd8e3;--blue:#3e9bd6;--btn:#fff8ef;--btnc:#a35f10;--red:#c0392b}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#161b21;--paper:#222a33;--ink:#e6ebf0;--muted:#9aa7b4;--line:#3a4552;--btn:#2e2618;--btnc:#f0b46a;--red:#ff8a7a}}
+:root[data-theme="dark"]{--bg:#161b21;--paper:#222a33;--ink:#e6ebf0;--muted:#9aa7b4;--line:#3a4552;--btn:#2e2618;--btnc:#f0b46a;--red:#ff8a7a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif}
+header{position:sticky;top:0;z-index:5;background:var(--paper);border-bottom:1px solid var(--line);padding:10px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.num{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:8px;background:var(--blue);color:#fff;font-size:26px;font-weight:700}
+header h1{font-size:17px;margin:0;flex:1;min-width:180px}
+header h1 small{display:block;font-size:12px;color:var(--muted);font-weight:400}
+.all{font:inherit;font-size:14px;font-weight:700;border:2px solid var(--blue);background:var(--paper);color:var(--blue);border-radius:8px;padding:6px 12px;cursor:pointer}
+main{max-width:1000px;margin:0 auto;padding:14px 16px 48px;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.note{grid-column:1/-1;margin:0;color:var(--muted);font-size:14px}
+.q{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:10px 12px 12px}
+.eq{display:flex;align-items:baseline;gap:8px;font-size:19px;font-weight:700;margin-bottom:8px}
+.no{font-size:16px}
+.ans{display:flex;align-items:center;justify-content:center;width:100%;min-height:48px;font:inherit;font-size:17px;color:var(--ink);background:var(--btn);border:2px dashed #c97a1f;border-radius:8px;cursor:pointer;padding:6px 8px;overflow-x:auto}
+.ans .av{display:none;flex-direction:column;align-items:flex-start;gap:4px;color:var(--red)}.ans .qm{color:var(--btnc);font-size:22px;font-weight:700}
+.q.open .ans{border-style:solid;border-color:var(--line);background:var(--paper);justify-content:flex-start}
+.q.open .ans .av{display:flex}.q.open .ans .qm{display:none}
+.fa{font-weight:700}
+</style></head><body>
+<header><span class="num">⑩</span><h1><small>数学Ⅰ 練習プリント</small>2次方程式（x²＋bx＋c＝0）50問　解答</h1><button class="all" type="button" id="all">全部の答えを見る</button></header>
+<main><p class="note">「？」をタップすると、その問題の途中式と答えが出ます（もう一度タップでかくす）。</p>
+<section class="q"><div class="eq"><span class="no">⑴</span><span class="m">{x}^{2}+5x+6=0</span></div>
+  <button class="ans" type="button" aria-label="⑴ の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">(x+3)(x+2)=0</span></span><span class="fa"><span class="m">x=-3, -2</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">⑵</span><span class="m">{x}^{2}+7x+12=0</span></div>
+  <button class="ans" type="button" aria-label="⑵ の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">(x+4)(x+3)=0</span></span><span class="fa"><span class="m">x=-4, -3</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">⑶</span><span class="m">{x}^{2}-5x+6=0</span></div>
+  <button class="ans" type="button" aria-label="⑶ の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">(x-2)(x-3)=0</span></span><span class="fa"><span class="m">x=2, 3</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">⑷</span><span class="m">{x}^{2}-7x+10=0</span></div>
+  <button class="ans" type="button" aria-label="⑷ の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">(x-2)(x-5)=0</span></span><span class="fa"><span class="m">x=2, 5</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">⑸</span><span class="m">{x}^{2}+x-6=0</span></div>
+  <button class="ans" type="button" aria-label="⑸ の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">(x+3)(x-2)=0</span></span><span class="fa"><span class="m">x=-3, 2</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">⑹</span><span class="m">{x}^{2}-x-12=0</span></div>
+  <button class="ans" type="button" aria-label="⑹ の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">(x+3)(x-4)=0</span></span><span class="fa"><span class="m">x=-3, 4</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">⑺</span><span class="m">{x}^{2}+2x-15=0</span></div>
+  <button class="ans" type="button" aria-label="⑺ の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">(x+5)(x-3)=0</span></span><span class="fa"><span class="m">x=-5, 3</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">⑻</span><span class="m">{x}^{2}-3x-18=0</span></div>
+  <button class="ans" type="button" aria-label="⑻ の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">(x+3)(x-6)=0</span></span><span class="fa"><span class="m">x=-3, 6</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">⑼</span><span class="m">{x}^{2}+8x+15=0</span></div>
+  <button class="ans" type="button" aria-label="⑼ の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">(x+5)(x+3)=0</span></span><span class="fa"><span class="m">x=-5, -3</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">⑽</span><span class="m">{x}^{2}-9x+20=0</span></div>
+  <button class="ans" type="button" aria-label="⑽ の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">(x-4)(x-5)=0</span></span><span class="fa"><span class="m">x=4, 5</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">⑾</span><span class="m">{x}^{2}+4x-21=0</span></div>
+  <button class="ans" type="button" aria-label="⑾ の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">(x+7)(x-3)=0</span></span><span class="fa"><span class="m">x=-7, 3</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">⑿</span><span class="m">{x}^{2}-2x-24=0</span></div>
+  <button class="ans" type="button" aria-label="⑿ の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">(x+4)(x-6)=0</span></span><span class="fa"><span class="m">x=-4, 6</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">⒀</span><span class="m">{x}^{2}+10x+21=0</span></div>
+  <button class="ans" type="button" aria-label="⒀ の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">(x+7)(x+3)=0</span></span><span class="fa"><span class="m">x=-7, -3</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">⒁</span><span class="m">{x}^{2}-11x+28=0</span></div>
+  <button class="ans" type="button" aria-label="⒁ の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">(x-4)(x-7)=0</span></span><span class="fa"><span class="m">x=4, 7</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">⒂</span><span class="m">{x}^{2}+6x-16=0</span></div>
+  <button class="ans" type="button" aria-label="⒂ の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">(x+8)(x-2)=0</span></span><span class="fa"><span class="m">x=-8, 2</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">⒃</span><span class="m">{x}^{2}-4x-32=0</span></div>
+  <button class="ans" type="button" aria-label="⒃ の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">(x+4)(x-8)=0</span></span><span class="fa"><span class="m">x=-4, 8</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">⒄</span><span class="m">{x}^{2}+12x+35=0</span></div>
+  <button class="ans" type="button" aria-label="⒄ の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">(x+7)(x+5)=0</span></span><span class="fa"><span class="m">x=-7, -5</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">⒅</span><span class="m">{x}^{2}+3x-28=0</span></div>
+  <button class="ans" type="button" aria-label="⒅ の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">(x+7)(x-4)=0</span></span><span class="fa"><span class="m">x=-7, 4</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">⒆</span><span class="m">{x}^{2}-13x+36=0</span></div>
+  <button class="ans" type="button" aria-label="⒆ の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">(x-4)(x-9)=0</span></span><span class="fa"><span class="m">x=4, 9</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">⒇</span><span class="m">{x}^{2}+9x-36=0</span></div>
+  <button class="ans" type="button" aria-label="⒇ の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">(x+12)(x-3)=0</span></span><span class="fa"><span class="m">x=-12, 3</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">(21)</span><span class="m">{x}^{2}-4=0</span></div>
+  <button class="ans" type="button" aria-label="(21) の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">(x+2)(x-2)=0</span></span><span class="fa"><span class="m">x=-2, 2</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">(22)</span><span class="m">{x}^{2}-9=0</span></div>
+  <button class="ans" type="button" aria-label="(22) の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">(x+3)(x-3)=0</span></span><span class="fa"><span class="m">x=-3, 3</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">(23)</span><span class="m">{x}^{2}-16=0</span></div>
+  <button class="ans" type="button" aria-label="(23) の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">(x+4)(x-4)=0</span></span><span class="fa"><span class="m">x=-4, 4</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">(24)</span><span class="m">{x}^{2}-36=0</span></div>
+  <button class="ans" type="button" aria-label="(24) の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">(x+6)(x-6)=0</span></span><span class="fa"><span class="m">x=-6, 6</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">(25)</span><span class="m">{x}^{2}-64=0</span></div>
+  <button class="ans" type="button" aria-label="(25) の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">(x+8)(x-8)=0</span></span><span class="fa"><span class="m">x=-8, 8</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">(26)</span><span class="m">{x}^{2}-81=0</span></div>
+  <button class="ans" type="button" aria-label="(26) の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">(x+9)(x-9)=0</span></span><span class="fa"><span class="m">x=-9, 9</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">(27)</span><span class="m">{x}^{2}+4x+4=0</span></div>
+  <button class="ans" type="button" aria-label="(27) の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">{(x+2)}^{2}=0</span></span><span class="fa"><span class="m">x=-2\text{（重解）}</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">(28)</span><span class="m">{x}^{2}-6x+9=0</span></div>
+  <button class="ans" type="button" aria-label="(28) の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">{(x-3)}^{2}=0</span></span><span class="fa"><span class="m">x=3\text{（重解）}</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">(29)</span><span class="m">{x}^{2}+8x+16=0</span></div>
+  <button class="ans" type="button" aria-label="(29) の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">{(x+4)}^{2}=0</span></span><span class="fa"><span class="m">x=-4\text{（重解）}</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">(30)</span><span class="m">{x}^{2}-10x+25=0</span></div>
+  <button class="ans" type="button" aria-label="(30) の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">{(x-5)}^{2}=0</span></span><span class="fa"><span class="m">x=5\text{（重解）}</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">(31)</span><span class="m">{x}^{2}+12x+36=0</span></div>
+  <button class="ans" type="button" aria-label="(31) の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">{(x+6)}^{2}=0</span></span><span class="fa"><span class="m">x=-6\text{（重解）}</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">(32)</span><span class="m">{x}^{2}-14x+49=0</span></div>
+  <button class="ans" type="button" aria-label="(32) の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">{(x-7)}^{2}=0</span></span><span class="fa"><span class="m">x=7\text{（重解）}</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">(33)</span><span class="m">{x}^{2}+3x=0</span></div>
+  <button class="ans" type="button" aria-label="(33) の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">x(x+3)=0</span></span><span class="fa"><span class="m">x=-3, 0</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">(34)</span><span class="m">{x}^{2}-4x=0</span></div>
+  <button class="ans" type="button" aria-label="(34) の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">x(x-4)=0</span></span><span class="fa"><span class="m">x=0, 4</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">(35)</span><span class="m">{x}^{2}+7x=0</span></div>
+  <button class="ans" type="button" aria-label="(35) の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">x(x+7)=0</span></span><span class="fa"><span class="m">x=-7, 0</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">(36)</span><span class="m">{x}^{2}-9x=0</span></div>
+  <button class="ans" type="button" aria-label="(36) の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">x(x-9)=0</span></span><span class="fa"><span class="m">x=0, 9</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">(37)</span><span class="m">{x}^{2}-x=0</span></div>
+  <button class="ans" type="button" aria-label="(37) の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">x(x-1)=0</span></span><span class="fa"><span class="m">x=0, 1</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">(38)</span><span class="m">{x}^{2}+12x=0</span></div>
+  <button class="ans" type="button" aria-label="(38) の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">x(x+12)=0</span></span><span class="fa"><span class="m">x=-12, 0</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">(39)</span><span class="m">{x}^{2}+3x+1=0</span></div>
+  <button class="ans" type="button" aria-label="(39) の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">x=\dfrac{-3\pm \sqrt{9-4}}{2}</span></span><span class="fa"><span class="m">x=\dfrac{-3\pm \sqrt{5}}{2}</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">(40)</span><span class="m">{x}^{2}+5x+3=0</span></div>
+  <button class="ans" type="button" aria-label="(40) の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">x=\dfrac{-5\pm \sqrt{25-12}}{2}</span></span><span class="fa"><span class="m">x=\dfrac{-5\pm \sqrt{13}}{2}</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">(41)</span><span class="m">{x}^{2}-x-1=0</span></div>
+  <button class="ans" type="button" aria-label="(41) の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">x=\dfrac{1\pm \sqrt{1+4}}{2}</span></span><span class="fa"><span class="m">x=\dfrac{1\pm \sqrt{5}}{2}</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">(42)</span><span class="m">{x}^{2}-3x-5=0</span></div>
+  <button class="ans" type="button" aria-label="(42) の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">x=\dfrac{3\pm \sqrt{9+20}}{2}</span></span><span class="fa"><span class="m">x=\dfrac{3\pm \sqrt{29}}{2}</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">(43)</span><span class="m">{x}^{2}+7x+1=0</span></div>
+  <button class="ans" type="button" aria-label="(43) の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">x=\dfrac{-7\pm \sqrt{49-4}}{2}=\dfrac{-7\pm \sqrt{45}}{2}</span></span><span class="fa"><span class="m">x=\dfrac{-7\pm 3\sqrt{5}}{2}</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">(44)</span><span class="m">{x}^{2}+x-3=0</span></div>
+  <button class="ans" type="button" aria-label="(44) の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">x=\dfrac{-1\pm \sqrt{1+12}}{2}</span></span><span class="fa"><span class="m">x=\dfrac{-1\pm \sqrt{13}}{2}</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">(45)</span><span class="m">{x}^{2}+2x-1=0</span></div>
+  <button class="ans" type="button" aria-label="(45) の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">x=\dfrac{-2\pm \sqrt{4+4}}{2}=\dfrac{-2\pm \sqrt{8}}{2}</span></span><span class="wl"><span class="m">=\dfrac{-2\pm 2\sqrt{2}}{2}</span></span><span class="fa"><span class="m">x=-1\pm \sqrt{2}</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">(46)</span><span class="m">{x}^{2}-4x+1=0</span></div>
+  <button class="ans" type="button" aria-label="(46) の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">x=\dfrac{4\pm \sqrt{16-4}}{2}=\dfrac{4\pm \sqrt{12}}{2}</span></span><span class="wl"><span class="m">=\dfrac{4\pm 2\sqrt{3}}{2}</span></span><span class="fa"><span class="m">x=2\pm \sqrt{3}</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">(47)</span><span class="m">{x}^{2}+6x+4=0</span></div>
+  <button class="ans" type="button" aria-label="(47) の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">x=\dfrac{-6\pm \sqrt{36-16}}{2}=\dfrac{-6\pm \sqrt{20}}{2}</span></span><span class="wl"><span class="m">=\dfrac{-6\pm 2\sqrt{5}}{2}</span></span><span class="fa"><span class="m">x=-3\pm \sqrt{5}</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">(48)</span><span class="m">{x}^{2}-8x+10=0</span></div>
+  <button class="ans" type="button" aria-label="(48) の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">x=\dfrac{8\pm \sqrt{64-40}}{2}=\dfrac{8\pm \sqrt{24}}{2}</span></span><span class="wl"><span class="m">=\dfrac{8\pm 2\sqrt{6}}{2}</span></span><span class="fa"><span class="m">x=4\pm \sqrt{6}</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">(49)</span><span class="m">{x}^{2}+2x+5=0</span></div>
+  <button class="ans" type="button" aria-label="(49) の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">x=\dfrac{-2\pm \sqrt{4-20}}{2}=\dfrac{-2\pm \sqrt{-16}}{2}</span></span><span class="wl"><span class="m">\text{ルートの中がマイナス → 解なし}</span></span><span class="fa"><span class="m">\text{解なし}</span></span></span></button></section>
+<section class="q"><div class="eq"><span class="no">(50)</span><span class="m">{x}^{2}-3x+4=0</span></div>
+  <button class="ans" type="button" aria-label="(50) の 答えを 見る"><span class="qm">？</span><span class="av"><span class="wl"><span class="m">x=\dfrac{3\pm \sqrt{9-16}}{2}=\dfrac{3\pm \sqrt{-7}}{2}</span></span><span class="wl"><span class="m">\text{ルートの中がマイナス → 解なし}</span></span><span class="fa"><span class="m">\text{解なし}</span></span></span></button></section>
+</main>
+<script>
+document.querySelectorAll('.m').forEach(e => { try { katex.render(e.textContent, e, { throwOnError: false }); } catch (err) {} });
+const qs=[...document.querySelectorAll('.q')], all=document.getElementById('all');
+qs.forEach(q=>q.querySelector('.ans').addEventListener('click',()=>{q.classList.toggle('open');sync();}));
+function sync(){all.textContent=qs.every(q=>q.classList.contains('open'))?'全部かくす':'全部の答えを見る';}
+all.addEventListener('click',()=>{const o=!qs.every(q=>q.classList.contains('open'));qs.forEach(q=>q.classList.toggle('open',o));sync();});
+</script></body></html>
