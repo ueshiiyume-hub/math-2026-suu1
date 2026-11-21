@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>複素数平面 練習 解答</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<style>
+:root{--bg:#f3f6ee;--paper:#fff;--ink:#28301f;--muted:#5f6b55;--line:#d3dcc6;--green:#4F6228;--pale:#EAF1DD;--red:#c00000}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#171b14;--paper:#22281e;--ink:#e7ecdf;--muted:#a3ad97;--line:#3b4434;--green:#9cb86a;--pale:#2c3424;--red:#ff8a8a}}
+:root[data-theme="dark"]{--bg:#171b14;--paper:#22281e;--ink:#e7ecdf;--muted:#a3ad97;--line:#3b4434;--green:#9cb86a;--pale:#2c3424;--red:#ff8a8a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif}
+header{background:var(--paper);border-bottom:1px solid var(--line);padding:10px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.num{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:6px;background:#4F6228;color:#fff;font-size:22px;font-weight:700}
+header h1{font-size:17px;margin:0;flex:1;min-width:180px}
+header h1 small{display:block;font-size:12px;color:var(--muted);font-weight:400}
+.all{font:inherit;font-size:14px;font-weight:700;border:2px solid var(--green);background:var(--paper);color:var(--green);border-radius:8px;padding:6px 12px;cursor:pointer}
+main{max-width:1000px;margin:0 auto;padding:6px 16px 48px;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.note{grid-column:1/-1;margin:8px 0 0;color:var(--muted);font-size:14px}
+h2{grid-column:1/-1;margin:14px 0 0;font-size:18px;display:flex;align-items:center;gap:8px}
+.sn{display:inline-flex;align-items:center;justify-content:center;min-width:28px;height:28px;border-radius:4px;background:#4F6228;color:#fff;font-size:16px}
+.lead{grid-column:1/-1;margin:0;color:var(--muted);font-size:14px}
+.q{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:10px 14px 14px;min-width:0}
+.eq{display:flex;align-items:baseline;gap:10px;font-size:18px;margin-bottom:8px;flex-wrap:wrap}
+.no{font-weight:700;color:var(--green)}
+.ans{display:flex;align-items:center;justify-content:center;width:100%;min-height:52px;font:inherit;font-size:17px;color:var(--ink);background:var(--pale);border:2px dashed var(--green);border-radius:8px;cursor:pointer;padding:8px;text-align:left}
+.ans .av{display:none}.ans .qm{color:var(--green);font-size:24px;font-weight:700}
+.q.open .ans{border-style:solid;border-color:var(--line);background:var(--paper);justify-content:flex-start}
+.q.open .ans .av{display:block;width:100%}.q.open .ans .qm{display:none}
+.calc{display:flex;flex-direction:column;gap:4px;font-size:15px;color:var(--muted);overflow-x:auto}
+.fin{display:block;margin-top:8px;padding:6px 10px;border-left:4px solid var(--red);color:var(--red);font-weight:700;overflow-x:auto}
+</style></head><body>
+<header><span class="num">C</span><h1><small>数学Ｃ　練習プリント</small>複素数平面　解答</h1><button class="all" type="button" id="all">全部の答えを見る</button></header>
+<main><p class="note">「？」をタップすると、その問題の途中の計算と答えが出ます（もう一度タップでかくす）。</p>
+<h2><span class="sn">１</span>複素数の絶対値（プリント①-3の類題）</h2><p class="lead">次の複素数の絶対値を求めよ。</p>
+<section class="q"><div class="eq"><span class="no">⑴</span><span>$5+12i$</span></div><button class="ans" type="button" aria-label="⑴ の 答えを 見る"><span class="qm">？</span><span class="av"><span class="calc"><span>$|5+12i|=\sqrt{5^2+12^2}=\sqrt{169}$</span></span><span class="fin">$13$</span></span></button></section>
+<section class="q"><div class="eq"><span class="no">⑵</span><span>$-7i$</span></div><button class="ans" type="button" aria-label="⑵ の 答えを 見る"><span class="qm">？</span><span class="av"><span class="calc"><span>$|-7i|=\sqrt{0^2+(-7)^2}$</span></span><span class="fin">$7$</span></span></button></section>
+<section class="q"><div class="eq"><span class="no">⑶</span><span>$2+\sqrt{5}i$</span></div><button class="ans" type="button" aria-label="⑶ の 答えを 見る"><span class="qm">？</span><span class="av"><span class="calc"><span>$|2+\sqrt{5}i|=\sqrt{2^2+(\sqrt{5})^2}=\sqrt{9}$</span></span><span class="fin">$3$</span></span></button></section>
+<section class="q"><div class="eq"><span class="no">⑷</span><span>$2\sqrt{2}-2\sqrt{2}i$</span></div><button class="ans" type="button" aria-label="⑷ の 答えを 見る"><span class="qm">？</span><span class="av"><span class="calc"><span>$|2\sqrt{2}-2\sqrt{2}i|=\sqrt{(2\sqrt{2})^2+(-2\sqrt{2})^2}=\sqrt{16}$</span></span><span class="fin">$4$</span></span></button></section>
+<h2><span class="sn">２</span>極形式（プリント問10の類題）</h2><p class="lead">次の複素数を極形式で表せ。ただし，偏角$\theta$は$0^\circ\leqq\theta&lt;360^\circ$とする。</p>
+<section class="q"><div class="eq"><span class="no">⑴</span><span>$1+\sqrt{3}i$</span></div><button class="ans" type="button" aria-label="⑴ の 答えを 見る"><span class="qm">？</span><span class="av"><span class="calc"><span>$r=|1+\sqrt{3}i|=2$</span><span>$1+\sqrt{3}i=2\left(\frac{1}{2}+\frac{\sqrt{3}}{2}i\right)$</span></span><span class="fin">$2(\cos60^\circ+i\sin60^\circ)$</span></span></button></section>
+<section class="q"><div class="eq"><span class="no">⑵</span><span>$-2+2i$</span></div><button class="ans" type="button" aria-label="⑵ の 答えを 見る"><span class="qm">？</span><span class="av"><span class="calc"><span>$r=|-2+2i|=2\sqrt{2}$</span><span>$-2+2i=2\sqrt{2}\left(-\frac{1}{\sqrt{2}}+\frac{1}{\sqrt{2}}i\right)$</span></span><span class="fin">$2\sqrt{2}(\cos135^\circ+i\sin135^\circ)$</span></span></button></section>
+<section class="q"><div class="eq"><span class="no">⑶</span><span>$-\sqrt{3}-i$</span></div><button class="ans" type="button" aria-label="⑶ の 答えを 見る"><span class="qm">？</span><span class="av"><span class="calc"><span>$r=|-\sqrt{3}-i|=2$</span><span>$-\sqrt{3}-i=2\left(-\frac{\sqrt{3}}{2}-\frac{1}{2}i\right)$</span></span><span class="fin">$2(\cos210^\circ+i\sin210^\circ)$</span></span></button></section>
+<section class="q"><div class="eq"><span class="no">⑷</span><span>$3-3i$</span></div><button class="ans" type="button" aria-label="⑷ の 答えを 見る"><span class="qm">？</span><span class="av"><span class="calc"><span>$r=|3-3i|=3\sqrt{2}$</span><span>$3-3i=3\sqrt{2}\left(\frac{1}{\sqrt{2}}-\frac{1}{\sqrt{2}}i\right)$</span></span><span class="fin">$3\sqrt{2}(\cos315^\circ+i\sin315^\circ)$</span></span></button></section>
+<section class="q"><div class="eq"><span class="no">⑸</span><span>$2\sqrt{3}+2i$</span></div><button class="ans" type="button" aria-label="⑸ の 答えを 見る"><span class="qm">？</span><span class="av"><span class="calc"><span>$r=|2\sqrt{3}+2i|=4$</span><span>$2\sqrt{3}+2i=4\left(\frac{\sqrt{3}}{2}+\frac{1}{2}i\right)$</span></span><span class="fin">$4(\cos30^\circ+i\sin30^\circ)$</span></span></button></section>
+<section class="q"><div class="eq"><span class="no">⑹</span><span>$-5i$</span></div><button class="ans" type="button" aria-label="⑹ の 答えを 見る"><span class="qm">？</span><span class="av"><span class="calc"><span>$r=|-5i|=5$</span><span>$-5i=5\cdot(-i)$</span></span><span class="fin">$5(\cos270^\circ+i\sin270^\circ)$</span></span></button></section>
+<h2><span class="sn">３</span>複素数の積（プリント問11の類題）</h2><p class="lead">次の複素数について，積$z_1z_2$の絶対値と偏角を求めよ。ただし，偏角$\theta$は$0^\circ\leqq\theta&lt;360^\circ$とする。</p>
+<section class="q"><div class="eq"><span class="no">⑴</span><span>$z_1=1+i$，$z_2=\sqrt{3}+i$</span></div><button class="ans" type="button" aria-label="⑴ の 答えを 見る"><span class="qm">？</span><span class="av"><span class="calc"><span>$z_1=\sqrt{2}(\cos45^\circ+i\sin45^\circ)$</span><span>$z_2=2(\cos30^\circ+i\sin30^\circ)$</span><span>絶対値　$\sqrt{2}\times2=2\sqrt{2}$</span><span>偏角　$45^\circ+30^\circ=75^\circ$</span></span><span class="fin">絶対値　$2\sqrt{2}$，偏角　$75^\circ$</span></span></button></section>
+<section class="q"><div class="eq"><span class="no">⑵</span><span>$z_1=2i$，$z_2=1+\sqrt{3}i$</span></div><button class="ans" type="button" aria-label="⑵ の 答えを 見る"><span class="qm">？</span><span class="av"><span class="calc"><span>$z_1=2(\cos90^\circ+i\sin90^\circ)$</span><span>$z_2=2(\cos60^\circ+i\sin60^\circ)$</span><span>絶対値　$2\times2=4$</span><span>偏角　$90^\circ+60^\circ=150^\circ$</span></span><span class="fin">絶対値　$4$，偏角　$150^\circ$</span></span></button></section>
+<section class="q"><div class="eq"><span class="no">⑶</span><span>$z_1=-1+i$，$z_2=3+3i$</span></div><button class="ans" type="button" aria-label="⑶ の 答えを 見る"><span class="qm">？</span><span class="av"><span class="calc"><span>$z_1=\sqrt{2}(\cos135^\circ+i\sin135^\circ)$</span><span>$z_2=3\sqrt{2}(\cos45^\circ+i\sin45^\circ)$</span><span>絶対値　$\sqrt{2}\times3\sqrt{2}=6$</span><span>偏角　$135^\circ+45^\circ=180^\circ$</span></span><span class="fin">絶対値　$6$，偏角　$180^\circ$</span></span></button></section>
+<section class="q"><div class="eq"><span class="no">⑷</span><span>$z_1=\sqrt{3}+i$，$z_2=-2$</span></div><button class="ans" type="button" aria-label="⑷ の 答えを 見る"><span class="qm">？</span><span class="av"><span class="calc"><span>$z_1=2(\cos30^\circ+i\sin30^\circ)$</span><span>$z_2=2(\cos180^\circ+i\sin180^\circ)$</span><span>絶対値　$2\times2=4$</span><span>偏角　$30^\circ+180^\circ=210^\circ$</span></span><span class="fin">絶対値　$4$，偏角　$210^\circ$</span></span></button></section>
+<section class="q"><div class="eq"><span class="no">⑸</span><span>$z_1=1-i$，$z_2=-1+\sqrt{3}i$</span></div><button class="ans" type="button" aria-label="⑸ の 答えを 見る"><span class="qm">？</span><span class="av"><span class="calc"><span>$z_1=\sqrt{2}(\cos315^\circ+i\sin315^\circ)$</span><span>$z_2=2(\cos120^\circ+i\sin120^\circ)$</span><span>絶対値　$\sqrt{2}\times2=2\sqrt{2}$</span><span>偏角　$315^\circ+120^\circ=435^\circ\to75^\circ$</span></span><span class="fin">絶対値　$2\sqrt{2}$，偏角　$75^\circ$</span></span></button></section>
+<section class="q"><div class="eq"><span class="no">⑹</span><span>$z_1=-\sqrt{3}+i$，$z_2=-1-i$</span></div><button class="ans" type="button" aria-label="⑹ の 答えを 見る"><span class="qm">？</span><span class="av"><span class="calc"><span>$z_1=2(\cos150^\circ+i\sin150^\circ)$</span><span>$z_2=\sqrt{2}(\cos225^\circ+i\sin225^\circ)$</span><span>絶対値　$2\times\sqrt{2}=2\sqrt{2}$</span><span>偏角　$150^\circ+225^\circ=375^\circ\to15^\circ$</span></span><span class="fin">絶対値　$2\sqrt{2}$，偏角　$15^\circ$</span></span></button></section>
+<h2><span class="sn">４</span>回転（プリント問13の類題）</h2><p class="lead">次の点を，原点のまわりに［　］の角だけ回転した点を表す複素数を求めよ。</p>
+<section class="q"><div class="eq"><span class="no">⑴</span><span>点$3+2i$　［$90^\circ$］</span></div><button class="ans" type="button" aria-label="⑴ の 答えを 見る"><span class="qm">？</span><span class="av"><span class="calc"><span>$90^\circ$回転は$i$を掛ける</span><span>$(3+2i)i=3i+2i^2$</span></span><span class="fin">$-2+3i$</span></span></button></section>
+<section class="q"><div class="eq"><span class="no">⑵</span><span>点$1+3i$　［$-90^\circ$］</span></div><button class="ans" type="button" aria-label="⑵ の 答えを 見る"><span class="qm">？</span><span class="av"><span class="calc"><span>$-90^\circ$回転は$-i$を掛ける</span><span>$(1+3i)(-i)=-i-3i^2$</span></span><span class="fin">$3-i$</span></span></button></section>
+<section class="q"><div class="eq"><span class="no">⑶</span><span>点$4-i$　［$180^\circ$］</span></div><button class="ans" type="button" aria-label="⑶ の 答えを 見る"><span class="qm">？</span><span class="av"><span class="calc"><span>$180^\circ$回転は$-1$を掛ける</span><span>$(4-i)\times(-1)$</span></span><span class="fin">$-4+i$</span></span></button></section>
+<section class="q"><div class="eq"><span class="no">⑷</span><span>点$\sqrt{3}+i$　［$60^\circ$］</span></div><button class="ans" type="button" aria-label="⑷ の 答えを 見る"><span class="qm">？</span><span class="av"><span class="calc"><span>$(\sqrt{3}+i)\left(\frac{1}{2}+\frac{\sqrt{3}}{2}i\right)$</span><span>$=\frac{\sqrt{3}}{2}+\frac{3}{2}i+\frac{1}{2}i+\frac{\sqrt{3}}{2}i^2$</span></span><span class="fin">$2i$</span></span></button></section>
+<section class="q"><div class="eq"><span class="no">⑸</span><span>点$2+2i$　［$30^\circ$］</span></div><button class="ans" type="button" aria-label="⑸ の 答えを 見る"><span class="qm">？</span><span class="av"><span class="calc"><span>$(2+2i)\left(\frac{\sqrt{3}}{2}+\frac{1}{2}i\right)=(1+i)(\sqrt{3}+i)$</span><span>$=\sqrt{3}+i+\sqrt{3}i+i^2$</span></span><span class="fin">$(\sqrt{3}-1)+(\sqrt{3}+1)i$</span></span></button></section>
+<section class="q"><div class="eq"><span class="no">⑹</span><span>点$2-4i$　［$45^\circ$］</span></div><button class="ans" type="button" aria-label="⑹ の 答えを 見る"><span class="qm">？</span><span class="av"><span class="calc"><span>$(2-4i)\left(\frac{1}{\sqrt{2}}+\frac{1}{\sqrt{2}}i\right)=\frac{1}{\sqrt{2}}(2-4i)(1+i)$</span><span>$=\frac{1}{\sqrt{2}}(2+2i-4i-4i^2)=\frac{6-2i}{\sqrt{2}}$</span></span><span class="fin">$3\sqrt{2}-\sqrt{2}i$</span></span></button></section>
+</main>
+<script>
+document.addEventListener('DOMContentLoaded',()=>{renderMathInElement(document.body,{delimiters:[{left:'$',right:'$',display:false}],throwOnError:false});});
+const qs=[...document.querySelectorAll('.q')], all=document.getElementById('all');
+qs.forEach(q=>q.querySelector('.ans').addEventListener('click',()=>{q.classList.toggle('open');sync();}));
+function sync(){all.textContent=qs.every(q=>q.classList.contains('open'))?'全部かくす':'全部の答えを見る';}
+all.addEventListener('click',()=>{const o=!qs.every(q=>q.classList.contains('open'));qs.forEach(q=>q.classList.toggle('open',o));sync();});
+</script></body></html>
