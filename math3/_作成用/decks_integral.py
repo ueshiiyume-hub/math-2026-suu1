@@ -1738,19 +1738,22 @@ const ISO = (k, n, rhs, m, p) => `<div class="iso" data-s="${k}">
   <div class="isoA" data-s="${k}" data-e="${n}">${D('I=' + rhs)}<span class="ist">${D('\\A{' + m + '}')}</span></div>
   <div class="isoB" data-s="${n}">${D('I')}<span class="mvI" data-s="${n}"><span class="sgm">${D('\\A{' + m + '}')}</span><span class="sgp">${D('\\A{' + p + '}')}</span></span>${D('=' + rhs)}</div>
 </div>`;
-/* 飛ぶ 長さ（右辺の −I の 位置 − 左辺の 行き先）を 測る。ページが 出た とき・番が 変わった とき */
+/* 飛ぶ 長さ（右辺の −I の 位置 − 左辺の 行き先）を 測る。動いて いない（show が ない）ときだけ 測る
+   （動いて いる ときに 触ると アニメーションが 始めから やり直しに なる、11/24 に 何度も 繰り返した） */
+let isoReq = 0;
 function isoFix(){
   document.querySelectorAll('.iso').forEach(iso => {
     const t = iso.querySelector('.ist'), m = iso.querySelector('.mvI');
-    if(!t || !m || !iso.offsetWidth) return;
+    if(!t || !m || !iso.offsetWidth || m.classList.contains('show')) return;
     const sc = iso.getBoundingClientRect().width / iso.offsetWidth || 1;
-    const an = m.style.animation; m.style.animation = 'none';
     const dx = (t.getBoundingClientRect().left - m.getBoundingClientRect().left) / sc;
-    m.style.animation = an;
     if(isFinite(dx) && dx > 0) m.style.setProperty('--dx', dx + 'px');
   });
 }
-(function(){ const go = () => { new MutationObserver(isoFix).observe(document.body, {subtree:true, attributes:true, attributeFilter:['class']}); setTimeout(isoFix, 300); };
+(function(){ const go = () => {
+    new MutationObserver(() => { if(!isoReq) isoReq = requestAnimationFrame(() => { isoReq = 0; isoFix(); }); })
+      .observe(document.body, {subtree:true, attributes:true, attributeFilter:['class']});
+    setTimeout(isoFix, 300); };
   if(document.body) go(); else document.addEventListener('DOMContentLoaded', go); })();
 
 const p0 = coverSlide({kicker:'数学Ⅲ　積分法', no:NO, title:'２回の 部分積分', sub:'もとの 積分 I が もう一度 出たら、移項して 求める'});
@@ -1776,27 +1779,29 @@ const p2 = ppPage({title:'例　⑴　２回目', tag:'⑴', q:String.raw`\int e
       `公式に 入れます。`,
       `マイナスが 2つで プラス。${M`\int e^x\sin x\,dx`}（もとの 積分）が 残ります。`]});
 
+const UBI = t => String.raw`\B{\underbrace{${t}}_{\large I}}`;     // もとの 積分 の 下に「I」
 const p3 = HD(NO, '例　⑴　I と おいて 移項', SEC) + `<div class="bd">
-  <div class="l" style="gap:12px;align-items:flex-start">
-    <div class="calc" style="font-size:27px;gap:10px">
-      <div>${D`\B{\int e^x\sin x\,dx}=e^x\sin x-\int e^x\cos x\,dx`}<span class="iso-lb">１回目</span></div>
-      <div data-s="1">${D`\phantom{\int e^x\sin x\,dx}=e^x\sin x-\left(e^x\cos x+\B{\int e^x\sin x\,dx}\right)`}<span class="iso-lb">２回目</span></div>
-      <div data-s="2" style="font-size:24px;color:var(--b)">もとの 積分 ${M`\int e^x\sin x\,dx`} を ${M`\B{I}`} と おく</div>
-      ${ISO(2, 3, String.raw`e^x\sin x-e^x\cos x`, '-I', '+I')}
-      <div data-s="3" class="iso-note">↑ 右辺の ${M`\A{-I}`} を 左辺へ 移項 → 符号が 変わって ${M`\A{+I}`}</div>
-      <div data-s="4">${D`2I=e^x(\sin x-\cos x)`}</div>
-      <div data-s="5">${D`I=\DP{\frac{1}{2}e^x(\sin x-\cos x)+C}`}</div>
+  <div class="l" style="gap:10px;align-items:flex-start">
+    <div class="calc" style="font-size:25px;gap:8px">
+      <div>${D`\int e^x\sin x\,dx=e^x\sin x-\int e^x\cos x\,dx`}<span class="iso-lb">１回目</span></div>
+      <div data-s="1">${D`\phantom{\int e^x\sin x\,dx}=e^x\sin x-\left(e^x\cos x+\int e^x\sin x\,dx\right)`}<span class="iso-lb">２回目</span></div>
+      <div data-s="2">${D(UBI(String.raw`\int e^x\sin x\,dx`) + String.raw`=e^x\sin x-e^x\cos x-` + UBI(String.raw`\int e^x\sin x\,dx`))}</div>
+      ${ISO(3, 4, String.raw`e^x\sin x-e^x\cos x`, '-I', '+I')}
+      <div data-s="4" class="iso-note">↑ 右辺の ${M`\A{-I}`} を 左辺へ 移項 → 符号が 変わって ${M`\A{+I}`}</div>
+      <div data-s="5">${D`2I=e^x(\sin x-\cos x)`}</div>
+      <div data-s="6">${D`I=\DP{\frac{1}{2}e^x(\sin x-\cos x)+C}`}</div>
     </div>
   </div>
   <div class="r bigpt" style="flex-direction:column;gap:12px;align-items:stretch;width:340px">
-    ${PT(2, '方針 ①', `もとの 積分を ${M`I`} と おく`)}
-    ${PT(3, '方針 ② 移項', `右辺の ${M`\A{-I}`} を 左辺へ<br>→ ${M`I+I=2I`}`)}
-    ${PT(5, '最後に', `両辺を ${M`2`} で 割る`)}
+    ${PT(2, '方針 ① I と おく', `${D`\B{I}=\int e^x\sin x\,dx`}<div style="font-size:20px">もとの 積分（左辺）と 右辺に 出た 積分は 同じ → 両方 ${M`\B{I}`}</div>`)}
+    ${PT(4, '方針 ② 移項', `右辺の ${M`\A{-I}`} を 左辺へ<br>→ ${M`I+I=2I`}`)}
+    ${PT(6, '最後に', `両辺を ${M`2`} で 割る`)}
   </div>
 </div>` + CAP([
   `１回目の 結果に、２回目の 結果を 入れます。`,
   `${M`\int e^x\cos x\,dx=e^x\cos x+\int e^x\sin x\,dx`} を かっこごと 入れます。右辺に もとの 積分が 出て きました。`,
-  `もとの 積分 ${M`\int e^x\sin x\,dx`} を ${M`I`} と おきます。左辺も 右辺も ${M`I`} に なります。`,
+  `かっこを はずすと、左辺と 右辺に 同じ 積分 ${M`\int e^x\sin x\,dx`} が あります。これを ${M`I`} と おきます。`,
+  `${M`I`} を 使って 書くと、${M`I=e^x\sin x-e^x\cos x-I`}。${M`I`} の 方程式に なりました。`,
   `右辺の ${M`-I`} を 左辺へ 移項します。移項すると 符号が 変わって ${M`+I`}。${M`I+I`} に なります。`,
   `${M`I+I=2I`}。右辺は ${M`e^x`} で くくります。`,
   `両辺を ${M`2`} で 割って、最後に ${M`+C`} を つけます。`
@@ -1827,7 +1832,7 @@ function q19(o){
     ${o.top||''}${PQ(o.tag, o.q)}
     <div class="two">
       <div class="l2" style="gap:10px">${SEL(1, '１回目', o.f1, o.g1)}${SEL(3, '２回目', o.f2, o.g2)}</div>
-      <div class="calc main" style="font-size:${o.fs||26}px;gap:10px">
+      <div class="calc main" style="font-size:${o.fs||24}px;gap:6px">
         <div data-s="2">${D(o.l1)}</div>
         <div data-s="4">${D(o.l2)}</div>
         ${ISO(5, 6, o.rhs, o.m, o.p)}
@@ -1851,21 +1856,21 @@ function q19(o){
 const Q19 = `<div class="q qline">次の 不定積分を 求めよ。</div>`;
 const p5 = q19({title:'問19　⑴', tag:'⑴', q:String.raw`I=\int e^x\cos x\,dx`, top:Q19,
   f1:[String.raw`\cos x`, String.raw`-\sin x`], g1:['e^x', 'e^x'], f2:[String.raw`\sin x`, String.raw`\cos x`], g2:['e^x', 'e^x'],
-  l1:String.raw`I=e^x\cos x+\int e^x\sin x\,dx`, l2:String.raw`\phantom{I}=e^x\cos x+\left(e^x\sin x-\B{\int e^x\cos x\,dx}\right)`,
+  l1:String.raw`I=e^x\cos x+\int e^x\sin x\,dx`, l2:String.raw`\phantom{I}=e^x\cos x+\bigl(e^x\sin x-\B{\underbrace{\int e^x\cos x\,dx}_{\large I}}\bigr)`,
   rhs:String.raw`e^x\cos x+e^x\sin x`, m:'-I', p:'+I', l3:String.raw`2I=e^x(\sin x+\cos x)`, ans:String.raw`\frac{1}{2}e^x(\sin x+\cos x)+C`});
 const p6 = q19({title:'問19　⑵', tag:'⑵', q:String.raw`I=\int e^{-x}\sin x\,dx`,
   f1:[String.raw`\sin x`, String.raw`\cos x`], g1:['e^{-x}', '-e^{-x}'], f2:[String.raw`\cos x`, String.raw`-\sin x`], g2:['e^{-x}', '-e^{-x}'],
-  l1:String.raw`I=-e^{-x}\sin x+\int e^{-x}\cos x\,dx`, l2:String.raw`\phantom{I}=-e^{-x}\sin x+\left(-e^{-x}\cos x-\B{\int e^{-x}\sin x\,dx}\right)`,
+  l1:String.raw`I=-e^{-x}\sin x+\int e^{-x}\cos x\,dx`, l2:String.raw`\phantom{I}=-e^{-x}\sin x+\bigl(-e^{-x}\cos x-\B{\underbrace{\int e^{-x}\sin x\,dx}_{\large I}}\bigr)`,
   rhs:String.raw`-e^{-x}\sin x-e^{-x}\cos x`, m:'-I', p:'+I', l3:String.raw`2I=-e^{-x}(\sin x+\cos x)`, ans:String.raw`-\frac{1}{2}e^{-x}(\sin x+\cos x)+C`});
-const p7 = q19({title:'問19　⑶', tag:'⑶', q:String.raw`I=\int e^{2x}\sin x\,dx`, fs:23,
+const p7 = q19({title:'問19　⑶', tag:'⑶', q:String.raw`I=\int e^{2x}\sin x\,dx`, fs:22,
   f1:[String.raw`\sin x`, String.raw`\cos x`], g1:['e^{2x}', String.raw`\frac{1}{2}e^{2x}`], f2:[String.raw`\cos x`, String.raw`-\sin x`], g2:['e^{2x}', String.raw`\frac{1}{2}e^{2x}`],
   l1:String.raw`I=\frac{1}{2}e^{2x}\sin x-\frac{1}{2}\int e^{2x}\cos x\,dx`,
-  l2:String.raw`\phantom{I}=\frac{1}{2}e^{2x}\sin x-\frac{1}{2}\left(\frac{1}{2}e^{2x}\cos x+\frac{1}{2}\B{\int e^{2x}\sin x\,dx}\right)`,
+  l2:String.raw`\phantom{I}=\frac{1}{2}e^{2x}\sin x-\frac{1}{2}\bigl(\frac{1}{2}e^{2x}\cos x+\frac{1}{2}\B{\underbrace{\int e^{2x}\sin x\,dx}_{\large I}}\bigr)`,
   rhs:String.raw`\frac{1}{2}e^{2x}\sin x-\frac{1}{4}e^{2x}\cos x`, m:String.raw`-\frac{1}{4}I`, p:String.raw`+\frac{1}{4}I`,
   l3:String.raw`\frac{5}{4}I=\frac{1}{4}e^{2x}(2\sin x-\cos x)`, ans:String.raw`\frac{1}{5}e^{2x}(2\sin x-\cos x)+C`});
 const p8 = q19({title:'問19　⑷', tag:'⑷', q:String.raw`I=\int e^x\cos2x\,dx`, fs:24,
   f1:[String.raw`\cos2x`, String.raw`-2\sin2x`], g1:['e^x', 'e^x'], f2:[String.raw`\sin2x`, String.raw`2\cos2x`], g2:['e^x', 'e^x'],
-  l1:String.raw`I=e^x\cos2x+2\int e^x\sin2x\,dx`, l2:String.raw`\phantom{I}=e^x\cos2x+2\left(e^x\sin2x-2\B{\int e^x\cos2x\,dx}\right)`,
+  l1:String.raw`I=e^x\cos2x+2\int e^x\sin2x\,dx`, l2:String.raw`\phantom{I}=e^x\cos2x+2\bigl(e^x\sin2x-2\B{\underbrace{\int e^x\cos2x\,dx}_{\large I}}\bigr)`,
   rhs:String.raw`e^x\cos2x+2e^x\sin2x`, m:'-4I', p:'+4I', l3:String.raw`5I=e^x(\cos2x+2\sin2x)`, ans:String.raw`\frac{1}{5}e^x(\cos2x+2\sin2x)+C`});
 
 const p9 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:24px">
