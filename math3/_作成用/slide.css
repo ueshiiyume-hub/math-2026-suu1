@@ -261,3 +261,18 @@ body.portrait #inkback{left:12px;bottom:14px;height:54px;font-size:18px}
 .pfbox .pfl{display:inline-block;font-size:19px;font-weight:700;color:var(--deep);line-height:1.4;margin-bottom:4px}
 .pfbox .fill{line-height:1.6}
 body.portrait .pfbox{font-size:23px;padding:14px 16px}
+/* −I の 移項（⑤-1、11/24）：右辺の −I が 左辺へ 飛び、とちゅうで 符号が ＋ に 変わる。--dx は デッキの isoFix が 測る */
+.iso,.calc > div.iso{display:grid;align-items:center;justify-items:start}
+.iso>.isoA,.iso>.isoB{grid-area:1/1;display:flex;align-items:center;gap:.12em}
+.mvI{position:relative;display:inline-flex;align-items:center}
+.mvI .sgm{position:absolute;left:0;top:50%;transform:translateY(-50%);white-space:nowrap}
+.mvI.show{animation:isoMv 1.6s ease-in-out both}
+.mvI.show .sgm{animation:isoOut 1.6s both}
+.mvI.show .sgp{animation:isoIn 1.6s both}
+@keyframes isoMv{0%{transform:translateX(var(--dx,6em))}15%{transform:translate(var(--dx,6em),-16px)}80%{transform:translate(0,-16px)}100%{transform:none}}
+@keyframes isoOut{0%,55%{opacity:1}72%,100%{opacity:0}}
+@keyframes isoIn{0%,55%{opacity:0}72%,100%{opacity:1}}
+.mvI.show .sgp .m{background:color-mix(in srgb,var(--a) 18%,transparent);border-radius:6px}
+.iso-note{font-size:20px;color:var(--a);font-weight:700}
+.iso-lb{font-size:16px;color:var(--muted);margin-left:12px;border:1px solid var(--line);padding:1px 8px;vertical-align:middle}
+body.final .mvI.show,body.final .mvI.show .sgm,body.final .mvI.show .sgp{animation-duration:.01s}
