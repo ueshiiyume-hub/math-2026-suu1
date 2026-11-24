@@ -283,6 +283,21 @@ body.portrait #inkback{left:12px;bottom:14px;height:54px;font-size:18px}
 .pfbox .pfl{display:inline-block;font-size:19px;font-weight:700;color:var(--deep);line-height:1.4;margin-bottom:4px}
 .pfbox .fill{line-height:1.6}
 body.portrait .pfbox{font-size:23px;padding:14px 16px}
+/* −I の 移項（⑤-1、11/24）：右辺の −I が 左辺へ 飛び、とちゅうで 符号が ＋ に 変わる。--dx は デッキの isoFix が 測る */
+.iso,.calc > div.iso{display:grid;align-items:center;justify-items:start}
+.iso>.isoA,.iso>.isoB{grid-area:1/1;display:flex;align-items:center;gap:.12em}
+.mvI{position:relative;display:inline-flex;align-items:center}
+.mvI .sgm{position:absolute;left:0;top:50%;transform:translateY(-50%);white-space:nowrap}
+.mvI.show{animation:isoMv 1.6s ease-in-out both}
+.mvI.show .sgm{animation:isoOut 1.6s both}
+.mvI.show .sgp{animation:isoIn 1.6s both}
+@keyframes isoMv{0%{transform:translateX(var(--dx,6em))}15%{transform:translate(var(--dx,6em),-16px)}80%{transform:translate(0,-16px)}100%{transform:none}}
+@keyframes isoOut{0%,55%{opacity:1}72%,100%{opacity:0}}
+@keyframes isoIn{0%,55%{opacity:0}72%,100%{opacity:1}}
+.mvI.show .sgp .m{background:color-mix(in srgb,var(--a) 18%,transparent);border-radius:6px}
+.iso-note{font-size:20px;color:var(--a);font-weight:700}
+.iso-lb{font-size:16px;color:var(--muted);margin-left:12px;border:1px solid var(--line);padding:1px 8px;vertical-align:middle}
+body.final .mvI.show,body.final .mvI.show .sgm,body.final .mvI.show .sgp{animation-duration:.01s}
 
 </style>
 </head>
@@ -293,7 +308,7 @@ body.portrait .pfbox{font-size:23px;padding:14px 16px}
 <div id="jump"></div>
 <script>
 const VER = 'ver 1.8　2026-11-16';
-const SERIES = [{"f": "1-1_xnの不定積分", "no": "①-1", "t": "xⁿ の不定積分", "v": "1.5_2026-11-15"}, {"f": "1-2_分子が多項式の場合", "no": "①-2", "t": "分子が多項式の場合", "v": "1.10_2026-11-15"}, {"f": "1-3_三角関数の不定積分", "no": "①-3", "t": "三角関数の不定積分", "v": "1.7_2026-11-15"}, {"f": "1-4_指数関数の不定積分", "no": "①-4", "t": "指数関数の不定積分", "v": "1.5_2026-11-15"}, {"f": "1-5_合成関数の不定積分", "no": "①-5", "t": "合成関数の不定積分", "v": "1.6_2026-11-15"}, {"f": "2-1_置換積分_1次式", "no": "②-1", "t": "置換積分（1次式を t に）", "v": "1.10_2026-11-15"}, {"f": "2-2_置換積分_根号", "no": "②-2", "t": "置換積分（√ を t に）", "v": "1.6_2026-11-15"}, {"f": "2-3_置換積分_xで微分", "no": "②-3", "t": "置換積分（x で 微分する 型）", "v": "1.8_2026-11-16"}, {"f": "2-4_置換積分_分子が分母の微分", "no": "②-4", "t": "置換積分（分子が 分母の 微分）", "v": "1.6_2026-11-16"}, {"f": "3-1_部分積分", "no": "③-1", "t": "部分積分法", "v": "1.7_2026-11-16"}, {"f": "3-2_部分積分_指数と対数", "no": "③-2", "t": "部分積分（eˣ・log x）", "v": "1.6_2026-11-16"}, {"f": "4-1_分数関数の不定積分", "no": "④-1", "t": "分数関数の不定積分", "v": "1.7_2026-11-16"}, {"f": "4-2_半角と積和の公式", "no": "④-2", "t": "半角の公式・積和の公式", "v": "1.5_2026-11-15"}, {"f": "4-3_三角関数_次数を下げる", "no": "④-3", "t": "三角関数の不定積分（次数を下げる）", "v": "1.5_2026-11-15"}, {"f": "4-4_三角関数_積を和に", "no": "④-4", "t": "三角関数の不定積分（積を和に）", "v": "1.5_2026-11-15"}], ME = "2-3_置換積分_xで微分";
+const SERIES = [{"f": "1-1_xnの不定積分", "no": "①-1", "t": "xⁿ の不定積分", "v": "1.5_2026-11-15"}, {"f": "1-2_分子が多項式の場合", "no": "①-2", "t": "分子が多項式の場合", "v": "1.10_2026-11-15"}, {"f": "1-3_三角関数の不定積分", "no": "①-3", "t": "三角関数の不定積分", "v": "1.7_2026-11-15"}, {"f": "1-4_指数関数の不定積分", "no": "①-4", "t": "指数関数の不定積分", "v": "1.5_2026-11-15"}, {"f": "1-5_合成関数の不定積分", "no": "①-5", "t": "合成関数の不定積分", "v": "1.6_2026-11-15"}, {"f": "2-1_置換積分_1次式", "no": "②-1", "t": "置換積分（1次式を t に）", "v": "1.10_2026-11-15"}, {"f": "2-2_置換積分_根号", "no": "②-2", "t": "置換積分（√ を t に）", "v": "1.6_2026-11-15"}, {"f": "2-3_置換積分_xで微分", "no": "②-3", "t": "置換積分（x で 微分する 型）", "v": "1.8_2026-11-16"}, {"f": "2-4_置換積分_分子が分母の微分", "no": "②-4", "t": "置換積分（分子が 分母の 微分）", "v": "1.6_2026-11-16"}, {"f": "3-1_部分積分", "no": "③-1", "t": "部分積分法", "v": "1.7_2026-11-16"}, {"f": "3-2_部分積分_指数と対数", "no": "③-2", "t": "部分積分（eˣ・log x）", "v": "1.6_2026-11-16"}, {"f": "4-1_分数関数の不定積分", "no": "④-1", "t": "分数関数の不定積分", "v": "1.7_2026-11-16"}, {"f": "4-2_半角と積和の公式", "no": "④-2", "t": "半角の公式・積和の公式", "v": "1.5_2026-11-15"}, {"f": "4-3_三角関数_次数を下げる", "no": "④-3", "t": "三角関数の不定積分（次数を下げる）", "v": "1.5_2026-11-15"}, {"f": "4-4_三角関数_積を和に", "no": "④-4", "t": "三角関数の不定積分（積を和に）", "v": "1.5_2026-11-15"}, {"f": "5-1_部分積分_2回", "no": "⑤-1", "t": "２回の 部分積分", "v": "1.0_2026-11-24"}], ME = "2-3_置換積分_xで微分";
 /* ====== 数学Ⅲ の 部品（数学C の parts.js を 元に した 別もの） ====== */
 
 /* 数式：M`\int x^3\,dx`（\ を そのまま 書ける）。KaTeX で かく。D は 大きい 形（\displaystyle：計算の 行に 使う） */
