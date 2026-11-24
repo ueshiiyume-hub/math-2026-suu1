@@ -327,6 +327,20 @@ SHEETS.append(dict(no='③-2', title='部分積分の不定積分（eˣ・log x�
 SHEETS[-1]['groups'][0][1][0]['notes'].insert(0, N('【選び方】', ['微分する方を $x$ とし，積分する方を $e^x$ とすると，', '積は $1\\cdot e^x=e^x$ となり，積分しやすそう。']))
 SHEETS[-1]['groups'][0][1][1]['notes'].insert(0, N('【選び方】', ['微分する方を $\\log x$ とし，積分する方を $1$ とすると，', '積は $\\frac{1}{x}\\cdot x=1$ となり，積分しやすそう。']))
 
+SHEETS.append(dict(no='③-3', title='部分積分の不定積分（２回の部分積分）', boxes=[('２回の部分積分', [
+    '部分積分を２回行うと、もとの積分が再び現れることがある。',
+    '①　もとの積分を $I$ とおき、２回とも [[$e^x$]] を【積分する方】にして部分積分する。',
+    '②　右辺に $I$ が現れたら、[[$I$ についての方程式]] を解く。'])],
+  groups=[('例', [it('⑴', r'\int e^x\sin x\,dx', [r'I=\int e^x\sin x\,dx\ \text{とおくと}', r'I=e^x\sin x-\int e^x\cos x\,dx',
+        r'\phantom{I}=e^x\sin x-\left\{e^x\cos x-\int e^x(-\sin x)\,dx\right\}', r'\phantom{I}=e^x\sin x-e^x\cos x-I',
+        r'\text{よって}\ \ 2I=e^x(\sin x-\cos x)', r'I=\frac{1}{2}e^x(\sin x-\cos x)+C'],
+       N('【選び方】', ['微分する方を [[$\\sin x$]] とし、積分する方を [[$e^x$]] とすると、', '「微分した方」と「積分した方」の積は [[$\\cos x\\cdot e^x=e^x\\cos x$]] → もう１回部分積分する。']))]),
+          ('問19（ノート）', [
+    it('⑴', r'\int e^x\cos x\,dx', [r'I=e^x\cos x+\int e^x\sin x\,dx', r'\phantom{I}=e^x\cos x+e^x\sin x-I', r'2I=e^x(\sin x+\cos x)', r'I=\frac{1}{2}e^x(\sin x+\cos x)+C']),
+    it('⑵', r'\int e^{-x}\sin x\,dx', [r'I=-e^{-x}\sin x+\int e^{-x}\cos x\,dx', r'\phantom{I}=-e^{-x}\sin x-e^{-x}\cos x-I', r'2I=-e^{-x}(\sin x+\cos x)', r'I=-\frac{1}{2}e^{-x}(\sin x+\cos x)+C']),
+    it('⑶', r'\int e^{2x}\sin x\,dx', [r'I=\frac{1}{2}e^{2x}\sin x-\frac{1}{2}\int e^{2x}\cos x\,dx', r'\phantom{I}=\frac{1}{2}e^{2x}\sin x-\frac{1}{4}e^{2x}\cos x-\frac{1}{4}I', r'\frac{5}{4}I=\frac{1}{4}e^{2x}(2\sin x-\cos x)', r'I=\frac{1}{5}e^{2x}(2\sin x-\cos x)+C']),
+    it('⑷', r'\int e^x\cos2x\,dx', [r'I=e^x\cos2x+2\int e^x\sin2x\,dx', r'\phantom{I}=e^x\cos2x+2e^x\sin2x-4I', r'5I=e^x(\cos2x+2\sin2x)', r'I=\frac{1}{5}e^x(\cos2x+2\sin2x)+C'])])]))
+
 SHEETS.append(dict(no='④-1', title='分数関数の不定積分', boxes=[('方針', [
     '「分子の次数」が「分母の次数」以上の時には，分子を分母で割って，「商＋余り／分母」の形にする。',
     '置換積分・部分積分が使えず，分母の次数が高い時には，部分分数に分解して，項ごとに積分をする。分母の次数が 1 次ならば積分可能。'])],
