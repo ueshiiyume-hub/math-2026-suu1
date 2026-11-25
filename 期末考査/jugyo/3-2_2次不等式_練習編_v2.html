@@ -2183,8 +2183,8 @@ function ptBig(P){
 }
 
 /* ====== このプリントのスライド ====== */
-const SERIES = [{"f": "1-1_因数分解の復習", "no": "①-1", "t": "因数分解の 復習", "v": "1.7_2026-11-15"}, {"f": "1-2_2次方程式の解", "no": "①-2", "t": "2次方程式の 解", "v": "1.7_2026-11-15"}, {"f": "1-3_2次方程式の解", "no": "①-3", "t": "2次方程式の 解 ②", "v": "1.7_2026-11-15"}, {"f": "1-4_解の公式", "no": "①-4", "t": "解の公式", "v": "1.9_2026-11-15"}, {"f": "1-5_解の公式_重解と解なし", "no": "①-5", "t": "2次方程式の 解 ③", "v": "1.9_2026-11-15"}, {"f": "1-6_実数解の個数", "no": "①-6", "t": "実数解の 個数", "v": "1.9_2026-11-15"}, {"f": "2-1_x軸との共有点", "no": "②-1", "t": "x軸との 共有点", "v": "1.7_2026-11-15"}, {"f": "2-2_x軸との共有点", "no": "②-2", "t": "x軸との 共有点 ②", "v": "1.7_2026-11-15"}, {"f": "2-3_x軸との位置関係", "no": "②-3", "t": "x軸との 位置関係", "v": "1.12_2026-11-15"}, {"f": "3-2_2次不等式_練習編_v2", "no": "③-1", "t": "2次不等式 練習編", "v": "3.21_2026-11-18"}, {"f": "3-1_2次不等式の解法_v2", "no": "③-2", "t": "2次不等式の 解き方", "v": "3.1_2026-11-18"}, {"f": "3-3_2次不等式の解法_v2", "no": "③-3", "t": "2次不等式 いろいろ", "v": "3.1_2026-11-18"}, {"f": "3-4_2次不等式の解法_v2", "no": "③-4", "t": "x² の前が マイナス", "v": "2.6_2026-11-18"}], ME = "3-2_2次不等式_練習編_v2";
-const VER = '<i class="nv">ver</i> 3.21　2026-11-18';
+const SERIES = [{"f": "1-1_因数分解の復習", "no": "①-1", "t": "因数分解の 復習", "v": "1.8_2026-11-25"}, {"f": "1-2_2次方程式の解", "no": "①-2", "t": "2次方程式の 解", "v": "1.8_2026-11-25"}, {"f": "1-3_2次方程式の解", "no": "①-3", "t": "2次方程式の 解 ②", "v": "1.8_2026-11-25"}, {"f": "1-4_解の公式", "no": "①-4", "t": "解の公式", "v": "1.10_2026-11-25"}, {"f": "1-5_解の公式_重解と解なし", "no": "①-5", "t": "2次方程式の 解 ③", "v": "1.10_2026-11-25"}, {"f": "1-6_実数解の個数", "no": "①-6", "t": "実数解の 個数", "v": "1.10_2026-11-25"}, {"f": "2-1_x軸との共有点", "no": "②-1", "t": "x軸との 共有点", "v": "1.8_2026-11-25"}, {"f": "2-2_x軸との共有点", "no": "②-2", "t": "x軸との 共有点 ②", "v": "1.8_2026-11-25"}, {"f": "2-3_x軸との位置関係", "no": "②-3", "t": "x軸との 位置関係", "v": "1.13_2026-11-25"}, {"f": "3-2_2次不等式_練習編_v2", "no": "③-1", "t": "2次不等式 練習編", "v": "3.22_2026-11-25"}, {"f": "3-1_2次不等式の解法_v2", "no": "③-2", "t": "2次不等式の 解き方", "v": "3.2_2026-11-25"}, {"f": "3-3_2次不等式の解法_v2", "no": "③-3", "t": "2次不等式 いろいろ", "v": "3.3_2026-11-25"}, {"f": "3-4_2次不等式の解法_v2", "no": "③-4", "t": "x² の前が マイナス", "v": "2.7_2026-11-25"}], ME = "3-2_2次不等式_練習編_v2";
+const VER = '<i class="nv">ver</i> 3.22　2026-11-25';
 /* ③-1 ver 2.0 の 土台：ver 1.4 の 部品の 写し（ver 1.4 を 直しても ver 2.0 は 変わらない） */
 
 const IMG = s => s;
@@ -2986,6 +2986,14 @@ const DECK = {title:'③-1 2次不等式 練習編', pages:PG};
 
 /* ====== 組み立て・操作 ====== */
 const stage = document.getElementById('stage');
+/* プリントの No.（数学Ⅲ と 同じ ように、2026-11-25 先生の 指示）：デッキ番号（DECK.title の はじめ）→ プリント右上の No.。
+   表紙の 見出し（kicker）の 後ろと、左下の ページ番号の 右に 出す。新しい プリントを 足したら ここにも 足す */
+const PNO = {'①-1':'1','①-2':'1・2','①-3':'2','①-4':'3・4','①-5':'5','①-6':'6','②-1':'7','②-2':'8','②-3':'9','③-1':'10・11','③-2':'12','③-3':'13〜15','③-4':'16'};
+const DNO = (DECK.title||'').split(/[\s　]/)[0], PN = PNO[DNO];
+if(PN && DECK.pages[0]) DECK.pages[0].html = DECK.pages[0].html.replace(/(<div class="kicker">[\s\S]*?)(<\/div>)/, `$1<span class="pnk">プリント No.${PN}</span>$2`);
+(()=>{ const st=document.createElement('style'); st.textContent=`.pnk{display:inline-block;margin-left:.7em;padding:0 .55em;border:2px solid currentColor;border-radius:6px;font-size:.82em;line-height:1.35;vertical-align:.08em}
+#jump .pnob{margin-left:8px;padding:1px 7px;border:1.5px solid #7d8fb3;border-radius:5px;font-size:11px;font-weight:700;color:#5b6f96;background:rgba(255,255,255,.75);white-space:nowrap}
+body.dark #jump .pnob,[data-theme="dark"] #jump .pnob{color:#b9c6e2;border-color:#7d8fb3;background:rgba(30,34,44,.7)}`; document.head.appendChild(st); })();
 const pages = DECK.pages.map(x=>x.html), names = DECK.pages.map(x=>x.name);
 document.title = DECK.title;
 /* スライドの種類（スマホの縦レイアウトで使う） */
@@ -2996,7 +3004,7 @@ stage.innerHTML = pages.map(h=>`<section class="slide t-${kind(h)}">${h}</sectio
   const nodes=[]; while(w.nextNode()) nodes.push(w.currentNode);
   nodes.forEach(n=>{
     if(!/[A-Za-z]/.test(n.nodeValue)) return;
-    if(n.parentNode.closest && (n.parentNode.closest('svg')||n.parentNode.closest('i'))) return;
+    if(n.parentNode.closest && (n.parentNode.closest('svg')||n.parentNode.closest('i')||n.parentNode.closest('.pnk'))) return;   // プリントの No. は 斜体に しない
     const f=document.createDocumentFragment();
     n.nodeValue.split(/([A-Za-z])/).forEach(t=>{
       if(/^[A-Za-z]$/.test(t)){const i=document.createElement('i');i.className='v';i.textContent=t;f.appendChild(i);}
@@ -3066,7 +3074,7 @@ const tocRows = (()=>{ let h='', g=null;
     if(m){ if(m[1]!==g){ g=m[1]; h+=`<div class="tg">${(DECK.groups&&DECK.groups[g])||g}</div>`; } h+=`<button class="ti in" data-i="${i}">${m[2]||n}</button>`; }
     else { g=null; h+=`<button class="ti" data-i="${i}">${n}</button>`; } });
   return h; })();
-jump.innerHTML = `<button id="fsbtn" title="全画面（F）"></button><button class="tocbtn" title="目次">≡ 目次</button><span class="pgno"></span>
+jump.innerHTML = `<button id="fsbtn" title="全画面（F）"></button><button class="tocbtn" title="目次">≡ 目次</button><span class="pgno"></span>${PN ? `<span class="pnob">${DNO}　No.${PN}</span>` : ''}
   <div class="tocp"><div class="toch"><b>${DECK.title||''}</b><button class="tocx" title="閉じる">✕</button></div>
   <a class="home" href="目次.html">← ほかの プリントへ</a><div class="tocl">${tocRows}</div></div><div class="tocbg"></div>`;
 /* ====== 全画面（数学Ⅲ と 同じ しくみを この 科目用に 写した もの、2026-10-27） ======
