@@ -1759,46 +1759,37 @@ function isoFix(){
 const p0 = coverSlide({kicker:'数学Ⅲ　積分法', no:NO, title:'２回の 部分積分', sub:'もとの 積分 I が もう一度 出たら、移項して 求める'});
 const Q = `<div class="q qline">次の 不定積分を 求めよ。</div>`;
 
-const p1 = ppPage({title:'例　⑴　１回目', tag:'⑴', q:String.raw`\int e^x\sin x\,dx`, top:Q,
-  f:[String.raw`\sin x`, String.raw`\cos x`], g:['e^x', 'e^x'], prod:String.raw`\cos x\cdot e^x=e^x\cos x`, pnote:'まだ 積の 形 → もう１回 部分積分',
-  calc:[[4, String.raw`=\A{\sin x}\cdot\B{e^x}-\int\A{\cos x}\cdot\B{e^x}\,dx`], [5, String.raw`=e^x\sin x-\int e^x\cos x\,dx`]],
-  cm:[`${M`e^x`} と ${M`\sin x`} の 積です。まず １回目の 部分積分を します。`,
-      `<b class="a">微分する方</b> は ${M`\sin x`}。微分すると ${M`\cos x`}。`,
-      `<b class="b">積分する方</b> は ${M`e^x`}。積分しても ${M`e^x`}。`,
-      `積は ${M`e^x\cos x`}。まだ 積の 形なので、すぐには 積分できません。`,
-      `公式「${M`fg-\int f'g\,dx`}」に 入れます。`,
-      `残った ${M`\int e^x\cos x\,dx`} を、もう１回 部分積分します（次の ページ）。`]});
-
-const p2 = ppPage({title:'例　⑴　２回目', tag:'⑴', q:String.raw`\int e^x\cos x\,dx`, top:`<div class="q qline">１回目で 残った 積分を、もう１回 部分積分する。</div>`,
-  f:[String.raw`\cos x`, String.raw`-\sin x`], g:['e^x', 'e^x'], prod:String.raw`(-\sin x)\cdot e^x=-e^x\sin x`, pnote:`<b>もとの 積分</b>（${M`\int e^x\sin x\,dx`}）と 同じ 形が 出る`,
-  calc:[[4, String.raw`=\A{\cos x}\cdot\B{e^x}-\int\A{(-\sin x)}\cdot\B{e^x}\,dx`], [5, String.raw`=e^x\cos x+\int e^x\sin x\,dx`]],
-  cm:[`２回目も、<b class="b">積分する方</b> は ${M`e^x`} に そろえます。`,
-      `<b class="a">微分する方</b> は ${M`\cos x`}。微分すると ${M`-\sin x`}。マイナスに 注意。`,
-      `<b class="b">積分する方</b> は ${M`e^x`}。`,
-      `積は ${M`-e^x\sin x`}。最初の 問題 ${M`\int e^x\sin x\,dx`} と 同じ 形が 出て きました。`,
-      `公式に 入れます。`,
-      `マイナスが 2つで プラス。${M`\int e^x\sin x\,dx`}（もとの 積分）が 残ります。`]});
-
+/* 問19 と 例 で 使う 選び方の 枠 */
+const SEL = (n, lab, f, g) => `<div data-s="${n}" class="box"><div class="bl">${lab}</div><div class="bc" style="font-size:22px;line-height:1.9">
+  <div><span class="tg a">微分する方</span>${M(String.raw`\A{${f[0]}}\ \to\ \A{${f[1]}}`)}</div><div><span class="tg b">積分する方</span>${M(String.raw`\B{${g[0]}}\ \to\ \B{${g[1]}}`)}</div></div></div>`;
+/* 1行の 選び方（例⑴ 用、せまい 画面に 収める） */
+const SELC = (n, lab, f, g) => `<div data-s="${n}" class="box"><div class="bl">${lab}</div><div class="bc" style="font-size:20px;line-height:1.7;white-space:nowrap">
+  <span class="tg a">微分</span>${M(String.raw`\A{${f[0]}}\to\A{${f[1]}}`)}　<span class="tg b">積分</span>${M(String.raw`\B{${g[0]}}\to\B{${g[1]}}`)}</div></div>`;
 const UBI = t => String.raw`\B{\underbrace{${t}}_{\large I}}`;     // もとの 積分 の 下に「I」
-const p3 = HD(NO, '例　⑴　I と おいて 移項', SEC) + `<div class="bd">
-  <div class="l" style="gap:10px;align-items:flex-start">
-    <div class="calc" style="font-size:25px;gap:8px">
-      <div>${D`\int e^x\sin x\,dx=e^x\sin x-\int e^x\cos x\,dx`}<span class="iso-lb">１回目</span></div>
-      <div data-s="1">${D`\phantom{\int e^x\sin x\,dx}=e^x\sin x-\left(e^x\cos x+\int e^x\sin x\,dx\right)`}<span class="iso-lb">２回目</span></div>
-      <div data-s="2">${D(UBI(String.raw`\int e^x\sin x\,dx`) + String.raw`=e^x\sin x-e^x\cos x-` + UBI(String.raw`\int e^x\sin x\,dx`))}</div>
-      ${ISO(3, 4, String.raw`e^x\sin x-e^x\cos x`, '-I', '+I')}
-      <div data-s="4" class="iso-note">↑ 右辺の ${M`\A{-I}`} を 左辺へ 移項 → 符号が 変わって ${M`\A{+I}`}</div>
-      <div data-s="5">${D`2I=e^x(\sin x-\cos x)`}</div>
-      <div data-s="6">${D`I=\DP{\frac{1}{2}e^x(\sin x-\cos x)+C}`}</div>
+/* 例⑴（11/25、先生の 指示：１回目・２回目 の ページを ここに まとめる）：左に １回目・２回目 の 選び方 → 方針、右に 計算 */
+const p3 = HD(NO, '例　⑴', SEC) + `<div class="bd col st" style="gap:10px">
+  ${PQ('⑴', String.raw`\int e^x\sin x\,dx`)}
+  <div class="two">
+    <div class="l2" style="gap:8px">
+      ${SELC(1, '１回目', [String.raw`\sin x`, String.raw`\cos x`], ['e^x', 'e^x'])}
+      ${SELC(3, '２回目（残った 積分）', [String.raw`\cos x`, String.raw`-\sin x`], ['e^x', 'e^x'])}
+      ${PT(5, '方針', `① ${M`\B{I}=\int e^x\sin x\,dx`} と おく<div data-s="7">② 右辺の ${M`\A{-I}`} を 左辺へ 移項</div>`)}
+    </div>
+    <div class="calc main" style="font-size:22px;gap:2px">
+      <div data-s="2">${D`\int e^x\sin x\,dx=e^x\sin x-\int e^x\cos x\,dx`}<span class="iso-lb">１回目</span></div>
+      <div data-s="4">${D`\phantom{\int e^x\sin x\,dx}=e^x\sin x-\bigl(e^x\cos x+\int e^x\sin x\,dx\bigr)`}<span class="iso-lb">２回目</span></div>
+      <div data-s="5">${D(UBI(String.raw`\int e^x\sin x\,dx`) + String.raw`=e^x\sin x-e^x\cos x-` + UBI(String.raw`\int e^x\sin x\,dx`))}</div>
+      ${ISO(6, 7, String.raw`e^x\sin x-e^x\cos x`, '-I', '+I')}
+      <div data-s="7" class="iso-note">↑ 右辺の ${M`\A{-I}`} を 左辺へ 移項 → 符号が 変わって ${M`\A{+I}`}</div>
+      <div data-s="8">${D`2I=e^x(\sin x-\cos x)`}</div>
+      <div data-s="9">${D`I=\DP{\frac{1}{2}e^x(\sin x-\cos x)+C}`}</div>
     </div>
   </div>
-  <div class="r bigpt" style="flex-direction:column;gap:12px;align-items:stretch;width:340px">
-    ${PT(2, '方針 ① I と おく', `${D`\B{I}=\int e^x\sin x\,dx`}<div style="font-size:20px">もとの 積分（左辺）と 右辺に 出た 積分は 同じ → 両方 ${M`\B{I}`}</div>`)}
-    ${PT(4, '方針 ② 移項', `右辺の ${M`\A{-I}`} を 左辺へ<br>→ ${M`I+I=2I`}`)}
-    ${PT(6, '最後に', `両辺を ${M`2`} で 割る`)}
-  </div>
 </div>` + CAP([
-  `１回目の 結果に、２回目の 結果を 入れます。`,
+  `${M`e^x`} と ${M`\sin x`} の 積です。部分積分を ２回 します。`,
+  `１回目：<b class="a">微分する方</b> は ${M`\sin x`}（→ ${M`\cos x`}）、<b class="b">積分する方</b> は ${M`e^x`}。`,
+  `１回目の 部分積分。積は ${M`e^x\cos x`} で、まだ 積分が 残ります。`,
+  `２回目：残った ${M`\int e^x\cos x\,dx`} を、また <b class="b">${M`e^x`} を 積分する方</b> に して 部分積分。${M`\cos x`} の 微分は ${M`-\sin x`}。`,
   `${M`\int e^x\cos x\,dx=e^x\cos x+\int e^x\sin x\,dx`} を かっこごと 入れます。右辺に もとの 積分が 出て きました。`,
   `かっこを はずすと、左辺と 右辺に 同じ 積分 ${M`\int e^x\sin x\,dx`} が あります。これを ${M`I`} と おきます。`,
   `${M`I`} を 使って 書くと、${M`I=e^x\sin x-e^x\cos x-I`}。${M`I`} の 方程式に なりました。`,
@@ -1825,8 +1816,6 @@ const p4 = pfPage({no:NO, sec:SEC, title:'例　⑴　プリントの 枠', tag:
       `${M`-I`} を 左辺に 移項して ${M`2I`}。あとは ${M`I`} を 求めるだけです。`]});
 
 /* 問19 の 1問：左＝１回目・２回目 の 選び方、右＝計算（−I の 移項を 動かす） */
-const SEL = (n, lab, f, g) => `<div data-s="${n}" class="box"><div class="bl">${lab}</div><div class="bc" style="font-size:22px;line-height:1.9">
-  <div><span class="tg a">微分する方</span>${M(String.raw`\A{${f[0]}}\ \to\ \A{${f[1]}}`)}</div><div><span class="tg b">積分する方</span>${M(String.raw`\B{${g[0]}}\ \to\ \B{${g[1]}}`)}</div></div></div>`;
 function q19(o){
   return HD(NO, o.title, SEC) + `<div class="bd col st" style="gap:14px">
     ${o.top||''}${PQ(o.tag, o.q)}
@@ -1881,7 +1870,7 @@ const p9 = HD(NO, 'まとめ', SEC) + `<div class="bd col" style="gap:24px">
 </div>` + CAP([`最後の ${M`+C`} を 忘れずに。`]);
 
 const DECK = {title:'⑤-1 ２回の 部分積分', pages:[
-  {name:'表紙', html:p0}, {name:'例　⑴　１回目', html:p1}, {name:'例　⑴　２回目', html:p2}, {name:'例　⑴　I と おいて 移項', html:p3},
+  {name:'表紙', html:p0}, {name:'例　⑴', html:p3},
   {name:'例　⑴　プリントの 枠', html:p4}, {name:'問19　⑴', html:p5}, {name:'問19　⑵', html:p6}, {name:'問19　⑶', html:p7}, {name:'問19　⑷', html:p8},
   {name:'まとめ', html:p9},
 ]};
