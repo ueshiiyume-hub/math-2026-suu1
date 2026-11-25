@@ -1766,31 +1766,66 @@ const SEL = (n, lab, f, g) => `<div data-s="${n}" class="box"><div class="bl">${
 const SELC = (n, lab, f, g) => `<div data-s="${n}" class="box"><div class="bl">${lab}</div><div class="bc" style="font-size:20px;line-height:1.7;white-space:nowrap">
   <span class="tg a">微分</span>${M(String.raw`\A{${f[0]}}\to\A{${f[1]}}`)}　<span class="tg b">積分</span>${M(String.raw`\B{${g[0]}}\to\B{${g[1]}}`)}</div></div>`;
 const UBI = t => String.raw`\B{\underbrace{${t}}_{\large I}}`;     // もとの 積分 の 下に「I」
-/* 例⑴（11/25、先生の 指示：１回目・２回目 の ページを ここに まとめる）：左に １回目・２回目 の 選び方 → 方針、右に 計算 */
-const p3 = HD(NO, '例　⑴', SEC) + `<div class="bd col st" style="gap:10px">
-  ${PQ('⑴', String.raw`\int e^x\sin x\,dx`)}
+/* 積分・微分の 矢印（11/25、先生の 指示。板書の ように 式の 上に「積分」「微分」と 矢印）
+   式の 中の 部品に \htmlData{ar=名前}{…} で 印を つけ、ARW(番, '始め>終わり', 色, 文字, 形) で 矢印を 置く。
+   形 'over'＝上に コの字（同じ 行）、'down'＝下の 行へ 曲線。位置は arwFix が 測る（isoFix と 同じ とき） */
+const AR = (k, t) => String.raw`\htmlData{ar=${k}}{${t}}`;
+const ARW = (n, ft, c, lab, kind) => `<path data-s="${n}" class="arw-p" data-arw="${ft}" data-kind="${kind||'over'}" style="stroke:var(--${c})" marker-end="url(#ah${c})"/>`
+  + (lab ? `<text data-s="${n}" class="arw-t" data-arw="${ft}" data-kind="${kind||'over'}" style="fill:var(--${c})">${lab}</text>` : '');
+const ARSVG = (arws) => `<svg class="arw-svg"><defs>${['a','b'].map(c => `<marker id="ah${c}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--${c})"/></marker>`).join('')}</defs>${arws.join('')}</svg>`;
+function arwFix(){
+  document.querySelectorAll('.arw-box').forEach(box => {
+    if(!box.offsetWidth) return;
+    const sc = box.getBoundingClientRect().width / box.offsetWidth || 1, B = box.getBoundingClientRect();
+    const R = k => { const e = box.querySelector(`[data-ar="${k}"]`); if(!e) return null; const r = e.getBoundingClientRect();
+      return {l:(r.left-B.left)/sc, r:(r.right-B.left)/sc, t:(r.top-B.top)/sc, b:(r.bottom-B.top)/sc, cx:((r.left+r.right)/2-B.left)/sc}; };
+    box.querySelectorAll('.arw-p').forEach(pa => {
+      const [f, t] = pa.dataset.arw.split('>'), a = R(f), b = R(t); if(!a || !b) return;
+      let d, lx, ly;
+      if(pa.dataset.kind === 'down'){ const y1 = a.b - 2, y2 = b.t - 4;
+        d = `M${a.cx},${y1} C${a.cx},${(y1+y2)/2} ${b.cx},${(y1+y2)/2} ${b.cx},${y2}`; lx = Math.min(a.cx, b.cx) - 24; ly = (y1+y2)/2 + 6; }   // 文字は 曲線の 左
+      else { const top = Math.min(a.t, b.t) - 14;
+        d = `M${a.cx},${a.t+2} L${a.cx},${top} L${b.cx},${top} L${b.cx},${b.t-3}`; lx = (a.cx+b.cx)/2; ly = top - 6; }
+      pa.setAttribute('d', d);
+      const tx = box.querySelector(`.arw-t[data-arw="${pa.dataset.arw}"]`); if(tx){ tx.setAttribute('x', lx); tx.setAttribute('y', ly); }
+    });
+  });
+}
+(function(){ let q = 0; const go = () => {
+    new MutationObserver(() => { if(!q) q = requestAnimationFrame(() => { q = 0; arwFix(); }); })
+      .observe(document.body, {subtree:true, attributes:true, attributeFilter:['class']});
+    setTimeout(arwFix, 300); setTimeout(arwFix, 1200); };
+  if(document.body) go(); else document.addEventListener('DOMContentLoaded', go); })();
+
+/* 例⑴（11/25、先生の 指示：１回目・２回目 の ページを ここに まとめる。積分・微分の 矢印、−∫eˣ(−sin x)dx を 書いてから 符号を 直す 行）
+   左に 問題・１回目・２回目 の 選び方・方針、右に 計算 */
+const p3 = HD(NO, '例　⑴', SEC) + `<div class="bd col st" style="gap:6px">
   <div class="two">
     <div class="l2" style="gap:8px">
+      ${PQ('⑴', String.raw`\int e^x\sin x\,dx`)}
       ${SELC(1, '１回目', [String.raw`\sin x`, String.raw`\cos x`], ['e^x', 'e^x'])}
       ${SELC(3, '２回目（残った 積分）', [String.raw`\cos x`, String.raw`-\sin x`], ['e^x', 'e^x'])}
-      ${PT(5, '方針', `① ${M`\B{I}=\int e^x\sin x\,dx`} と おく<div data-s="7">② 右辺の ${M`\A{-I}`} を 左辺へ 移項</div>`)}
+      ${PT(6, '方針', `① ${M`\B{I}=\int e^x\sin x\,dx`} と おく<div data-s="8">② 右辺の ${M`\A{-I}`} を 左辺へ 移項</div>`)}
     </div>
-    <div class="calc main" style="font-size:22px;gap:2px">
-      <div data-s="2">${D`\int e^x\sin x\,dx=e^x\sin x-\int e^x\cos x\,dx`}<span class="iso-lb">１回目</span></div>
-      <div data-s="4">${D`\phantom{\int e^x\sin x\,dx}=e^x\sin x-\bigl(e^x\cos x+\int e^x\sin x\,dx\bigr)`}<span class="iso-lb">２回目</span></div>
-      <div data-s="5">${D(UBI(String.raw`\int e^x\sin x\,dx`) + String.raw`=e^x\sin x-e^x\cos x-` + UBI(String.raw`\int e^x\sin x\,dx`))}</div>
-      ${ISO(6, 7, String.raw`e^x\sin x-e^x\cos x`, '-I', '+I')}
-      <div data-s="7" class="iso-note">↑ 右辺の ${M`\A{-I}`} を 左辺へ 移項 → 符号が 変わって ${M`\A{+I}`}</div>
-      <div data-s="8">${D`2I=e^x(\sin x-\cos x)`}</div>
-      <div data-s="9">${D`I=\DP{\frac{1}{2}e^x(\sin x-\cos x)+C}`}</div>
+    <div class="calc main arw-box" style="font-size:22px;gap:4px;padding-top:34px;position:relative">
+      ${ARSVG([ARW(2, 'g1>G1', 'b', '積分'), ARW(2, 'f1>F1', 'a', '微分'), ARW(4, 'g2>G2', 'b', '積分', 'down'), ARW(4, 'f2>F2', 'a', '微分')])}
+      <div data-s="2">${D(String.raw`\int ${AR('g1','e^x')}\sin x\,dx=${AR('G1','e^x')}${AR('f1','\\sin x')}-\int ${AR('g2','e^x')}${AR('F1','\\cos x')}\,dx`)}<span class="iso-lb">１回目</span></div>
+      <div data-s="4" style="margin-top:30px">${D(String.raw`\phantom{\int e^x\sin x\,dx}=e^x\sin x-\bigl(${AR('G2','e^x')}${AR('f2','\\cos x')}-\int e^x${AR('F2','(-\\sin x)')}\,dx\bigr)`)}<span class="iso-lb">２回目</span></div>
+      <div data-s="5">${D(String.raw`\phantom{\int e^x\sin x\,dx}=e^x\sin x-\bigl(e^x\cos x\,\A{+}\int e^x\sin x\,dx\bigr)`)}<span class="iso-lb">符号</span></div>
+      <div data-s="6">${D(UBI(String.raw`\int e^x\sin x\,dx`) + String.raw`=e^x\sin x-e^x\cos x-` + UBI(String.raw`\int e^x\sin x\,dx`))}</div>
+      ${ISO(7, 8, String.raw`e^x\sin x-e^x\cos x`, '-I', '+I')}
+      <div data-s="8" class="iso-note">↑ 右辺の ${M`\A{-I}`} を 左辺へ 移項 → 符号が 変わって ${M`\A{+I}`}</div>
+      <div data-s="9">${D`2I=e^x(\sin x-\cos x)`}</div>
+      <div data-s="10">${D`I=\DP{\frac{1}{2}e^x(\sin x-\cos x)+C}`}</div>
     </div>
   </div>
 </div>` + CAP([
   `${M`e^x`} と ${M`\sin x`} の 積です。部分積分を ２回 します。`,
-  `１回目：<b class="a">微分する方</b> は ${M`\sin x`}（→ ${M`\cos x`}）、<b class="b">積分する方</b> は ${M`e^x`}。`,
-  `１回目の 部分積分。積は ${M`e^x\cos x`} で、まだ 積分が 残ります。`,
-  `２回目：残った ${M`\int e^x\cos x\,dx`} を、また <b class="b">${M`e^x`} を 積分する方</b> に して 部分積分。${M`\cos x`} の 微分は ${M`-\sin x`}。`,
-  `${M`\int e^x\cos x\,dx=e^x\cos x+\int e^x\sin x\,dx`} を かっこごと 入れます。右辺に もとの 積分が 出て きました。`,
+  `１回目：<b class="a">微分する方</b> は ${M`\sin x`}（→ ${M`\cos x`}）、<b class="b">積分する方</b> は ${M`e^x`}（→ ${M`e^x`}）。`,
+  `１回目の 部分積分。${M`e^x`} は <b class="b">積分</b> して 前に、${M`\sin x`} は <b class="a">微分</b> して ${M`\cos x`} に。まだ 積分が 残ります。`,
+  `２回目：残った ${M`\int e^x\cos x\,dx`} を、また <b class="b">${M`e^x`} を 積分する方</b> に して 部分積分。`,
+  `${M`e^x`} は <b class="b">積分</b> して ${M`e^x`}、${M`\cos x`} は <b class="a">微分</b> して ${M`-\sin x`}。かっこの 中に そのまま 書きます。`,
+  `符号を 直します。${M`-\int e^x(-\sin x)\,dx=+\int e^x\sin x\,dx`}（マイナスが 2つで プラス）。`,
   `かっこを はずすと、左辺と 右辺に 同じ 積分 ${M`\int e^x\sin x\,dx`} が あります。これを ${M`I`} と おきます。`,
   `${M`I`} を 使って 書くと、${M`I=e^x\sin x-e^x\cos x-I`}。${M`I`} の 方程式に なりました。`,
   `右辺の ${M`-I`} を 左辺へ 移項します。移項すると 符号が 変わって ${M`+I`}。${M`I+I`} に なります。`,
