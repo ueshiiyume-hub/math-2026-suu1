@@ -12,13 +12,20 @@ const FILL = (n, h, w) => `<span class="fill"${w?` style="min-width:${w}em"`:''}
 /* 説明欄：cm の i 番目が i 番で 出る（null は とばす） */
 const CAP = cm => `<div class="cap">${cm.map((c,i)=>c==null?'':`<p data-m="${i}">${c}</p>`).join('')}</div>`;
 /* 見出し */
-const HD = (no, title, sec) => `<header class="hd"><span class="no">${no}</span><h2>${title}</h2>${sec?`<span class="sec">${sec}</span>`:''}</header>`;
+/* プリントの No.（2026-11-25、先生の 指示。数学Ⅲ と 同じ）：見出しの 番号の 右に「No.9〜10」、表紙に「プリント No.9〜10」。
+   数学C の プリントは ページ番号 ＝ No.（ヘッダー「複素数平面　No.(ページ)」）なので、2ページ 以上の 節は「〜」。プリントを 直したら ここも 直す。
+   ①-4 の 練習編（問10）は デッキで PNOX ＝ '6〜7' に する */
+const PNO = {'①-1':'1','①-2':'2','①-3':'3','①-4':'4〜6','②-1':'8','②-2':'9〜10','②-3':'11〜12','③-1':'13〜14','③-2':'15〜16','③-3':'17'};
+let PNOX = null;
+const PNOT = no => { const n = PNOX || PNO[no]; return n ? `No.${n}` : ''; };
+const HD = (no, title, sec) => `<header class="hd"><span class="no">${no}</span>${PNOT(no)?`<span class="pno">${PNOT(no)}</span>`:''}<h2>${title}</h2>${sec?`<span class="sec">${sec}</span>`:''}</header>`;
 /* 枠（定義・記法 など） */
 const BOX = (label, body) => `<div class="box"><div class="bl">${label}</div><div class="bc">${body}</div></div>`;
 
 /* 表紙 */
 function coverSlide(o){
-  return `<div class="cover"><div class="k">${o.kicker||'数学C'}</div><div class="n">${o.no}</div>
+  const pn = PNOT(String(o.no).replace(/\s.*$/, '').replace(/　.*$/, ''));
+  return `<div class="cover"><div class="k">${o.kicker||'数学C'}</div><div class="n">${o.no}</div>${pn?`<div class="pn">プリント ${pn}</div>`:''}
     <h1>${o.title}</h1><div class="sb">${o.sub||''}</div><div class="ln"></div>
     <div class="ver">${VER}</div></div>`;
 }

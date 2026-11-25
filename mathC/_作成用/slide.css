@@ -302,3 +302,6 @@ body.portrait #inkback{left:12px;bottom:14px;height:54px;font-size:18px}
 .pl.dx text{fill:var(--ink);font-size:44px!important;font-family:'KaTeX_Main','Times New Roman',serif}
 .pl .dxa,.pl .dxb{fill:none;stroke-width:3.5;stroke-linecap:round}
 .pl .dxa{stroke:#2f6fb3}.pl .dxb{stroke:#3a3a8c}
+/* プリントの No.（2026-11-25、数学Ⅲ と 同じ） */
+.hd .pno{border:2px solid var(--deep);color:var(--deep);font-weight:700;font-size:17px;padding:1px 8px;margin-left:-8px;white-space:nowrap;letter-spacing:.03em}
+.cover .pn{margin-top:10px;font-size:20px;font-weight:700;color:var(--deep);border:2px solid var(--deep);padding:1px 14px;letter-spacing:.06em}
