@@ -276,3 +276,6 @@ body.portrait .pfbox{font-size:23px;padding:14px 16px}
 .iso-note{font-size:20px;color:var(--a);font-weight:700}
 .iso-lb{font-size:16px;color:var(--muted);margin-left:12px;border:1px solid var(--line);padding:1px 8px;vertical-align:middle}
 body.final .mvI.show,body.final .mvI.show .sgm,body.final .mvI.show .sgp{animation-duration:.01s}
+/* プリントの 番号（11/25）：見出しの 番号の 右に 小さく、表紙は 番号の 下に */
+.hd .pno{border:2px solid var(--deep);color:var(--deep);font-weight:700;font-size:17px;padding:1px 8px;margin-left:-8px;white-space:nowrap;letter-spacing:.03em}
+.cover .pn{margin-top:10px;font-size:20px;font-weight:700;color:var(--deep);border:2px solid var(--deep);padding:1px 14px;letter-spacing:.06em}

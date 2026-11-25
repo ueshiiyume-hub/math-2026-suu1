@@ -298,6 +298,9 @@ body.portrait .pfbox{font-size:23px;padding:14px 16px}
 .iso-note{font-size:20px;color:var(--a);font-weight:700}
 .iso-lb{font-size:16px;color:var(--muted);margin-left:12px;border:1px solid var(--line);padding:1px 8px;vertical-align:middle}
 body.final .mvI.show,body.final .mvI.show .sgm,body.final .mvI.show .sgp{animation-duration:.01s}
+/* プリントの 番号（11/25）：見出しの 番号の 右に 小さく、表紙は 番号の 下に */
+.hd .pno{border:2px solid var(--deep);color:var(--deep);font-weight:700;font-size:17px;padding:1px 8px;margin-left:-8px;white-space:nowrap;letter-spacing:.03em}
+.cover .pn{margin-top:10px;font-size:20px;font-weight:700;color:var(--deep);border:2px solid var(--deep);padding:1px 14px;letter-spacing:.06em}
 
 </style>
 </head>
@@ -307,8 +310,8 @@ body.final .mvI.show,body.final .mvI.show .sgm,body.final .mvI.show .sgp{animati
 <div id="ui"></div>
 <div id="jump"></div>
 <script>
-const VER = 'ver 1.10　2026-11-15';
-const SERIES = [{"f": "1-1_xnの不定積分", "no": "①-1", "t": "xⁿ の不定積分", "v": "1.5_2026-11-15"}, {"f": "1-2_分子が多項式の場合", "no": "①-2", "t": "分子が多項式の場合", "v": "1.10_2026-11-15"}, {"f": "1-3_三角関数の不定積分", "no": "①-3", "t": "三角関数の不定積分", "v": "1.7_2026-11-15"}, {"f": "1-4_指数関数の不定積分", "no": "①-4", "t": "指数関数の不定積分", "v": "1.5_2026-11-15"}, {"f": "1-5_合成関数の不定積分", "no": "①-5", "t": "合成関数の不定積分", "v": "1.6_2026-11-15"}, {"f": "2-1_置換積分_1次式", "no": "②-1", "t": "置換積分（1次式を t に）", "v": "1.10_2026-11-15"}, {"f": "2-2_置換積分_根号", "no": "②-2", "t": "置換積分（√ を t に）", "v": "1.6_2026-11-15"}, {"f": "2-3_置換積分_xで微分", "no": "②-3", "t": "置換積分（x で 微分する 型）", "v": "1.8_2026-11-16"}, {"f": "2-4_置換積分_分子が分母の微分", "no": "②-4", "t": "置換積分（分子が 分母の 微分）", "v": "1.6_2026-11-16"}, {"f": "3-1_部分積分", "no": "③-1", "t": "部分積分法", "v": "1.7_2026-11-16"}, {"f": "3-2_部分積分_指数と対数", "no": "③-2", "t": "部分積分（eˣ・log x）", "v": "1.6_2026-11-16"}, {"f": "4-1_分数関数の不定積分", "no": "④-1", "t": "分数関数の不定積分", "v": "1.7_2026-11-16"}, {"f": "4-2_半角と積和の公式", "no": "④-2", "t": "半角の公式・積和の公式", "v": "1.5_2026-11-15"}, {"f": "4-3_三角関数_次数を下げる", "no": "④-3", "t": "三角関数の不定積分（次数を下げる）", "v": "1.5_2026-11-15"}, {"f": "4-4_三角関数_積を和に", "no": "④-4", "t": "三角関数の不定積分（積を和に）", "v": "1.5_2026-11-15"}, {"f": "5-1_部分積分_2回", "no": "⑤-1", "t": "２回の 部分積分", "v": "1.2_2026-11-25"}], ME = "2-1_置換積分_1次式";
+const VER = 'ver 1.11　2026-11-25';
+const SERIES = [{"f": "1-1_xnの不定積分", "no": "①-1", "t": "xⁿ の不定積分", "v": "1.6_2026-11-25"}, {"f": "1-2_分子が多項式の場合", "no": "①-2", "t": "分子が多項式の場合", "v": "1.11_2026-11-25"}, {"f": "1-3_三角関数の不定積分", "no": "①-3", "t": "三角関数の不定積分", "v": "1.8_2026-11-25"}, {"f": "1-4_指数関数の不定積分", "no": "①-4", "t": "指数関数の不定積分", "v": "1.6_2026-11-25"}, {"f": "1-5_合成関数の不定積分", "no": "①-5", "t": "合成関数の不定積分", "v": "1.7_2026-11-25"}, {"f": "2-1_置換積分_1次式", "no": "②-1", "t": "置換積分（1次式を t に）", "v": "1.11_2026-11-25"}, {"f": "2-2_置換積分_根号", "no": "②-2", "t": "置換積分（√ を t に）", "v": "1.7_2026-11-25"}, {"f": "2-3_置換積分_xで微分", "no": "②-3", "t": "置換積分（x で 微分する 型）", "v": "1.9_2026-11-25"}, {"f": "2-4_置換積分_分子が分母の微分", "no": "②-4", "t": "置換積分（分子が 分母の 微分）", "v": "1.7_2026-11-25"}, {"f": "3-1_部分積分", "no": "③-1", "t": "部分積分法", "v": "1.8_2026-11-25"}, {"f": "3-2_部分積分_指数と対数", "no": "③-2", "t": "部分積分（eˣ・log x）", "v": "1.7_2026-11-25"}, {"f": "4-1_分数関数の不定積分", "no": "④-1", "t": "分数関数の不定積分", "v": "1.8_2026-11-25"}, {"f": "4-2_半角と積和の公式", "no": "④-2", "t": "半角の公式・積和の公式", "v": "1.6_2026-11-25"}, {"f": "4-3_三角関数_次数を下げる", "no": "④-3", "t": "三角関数の不定積分（次数を下げる）", "v": "1.6_2026-11-25"}, {"f": "4-4_三角関数_積を和に", "no": "④-4", "t": "三角関数の不定積分（積を和に）", "v": "1.6_2026-11-25"}, {"f": "5-1_部分積分_2回", "no": "⑤-1", "t": "２回の 部分積分", "v": "1.3_2026-11-25"}], ME = "2-1_置換積分_1次式";
 /* ====== 数学Ⅲ の 部品（数学C の parts.js を 元に した 別もの） ====== */
 
 /* 数式：M`\int x^3\,dx`（\ を そのまま 書ける）。KaTeX で かく。D は 大きい 形（\displaystyle：計算の 行に 使う） */
@@ -324,7 +327,10 @@ const FILL = (n, h, w) => `<span class="fill"${w?` style="min-width:${w}em"`:''}
 /* 説明欄：cm の i 番目が i 番で 出る（null は とばす） */
 const CAP = cm => `<div class="cap">${cm.map((c,i)=>c==null?'':`<p data-m="${i}">${c}</p>`).join('')}</div>`;
 /* 見出し */
-const HD = (no, title, sec) => `<header class="hd"><span class="no">${no}</span><h2>${title}</h2>${sec?`<span class="sec">${sec}</span>`:''}</header>`;
+/* プリントの 番号（プリント右上の No.）。11/25、先生の 指示で 各スライドに 出す。④-2 の 後の No. は プリントの とおり */
+const PNO = {'①-1':1,'①-2':2,'①-3':3,'①-4':4,'①-5':5,'②-1':6,'②-2':7,'②-3':8,'②-4':9,'③-1':10,'③-2':11,'④-1':12,'④-2':13,'④-3':14,'④-4':15,'⑤-1':16};
+const PNOT = no => PNO[no] ? `No.${PNO[no]}` : '';
+const HD = (no, title, sec) => `<header class="hd"><span class="no">${no}</span>${PNO[no]?`<span class="pno">${PNOT(no)}</span>`:''}<h2>${title}</h2>${sec?`<span class="sec">${sec}</span>`:''}</header>`;
 /* 枠（公式・方針 など） */
 const BOX = (label, body) => `<div class="box"><div class="bl">${label}</div><div class="bc">${body}</div></div>`;
 /* Point の 枠：n 番で 出る（n が null なら はじめから） */
@@ -338,7 +344,7 @@ const PQ = (tag, tex) => `<div class="pq"><span class="tag">${tag}</span>${D(tex
 
 /* 表紙 */
 function coverSlide(o){
-  return `<div class="cover"><div class="k">${o.kicker||'数学Ⅲ'}</div><div class="n">${o.no}</div>
+  return `<div class="cover"><div class="k">${o.kicker||'数学Ⅲ'}</div><div class="n">${o.no}</div>${PNO[o.no]?`<div class="pn">プリント ${PNOT(o.no)}</div>`:''}
     <h1>${o.title}</h1><div class="sb">${o.sub||''}</div><div class="ln"></div>
     <div class="ver">${VER}</div></div>`;
 }

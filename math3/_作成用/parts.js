@@ -13,7 +13,10 @@ const FILL = (n, h, w) => `<span class="fill"${w?` style="min-width:${w}em"`:''}
 /* 説明欄：cm の i 番目が i 番で 出る（null は とばす） */
 const CAP = cm => `<div class="cap">${cm.map((c,i)=>c==null?'':`<p data-m="${i}">${c}</p>`).join('')}</div>`;
 /* 見出し */
-const HD = (no, title, sec) => `<header class="hd"><span class="no">${no}</span><h2>${title}</h2>${sec?`<span class="sec">${sec}</span>`:''}</header>`;
+/* プリントの 番号（プリント右上の No.）。11/25、先生の 指示で 各スライドに 出す。④-2 の 後の No. は プリントの とおり */
+const PNO = {'①-1':1,'①-2':2,'①-3':3,'①-4':4,'①-5':5,'②-1':6,'②-2':7,'②-3':8,'②-4':9,'③-1':10,'③-2':11,'④-1':12,'④-2':13,'④-3':14,'④-4':15,'⑤-1':16};
+const PNOT = no => PNO[no] ? `No.${PNO[no]}` : '';
+const HD = (no, title, sec) => `<header class="hd"><span class="no">${no}</span>${PNO[no]?`<span class="pno">${PNOT(no)}</span>`:''}<h2>${title}</h2>${sec?`<span class="sec">${sec}</span>`:''}</header>`;
 /* 枠（公式・方針 など） */
 const BOX = (label, body) => `<div class="box"><div class="bl">${label}</div><div class="bc">${body}</div></div>`;
 /* Point の 枠：n 番で 出る（n が null なら はじめから） */
@@ -27,7 +30,7 @@ const PQ = (tag, tex) => `<div class="pq"><span class="tag">${tag}</span>${D(tex
 
 /* 表紙 */
 function coverSlide(o){
-  return `<div class="cover"><div class="k">${o.kicker||'数学Ⅲ'}</div><div class="n">${o.no}</div>
+  return `<div class="cover"><div class="k">${o.kicker||'数学Ⅲ'}</div><div class="n">${o.no}</div>${PNO[o.no]?`<div class="pn">プリント ${PNOT(o.no)}</div>`:''}
     <h1>${o.title}</h1><div class="sb">${o.sub||''}</div><div class="ln"></div>
     <div class="ver">${VER}</div></div>`;
 }
