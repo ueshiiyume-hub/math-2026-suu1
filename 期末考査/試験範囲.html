@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>試験範囲・提出物</title>
-<!-- ２学期期末考査 数学Ⅰ の 試験範囲・提出物・寺子屋スペシャル（先生の 配布物 04_2学期期末考査…docx を HTML に 書き直し、2026-11-17）。
+<!-- ２学期期末考査 数学Ⅰ の 試験範囲・提出物・寺子屋スペシャル（先生の 配布物 04_2学期期末考査…docx を HTML に 書き直し、2026-11-17。11/27 に 提出物 ③ 自分の 勉強成果（テスト当日・加点）を 追加）。
      build しない 1枚の HTML。直すときは この ファイルを 直接。PNG（試験範囲.png）は _作成用/skill/tools/shot.sh か Playwright で 撮り直す -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -82,6 +82,12 @@ h2 small{font-family:"Zen Maru Gothic",sans-serif;font-size:15px;color:var(--mut
 .tag{display:inline-block;border:2px solid var(--ink);border-radius:8px;padding:1px 10px;font-size:15px;text-align:center}
 .days{display:flex;flex-wrap:wrap;gap:6px 22px;font-size:20px}
 .days b{color:var(--accent)}
+/* 自由提出（加点） */
+.sub.free{border-style:dashed;border-color:var(--accent)}
+.sub.free h3{flex-wrap:wrap;row-gap:6px}
+.sub.free h3 .t,.sub.free .plus{white-space:nowrap;flex:none}
+.sub.free .plus{white-space:nowrap;font-size:14px;font-weight:700;color:#fff;background:var(--accent);border-radius:999px;padding:2px 10px}
+.sub.free .lead{margin:0 0 8px;font-size:17px;line-height:1.6}
 /* 寺子屋 */
 .tera{display:grid;grid-template-columns:auto 1fr;gap:10px 16px;align-items:center;font-size:19px;margin:0 0 14px}
 .tera .d{background:var(--r-bg);border-radius:8px;padding:6px 12px;white-space:nowrap}
@@ -141,6 +147,14 @@ ul{margin:6px 0 0;padding-left:1.3em;font-size:16px;line-height:1.7;color:var(--
       <h3><span class="n">2</span>問題集</h3>
       <div class="row"><span class="tag">提出日</span><div class="days"><span>1組　<b>12/2</b></span><span>2組　<b>12/2</b></span><span>3組　<b>12/1</b></span></div></div>
       <div class="row"><span class="tag">提出方法</span><div>授業中に 提出</div></div>
+    </div>
+
+    <!-- 2026-11-27 先生の 指示：テスト当日に 勉強成果を 自由に 提出して 加点 -->
+    <div class="sub free">
+      <h3><span class="n">3</span><span class="t">自分の 勉強成果</span><span class="plus">さらに 加点！</span></h3>
+      <p class="lead">テスト当日に 自分の 勉強成果を 提出して、さらなる 加点を 狙いましょう。</p>
+      <div class="row"><span class="tag">提出物</span><div>自由（例：<b>練習プリント ①〜⑩</b>、塾 などの 勉強成果 など）</div></div>
+      <div class="row"><span class="tag">提出日</span><div class="days"><span><b>テスト当日</b></span></div></div>
     </div>
   </section>
 
